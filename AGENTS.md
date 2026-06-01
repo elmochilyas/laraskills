@@ -26,6 +26,8 @@ Laravel 13 AI-ready skills, rules, agents, and CLI harness configs for OpenCode,
 | laravel-api-graphql | GraphQL architecture specialist | Lighthouse schema-first, resolvers, DataLoader, query complexity, subscriptions, Federation |
 | laravel-api-grpc | gRPC & Protobuf specialist | Proto definition, RoadRunner gRPC services, interceptors, streaming, client integration |
 | laravel-api-microservices | Microservice architecture specialist | Service boundaries, database ownership, event-driven communication, saga patterns |
+| laravel-authentication | Authentication & authorization specialist | Sanctum, Passport, OAuth2, OIDC, JWT, Policies, Gates, Roles, Permissions, MFA, SSO |
+| laravel-identity-architecture | Enterprise IAM & zero-trust specialist | SCIM, LDAP/AD, Entra ID, Okta, Keycloak, SAML, zero-trust, conditional access |
 
 ## Available Skills
 
@@ -42,6 +44,7 @@ Laravel 13 AI-ready skills, rules, agents, and CLI harness configs for OpenCode,
 | laravel-api-graphql | GraphQL with Lighthouse: schema-first design, directives, DataLoader, query complexity, subscriptions, Federation |
 | laravel-api-grpc | gRPC & Protocol Buffers: proto definition, RoadRunner services, interceptors, streaming, client integration for microservices |
 | laravel-api-microservices | Internal microservice architecture: service boundaries, database ownership, event-driven communication, saga patterns, health checks |
+| laravel-authentication | Authentication & authorization: Sanctum, Passport, OAuth2, OIDC, JWT, Policies, Gates, Roles, Permissions, Multi-tenant, SSO, Enterprise IAM, Zero-trust |
 
 ## Laravel 13 Key Features
 

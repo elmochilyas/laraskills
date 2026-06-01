@@ -48,6 +48,7 @@ php artisan make:controller --invokable RegisterUserController
 | laravel-api-graphql | skills/laravel-api-graphql/SKILL.md | GraphQL: Lighthouse, resolvers, DataLoader, Federation |
 | laravel-api-grpc | skills/laravel-api-grpc/SKILL.md | gRPC: Protocol Buffers, RoadRunner, streaming, interceptors |
 | laravel-api-microservices | skills/laravel-api-microservices/SKILL.md | Microservices: boundaries, event-driven, saga patterns |
+| laravel-authentication | skills/laravel-authentication/ | Authentication & authorization: 14 files covering Sanctum, Passport, OAuth2, OIDC, JWT, Policies, Gates, Roles, Permissions, Multi-tenant, SSO, Enterprise IAM, Zero-trust |
 
 ## Laravel 13 Specifics
 

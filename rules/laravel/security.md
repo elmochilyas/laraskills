@@ -52,3 +52,5 @@ paths:
 
 See skill: `laravel-security` for comprehensive security patterns.
 See skill: `laravel-database` for SQL injection prevention and database-level security.
+See skill: `laravel-authentication` for authentication and authorization patterns.
+See rules/laravel/authentication.md for comprehensive authentication and authorization rules.
