@@ -4,6 +4,12 @@
 
 Builds on the [ECC](https://github.com/affaan-m/ECC) ecosystem with Laravel 13-specific depth.
 
+```bash
+# Install from GitHub
+npx skills add elmochilyas/laravel-ecc
+gh skill install elmochilyas/laravel-ecc
+```
+
 ## What's Included
 
 | Category | Count | Description |
@@ -17,36 +23,36 @@ Builds on the [ECC](https://github.com/affaan-m/ECC) ecosystem with Laravel 13-s
 
 ## Quick Start
 
-### Using the CLI
+### Install from GitHub (once this repo is pushed)
 
 ```bash
-# From this repo directory, add skills to your Laravel 13 project
+# Vercel Skills CLI — works in any terminal
+npx skills add affaan-m/laravel-ecc
+
+# GitHub CLI — native skill management
+gh skill install affaan-m/laravel-ecc
+
+# Install a single skill only
+npx skills add affaan-m/laravel-ecc --skill laravel-patterns
+```
+
+### Install from this repo locally
+
+```bash
+# Using our CLI
 npx laravel-ecc add laravel-patterns
 npx laravel-ecc add laravel-tdd
 npx laravel-ecc add laravel-security
 npx laravel-ecc add laravel-artisan
-npx laravel-ecc doctor
-```
 
-### Using install scripts
-
-```bash
-# Minimal (3 skills only)
+# Using install scripts
 ./install.ps1 --profile minimal   # Windows
 ./install.sh --profile minimal    # macOS/Linux
 
-# Core (skills + rules + agents)
-./install.ps1 --profile core      # Windows
-./install.sh --profile core       # macOS/Linux
-
-# Full (everything + all 63 ECC agents + commands)
+# Full install (everything)
 ./install.ps1 --profile full      # Windows
 ./install.sh --profile full       # macOS/Linux
 ```
-
-### Manual copy
-
-Copy `skills/`, `rules/laravel/`, and `agents/` into your Laravel 13 project root. Copy relevant `.opencode/`, `.claude/`, or `.cursor/` configs as needed.
 
 ## Laravel 13 Version
 
