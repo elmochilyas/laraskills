@@ -17,9 +17,9 @@ npx laravel-ecc@beta add laravel-patterns
 
 | Category | Count | Description |
 |----------|-------|-------------|
-| Skills | 6 | Deep Laravel 13 skills (~35-40 code examples each) |
-| Rules | 35 | common(10) + php(5) + web(7) + laravel(13) |
-| Agents | 5 | Laravel Artisan, Eloquent, Migration, Database, Container agents |
+| Skills | 11 | Deep Laravel 13 skills (~35-40 code examples each) |
+| Rules | 40 | common(10) + php(5) + web(7) + laravel(18) |
+| Agents | 10 | Laravel Artisan, Eloquent, Migration, Database, Container, REST, JSON:API, GraphQL, gRPC, Microservices agents |
 | Commands | 4 | artisan, migrate, seed, route-list |
 | Harness Configs | 12 | OpenCode, Claude Code, Cursor, Gemini, Codex, Copilot, VS Code, Zed, Trae, Qwen, CodeBuddy, Kiro |
 | MCP Configs | 2 | Laravel docs + Composer security |
@@ -106,7 +106,7 @@ Key features:
 - Pest 4 browser testing with Playwright
 - Horizon Redis Cluster support
 
-## Six Skills
+## Eleven Skills
 
 ### laravel-patterns
 Architecture: modular domains, Actions/Services/DTOs, Eloquent optimization, attribute models, Form Requests, API Resources, Queues, Events, Caching, Policies, Pipeline, Service container, Rate limiting
@@ -125,6 +125,21 @@ Advanced Eloquent: relationships (morph, polymorphic many-to-many, HasOneThrough
 
 ### laravel-database
 Database engineering for both MySQL and PostgreSQL: SQL mastery (CTEs, window functions, recursive CTEs, UPSERT, RETURNING, GROUP BY extensions), query plans (EXPLAIN ANALYZE, FORMAT=JSON), index design (composite, partial, covering, functional, GIN/GiST/BRIN/HNSW, FULLTEXT, SPATIAL, invisible, descending), full-text search (whereFullText, Scout, BOOLEAN MODE), database scaling (read replicas, partitioning, sharding, PgBouncer, ProxySQL), multi-tenant strategies, transactions (pessimistic locking, gap locks, isolation levels, deadlock prevention, retry), PostgreSQL (JSONB, GIN, materialized views, triggers, functions, arrays, range types), MySQL (InnoDB, utf8mb4, JSON, ProxySQL, Group Replication, Performance Schema), Laravel 13 vector search (whereVectorSimilarTo, pgvector, embeddings, HNSW, reranking, hybrid full-text + vector)
+
+### laravel-api-rest
+REST API architecture: REST principles (resources over actions, HTTP methods, status codes), HATEOAS hypermedia links, API versioning (URL-based, header negotiation, deprecation strategy), resource transformation (API Resources, conditional attributes, consistent envelopes), pagination strategies (offset, cursor, length-aware, decision matrix), enterprise API checklist
+
+### laravel-api-jsonapi
+JSON:API specification: Laravel 13 native JsonApiResource, attribute definition (simple list, closure-wrapped, sparse fieldsets), relationship mapping, compound documents with includes, whitelisting/limiting include depth, self/relationship/top-level links, meta objects, JSON:API error handling, pagination for JSON:API (page-based, cursor), test patterns
+
+### laravel-api-graphql
+GraphQL with Lighthouse: schema-first design (SDL), directives (@all, @find, @paginate, @create, @update, @delete, @hasMany, @belongsTo, @rules, @can, @canModel), thin resolver pattern with Action delegation, N+1 prevention with DataLoader, query complexity protection (max depth, max complexity), subscriptions (Pusher), GraphQL Federation (@key, @external, @shareable, @provides, @requires), validation, authorization via policies, testing
+
+### laravel-api-grpc
+gRPC and Protocol Buffers for Laravel: proto syntax and field numbering optimization, RoadRunner gRPC server configuration, service implementation (unary, server streaming, bidirectional), gRPC interceptors (logging, metrics, auth), client integration, error handling with gRPC status codes, health checks, schema evolution rules, testing
+
+### laravel-api-microservices
+Internal microservice architecture: service boundaries (one domain per service), database ownership (no direct cross-service DB access), communication strategy (events preferred, gRPC, REST), event-driven integration (event catalog, publishing, cross-service listeners), saga pattern for distributed transactions (orchestration/choreography, compensating actions), health checks, structured logging, distributed tracing, deployment
 
 ## CLI Harness Support
 

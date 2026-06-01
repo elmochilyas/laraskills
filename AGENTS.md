@@ -21,6 +21,11 @@ Laravel 13 AI-ready skills, rules, agents, and CLI harness configs for OpenCode,
 | laravel-migration | Database migration design | Schema design, migrations, seeders, factories |
 | laravel-database | Database engineering specialist | SQL optimization, indexing, PostgreSQL (JSONB, materialized views, vector search), MySQL (InnoDB, utf8mb4, partitioning, replication), transactions, scaling |
 | laravel-container | Container, DI, provider, facade architecture | Container bindings, providers, contract design, facade review |
+| laravel-api-rest | REST API architecture specialist | Resource naming, HTTP methods, status codes, HATEOAS, versioning, resource transformation, pagination |
+| laravel-api-jsonapi | JSON:API specification specialist | Native JsonApiResource, sparse fieldsets, includes, relationships, compound documents, links, meta objects |
+| laravel-api-graphql | GraphQL architecture specialist | Lighthouse schema-first, resolvers, DataLoader, query complexity, subscriptions, Federation |
+| laravel-api-grpc | gRPC & Protobuf specialist | Proto definition, RoadRunner gRPC services, interceptors, streaming, client integration |
+| laravel-api-microservices | Microservice architecture specialist | Service boundaries, database ownership, event-driven communication, saga patterns |
 
 ## Available Skills
 
@@ -32,6 +37,11 @@ Laravel 13 AI-ready skills, rules, agents, and CLI harness configs for OpenCode,
 | laravel-security | Laravel 13 security: mass assignment, XSS, CSRF, Gates/Polices, rate limiting |
 | laravel-core-internals | Laravel 13 core internals: Service Container, DI, Providers, Facades, Request Lifecycle, Contracts |
 | laravel-database | Database engineering: SQL mastery, indexing, PostgreSQL (JSONB, materialized views, vector search), MySQL (InnoDB, utf8mb4, partitioning, replication), scaling, transactions |
+| laravel-api-rest | REST API architecture: resource naming, HATEOAS, versioning, resource transformation, pagination (offset/cursor/keyset) |
+| laravel-api-jsonapi | JSON:API specification: native JsonApiResource, sparse fieldsets, includes, compound documents, relationships, links, meta, error handling |
+| laravel-api-graphql | GraphQL with Lighthouse: schema-first design, directives, DataLoader, query complexity, subscriptions, Federation |
+| laravel-api-grpc | gRPC & Protocol Buffers: proto definition, RoadRunner services, interceptors, streaming, client integration for microservices |
+| laravel-api-microservices | Internal microservice architecture: service boundaries, database ownership, event-driven communication, saga patterns, health checks |
 
 ## Laravel 13 Key Features
 

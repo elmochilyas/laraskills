@@ -43,6 +43,11 @@ php artisan make:controller --invokable RegisterUserController
 | laravel-core-internals | skills/laravel-core-internals/SKILL.md | Service Container, DI, Providers, Facades, Request Lifecycle, Contracts |
 | laravel-eloquent | skills/laravel-eloquent/SKILL.md | Advanced Eloquent: relationships, performance, domain modeling, scopes, casts, events |
 | laravel-database | skills/laravel-database/SKILL.md | Database engineering: SQL, indexing, PostgreSQL (JSONB, materialized views, vector search), MySQL (InnoDB, utf8mb4, partitioning, replication), transactions, scaling |
+| laravel-api-rest | skills/laravel-api-rest/SKILL.md | REST architecture: HATEOAS, versioning, resource transformation, pagination |
+| laravel-api-jsonapi | skills/laravel-api-jsonapi/SKILL.md | JSON:API: native JsonApiResource, sparse fieldsets, includes, relationships, links, meta |
+| laravel-api-graphql | skills/laravel-api-graphql/SKILL.md | GraphQL: Lighthouse, resolvers, DataLoader, Federation |
+| laravel-api-grpc | skills/laravel-api-grpc/SKILL.md | gRPC: Protocol Buffers, RoadRunner, streaming, interceptors |
+| laravel-api-microservices | skills/laravel-api-microservices/SKILL.md | Microservices: boundaries, event-driven, saga patterns |
 
 ## Laravel 13 Specifics
 

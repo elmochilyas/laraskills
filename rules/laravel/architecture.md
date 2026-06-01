@@ -89,6 +89,16 @@ return User::all();
 - Skill: `laravel-patterns` for Actions, DTOs, and Services
 - Skill: `laravel-eloquent` for advanced Eloquent patterns and domain modeling
 - Skill: `laravel-database` for database architecture and scaling strategies
+- Skill: `laravel-api-rest` for REST architecture and API design
+- Skill: `laravel-api-jsonapi` for JSON:API specification resources
+- Skill: `laravel-api-graphql` for GraphQL with Lighthouse
+- Skill: `laravel-api-grpc` for gRPC service implementation
+- Skill: `laravel-api-microservices` for internal service boundaries
 - Rule: `rules/laravel/eloquent.md` for enforced Eloquent rules
 - Rule: `rules/laravel/database.md` for enforced database engineering rules
 - Rule: `rules/laravel/middleware.md` for middleware pipeline
+- Rule: `rules/laravel/api-rest.md` for enforced REST API rules
+- Rule: `rules/laravel/api-jsonapi.md` for enforced JSON:API rules
+- Rule: `rules/laravel/api-graphql.md` for enforced GraphQL rules
+- Rule: `rules/laravel/api-grpc.md` for enforced gRPC rules
+- Rule: `rules/laravel/api-microservices.md` for enforced microservices rules
