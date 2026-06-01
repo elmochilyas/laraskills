@@ -53,7 +53,7 @@ if (Test-Path (Join-Path $targetDir '.cursor')) { $detectedTools += 'cursor' }
 if (Test-Path (Join-Path $targetDir '.gemini')) { $detectedTools += 'gemini' }
 if (Test-Path (Join-Path $targetDir '.codex')) { $detectedTools += 'codex' }
 
-Write-Status "Laravel ECC v1.0.0-beta.1"
+Write-Status "Laravel ECC v1.0.0-beta.2"
 Write-Status "Target: $targetDir"
 Write-Status "Profile: $profile"
 Write-Status "Detected tools: $($detectedTools -join ', ')"
@@ -162,7 +162,7 @@ if ($profile -eq 'full') {
 
 # Save state
 $state = @{
-    version = '1.0.0-beta.1'
+    version = '1.0.0-beta.2'
     target = $targetDir
     installed_at = (Get-Date).ToString('o')
     profile = $profile
