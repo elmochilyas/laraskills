@@ -103,7 +103,7 @@ Key features:
 - Pest 4 first-class test framework with PHP Attribute Output (PAO)
 - Queue job attributes (`#[Connection]`, `#[Tries]`, `#[Timeout]`)
 - Console command attributes (`#[AsCommand]`)
-- Dusk `clickOnceVisible` / `clickOnceEnabled`
+- Pest 4 browser testing with Playwright
 - Horizon Redis Cluster support
 
 ## Three Skills

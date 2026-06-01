@@ -3,13 +3,13 @@
     "laravel-docs": {
       "description": "Laravel 13 documentation lookup — fetch current docs, changelog, and API references",
       "command": "npx",
-      "args": ["@context7/mcp-server", "laravel"],
+      "args": ["-y", "@upstash/context7-mcp"],
       "disabled": false
     },
     "composer-security": {
       "description": "Composer package security auditing — check for vulnerabilities in dependencies",
       "command": "npx",
-      "args": ["@mcp/security-audit"],
+      "args": ["-y", "mcp-security-audit"],
       "disabled": false
     }
   }

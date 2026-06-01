@@ -36,5 +36,5 @@ globs: ["**/*.php", "**/*.blade.php", "**/composer.json", "**/pint.json"]
 
 - PHP 8.3+ required.
 - Pest 4 is first-class with PHP Attribute Output.
-- Use `clickOnceVisible` and `clickOnceEnabled` for Dusk.
+- Use Pest 4 browser testing (Playwright) as the recommended approach for browser tests.
 - Queue jobs use `#[Connection]`, `#[Tries]`, `#[Timeout]` attributes.

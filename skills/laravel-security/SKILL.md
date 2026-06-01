@@ -507,7 +507,7 @@ class SecurityHeaders
 
     private function cspPolicy(): string
     {
-        $nonce = csp_nonce();
+        $nonce = app(\Illuminate\Foundation\Vite::class)->cspNonce();
 
         return implode('; ', [
             "default-src 'self'",

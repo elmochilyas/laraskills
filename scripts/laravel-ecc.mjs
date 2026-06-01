@@ -1,5 +1,5 @@
 #!/usr/bin/env node
-import { existsSync, readFileSync, copyFileSync, mkdirSync, cpSync, writeFileSync } from 'node:fs';
+import { existsSync, readFileSync, copyFileSync, mkdirSync, cpSync, writeFileSync, readdirSync, statSync } from 'node:fs';
 import { join, dirname } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { createRequire } from 'node:module';
@@ -81,7 +81,6 @@ function copyHarnessConfigs(target) {
     const dest = join(target, dir);
     if (!existsSync(src)) continue;
     mkdirSync(dest, { recursive: true });
-    const entries = readFileSync(src, { withFileTypes: false });
     if (existsSync(join(src, 'settings.json'))) {
       copyFileSync(join(src, 'settings.json'), join(dest, 'settings.json'));
       count++;
@@ -373,7 +372,6 @@ if (args[0] === 'add') {
 }
 
 if (args[0] === 'update') {
-  const { readdirSync, statSync } = await import('node:fs');
   doUpdate(target);
   process.exit(0);
 }

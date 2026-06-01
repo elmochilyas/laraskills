@@ -30,7 +30,7 @@ composer audit                     # Security audit
 # Artisan
 php artisan make:model -m User     # Model with migration
 php artisan make:controller UserController --resource
-php artisan make:action CreateUser
+php artisan make:controller --invokable RegisterUserController
 ```
 
 ## Key Skills

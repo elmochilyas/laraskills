@@ -2,7 +2,7 @@
 
 Laravel 13 AI-ready skills, rules, agents, and CLI harness configs for OpenCode, Claude Code, Cursor, Gemini CLI, Codex CLI, Copilot, and more.
 
-**Version:** 1.0.0-beta.2
+**Version:** 1.0.0-beta.4
 
 ## Core Principles
 
@@ -37,7 +37,7 @@ Laravel 13 AI-ready skills, rules, agents, and CLI harness configs for OpenCode,
 - **PHP 8.3+ required**
 - **Svelte 5 adapter** for Laravel Echo
 - **Horizon Redis Cluster** support
-- **Dusk**: `clickOnceVisible`, `clickOnceEnabled`
+- **Pest 4 browser testing**: First-party Playwright integration for browser tests
 
 ## Security Guidelines
 
@@ -77,7 +77,7 @@ Test types:
 ```
 skills/          — 4 Laravel 13 deep skills
 rules/           — Always-follow guidelines (common + php + web + laravel)
-agents/          — 4 Laravel-specific agents + ECC agents
+agents/          — 4 Laravel-specific agents
 commands/        — 4 Laravel commands + ECC commands
 hooks/           — Trigger-based automations for Pint, PHPStan, Pest
 mcp-configs/     — MCP server configurations

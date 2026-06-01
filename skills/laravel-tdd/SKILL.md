@@ -567,10 +567,10 @@ test('models extend Eloquent Model')
     ->expect('App\Models')
     ->toExtend(\Illuminate\Database\Eloquent\Model::class);
 
-test('policies extend base policy')
+test('policies are plain classes')
     ->arch()
     ->expect('App\Policies')
-    ->toExtend(\Illuminate\Auth\Access\Policy::class);
+    ->toHaveMethods(['view', 'create', 'update', 'delete']);
 
 test('no raw SQL in services')
     ->arch()
@@ -689,14 +689,19 @@ test('process A', function () {
 })->onlyOn('p1');
 ```
 
-## Browser Tests (Dusk)
+## Browser Tests (Pest 4 / Playwright)
+
+Pest 4 includes first-party browser testing powered by Playwright — the recommended approach for new projects.
+
+```bash
+composer require pestphp/pest pestphp/pest-plugin-browser --dev
+npx playwright install
+```
 
 ```php
 <?php
 
-namespace Tests\Browser;
-
-use Laravel\Dusk\Browser;
+use function Pest\Laravel\actingAs;
 
 test('users can log in', function () {
     $user = User::factory()->create([
@@ -704,32 +709,28 @@ test('users can log in', function () {
         'password' => Hash::make('Secret123!'),
     ]);
 
-    $this->browse(function (Browser $browser) use ($user) {
-        $browser->visit('/login')
-            ->type('email', $user->email)
-            ->type('password', 'Secret123!')
-            ->press('Log In')
-            ->assertPathIs('/dashboard')
-            ->assertSee('Dashboard');
-    });
+    $browser = browser()->visit('/login');
+    $browser->fill('[name="email"]', $user->email);
+    $browser->fill('[name="password"]', 'Secret123!');
+    $browser->press('Log In');
+    $browser->assertPathIs('/dashboard');
+    $browser->assertSee('Dashboard');
 });
 
-test('click once visible (Laravel 13)', function () {
-    $this->browse(function (Browser $browser) {
-        $browser->visit('/modal')
-            ->clickOnceVisible('#open-modal')
-            ->waitFor('#modal-content')
-            ->assertSeeIn('#modal-content', 'Modal loaded');
-    });
+test('modal loads after button click', function () {
+    browser()
+        ->visit('/modal')
+        ->click('#open-modal')
+        ->waitFor('#modal-content')
+        ->assertSeeIn('#modal-content', 'Modal loaded');
 });
 
-test('click once enabled (Laravel 13)', function () {
-    $this->browse(function (Browser $browser) {
-        $browser->visit('/form')
-            ->type('name', 'John')
-            ->clickOnceEnabled('#submit-btn')
-            ->waitForText('Saved');
-    });
+test('form saves after button is enabled', function () {
+    browser()
+        ->visit('/form')
+        ->fill('[name="name"]', 'John')
+        ->click('#submit-btn')
+        ->waitForText('Saved');
 });
 ```
 

@@ -616,11 +616,18 @@ class EventServiceProvider extends ServiceProvider
 }
 ```
 
-Or with Laravel 13 attributes:
+Or with auto-discovery (Laravel 13 scans listeners directory by default — no manual registration needed):
 
 ```php
-#[Listen(OrderPlaced::class, SendOrderConfirmation::class)]
-class EventServiceProvider extends ServiceProvider {}
+// Listeners are auto-discovered when the class method is named `handle`
+// and type-hints the event class. No EventServiceProvider registration required.
+class SendOrderConfirmation
+{
+    public function handle(OrderPlaced $event): void
+    {
+        // ...
+    }
+}
 ```
 
 ## Caching
