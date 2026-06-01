@@ -98,4 +98,6 @@ $table->fullText(['title', 'body']);            // Full text search
 ## Reference
 
 - See skill: `laravel-tdd` for testing with factories
+- See skill: `laravel-database` for advanced PostgreSQL features, partitioning, JSONB, materialized views, and migration strategies
 - See rules/laravel/patterns.md for project conventions
+- See rule: `rules/laravel/database.md` for enforced database engineering rules

@@ -42,12 +42,15 @@ php artisan make:controller --invokable RegisterUserController
 | laravel-security | skills/laravel-security/SKILL.md | Mass assignment, XSS, CSRF, Gates, Rate limiting |
 | laravel-core-internals | skills/laravel-core-internals/SKILL.md | Service Container, DI, Providers, Facades, Request Lifecycle, Contracts |
 | laravel-eloquent | skills/laravel-eloquent/SKILL.md | Advanced Eloquent: relationships, performance, domain modeling, scopes, casts, events |
+| laravel-database | skills/laravel-database/SKILL.md | Database engineering: SQL, indexing, PostgreSQL (JSONB, materialized views, vector search), MySQL (InnoDB, utf8mb4, partitioning, replication), transactions, scaling |
 
 ## Laravel 13 Specifics
 
 - **Models use PHP 8 attributes**: `#[Table]`, `#[Fillable]`, `#[Hidden]`, `#[Casts]`
 - **Pest 4 is first-class**, with PHP Attribute Output (PAO)
 - **PHP 8.3+ required**
+- **Native vector search**: `whereVectorSimilarTo()` requires PostgreSQL + pgvector extension + `laravel/ai` SDK
+- **Full-text search**: `whereFullText()` works on MariaDB, MySQL, PostgreSQL
 - Use `declare(strict_types=1)` in all new files
 - Prefer FormRequest validation over inline validation
 - Organize by feature/domain (`app/Modules/User/`), not by type (`app/Models/`, `app/Controllers/`)
@@ -55,3 +58,20 @@ php artisan make:controller --invokable RegisterUserController
 - Always use constructor injection, never `app()` or `resolve()` in business code
 - Depend on contracts, not concrete implementations
 - Use facades only for infrastructure concerns (Cache, Log, DB)
+
+## Database
+
+**PostgreSQL** (recommended for new projects with advanced querying needs):
+- Vector search requires `pgvector` extension + `laravel/ai` package
+- Use `Schema::ensureVectorExtensionExists()` before creating vector columns
+- Use `$table->vector('embedding', dimensions: 1536)->index()` for HNSW index
+- Use materialized views for dashboard/analytics queries
+- Use JSONB with GIN indexes for semi-structured data
+
+**MySQL** (recommended for simple CRUD, lower ops overhead, or managed MySQL/RDS/Aurora):
+- Always use `utf8mb4` charset (not legacy `utf8`)
+- Use InnoDB engine (required for transactions + foreign keys)
+- Set InnoDB buffer pool to 70-80% of available RAM
+- Enable `ONLY_FULL_GROUP_BY` and `STRICT_TRANS_TABLES` SQL modes
+- Use ProxySQL for connection pooling and read/write splitting
+- Partition columns must be included in all unique/primary keys

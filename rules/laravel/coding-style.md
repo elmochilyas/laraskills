@@ -61,3 +61,7 @@ use Illuminate\Http\Request;
 - Use **Laravel Pint** for formatting (`./vendor/bin/pint`).
 - Use **PHPStan** at level 6+ for static analysis.
 - Keep Pint config in `pint.json` at project root.
+
+## Reference
+
+See skill: `laravel-database` for migration and schema design conventions.

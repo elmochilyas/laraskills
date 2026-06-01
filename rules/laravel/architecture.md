@@ -88,5 +88,7 @@ return User::all();
 - Skill: `laravel-core-internals` for architecture patterns
 - Skill: `laravel-patterns` for Actions, DTOs, and Services
 - Skill: `laravel-eloquent` for advanced Eloquent patterns and domain modeling
+- Skill: `laravel-database` for database architecture and scaling strategies
 - Rule: `rules/laravel/eloquent.md` for enforced Eloquent rules
+- Rule: `rules/laravel/database.md` for enforced database engineering rules
 - Rule: `rules/laravel/middleware.md` for middleware pipeline

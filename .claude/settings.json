@@ -26,7 +26,9 @@
     "rules/laravel/architecture.md",
     "skills/laravel-core-internals/SKILL.md",
     "skills/laravel-eloquent/SKILL.md",
-    "rules/laravel/eloquent.md"
+    "skills/laravel-database/SKILL.md",
+    "rules/laravel/eloquent.md",
+    "rules/laravel/database.md"
   ],
   "hooks": {
     "PostToolUse": [

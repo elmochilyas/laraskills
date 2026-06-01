@@ -10,7 +10,7 @@ const require = createRequire(import.meta.url);
 const pkg = JSON.parse(readFileSync(join(ROOT, 'package.json'), 'utf-8'));
 
 const VALID_COMPONENTS = [
-  'laravel-patterns', 'laravel-tdd', 'laravel-security', 'laravel-core-internals',
+  'laravel-patterns', 'laravel-tdd', 'laravel-security', 'laravel-core-internals', 'laravel-database',
   'laravel-artisan', 'laravel-eloquent', 'laravel-migration', 'laravel-container',
 ];
 
@@ -190,7 +190,7 @@ function install(target, profile) {
 
   const skillList = profile === 'minimal'
     ? ['laravel-patterns', 'laravel-tdd', 'laravel-security']
-    : ['laravel-patterns', 'laravel-tdd', 'laravel-security', 'laravel-core-internals', 'laravel-eloquent'];
+    : ['laravel-patterns', 'laravel-tdd', 'laravel-security', 'laravel-core-internals', 'laravel-eloquent', 'laravel-database'];
 
   for (const skill of skillList) {
     const src = join(ROOT, 'skills', skill);
@@ -208,7 +208,7 @@ function install(target, profile) {
   mkdirSync(agentsDir, { recursive: true });
   const agents = profile === 'minimal'
     ? ['laravel-artisan.md']
-    : ['laravel-artisan.md', 'laravel-eloquent.md', 'laravel-migration.md', 'laravel-container.md'];
+    : ['laravel-artisan.md', 'laravel-eloquent.md', 'laravel-migration.md', 'laravel-database.md', 'laravel-container.md'];
   for (const agent of agents) {
     const src = join(ROOT, 'agents', agent);
     if (existsSync(src)) {
@@ -223,7 +223,7 @@ function install(target, profile) {
     log('  ✓ Installed commands & harness configs');
   }
 
-  const installedComponents = [...skillList, 'rules', ...agents.map(a => a.replace('.md', ''))];
+  const installedComponents = [...new Set([...skillList, 'rules', ...agents.map(a => a.replace('.md', ''))])];
   const state = {
     version: pkg.version,
     target,
@@ -324,7 +324,7 @@ Usage:
 
 Profiles:
   minimal   Skills only (3 skills)
-  core      5 skills + rules + agents (default)
+  core      6 skills + rules + agents (default)
   full      Everything + commands + harness configs
 
 Components:
@@ -334,6 +334,7 @@ Components:
   laravel-core-internals  Laravel 13 core internals (Container, DI, Providers, Facades, Lifecycle, Contracts)
   laravel-artisan         Artisan command generation agent
   laravel-eloquent        Eloquent ORM optimization agent
+  laravel-database        Database engineering skill (SQL, indexing, PostgreSQL, vector search)
   laravel-migration       Database migration design agent
   laravel-container       Container, DI, provider, facade architecture agent
 

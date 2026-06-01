@@ -737,6 +737,7 @@ php artisan up
 ## References
 
 - See skill: `laravel-patterns` for architecture context
+- See skill: `laravel-database` for SQL injection prevention at the database level
 - See skill: `laravel-tdd` for writing security tests
 - See rules/php/security.md for general PHP security rules
 - See rules/laravel/security.md for Laravel-specific security rules

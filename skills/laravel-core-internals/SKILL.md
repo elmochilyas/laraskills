@@ -1111,6 +1111,7 @@ Failure to meet any of these is an **architectural violation** requiring refacto
 ## References
 
 - See skill: `laravel-eloquent` for advanced Eloquent architecture, performance, and domain modeling
+- See skill: `laravel-database` for transaction management, read replicas, multi-tenancy, and database scaling
 - See skill: `laravel-patterns` for Actions, DTOs, and Service patterns
 - See skill: `laravel-tdd` for testing containers, facades, and contracts
 - See rule: `rules/laravel/service-container.md` for container best practices

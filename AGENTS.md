@@ -19,6 +19,7 @@ Laravel 13 AI-ready skills, rules, agents, and CLI harness configs for OpenCode,
 | laravel-artisan | Artisan command generation | Creating commands, schedules, make:classes |
 | laravel-eloquent | Advanced Eloquent ORM specialist | Relationship mapping, query optimization, N+1 elimination, domain modeling, scopes, casts, events, performance tuning |
 | laravel-migration | Database migration design | Schema design, migrations, seeders, factories |
+| laravel-database | Database engineering specialist | SQL optimization, indexing, PostgreSQL (JSONB, materialized views, vector search), MySQL (InnoDB, utf8mb4, partitioning, replication), transactions, scaling |
 | laravel-container | Container, DI, provider, facade architecture | Container bindings, providers, contract design, facade review |
 
 ## Available Skills
@@ -30,6 +31,7 @@ Laravel 13 AI-ready skills, rules, agents, and CLI harness configs for OpenCode,
 | laravel-tdd | Laravel 13 testing with Pest 4: Feature tests, fakes, architecture tests |
 | laravel-security | Laravel 13 security: mass assignment, XSS, CSRF, Gates/Polices, rate limiting |
 | laravel-core-internals | Laravel 13 core internals: Service Container, DI, Providers, Facades, Request Lifecycle, Contracts |
+| laravel-database | Database engineering: SQL mastery, indexing, PostgreSQL (JSONB, materialized views, vector search), MySQL (InnoDB, utf8mb4, partitioning, replication), scaling, transactions |
 
 ## Laravel 13 Key Features
 
@@ -42,6 +44,8 @@ Laravel 13 AI-ready skills, rules, agents, and CLI harness configs for OpenCode,
 - **Svelte 5 adapter** for Laravel Echo
 - **Horizon Redis Cluster** support
 - **Pest 4 browser testing**: First-party Playwright integration for browser tests
+- **Native vector search**: `whereVectorSimilarTo()` with PostgreSQL + pgvector + `laravel/ai` SDK
+- **MySQL & PostgreSQL balanced**: MySQL (InnoDB, utf8mb4, JSON, partitioning, replication), PostgreSQL (JSONB, materialized views, GIN/GiST/BRIN indexes, vector search), full-text search via `whereFullText` on both
 
 ## Security Guidelines
 
@@ -79,9 +83,9 @@ Test types:
 ## Project Structure
 
 ```
-skills/          — 5 Laravel 13 deep skills
+skills/          — 6 Laravel 13 deep skills
 rules/           — Always-follow guidelines (common + php + web + laravel)
-agents/          — 4 Laravel-specific agents (+ 4 MCP agents in mcp-configs)
+agents/          — 5 Laravel-specific agents (+ 4 MCP agents in mcp-configs)
 commands/        — 4 Laravel commands + ECC commands
 hooks/           — Trigger-based automations for Pint, PHPStan, Pest
 mcp-configs/     — MCP server configurations

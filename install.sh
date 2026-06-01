@@ -38,7 +38,7 @@ while [[ $# -gt 0 ]]; do
     esac
 done
 
-echo "Laravel ECC v1.0.0-beta.2"
+echo "Laravel ECC v1.0.0-beta.6"
 echo "Target: $TARGET_DIR"
 echo "Profile: $PROFILE"
 
@@ -56,7 +56,7 @@ fi
 
 if [ -n "${COMPONENT:-}" ]; then
     case "$COMPONENT" in
-        laravel-patterns|laravel-tdd|laravel-security|laravel-core-internals|laravel-eloquent)
+        laravel-patterns|laravel-tdd|laravel-security|laravel-core-internals|laravel-eloquent|laravel-database)
             mkdir -p "$TARGET_DIR/skills"
             cp -r "$SCRIPT_DIR/skills/$COMPONENT" "$TARGET_DIR/skills/"
             log "Added: $COMPONENT"
@@ -66,7 +66,7 @@ if [ -n "${COMPONENT:-}" ]; then
             cp "$SCRIPT_DIR/agents/${COMPONENT}.md" "$TARGET_DIR/agents/"
             log "Added: $COMPONENT"
             ;;
-        *) err "Unknown: $COMPONENT Valid: laravel-patterns, laravel-tdd, laravel-security, laravel-core-internals, laravel-eloquent, laravel-artisan, laravel-migration, laravel-container"; exit 1 ;;
+        *) err "Unknown: $COMPONENT Valid: laravel-patterns, laravel-tdd, laravel-security, laravel-core-internals, laravel-eloquent, laravel-database, laravel-artisan, laravel-migration, laravel-container"; exit 1 ;;
     esac
     exit 0
 fi
@@ -75,7 +75,7 @@ log "Installing Laravel ECC..."
 
 # Skills
 mkdir -p "$TARGET_DIR/skills"
-for skill in laravel-patterns laravel-tdd laravel-security laravel-core-internals laravel-eloquent; do
+for skill in laravel-patterns laravel-tdd laravel-security laravel-core-internals laravel-eloquent laravel-database; do
     cp -r "$SCRIPT_DIR/skills/$skill" "$TARGET_DIR/skills/"
     log "  ✓ Installed skill: $skill"
 done
@@ -89,7 +89,7 @@ done
 
 # Agents
 mkdir -p "$TARGET_DIR/agents"
-for agent in laravel-artisan.md laravel-eloquent.md laravel-migration.md laravel-container.md; do
+for agent in laravel-artisan.md laravel-eloquent.md laravel-migration.md laravel-database.md laravel-container.md; do
     cp "$SCRIPT_DIR/agents/$agent" "$TARGET_DIR/agents/"
 done
 
@@ -109,12 +109,12 @@ fi
 # Save state
 cat > "$STATE_FILE" <<EOF
 {
-  "version": "1.0.0-beta.2",
+  "version": "1.0.0-beta.6",
   "target": "$TARGET_DIR",
   "installed_at": "$(date -u +%Y-%m-%dT%H:%M:%SZ)",
   "profile": "$PROFILE",
   "tools": [${TOOLS// /, }],
-  "components": ["laravel-patterns", "laravel-tdd", "laravel-security", "laravel-core-internals", "laravel-eloquent", "rules"]
+  "components": ["laravel-patterns", "laravel-tdd", "laravel-security", "laravel-core-internals", "laravel-eloquent", "laravel-database", "rules"]
 }
 EOF
 

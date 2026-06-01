@@ -47,4 +47,6 @@ test('strict types')->arch()->expect('App')->toUseStrictTypes();
 ## Reference
 
 See skill: `laravel-tdd` for comprehensive testing with Pest 4.
+See skill: `laravel-database` for database testing (RefreshDatabase, transactions, migrations).
 See rules/laravel/patterns.md for architecture to test against.
+See rule: `rules/laravel/database.md` for database engineering rules.

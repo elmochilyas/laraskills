@@ -883,6 +883,7 @@ For deep coverage of Service Container, Dependency Injection, Service Providers,
 ## References
 
 - See skill: `laravel-eloquent` for comprehensive advanced Eloquent patterns (relationships, performance, scopes, casts, events)
+- See skill: `laravel-database` for SQL optimization, indexing, PostgreSQL, transactions, and scaling
 - See skill: `laravel-core-internals` for container, DI, providers, facades, lifecycle, and contracts
 - See skill: `laravel-tdd` for testing these patterns with Pest 4
 - See skill: `laravel-security` for securing these patterns

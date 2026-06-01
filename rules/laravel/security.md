@@ -51,3 +51,4 @@ paths:
 ## Reference
 
 See skill: `laravel-security` for comprehensive security patterns.
+See skill: `laravel-database` for SQL injection prevention and database-level security.

@@ -122,3 +122,7 @@ This rule works with:
 - [security.md](security.md) - Security checklist
 - [git-workflow.md](git-workflow.md) - Commit standards
 - [agents.md](agents.md) - Agent delegation
+
+## See Also
+
+- Skill: `laravel-database` for query performance analysis and database-level optimization

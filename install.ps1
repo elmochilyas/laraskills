@@ -53,7 +53,7 @@ if (Test-Path (Join-Path $targetDir '.cursor')) { $detectedTools += 'cursor' }
 if (Test-Path (Join-Path $targetDir '.gemini')) { $detectedTools += 'gemini' }
 if (Test-Path (Join-Path $targetDir '.codex')) { $detectedTools += 'codex' }
 
-Write-Status "Laravel ECC v1.0.0-beta.2"
+Write-Status "Laravel ECC v1.0.0-beta.6"
 Write-Status "Target: $targetDir"
 Write-Status "Profile: $profile"
 Write-Status "Detected tools: $($detectedTools -join ', ')"
@@ -74,7 +74,7 @@ if ($doctor) {
 
 # Handle add component
 if ($component) {
-    $validComponents = @('laravel-patterns', 'laravel-tdd', 'laravel-security', 'laravel-core-internals', 'laravel-eloquent',
+    $validComponents = @('laravel-patterns', 'laravel-tdd', 'laravel-security', 'laravel-core-internals', 'laravel-eloquent', 'laravel-database',
                          'laravel-artisan', 'laravel-migration', 'laravel-container')
 
     if ($component -notin $validComponents) {
@@ -117,10 +117,10 @@ $skillsDir = Join-Path $targetDir 'skills'
 $rulesDir = Join-Path $targetDir 'rules'
 $agentsDir = Join-Path $targetDir 'agents'
 
-# Copy 5 core skills
+# Copy 6 core skills
 New-Item -ItemType Directory -Path $skillsDir -Force | Out-Null
 $srcSkillsDir = Join-Path $scriptDir 'skills'
-foreach ($skill in @('laravel-patterns', 'laravel-tdd', 'laravel-security', 'laravel-core-internals', 'laravel-eloquent')) {
+foreach ($skill in @('laravel-patterns', 'laravel-tdd', 'laravel-security', 'laravel-core-internals', 'laravel-eloquent', 'laravel-database')) {
     Copy-Item -Path (Join-Path $srcSkillsDir $skill) -Destination (Join-Path $skillsDir $skill) -Recurse -Force
     Write-Status "  ✓ Installed skill: $skill"
 }
@@ -133,10 +133,10 @@ foreach ($lang in @('common', 'php', 'web', 'laravel')) {
     Write-Status "  ✓ Installed rules: $lang"
 }
 
-# Copy agents (core profile includes the 4 Laravel agents)
+# Copy agents (core profile includes the 5 Laravel agents)
 New-Item -ItemType Directory -Path $agentsDir -Force | Out-Null
 $srcAgentsDir = Join-Path $scriptDir 'agents'
-foreach ($agent in @('laravel-artisan.md', 'laravel-eloquent.md', 'laravel-migration.md', 'laravel-container.md')) {
+foreach ($agent in @('laravel-artisan.md', 'laravel-eloquent.md', 'laravel-migration.md', 'laravel-database.md', 'laravel-container.md')) {
     Copy-Item -Path (Join-Path $srcAgentsDir $agent) -Destination (Join-Path $agentsDir $agent) -Force
 }
 
@@ -162,12 +162,12 @@ if ($profile -eq 'full') {
 
 # Save state
 $state = @{
-    version = '1.0.0-beta.2'
+    version = '1.0.0-beta.6'
     target = $targetDir
     installed_at = (Get-Date).ToString('o')
     profile = $profile
     tools = $detectedTools
-    components = @('laravel-patterns', 'laravel-tdd', 'laravel-security', 'laravel-core-internals', 'laravel-eloquent', 'rules')
+    components = @('laravel-patterns', 'laravel-tdd', 'laravel-security', 'laravel-core-internals', 'laravel-eloquent', 'laravel-database', 'rules')
 } | ConvertTo-Json
 
 Set-Content -Path $stateFile -Value $state

@@ -17,9 +17,9 @@ npx laravel-ecc@beta add laravel-patterns
 
 | Category | Count | Description |
 |----------|-------|-------------|
-| Skills | 5 | Deep Laravel 13 skills (~35-40 code examples each) |
-| Rules | 34 | common(10) + php(5) + web(7) + laravel(12) |
-| Agents | 4 | Laravel Artisan, Eloquent, Migration, Container agents |
+| Skills | 6 | Deep Laravel 13 skills (~35-40 code examples each) |
+| Rules | 35 | common(10) + php(5) + web(7) + laravel(13) |
+| Agents | 5 | Laravel Artisan, Eloquent, Migration, Database, Container agents |
 | Commands | 4 | artisan, migrate, seed, route-list |
 | Harness Configs | 12 | OpenCode, Claude Code, Cursor, Gemini, Codex, Copilot, VS Code, Zed, Trae, Qwen, CodeBuddy, Kiro |
 | MCP Configs | 2 | Laravel docs + Composer security |
@@ -106,19 +106,25 @@ Key features:
 - Pest 4 browser testing with Playwright
 - Horizon Redis Cluster support
 
-## Three Skills
+## Six Skills
 
 ### laravel-patterns
 Architecture: modular domains, Actions/Services/DTOs, Eloquent optimization, attribute models, Form Requests, API Resources, Queues, Events, Caching, Policies, Pipeline, Service container, Rate limiting
 
 ### laravel-tdd
-Pest 4: Feature/Unit 80/20 split, Model factories, HTTP tests, Auth tests, Laravel fakes (Http/Mail/Queue/Storage/Event/Bus), Architecture tests, Datasets, Snapshot testing, Parallel testing, Dusk, CI
+Pest 4: Feature/Unit 80/20 split, Model factories, HTTP tests, Auth tests, Laravel fakes (Http/Mail/Queue/Storage/Event/Bus), Architecture tests, Datasets, Snapshot testing, Parallel testing, CI
 
 ### laravel-security
-Mass assignment, SQL injection, XSS/Blade, CSRF, Breeze/Fortify, Gates/Polices, FormRequest, Rate limiting, HSTS/CSP headers, Session security, CORS, File uploads, composer audit, Enlightn, APP_KEY rotation, Production hardening
+Mass assignment, SQL injection, XSS/Blade, CSRF, Breeze/Fortify, Gates/Polices, FormRequest, Rate limiting, HSTS/CSP headers, Session security, CORS, File uploads, composer audit, APP_KEY rotation, Production hardening
 
 ### laravel-core-internals
-Service Container, Dependency Injection, Auto Resolution, Contextual Binding, Tagged Services, Service Lifetimes (Singleton/Scoped/Transient), Service Providers (Register/Boot lifecycle, Deferred, Dynamic loading), Facades (Internals, Testing, Anti-patterns, Custom), Request Lifecycle (HTTP Kernel, Middleware Pipeline, Route Resolution, Controller Dispatching, Response Generation), Contracts (Interface-first, Swappable implementations, LSP)
+Service Container, Dependency Injection, Auto Resolution, Contextual Binding, Tagged Services, Service Lifetimes (Singleton/Scoped/Transient), Service Providers (Register/Boot lifecycle, Deferred, Dynamic loading), Facades (Internals, Testing, Anti-patterns, Custom), Request Lifecycle (Middleware Pipeline, Route Resolution, Controller Dispatching, Response Generation), Contracts (Interface-first, Swappable implementations, LSP)
+
+### laravel-eloquent
+Advanced Eloquent: relationships (morph, polymorphic many-to-many, HasOneThrough, HasManyThrough), performance (N+1 prevention, eager constraints, selective columns, aggregate relationships), model design (DTOs, Value Objects, Rich Domain Models), advanced features (custom builders, global/local scopes, query macros, custom/encrypted/enum casts), events (observers, domain events, event sourcing)
+
+### laravel-database
+Database engineering for both MySQL and PostgreSQL: SQL mastery (CTEs, window functions, recursive CTEs, UPSERT, RETURNING, GROUP BY extensions), query plans (EXPLAIN ANALYZE, FORMAT=JSON), index design (composite, partial, covering, functional, GIN/GiST/BRIN/HNSW, FULLTEXT, SPATIAL, invisible, descending), full-text search (whereFullText, Scout, BOOLEAN MODE), database scaling (read replicas, partitioning, sharding, PgBouncer, ProxySQL), multi-tenant strategies, transactions (pessimistic locking, gap locks, isolation levels, deadlock prevention, retry), PostgreSQL (JSONB, GIN, materialized views, triggers, functions, arrays, range types), MySQL (InnoDB, utf8mb4, JSON, ProxySQL, Group Replication, Performance Schema), Laravel 13 vector search (whereVectorSimilarTo, pgvector, embeddings, HNSW, reranking, hybrid full-text + vector)
 
 ## CLI Harness Support
 

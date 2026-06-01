@@ -71,6 +71,8 @@ Before merging, verify:
 ## See Also
 
 - Skill: `laravel-eloquent` for comprehensive advanced Eloquent patterns
+- Skill: `laravel-database` for SQL optimization, indexing strategy, and query analysis
 - Skill: `laravel-patterns` for Actions, DTOs, and Services
 - Skill: `laravel-tdd` for testing Eloquent models
+- Rule: `rules/laravel/database.md` for enforced database engineering rules
 - Agent: `laravel-eloquent` for automated Eloquent optimization

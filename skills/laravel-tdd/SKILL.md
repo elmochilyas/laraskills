@@ -833,6 +833,7 @@ parameters:
 ## References
 
 - See skill: `laravel-patterns` for the architecture patterns to test
+- See skill: `laravel-database` for database testing patterns (transactions, isolation, migrations)
 - See skill: `laravel-security` for security-focused tests
 - See rules/php/testing.md for general PHP testing rules
 - See rules/laravel/testing.md for Laravel-specific testing rules

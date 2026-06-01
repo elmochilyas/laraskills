@@ -1497,6 +1497,9 @@ Before merging any code involving Eloquent models or queries:
 - See skill: `laravel-patterns` for Actions, DTOs, Services, and Architecture patterns
 - See skill: `laravel-tdd` for testing Eloquent models, scopes, casts, and events with Pest 4
 - See skill: `laravel-core-internals` for Service Container, DI, Providers, and Contracts
+- See skill: `laravel-database` for SQL optimization, indexing strategy, PostgreSQL features, and transaction management
 - See rule: `rules/laravel/eloquent.md` for enforced Eloquent rules
+- See rule: `rules/laravel/database.md` for enforced database engineering rules
 - See rule: `rules/laravel/patterns.md` for general Laravel patterns
 - See agent: `laravel-eloquent` for automated Eloquent optimization assistance
+- See agent: `laravel-database` for automated database engineering assistance
