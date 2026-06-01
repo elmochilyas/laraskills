@@ -1,0 +1,113 @@
+{
+  "$schema": "https://opencode.ai/config.json",
+  "instructions": [
+    "AGENTS.md",
+    "CLAUDE.md",
+    "skills/laravel-patterns/SKILL.md",
+    "skills/laravel-tdd/SKILL.md",
+    "skills/laravel-security/SKILL.md"
+  ],
+  "skills": {
+    "paths": [
+      "../skills"
+    ]
+  },
+  "agent": {
+    "build": {
+      "description": "Primary coding agent for Laravel 13 development",
+      "mode": "primary",
+      "model": "anthropic/claude-sonnet-4-5",
+      "tools": {
+        "write": true,
+        "edit": true,
+        "bash": true,
+        "read": true,
+        "changed-files": true
+      }
+    },
+    "planner": {
+      "description": "Expert planning specialist for complex Laravel 13 features",
+      "mode": "subagent",
+      "model": "anthropic/claude-opus-4-5",
+      "tools": {
+        "read": true,
+        "bash": true,
+        "write": false,
+        "edit": false
+      }
+    },
+    "code-reviewer": {
+      "description": "Expert code review specialist for Laravel 13 code quality",
+      "mode": "subagent",
+      "model": "anthropic/claude-opus-4-5",
+      "tools": {
+        "read": true,
+        "bash": true,
+        "write": false,
+        "edit": false
+      }
+    },
+    "security-reviewer": {
+      "description": "Security vulnerability detection for Laravel 13 applications",
+      "mode": "subagent",
+      "model": "anthropic/claude-opus-4-5",
+      "tools": {
+        "read": true,
+        "bash": true,
+        "write": true,
+        "edit": true
+      }
+    },
+    "tdd-guide": {
+      "description": "Test-Driven Development with Pest 4 for Laravel 13",
+      "mode": "subagent",
+      "model": "anthropic/claude-opus-4-5",
+      "tools": {
+        "read": true,
+        "write": true,
+        "edit": true,
+        "bash": true
+      }
+    },
+    "build-error-resolver": {
+      "description": "Fix PHP build, Composer, and Laravel artisan errors",
+      "mode": "subagent",
+      "model": "anthropic/claude-sonnet-4-5",
+      "tools": {
+        "read": true,
+        "write": true,
+        "edit": true,
+        "bash": true
+      }
+    }
+  },
+  "command": {
+    "plan": {
+      "description": "Create a detailed implementation plan for Laravel features",
+      "template": "{file:commands/plan.md}\n\n$ARGUMENTS",
+      "agent": "planner",
+      "subtask": true
+    },
+    "tdd": {
+      "description": "Enforce TDD workflow with Pest 4",
+      "template": "{file:commands/tdd.md}\n\n$ARGUMENTS",
+      "agent": "tdd-guide",
+      "subtask": true
+    },
+    "code-review": {
+      "description": "Review Laravel code for quality, security, and patterns",
+      "template": "{file:commands/code-review.md}\n\n$ARGUMENTS",
+      "agent": "code-reviewer",
+      "subtask": true
+    },
+    "artisan": {
+      "description": "Generate and run Artisan commands",
+      "template": "{file:commands/artisan.md}\n\n$ARGUMENTS",
+      "agent": "build",
+      "subtask": false
+    }
+  },
+  "permission": {
+    "mcp_*": "ask"
+  }
+}

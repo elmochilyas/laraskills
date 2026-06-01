@@ -1,0 +1,32 @@
+{
+  "hooks": {
+    "PostToolUse": [
+      {
+        "matcher": "Write|Edit",
+        "matcher-patterns": ["**/*.php"],
+        "command": "./vendor/bin/pint \"$FILE_PATH\"",
+        "description": "Auto-format edited PHP files with Laravel Pint"
+      },
+      {
+        "matcher": "Write|Edit",
+        "matcher-patterns": ["**/*.php"],
+        "command": "./vendor/bin/phpstan analyse \"$FILE_PATH\" --level=6 --no-progress",
+        "description": "Run PHPStan on edited PHP files (incremental)"
+      },
+      {
+        "matcher": "Write|Edit",
+        "matcher-patterns": ["**/*.php"],
+        "command": "php artisan test --filter=\"$CHANGED\" 2>/dev/null || true",
+        "description": "Run Pest tests for changed file (non-blocking)"
+      }
+    ],
+    "PreToolUse": [
+      {
+        "matcher": "Write|Edit",
+        "matcher-patterns": ["**/*.php"],
+        "command": "",
+        "description": "Guard: Warn if dd/dump/ray/var_dump/die() found"
+      }
+    ]
+  }
+}

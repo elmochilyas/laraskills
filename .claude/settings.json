@@ -1,0 +1,38 @@
+{
+  "instructions": [
+    "AGENTS.md",
+    "CLAUDE.md",
+    "skills/laravel-patterns/SKILL.md",
+    "skills/laravel-tdd/SKILL.md",
+    "skills/laravel-security/SKILL.md",
+    "rules/common/coding-style.md",
+    "rules/common/testing.md",
+    "rules/common/security.md",
+    "rules/php/coding-style.md",
+    "rules/php/patterns.md",
+    "rules/php/testing.md",
+    "rules/php/security.md",
+    "rules/php/hooks.md",
+    "rules/laravel/coding-style.md",
+    "rules/laravel/patterns.md",
+    "rules/laravel/testing.md",
+    "rules/laravel/security.md",
+    "rules/laravel/hooks.md"
+  ],
+  "hooks": {
+    "PostToolUse": [
+      {
+        "matcher": "Write|Edit",
+        "matcher-patterns": ["**/*.php"],
+        "command": "./vendor/bin/pint \"$FILE_PATH\"",
+        "description": "Auto-format edited PHP files with Laravel Pint"
+      },
+      {
+        "matcher": "Write|Edit",
+        "matcher-patterns": ["**/*.php"],
+        "command": "./vendor/bin/phpstan analyse \"$FILE_PATH\" --level=6 --no-progress",
+        "description": "Run PHPStan on edited PHP files"
+      }
+    ]
+  }
+}

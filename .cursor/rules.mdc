@@ -1,0 +1,36 @@
+---
+description: Laravel 13 development rules for Cursor IDE
+globs: ["**/*.php", "**/*.blade.php", "**/composer.json", "**/pint.json"]
+---
+
+# Laravel 13 Rules for Cursor
+
+## Core Rules
+
+- Follow PSR-12 with Laravel Pint formatting.
+- Use `declare(strict_types=1)` in all PHP files.
+- Use Laravel 13 PHP 8 attributes: `#[Table]`, `#[Fillable]`, `#[Hidden]`, `#[Casts]`.
+- Organize by feature (`app/Modules/User/`), not by type (`app/Models/`).
+- Use Actions for single-purpose operations, Services for orchestration.
+- Use readonly DTOs for all data crossing boundaries.
+
+## Testing Rules
+
+- Use Pest 4 for all tests (Laravel 13 default).
+- 80% feature tests, 20% unit tests.
+- Use Laravel fakes (Http, Mail, Queue, Storage) over mocks.
+- Write architecture tests to enforce conventions.
+
+## Security Rules
+
+- Every model must have `#[Fillable]` or `#[Guarded]`.
+- Never pass `$request->all()` to `Model::create()`.
+- Use Blade `{{ }}` escaping (never `{!! !!}` without sanitizing).
+- Apply rate limiting to all API endpoints.
+
+## Laravel 13 Specific
+
+- PHP 8.3+ required.
+- Pest 4 is first-class with PHP Attribute Output.
+- Use `clickOnceVisible` and `clickOnceEnabled` for Dusk.
+- Queue jobs use `#[Connection]`, `#[Tries]`, `#[Timeout]` attributes.

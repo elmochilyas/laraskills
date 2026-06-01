@@ -1,0 +1,49 @@
+{
+  "name": "laravel-ecc",
+  "version": "1.0.0-beta.1",
+  "description": "Laravel 13 ECC — AI-ready Laravel skills, rules, agents, and CLI harness configs for OpenCode, Claude Code, Cursor, Gemini, Codex, Copilot, and more",
+  "publishConfig": { "access": "public" },
+  "keywords": [
+    "laravel", "laravel13", "ecc", "php", "pest", "tdd", "eloquent",
+    "opencode", "claude-code", "cursor", "gemini-cli", "codex-cli",
+    "copilot", "ai-agents", "skills", "rules", "hooks", "mcp"
+  ],
+  "author": { "name": "Laravel ECC Contributors" },
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/affaan-m/ECC.git"
+  },
+  "homepage": "https://github.com/affaan-m/ECC#readme",
+  "bin": {
+    "laravel-ecc": "scripts/laravel-ecc.mjs"
+  },
+  "files": [
+    "skills/",
+    "rules/",
+    "agents/",
+    "commands/",
+    "hooks/",
+    "mcp-configs/",
+    ".opencode/",
+    ".claude/",
+    ".cursor/",
+    ".gemini/",
+    ".codex/",
+    ".vscode/",
+    ".zed/",
+    ".trae/",
+    ".qwen/",
+    ".codebuddy/",
+    ".kiro/",
+    "install.ps1",
+    "install.sh",
+    "AGENTS.md",
+    "CLAUDE.md",
+    "VERSION"
+  ],
+  "scripts": {
+    "postinstall": "node -e \"console.log('\\n  laravel-ecc installed! Run `npx laravel-ecc add <component>` to add Laravel 13 skills to your project.\\n')\""
+  },
+  "engines": { "node": ">=18" }
+}

@@ -1,0 +1,35 @@
+{
+  "languages": {
+    "PHP": {
+      "format_on_save": "on",
+      "formatter": {
+        "language_servers": ["intelephense"],
+        "external": {
+          "command": "php",
+          "arguments": ["vendor/bin/pint", "--format", "json", "--stdin"]
+        }
+      },
+      "language_servers": ["intelephense"]
+    }
+  },
+  "language_servers": {
+    "intelephense": {
+      "initialization_options": {
+        "storagePath": "/tmp/intelephense",
+        "global": {
+          "phpVersion": "8.3"
+        }
+      }
+    }
+  },
+  "lsp": {
+    "intelephense": {
+      "initialization_options": {
+        "licenceKey": "",
+        "storagePath": "/tmp/intelephense"
+      }
+    }
+  },
+  "tab_size": 4,
+  "hard_tabs": false
+}
