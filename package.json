@@ -12,9 +12,9 @@
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/affaan-m/laravel-ecc.git"
+    "url": "git+https://github.com/elmochilyas/laravel-ecc.git"
   },
-  "homepage": "https://github.com/affaan-m/laravel-ecc#readme",
+  "homepage": "https://github.com/elmochilyas/laravel-ecc#readme",
   "bin": {
     "laravel-ecc": "scripts/laravel-ecc.mjs"
   },
