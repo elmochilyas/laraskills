@@ -1110,7 +1110,8 @@ Failure to meet any of these is an **architectural violation** requiring refacto
 
 ## References
 
-- See skill: `laravel-patterns` for Actions, DTOs, and Eloquent patterns
+- See skill: `laravel-eloquent` for advanced Eloquent architecture, performance, and domain modeling
+- See skill: `laravel-patterns` for Actions, DTOs, and Service patterns
 - See skill: `laravel-tdd` for testing containers, facades, and contracts
 - See rule: `rules/laravel/service-container.md` for container best practices
 - See rule: `rules/laravel/service-providers.md` for provider guidelines

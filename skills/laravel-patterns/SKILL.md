@@ -296,104 +296,34 @@ class Price
 
 ## Eloquent Best Practices
 
-### Scoped Bindings
+See the dedicated **skill: `laravel-eloquent`** for comprehensive coverage of:
 
-Always scope route model bindings to prevent access to resources owned by other users.
+- **Relationships**: Morph relations, Polymorphic Many-to-Many, HasOneThrough, HasManyThrough, deep/nested relationships
+- **Performance**: N+1 prevention, eager loading constraints, lazy eager loading, selective columns, aggregate relationships
+- **Model Design**: DTO Pattern, Value Objects, Rich Domain Models, Repository Alternatives (Query Objects, Custom Builders, Domain Services)
+- **Advanced Features**: Global Scopes, Local Scopes, Custom Builders, Query Macros, Custom Casts, Encrypted Casts, Enum Casts
+- **Events**: Model Observers, Domain Events, Event Sourcing Patterns
+- **Enterprise Checklist**: Complete audit checklist for Eloquent code review
+
+### Quick Reference
 
 ```php
+// Scoped Bindings
 Route::get('/users/{user}/posts/{post}', function (User $user, Post $post) {
     return $post;
 })->scopeBindings();
-```
 
-### Query Scopes
-
-```php
-class Post extends Model
-{
-    public function scopePublished(Builder $query): Builder
-    {
-        return $query->whereNotNull('published_at');
-    }
-
-    public function scopeRecent(Builder $query): Builder
-    {
-        return $query->orderBy('created_at', 'desc');
-    }
-}
-
-// Usage
-Post::published()->recent()->get();
-```
-
-### Global Scopes
-
-```php
-class ActiveScope implements Scope
-{
-    public function apply(Builder $builder, Model $model): void
-    {
-        $builder->where('is_active', true);
-    }
-}
-
-#[ScopedBy(ActiveScope::class)]
-class Product extends Model {}
-```
-
-### Eager Loading (Prevent N+1)
-
-```php
-// BAD — N+1 queries
-$orders = Order::all();
-foreach ($orders as $order) {
-    echo $order->user->name;
-}
-
-// GOOD — eager load
-$orders = Order::with('user', 'items.product')->get();
-
-// GOOD — lazy eager load when needed later
-$orders = Order::all();
-if ($needsUsers) {
-    $orders->load('user');
-}
-
-// GOOD — prevent N+1 with once
-$orders = Order::all();
-$orders->each(fn ($order) => $order->once('user', fn () => $order->user));
-```
-
-### Constrained Eager Loading
-
-```php
-$users = User::with(['posts' => function (Builder $query) {
-    $query->where('is_published', true)->orderBy('created_at', 'desc');
-}])->get();
-```
-
-### Select Specific Columns
-
-```php
-// BAD
-$users = User::all();
-
-// GOOD
-$users = User::select('id', 'name', 'email')->get();
-```
-
-### Cursor-Based Pagination for Large Datasets
-
-```php
+// Cursor-Based Pagination
 $users = User::orderBy('id')->cursorPaginate(25);
-// Returns: data[], next_cursor, prev_cursor
-```
 
-### Model::query() for Type Safety
-
-```php
-// GOOD — better static analysis
+// Model::query() for Type Safety
 User::query()->where('active', true)->get();
+
+// Attribute-Driven Model (Laravel 13)
+#[Table('users')]
+#[Fillable(['name', 'email'])]
+#[Casts(['is_admin' => 'boolean'])]
+class User extends Model {}
 ```
 
 ## Form Requests
@@ -952,11 +882,13 @@ For deep coverage of Service Container, Dependency Injection, Service Providers,
 
 ## References
 
+- See skill: `laravel-eloquent` for comprehensive advanced Eloquent patterns (relationships, performance, scopes, casts, events)
 - See skill: `laravel-core-internals` for container, DI, providers, facades, lifecycle, and contracts
 - See skill: `laravel-tdd` for testing these patterns with Pest 4
 - See skill: `laravel-security` for securing these patterns
 - See rules/php/patterns.md for general PHP patterns
 - See rules/laravel/patterns.md for Laravel-specific rule supplements
+- See rules/laravel/eloquent.md for enforced Eloquent rules
 - See rules/laravel/service-container.md for container best practices
 - See rules/laravel/service-providers.md for provider guidelines
 - See rules/laravel/facades.md for facade usage rules

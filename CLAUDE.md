@@ -41,6 +41,7 @@ php artisan make:controller --invokable RegisterUserController
 | laravel-tdd | skills/laravel-tdd/SKILL.md | Pest 4, Feature tests, Fakes, Architecture tests |
 | laravel-security | skills/laravel-security/SKILL.md | Mass assignment, XSS, CSRF, Gates, Rate limiting |
 | laravel-core-internals | skills/laravel-core-internals/SKILL.md | Service Container, DI, Providers, Facades, Request Lifecycle, Contracts |
+| laravel-eloquent | skills/laravel-eloquent/SKILL.md | Advanced Eloquent: relationships, performance, domain modeling, scopes, casts, events |
 
 ## Laravel 13 Specifics
 

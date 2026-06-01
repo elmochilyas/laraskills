@@ -190,7 +190,7 @@ function install(target, profile) {
 
   const skillList = profile === 'minimal'
     ? ['laravel-patterns', 'laravel-tdd', 'laravel-security']
-    : ['laravel-patterns', 'laravel-tdd', 'laravel-security', 'laravel-core-internals'];
+    : ['laravel-patterns', 'laravel-tdd', 'laravel-security', 'laravel-core-internals', 'laravel-eloquent'];
 
   for (const skill of skillList) {
     const src = join(ROOT, 'skills', skill);
@@ -324,7 +324,7 @@ Usage:
 
 Profiles:
   minimal   Skills only (3 skills)
-  core      4 skills + rules + agents (default)
+  core      5 skills + rules + agents (default)
   full      Everything + commands + harness configs
 
 Components:

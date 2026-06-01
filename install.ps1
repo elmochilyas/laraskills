@@ -74,8 +74,8 @@ if ($doctor) {
 
 # Handle add component
 if ($component) {
-    $validComponents = @('laravel-patterns', 'laravel-tdd', 'laravel-security', 'laravel-core-internals',
-                         'laravel-artisan', 'laravel-eloquent', 'laravel-migration', 'laravel-container')
+    $validComponents = @('laravel-patterns', 'laravel-tdd', 'laravel-security', 'laravel-core-internals', 'laravel-eloquent',
+                         'laravel-artisan', 'laravel-migration', 'laravel-container')
 
     if ($component -notin $validComponents) {
         Write-Error "Unknown component: $component. Valid: $($validComponents -join ', ')"
@@ -117,10 +117,10 @@ $skillsDir = Join-Path $targetDir 'skills'
 $rulesDir = Join-Path $targetDir 'rules'
 $agentsDir = Join-Path $targetDir 'agents'
 
-# Copy 4 core skills
+# Copy 5 core skills
 New-Item -ItemType Directory -Path $skillsDir -Force | Out-Null
 $srcSkillsDir = Join-Path $scriptDir 'skills'
-foreach ($skill in @('laravel-patterns', 'laravel-tdd', 'laravel-security', 'laravel-core-internals')) {
+foreach ($skill in @('laravel-patterns', 'laravel-tdd', 'laravel-security', 'laravel-core-internals', 'laravel-eloquent')) {
     Copy-Item -Path (Join-Path $srcSkillsDir $skill) -Destination (Join-Path $skillsDir $skill) -Recurse -Force
     Write-Status "  ✓ Installed skill: $skill"
 }
@@ -167,7 +167,7 @@ $state = @{
     installed_at = (Get-Date).ToString('o')
     profile = $profile
     tools = $detectedTools
-    components = @('laravel-patterns', 'laravel-tdd', 'laravel-security', 'laravel-core-internals', 'rules')
+    components = @('laravel-patterns', 'laravel-tdd', 'laravel-security', 'laravel-core-internals', 'laravel-eloquent', 'rules')
 } | ConvertTo-Json
 
 Set-Content -Path $stateFile -Value $state

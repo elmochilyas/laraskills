@@ -17,8 +17,8 @@ npx laravel-ecc@beta add laravel-patterns
 
 | Category | Count | Description |
 |----------|-------|-------------|
-| Skills | 4 | Deep Laravel 13 skills (~35-40 code examples each) |
-| Rules | 33 | common(10) + php(5) + web(7) + laravel(11) |
+| Skills | 5 | Deep Laravel 13 skills (~35-40 code examples each) |
+| Rules | 34 | common(10) + php(5) + web(7) + laravel(12) |
 | Agents | 4 | Laravel Artisan, Eloquent, Migration, Container agents |
 | Commands | 4 | artisan, migrate, seed, route-list |
 | Harness Configs | 12 | OpenCode, Claude Code, Cursor, Gemini, Codex, Copilot, VS Code, Zed, Trae, Qwen, CodeBuddy, Kiro |
@@ -63,7 +63,7 @@ npx skills add elmochilyas/laravel-ecc --skill laravel-patterns
 ./install.ps1 --profile minimal   # Windows
 ./install.sh --profile minimal    # macOS/Linux
 
-# Core (4 skills + rules + agents — default)
+# Core (5 skills + rules + agents — default)
 ./install.ps1                     # Windows
 ./install.sh                      # macOS/Linux
 

@@ -6,7 +6,8 @@
     "skills/laravel-patterns/SKILL.md",
     "skills/laravel-tdd/SKILL.md",
     "skills/laravel-security/SKILL.md",
-    "skills/laravel-core-internals/SKILL.md"
+    "skills/laravel-core-internals/SKILL.md",
+    "skills/laravel-eloquent/SKILL.md"
   ],
   "skills": {
     "paths": [

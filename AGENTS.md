@@ -17,7 +17,7 @@ Laravel 13 AI-ready skills, rules, agents, and CLI harness configs for OpenCode,
 | Agent | Purpose | When to Use |
 |-------|---------|-------------|
 | laravel-artisan | Artisan command generation | Creating commands, schedules, make:classes |
-| laravel-eloquent | Eloquent ORM optimization | Query optimization, relationships, N+1 fixes |
+| laravel-eloquent | Advanced Eloquent ORM specialist | Relationship mapping, query optimization, N+1 elimination, domain modeling, scopes, casts, events, performance tuning |
 | laravel-migration | Database migration design | Schema design, migrations, seeders, factories |
 | laravel-container | Container, DI, provider, facade architecture | Container bindings, providers, contract design, facade review |
 
@@ -25,14 +25,18 @@ Laravel 13 AI-ready skills, rules, agents, and CLI harness configs for OpenCode,
 
 | Skill | Purpose |
 |-------|---------|
-| laravel-patterns | Laravel 13 architecture: Actions, DTOs, Services, Eloquent, Queues, Caching |
+| laravel-patterns | Laravel 13 architecture: Actions, DTOs, Services, Queues, Caching, API Resources |
+| laravel-eloquent | Advanced Eloquent: relationships (morph, deep, through), performance (N+1, aggregates), domain modeling (DTOs, VOs), custom builders, scopes, casts, events, event sourcing |
 | laravel-tdd | Laravel 13 testing with Pest 4: Feature tests, fakes, architecture tests |
 | laravel-security | Laravel 13 security: mass assignment, XSS, CSRF, Gates/Polices, rate limiting |
 | laravel-core-internals | Laravel 13 core internals: Service Container, DI, Providers, Facades, Request Lifecycle, Contracts |
 
 ## Laravel 13 Key Features
 
-- **Attribute-driven models**: `#[Table]`, `#[Fillable]`, `#[Hidden]`, `#[Casts]`, `#[Connection]`, `#[Tries]`
+- **Attribute-driven models**: `#[Table]`, `#[Fillable]`, `#[Hidden]`, `#[Casts]`, `#[Connection]`, `#[ScopedBy]`, `#[ObservedBy]`
+- **Universal PHP 8 attributes**: Model config, queue jobs (`#[Tries]`, `#[Timeout]`, `#[Backoff]`), console commands (`#[AsCommand]`, `#[Signature]`, `#[Description]`)
+- **Advanced Eloquent**: Polymorphic relationships, HasOneThrough/HasManyThrough, custom builders, global/local scopes, query macros, custom/encrypted/enum casts
+- **Rich domain models**: DTOs, Value Objects, domain events, event sourcing patterns
 - **Pest 4 as first-class** test framework (PHP Attribute Output PAO shipped)
 - **PHP 8.3+ required**
 - **Svelte 5 adapter** for Laravel Echo
@@ -75,9 +79,9 @@ Test types:
 ## Project Structure
 
 ```
-skills/          — 4 Laravel 13 deep skills
+skills/          — 5 Laravel 13 deep skills
 rules/           — Always-follow guidelines (common + php + web + laravel)
-agents/          — 4 Laravel-specific agents
+agents/          — 4 Laravel-specific agents (+ 4 MCP agents in mcp-configs)
 commands/        — 4 Laravel commands + ECC commands
 hooks/           — Trigger-based automations for Pint, PHPStan, Pest
 mcp-configs/     — MCP server configurations

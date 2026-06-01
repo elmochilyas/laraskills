@@ -63,6 +63,8 @@ Single responsibility per middleware. Global for cross-cutting, route for domain
 ## Reference
 
 See skill: `laravel-patterns` for comprehensive Laravel patterns.
+See skill: `laravel-eloquent` for advanced Eloquent architecture and performance.
 See skill: `laravel-tdd` for testing patterns.
 See skill: `laravel-security` for security patterns.
 See skill: `laravel-core-internals` for container, DI, providers, facades, request lifecycle, and contracts.
+See rule: `rules/laravel/eloquent.md` for enforced Eloquent rules.

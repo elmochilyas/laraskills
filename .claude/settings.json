@@ -24,7 +24,9 @@
     "rules/laravel/contracts.md",
     "rules/laravel/middleware.md",
     "rules/laravel/architecture.md",
-    "skills/laravel-core-internals/SKILL.md"
+    "skills/laravel-core-internals/SKILL.md",
+    "skills/laravel-eloquent/SKILL.md",
+    "rules/laravel/eloquent.md"
   ],
   "hooks": {
     "PostToolUse": [

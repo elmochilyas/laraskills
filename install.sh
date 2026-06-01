@@ -56,7 +56,7 @@ fi
 
 if [ -n "${COMPONENT:-}" ]; then
     case "$COMPONENT" in
-        laravel-patterns|laravel-tdd|laravel-security|laravel-core-internals)
+        laravel-patterns|laravel-tdd|laravel-security|laravel-core-internals|laravel-eloquent)
             mkdir -p "$TARGET_DIR/skills"
             cp -r "$SCRIPT_DIR/skills/$COMPONENT" "$TARGET_DIR/skills/"
             log "Added: $COMPONENT"
@@ -66,7 +66,7 @@ if [ -n "${COMPONENT:-}" ]; then
             cp "$SCRIPT_DIR/agents/${COMPONENT}.md" "$TARGET_DIR/agents/"
             log "Added: $COMPONENT"
             ;;
-        *) err "Unknown: $COMPONENT Valid: laravel-patterns, laravel-tdd, laravel-security, laravel-core-internals, laravel-artisan, laravel-eloquent, laravel-migration, laravel-container"; exit 1 ;;
+        *) err "Unknown: $COMPONENT Valid: laravel-patterns, laravel-tdd, laravel-security, laravel-core-internals, laravel-eloquent, laravel-artisan, laravel-migration, laravel-container"; exit 1 ;;
     esac
     exit 0
 fi
@@ -75,7 +75,7 @@ log "Installing Laravel ECC..."
 
 # Skills
 mkdir -p "$TARGET_DIR/skills"
-for skill in laravel-patterns laravel-tdd laravel-security laravel-core-internals; do
+for skill in laravel-patterns laravel-tdd laravel-security laravel-core-internals laravel-eloquent; do
     cp -r "$SCRIPT_DIR/skills/$skill" "$TARGET_DIR/skills/"
     log "  ✓ Installed skill: $skill"
 done
@@ -114,7 +114,7 @@ cat > "$STATE_FILE" <<EOF
   "installed_at": "$(date -u +%Y-%m-%dT%H:%M:%SZ)",
   "profile": "$PROFILE",
   "tools": [${TOOLS// /, }],
-  "components": ["laravel-patterns", "laravel-tdd", "laravel-security", "laravel-core-internals", "rules"]
+  "components": ["laravel-patterns", "laravel-tdd", "laravel-security", "laravel-core-internals", "laravel-eloquent", "rules"]
 }
 EOF
 
