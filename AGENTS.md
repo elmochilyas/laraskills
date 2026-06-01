@@ -82,4 +82,6 @@ commands/        — 4 Laravel commands + ECC commands
 hooks/           — Trigger-based automations for Pint, PHPStan, Pest
 mcp-configs/     — MCP server configurations
 scripts/         — Cross-platform Node.js utilities
+update.ps1       — Windows update script (syncs to latest package version)
+update.sh        — Unix update script (syncs to latest package version)
 ```

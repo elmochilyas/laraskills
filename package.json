@@ -39,6 +39,8 @@
     ".github/",
     "install.ps1",
     "install.sh",
+    "update.ps1",
+    "update.sh",
     "AGENTS.md",
     "CLAUDE.md",
     "VERSION"

@@ -29,10 +29,15 @@ npx laravel-ecc@beta add laravel-patterns
 ### Install from npm
 
 ```bash
-# Install a specific skill
+# Full installation to current project
+npx laravel-ecc@beta install
+
+# Install with a different profile
+npx laravel-ecc@beta install --profile minimal    # Skills only
+npx laravel-ecc@beta install --profile full       # Everything
+
+# Add a single component to an existing project
 npx laravel-ecc@beta add laravel-patterns
-npx laravel-ecc@beta add laravel-tdd
-npx laravel-ecc@beta add laravel-security
 
 # Check installation state
 npx laravel-ecc@beta doctor
@@ -58,10 +63,36 @@ npx skills add elmochilyas/laravel-ecc --skill laravel-patterns
 ./install.ps1 --profile minimal   # Windows
 ./install.sh --profile minimal    # macOS/Linux
 
+# Core (4 skills + rules + agents — default)
+./install.ps1                     # Windows
+./install.sh                      # macOS/Linux
+
 # Full (everything)
 ./install.ps1 --profile full      # Windows
 ./install.sh --profile full       # macOS/Linux
 ```
+
+### Update to Latest
+
+```bash
+# Via npm (recommended)
+npx laravel-ecc@beta update
+
+# Via install scripts
+./update.ps1                      # Windows
+./update.sh                       # macOS/Linux
+
+# Preview changes without applying
+./update.ps1 --dry-run            # Windows
+./update.sh --dry-run             # macOS/Linux
+
+# Check version
+npx laravel-ecc@beta doctor
+./update.ps1 --version            # Windows
+./update.sh --version             # macOS/Linux
+```
+
+The update script reads your existing installation state (`.laravel-ecc-state.json`) and syncs all components to the latest package version while preserving your installation profile.
 
 ## Laravel 13
 
