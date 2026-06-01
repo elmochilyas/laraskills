@@ -74,8 +74,8 @@ if ($doctor) {
 
 # Handle add component
 if ($component) {
-    $validComponents = @('laravel-patterns', 'laravel-tdd', 'laravel-security',
-                         'laravel-artisan', 'laravel-eloquent', 'laravel-migration')
+    $validComponents = @('laravel-patterns', 'laravel-tdd', 'laravel-security', 'laravel-core-internals',
+                         'laravel-artisan', 'laravel-eloquent', 'laravel-migration', 'laravel-container')
 
     if ($component -notin $validComponents) {
         Write-Error "Unknown component: $component. Valid: $($validComponents -join ', ')"
@@ -117,10 +117,10 @@ $skillsDir = Join-Path $targetDir 'skills'
 $rulesDir = Join-Path $targetDir 'rules'
 $agentsDir = Join-Path $targetDir 'agents'
 
-# Copy 3 core skills
+# Copy 4 core skills
 New-Item -ItemType Directory -Path $skillsDir -Force | Out-Null
 $srcSkillsDir = Join-Path $scriptDir 'skills'
-foreach ($skill in @('laravel-patterns', 'laravel-tdd', 'laravel-security')) {
+foreach ($skill in @('laravel-patterns', 'laravel-tdd', 'laravel-security', 'laravel-core-internals')) {
     Copy-Item -Path (Join-Path $srcSkillsDir $skill) -Destination (Join-Path $skillsDir $skill) -Recurse -Force
     Write-Status "  ✓ Installed skill: $skill"
 }
@@ -133,10 +133,10 @@ foreach ($lang in @('common', 'php', 'web', 'laravel')) {
     Write-Status "  ✓ Installed rules: $lang"
 }
 
-# Copy agents (core profile includes the 3 Laravel agents)
+# Copy agents (core profile includes the 4 Laravel agents)
 New-Item -ItemType Directory -Path $agentsDir -Force | Out-Null
 $srcAgentsDir = Join-Path $scriptDir 'agents'
-foreach ($agent in @('laravel-artisan.md', 'laravel-eloquent.md', 'laravel-migration.md')) {
+foreach ($agent in @('laravel-artisan.md', 'laravel-eloquent.md', 'laravel-migration.md', 'laravel-container.md')) {
     Copy-Item -Path (Join-Path $srcAgentsDir $agent) -Destination (Join-Path $agentsDir $agent) -Force
 }
 
@@ -167,7 +167,7 @@ $state = @{
     installed_at = (Get-Date).ToString('o')
     profile = $profile
     tools = $detectedTools
-    components = @('laravel-patterns', 'laravel-tdd', 'laravel-security', 'rules')
+    components = @('laravel-patterns', 'laravel-tdd', 'laravel-security', 'laravel-core-internals', 'rules')
 } | ConvertTo-Json
 
 Set-Content -Path $stateFile -Value $state

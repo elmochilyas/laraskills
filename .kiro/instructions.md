@@ -5,6 +5,7 @@
 - Attribute-driven models: `#[Table('users')]` `#[Fillable(['name', 'email'])]`
 - Domain modules: `app/Modules/{Feature}/Actions/`, `app/Modules/{Feature}/DTOs/`
 - Single-purpose Action classes with `execute()`
+- Constructor injection, depend on contracts, avoid facades in business logic
 - Pest 4 for testing (feature > unit, 80/20 split)
 - FormRequest for validation + authorization
 - Gates and Policies for access control

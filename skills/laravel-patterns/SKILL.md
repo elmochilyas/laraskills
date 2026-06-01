@@ -867,9 +867,92 @@ test('create user action creates a user', function () {
 });
 ```
 
+## Architecture Flow
+
+Every Laravel application should follow a consistent architecture flow:
+
+```
+Controller (thin — validation, auth, response)
+    ↓
+Action (orchestration, single responsibility)
+    ↓
+Domain Service (business logic)
+    ↓
+Contract (interface)
+    ↓
+Infrastructure (Stripe, Eloquent, Mailgun, etc.)
+    ↓
+Database / External API
+```
+
+### Example: Controller → Action → Contract → Infrastructure
+
+```php
+// Controller — thin, no business logic
+class CreatePaymentController
+{
+    public function __invoke(
+        CreatePaymentRequest $request,
+        ProcessPaymentAction $action,
+    ): PaymentResource
+    {
+        $dto = CreatePaymentDTO::fromRequest($request->validated());
+        $payment = $action->execute($dto);
+        return new PaymentResource($payment);
+    }
+}
+
+// Action — orchestration
+class ProcessPaymentAction
+{
+    public function __construct(
+        private PaymentGatewayInterface $gateway,
+        private OrderRepository $orders,
+        private PaymentRepository $payments,
+    ) {}
+
+    public function execute(CreatePaymentDTO $dto): Payment
+    {
+        $order = $this->orders->findOrFail($dto->orderId);
+        $result = $this->gateway->charge($dto->amount, $dto->paymentData);
+        $payment = $this->payments->createFromResult($order, $result);
+        return $payment;
+    }
+}
+
+// Contract
+interface PaymentGatewayInterface
+{
+    public function charge(int $amount, array $data): PaymentResult;
+}
+
+// Infrastructure
+class StripeGateway implements PaymentGatewayInterface
+{
+    public function charge(int $amount, array $data): PaymentResult
+    {
+        $charge = \Stripe\Charge::create([
+            'amount' => $amount,
+            'currency' => 'usd',
+            'source' => $data['token'],
+        ]);
+        return PaymentResult::fromStripe($charge);
+    }
+}
+```
+
+For deep coverage of Service Container, Dependency Injection, Service Providers, Facades, Request Lifecycle, and Contracts, see **skill: `laravel-core-internals`**.
+
 ## References
 
+- See skill: `laravel-core-internals` for container, DI, providers, facades, lifecycle, and contracts
 - See skill: `laravel-tdd` for testing these patterns with Pest 4
 - See skill: `laravel-security` for securing these patterns
 - See rules/php/patterns.md for general PHP patterns
 - See rules/laravel/patterns.md for Laravel-specific rule supplements
+- See rules/laravel/service-container.md for container best practices
+- See rules/laravel/service-providers.md for provider guidelines
+- See rules/laravel/facades.md for facade usage rules
+- See rules/laravel/contracts.md for contract design rules
+- See rules/laravel/middleware.md for middleware pipeline rules
+- See rules/laravel/architecture.md for architecture flow rules

@@ -36,6 +36,7 @@
     ".qwen/",
     ".codebuddy/",
     ".kiro/",
+    ".github/",
     "install.ps1",
     "install.sh",
     "AGENTS.md",

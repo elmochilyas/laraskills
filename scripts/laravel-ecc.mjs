@@ -19,8 +19,8 @@ const require = createRequire(import.meta.url);
 const pkg = JSON.parse(readFileSync(join(ROOT, 'package.json'), 'utf-8'));
 
 const VALID_COMPONENTS = [
-  'laravel-patterns', 'laravel-tdd', 'laravel-security',
-  'laravel-artisan', 'laravel-eloquent', 'laravel-migration',
+  'laravel-patterns', 'laravel-tdd', 'laravel-security', 'laravel-core-internals',
+  'laravel-artisan', 'laravel-eloquent', 'laravel-migration', 'laravel-container',
 ];
 
 function log(msg) { console.log(`[Laravel ECC] ${msg}`); }
@@ -94,12 +94,14 @@ Usage:
   npx laravel-ecc --help             Show this help
 
 Components:
-  laravel-patterns    Laravel 13 architecture patterns (Actions, DTOs, Eloquent, Queues)
-  laravel-tdd         Laravel 13 testing with Pest 4 (feature tests, fakes, architecture)
-  laravel-security    Laravel 13 security (mass assignment, XSS, CSRF, Gates, rate limiting)
-  laravel-artisan     Artisan command generation agent
-  laravel-eloquent    Eloquent ORM optimization agent
-  laravel-migration   Database migration design agent
+  laravel-patterns        Laravel 13 architecture patterns (Actions, DTOs, Eloquent, Queues)
+  laravel-tdd             Laravel 13 testing with Pest 4 (feature tests, fakes, architecture)
+  laravel-security        Laravel 13 security (mass assignment, XSS, CSRF, Gates, rate limiting)
+  laravel-core-internals  Laravel 13 core internals (Container, DI, Providers, Facades, Lifecycle, Contracts)
+  laravel-artisan         Artisan command generation agent
+  laravel-eloquent        Eloquent ORM optimization agent
+  laravel-migration       Database migration design agent
+  laravel-container       Container, DI, provider, facade architecture agent
 
 Also install via install scripts:
   ./install.ps1 --profile minimal|core|full   Windows

@@ -13,6 +13,10 @@ globs: ["**/*.php", "**/*.blade.php", "**/composer.json", "**/pint.json"]
 - Organize by feature (`app/Modules/User/`), not by type (`app/Models/`).
 - Use Actions for single-purpose operations, Services for orchestration.
 - Use readonly DTOs for all data crossing boundaries.
+- Follow Controller → Action → Service → Contract → Infrastructure flow.
+- Always use constructor injection, never `app()` or `resolve()` in business code.
+- Depend on contracts (interfaces), not concrete implementations.
+- Use facades only for infrastructure concerns (Cache, Log, DB); inject contracts elsewhere.
 
 ## Testing Rules
 

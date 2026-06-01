@@ -17,9 +17,9 @@ npx laravel-ecc@beta add laravel-patterns
 
 | Category | Count | Description |
 |----------|-------|-------------|
-| Skills | 3 | Deep Laravel 13 skills (~35-40 code examples each) |
-| Rules | 22 | common(10) + php(5) + web(7) + laravel(5) |
-| Agents | 3 | Laravel Artisan, Eloquent, Migration agents |
+| Skills | 4 | Deep Laravel 13 skills (~35-40 code examples each) |
+| Rules | 33 | common(10) + php(5) + web(7) + laravel(11) |
+| Agents | 4 | Laravel Artisan, Eloquent, Migration, Container agents |
 | Commands | 4 | artisan, migrate, seed, route-list |
 | Harness Configs | 12 | OpenCode, Claude Code, Cursor, Gemini, Codex, Copilot, VS Code, Zed, Trae, Qwen, CodeBuddy, Kiro |
 | MCP Configs | 2 | Laravel docs + Composer security |
@@ -85,6 +85,9 @@ Pest 4: Feature/Unit 80/20 split, Model factories, HTTP tests, Auth tests, Larav
 
 ### laravel-security
 Mass assignment, SQL injection, XSS/Blade, CSRF, Breeze/Fortify, Gates/Polices, FormRequest, Rate limiting, HSTS/CSP headers, Session security, CORS, File uploads, composer audit, Enlightn, APP_KEY rotation, Production hardening
+
+### laravel-core-internals
+Service Container, Dependency Injection, Auto Resolution, Contextual Binding, Tagged Services, Service Lifetimes (Singleton/Scoped/Transient), Service Providers (Register/Boot lifecycle, Deferred, Dynamic loading), Facades (Internals, Testing, Anti-patterns, Custom), Request Lifecycle (HTTP Kernel, Middleware Pipeline, Route Resolution, Controller Dispatching, Response Generation), Contracts (Interface-first, Swappable implementations, LSP)
 
 ## CLI Harness Support
 

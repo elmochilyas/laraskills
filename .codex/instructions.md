@@ -16,6 +16,8 @@ app/Modules/
 - **Actions**: Single-purpose classes with `execute()` method
 - **DTOs**: Readonly classes for data transfer between layers
 - **Attributes**: Use PHP 8 attributes (`#[Fillable]`, `#[Table]`, `#[Tries]`) instead of property declarations
+- **Container**: Constructor injection, depend on contracts, contextual binding
+- **Facades**: Use only for infrastructure (Cache, Log, DB); inject contracts in business code
 
 ## Testing
 

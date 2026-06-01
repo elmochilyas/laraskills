@@ -7,6 +7,7 @@
 - **Structure**: `app/Modules/{Feature}/` (domain, not type)
 - **Actions**: Single-purpose classes, `execute()` method
 - **DTOs**: Readonly classes for data transfer
+- **DI**: Constructor injection, depend on contracts, avoid facades in business logic
 - **Auth**: Gates, Policies, FormRequest `authorize()`
 - **Testing**: `php artisan test --parallel`
 - **Quality**: `./vendor/bin/pint && ./vendor/bin/phpstan analyse --level=6`

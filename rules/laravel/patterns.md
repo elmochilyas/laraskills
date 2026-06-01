@@ -44,8 +44,25 @@ Use readonly DTOs for all data crossing service boundaries. See skill: `laravel-
 - Use fakes (Http, Mail, Queue, Notification, Storage, Event, Bus) instead of mocks.
 - Write architecture tests to enforce conventions.
 
+## Architecture Flow
+
+Follow the **Controller → Action → Domain Service → Contract → Infrastructure** flow. See skill: `laravel-core-internals` and rule: `rules/laravel/architecture.md`.
+
+## Container & DI
+
+Always use constructor injection, depend on contracts, never resolve from the container in business code. See rule: `rules/laravel/service-container.md` and rule: `rules/laravel/service-providers.md`.
+
+## Facades
+
+Use facades only for infrastructure concerns (Cache, Log, DB). Inject contracts in business logic. See rule: `rules/laravel/facades.md` and rule: `rules/laravel/contracts.md`.
+
+## Middleware
+
+Single responsibility per middleware. Global for cross-cutting, route for domain-specific. See rule: `rules/laravel/middleware.md`.
+
 ## Reference
 
 See skill: `laravel-patterns` for comprehensive Laravel patterns.
 See skill: `laravel-tdd` for testing patterns.
 See skill: `laravel-security` for security patterns.
+See skill: `laravel-core-internals` for container, DI, providers, facades, request lifecycle, and contracts.

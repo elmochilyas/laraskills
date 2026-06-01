@@ -6,6 +6,10 @@
 - Use Actions (`execute()` method) for single-purpose operations
 - Use readonly DTOs for data transfer
 - Use FormRequest for validation and authorization
+- Follow Controller → Action → Domain Service → Contract → Infrastructure flow
+- Always use constructor injection, never `app()` or `resolve()` in business code
+- Depend on contracts, not concrete implementations
+- Use facades only for infrastructure concerns (Cache, Log, DB)
 
 ## Models (Laravel 13)
 

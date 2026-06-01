@@ -56,17 +56,17 @@ fi
 
 if [ -n "${COMPONENT:-}" ]; then
     case "$COMPONENT" in
-        laravel-patterns|laravel-tdd|laravel-security)
+        laravel-patterns|laravel-tdd|laravel-security|laravel-core-internals)
             mkdir -p "$TARGET_DIR/skills"
             cp -r "$SCRIPT_DIR/skills/$COMPONENT" "$TARGET_DIR/skills/"
             log "Added: $COMPONENT"
             ;;
-        laravel-artisan|laravel-eloquent|laravel-migration)
+        laravel-artisan|laravel-eloquent|laravel-migration|laravel-container)
             mkdir -p "$TARGET_DIR/agents"
             cp "$SCRIPT_DIR/agents/${COMPONENT}.md" "$TARGET_DIR/agents/"
             log "Added: $COMPONENT"
             ;;
-        *) err "Unknown: $COMPONENT Valid: laravel-patterns, laravel-tdd, laravel-security, laravel-artisan, laravel-eloquent, laravel-migration"; exit 1 ;;
+        *) err "Unknown: $COMPONENT Valid: laravel-patterns, laravel-tdd, laravel-security, laravel-core-internals, laravel-artisan, laravel-eloquent, laravel-migration, laravel-container"; exit 1 ;;
     esac
     exit 0
 fi
@@ -75,7 +75,7 @@ log "Installing Laravel ECC..."
 
 # Skills
 mkdir -p "$TARGET_DIR/skills"
-for skill in laravel-patterns laravel-tdd laravel-security; do
+for skill in laravel-patterns laravel-tdd laravel-security laravel-core-internals; do
     cp -r "$SCRIPT_DIR/skills/$skill" "$TARGET_DIR/skills/"
     log "  ✓ Installed skill: $skill"
 done
@@ -89,7 +89,7 @@ done
 
 # Agents
 mkdir -p "$TARGET_DIR/agents"
-for agent in laravel-artisan.md laravel-eloquent.md laravel-migration.md; do
+for agent in laravel-artisan.md laravel-eloquent.md laravel-migration.md laravel-container.md; do
     cp "$SCRIPT_DIR/agents/$agent" "$TARGET_DIR/agents/"
 done
 
@@ -114,7 +114,7 @@ cat > "$STATE_FILE" <<EOF
   "installed_at": "$(date -u +%Y-%m-%dT%H:%M:%SZ)",
   "profile": "$PROFILE",
   "tools": [${TOOLS// /, }],
-  "components": ["laravel-patterns", "laravel-tdd", "laravel-security", "rules"]
+  "components": ["laravel-patterns", "laravel-tdd", "laravel-security", "laravel-core-internals", "rules"]
 }
 EOF
 

@@ -8,6 +8,8 @@ When working with Laravel 13 projects, follow these guidelines:
 - Use PHP 8 attributes for model config: `#[Table]`, `#[Fillable]`, `#[Hidden]`
 - Use Actions for single-purpose operations, DTOs for data transfer
 - Use Laravel 13 attribute-driven queue and command config
+- Use constructor injection, depend on contracts, avoid facades in business logic
+- Use contextual binding when consumers need different implementations
 
 ## Testing
 

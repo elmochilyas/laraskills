@@ -19,6 +19,7 @@ Laravel 13 AI-ready skills, rules, agents, and CLI harness configs for OpenCode,
 | laravel-artisan | Artisan command generation | Creating commands, schedules, make:classes |
 | laravel-eloquent | Eloquent ORM optimization | Query optimization, relationships, N+1 fixes |
 | laravel-migration | Database migration design | Schema design, migrations, seeders, factories |
+| laravel-container | Container, DI, provider, facade architecture | Container bindings, providers, contract design, facade review |
 
 ## Available Skills
 
@@ -27,6 +28,7 @@ Laravel 13 AI-ready skills, rules, agents, and CLI harness configs for OpenCode,
 | laravel-patterns | Laravel 13 architecture: Actions, DTOs, Services, Eloquent, Queues, Caching |
 | laravel-tdd | Laravel 13 testing with Pest 4: Feature tests, fakes, architecture tests |
 | laravel-security | Laravel 13 security: mass assignment, XSS, CSRF, Gates/Polices, rate limiting |
+| laravel-core-internals | Laravel 13 core internals: Service Container, DI, Providers, Facades, Request Lifecycle, Contracts |
 
 ## Laravel 13 Key Features
 
@@ -73,9 +75,9 @@ Test types:
 ## Project Structure
 
 ```
-skills/          — 3 Laravel 13 deep skills
+skills/          — 4 Laravel 13 deep skills
 rules/           — Always-follow guidelines (common + php + web + laravel)
-agents/          — 3 Laravel-specific agents + ECC agents
+agents/          — 4 Laravel-specific agents + ECC agents
 commands/        — 4 Laravel commands + ECC commands
 hooks/           — Trigger-based automations for Pint, PHPStan, Pest
 mcp-configs/     — MCP server configurations

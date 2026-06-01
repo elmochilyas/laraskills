@@ -17,7 +17,14 @@
     "rules/laravel/patterns.md",
     "rules/laravel/testing.md",
     "rules/laravel/security.md",
-    "rules/laravel/hooks.md"
+    "rules/laravel/hooks.md",
+    "rules/laravel/service-container.md",
+    "rules/laravel/service-providers.md",
+    "rules/laravel/facades.md",
+    "rules/laravel/contracts.md",
+    "rules/laravel/middleware.md",
+    "rules/laravel/architecture.md",
+    "skills/laravel-core-internals/SKILL.md"
   ],
   "hooks": {
     "PostToolUse": [

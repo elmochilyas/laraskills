@@ -40,6 +40,7 @@ php artisan make:action CreateUser
 | laravel-patterns | skills/laravel-patterns/SKILL.md | Architecture, Actions, DTOs, Eloquent, Queues |
 | laravel-tdd | skills/laravel-tdd/SKILL.md | Pest 4, Feature tests, Fakes, Architecture tests |
 | laravel-security | skills/laravel-security/SKILL.md | Mass assignment, XSS, CSRF, Gates, Rate limiting |
+| laravel-core-internals | skills/laravel-core-internals/SKILL.md | Service Container, DI, Providers, Facades, Request Lifecycle, Contracts |
 
 ## Laravel 13 Specifics
 
@@ -49,3 +50,7 @@ php artisan make:action CreateUser
 - Use `declare(strict_types=1)` in all new files
 - Prefer FormRequest validation over inline validation
 - Organize by feature/domain (`app/Modules/User/`), not by type (`app/Models/`, `app/Controllers/`)
+- Follow **Controller → Action → Domain Service → Contract → Infrastructure** flow
+- Always use constructor injection, never `app()` or `resolve()` in business code
+- Depend on contracts, not concrete implementations
+- Use facades only for infrastructure concerns (Cache, Log, DB)
