@@ -206,6 +206,25 @@ Use this order:
 
 Indexes are navigation layers. Knowledge-unit files are deep sources. Avoid scanning the whole repository.
 
+## Retrieval CLI (Phase 11.1)
+
+Before scanning the entire knowledge layer, use the deterministic retrieval CLI:
+
+```bash
+npx laravel-ecc retrieve "your task"    # Get the minimal useful context bundle
+npx laravel-ecc search "keywords"       # Find matching knowledge units
+npx laravel-ecc get <ku-id>             # Inspect a specific knowledge unit
+npx laravel-ecc validate                # Check intelligence layer integrity
+```
+
+The retrieval CLI produces deterministic, explainable output with ranked knowledge units, applicable rules, skills, decision trees, anti-patterns, checklists, prerequisites, and related topics. It is faster and more targeted than manual file scanning.
+
+**Preferred workflow:**
+1. Run `npx laravel-ecc retrieve "your task" --mode compact` for quick routing
+2. Use the returned KUs as starting points for deeper reading
+3. Run `npx laravel-ecc retrieve "your task" --mode standard` for full context
+4. Use `npx laravel-ecc get <ku-id>` to inspect specific KUs in detail
+
 ## Machine-Readable Intelligence
 
 Future tools, MCP servers, and retrieval systems should consume these files:

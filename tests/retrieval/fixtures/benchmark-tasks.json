@@ -1,0 +1,458 @@
+[
+  {
+    "id": "bench-001",
+    "query": "Build a CRUD module for products",
+    "expectedPrimaryDomain": "api-crud-system-engineering",
+    "expectedSupportingDomains": ["data-storage-systems"],
+    "expectedSkillCategories": ["laravel-api-rest"],
+    "forbiddenDomains": ["ai-intelligence-systems"]
+  },
+  {
+    "id": "bench-002",
+    "query": "Refactor a fat controller into actions",
+    "expectedPrimaryDomain": "backend-architecture-design",
+    "expectedSupportingDomains": ["laravel-core-application-engineering", "application-architecture-patterns"],
+    "forbiddenDomains": ["ai-intelligence-systems"]
+  },
+  {
+    "id": "bench-003",
+    "query": "Add validation using Form Requests",
+    "expectedPrimaryDomain": "laravel-core-application-engineering",
+    "expectedSupportingDomains": ["api-crud-system-engineering"],
+    "forbiddenDomains": ["async-distributed-systems"]
+  },
+  {
+    "id": "bench-004",
+    "query": "Create API Resources for a JSON response",
+    "expectedPrimaryDomain": "api-crud-system-engineering",
+    "expectedSupportingDomains": ["laravel-core-application-engineering"],
+    "expectedSkillCategories": ["laravel-api-rest"]
+  },
+  {
+    "id": "bench-005",
+    "query": "Fix an N+1 query issue in Eloquent",
+    "expectedPrimaryDomain": "laravel-eloquent-domain-modeling",
+    "expectedSupportingDomains": ["data-storage-systems", "performance-runtime-engineering"],
+    "forbiddenDomains": ["ai-intelligence-systems"]
+  },
+  {
+    "id": "bench-006",
+    "query": "Add a composite index to a database table",
+    "expectedPrimaryDomain": "data-storage-systems",
+    "expectedSupportingDomains": ["performance-runtime-engineering"],
+    "forbiddenDomains": ["real-time-systems"]
+  },
+  {
+    "id": "bench-007",
+    "query": "Design tenant-isolated Eloquent models",
+    "expectedPrimaryDomain": "laravel-eloquent-domain-modeling",
+    "expectedSupportingDomains": ["data-storage-systems", "security-identity-engineering"],
+    "forbiddenDomains": ["real-time-systems"]
+  },
+  {
+    "id": "bench-008",
+    "query": "Optimize a slow database query using EXPLAIN",
+    "expectedPrimaryDomain": "data-storage-systems",
+    "expectedSupportingDomains": ["performance-runtime-engineering"],
+    "expectedSkillCategories": ["laravel-database"]
+  },
+  {
+    "id": "bench-009",
+    "query": "Add Sanctum SPA authentication to a Laravel app",
+    "expectedPrimaryDomain": "security-identity-engineering",
+    "expectedSupportingDomains": ["api-crud-system-engineering"],
+    "expectedSkillCategories": ["laravel-authentication"]
+  },
+  {
+    "id": "bench-010",
+    "query": "Choose between Policies and Gates for authorization",
+    "expectedPrimaryDomain": "security-identity-engineering",
+    "expectedSupportingDomains": ["laravel-core-application-engineering", "governance-compliance-engineering"],
+    "expectedSkillCategories": ["laravel-security"]
+  },
+  {
+    "id": "bench-011",
+    "query": "Add RBAC authorization with roles and permissions",
+    "expectedPrimaryDomain": "security-identity-engineering",
+    "expectedSupportingDomains": ["governance-compliance-engineering"],
+    "forbiddenDomains": ["real-time-systems"]
+  },
+  {
+    "id": "bench-012",
+    "query": "Protect API secrets and environment variables",
+    "expectedPrimaryDomain": "security-identity-engineering",
+    "expectedSupportingDomains": ["devops-infrastructure"],
+    "forbiddenDomains": ["search-retrieval-systems"]
+  },
+  {
+    "id": "bench-013",
+    "query": "Queue an email with retry logic",
+    "expectedPrimaryDomain": "async-distributed-systems",
+    "expectedSupportingDomains": ["performance-runtime-engineering"],
+    "forbiddenDomains": ["real-time-systems"]
+  },
+  {
+    "id": "bench-014",
+    "query": "Add an idempotent background job",
+    "expectedPrimaryDomain": "async-distributed-systems",
+    "expectedSupportingDomains": ["data-storage-systems"],
+    "forbiddenDomains": ["ai-intelligence-systems"]
+  },
+  {
+    "id": "bench-015",
+    "query": "Broadcast real-time notifications using Laravel Echo",
+    "expectedPrimaryDomain": "real-time-systems",
+    "expectedSupportingDomains": ["async-distributed-systems"],
+    "forbiddenDomains": ["data-storage-systems"]
+  },
+  {
+    "id": "bench-016",
+    "query": "Scale Reverb horizontally for WebSocket connections",
+    "expectedPrimaryDomain": "real-time-systems",
+    "expectedSupportingDomains": ["devops-infrastructure", "performance-runtime-engineering"],
+    "forbiddenDomains": ["data-engineering-analytics"]
+  },
+  {
+    "id": "bench-017",
+    "query": "Add Pest feature tests for an API endpoint",
+    "expectedPrimaryDomain": "testing-reliability-engineering",
+    "expectedSupportingDomains": ["api-crud-system-engineering"],
+    "expectedSkillCategories": ["laravel-tdd"]
+  },
+  {
+    "id": "bench-018",
+    "query": "Add regression tests for a bug fix",
+    "expectedPrimaryDomain": "testing-reliability-engineering",
+    "expectedSupportingDomains": ["api-crud-system-engineering"],
+    "forbiddenDomains": ["ai-intelligence-systems"]
+  },
+  {
+    "id": "bench-019",
+    "query": "Test queued job workflows with fakes",
+    "expectedPrimaryDomain": "testing-reliability-engineering",
+    "expectedSupportingDomains": ["async-distributed-systems"],
+    "expectedSkillCategories": ["laravel-tdd"]
+  },
+  {
+    "id": "bench-020",
+    "query": "Add Dusk browser tests",
+    "expectedPrimaryDomain": "testing-reliability-engineering",
+    "expectedSupportingDomains": ["devops-infrastructure"],
+    "forbiddenDomains": ["ai-intelligence-systems"]
+  },
+  {
+    "id": "bench-021",
+    "query": "Build a CI/CD pipeline for Laravel with GitHub Actions",
+    "expectedPrimaryDomain": "devops-infrastructure",
+    "expectedSupportingDomains": ["platform-engineering-developer-experience", "testing-reliability-engineering"],
+    "forbiddenDomains": ["real-time-systems"]
+  },
+  {
+    "id": "bench-022",
+    "query": "Add structured logging with Laravel logging channels",
+    "expectedPrimaryDomain": "observability-production-intelligence",
+    "expectedSupportingDomains": ["laravel-core-application-engineering"],
+    "forbiddenDomains": ["search-retrieval-systems"]
+  },
+  {
+    "id": "bench-023",
+    "query": "Diagnose a production performance regression",
+    "expectedPrimaryDomain": "performance-runtime-engineering",
+    "expectedSupportingDomains": ["observability-production-intelligence", "data-storage-systems"],
+    "forbiddenDomains": ["ai-intelligence-systems"]
+  },
+  {
+    "id": "bench-024",
+    "query": "Add monitoring with health checks and alerts",
+    "expectedPrimaryDomain": "observability-production-intelligence",
+    "expectedSupportingDomains": ["devops-infrastructure"],
+    "forbiddenDomains": ["application-architecture-patterns"]
+  },
+  {
+    "id": "bench-025",
+    "query": "Add vector search to a Laravel app with pgvector",
+    "expectedPrimaryDomain": "search-retrieval-systems",
+    "expectedSupportingDomains": ["ai-intelligence-systems", "data-storage-systems"],
+    "expectedSkillCategories": ["laravel-database"]
+  },
+  {
+    "id": "bench-026",
+    "query": "Build a RAG workflow with Laravel AI SDK",
+    "expectedPrimaryDomain": "ai-intelligence-systems",
+    "expectedSupportingDomains": ["search-retrieval-systems"],
+    "forbiddenDomains": ["real-time-systems"]
+  },
+  {
+    "id": "bench-027",
+    "query": "Use embeddings for semantic search",
+    "expectedPrimaryDomain": "ai-intelligence-systems",
+    "expectedSupportingDomains": ["search-retrieval-systems"],
+    "forbiddenDomains": ["devops-infrastructure"]
+  },
+  {
+    "id": "bench-028",
+    "query": "Protect an LLM feature from prompt injection",
+    "expectedPrimaryDomain": "ai-intelligence-systems",
+    "expectedSupportingDomains": ["security-identity-engineering"],
+    "forbiddenDomains": ["testing-reliability-engineering"]
+  },
+  {
+    "id": "bench-029",
+    "query": "Design a modular monolith architecture",
+    "expectedPrimaryDomain": "application-architecture-patterns",
+    "expectedSupportingDomains": ["backend-architecture-design", "laravel-core-application-engineering"],
+    "forbiddenDomains": ["ai-intelligence-systems"]
+  },
+  {
+    "id": "bench-030",
+    "query": "Implement CQRS pattern in Laravel",
+    "expectedPrimaryDomain": "backend-architecture-design",
+    "expectedSupportingDomains": ["application-architecture-patterns"],
+    "forbiddenDomains": ["real-time-systems"]
+  },
+  {
+    "id": "bench-031",
+    "query": "Configure MySQL replication with read replicas",
+    "expectedPrimaryDomain": "data-storage-systems",
+    "expectedSupportingDomains": ["performance-runtime-engineering"],
+    "expectedSkillCategories": ["laravel-database"]
+  },
+  {
+    "id": "bench-032",
+    "query": "Set up database sharding for a high-traffic app",
+    "expectedPrimaryDomain": "data-storage-systems",
+    "expectedSupportingDomains": ["performance-runtime-engineering", "application-architecture-patterns"],
+    "forbiddenDomains": ["real-time-systems"]
+  },
+  {
+    "id": "bench-033",
+    "query": "Add WebSocket support with Laravel Reverb",
+    "expectedPrimaryDomain": "real-time-systems",
+    "expectedSupportingDomains": ["async-distributed-systems", "security-identity-engineering"],
+    "forbiddenDomains": ["data-engineering-analytics"]
+  },
+  {
+    "id": "bench-034",
+    "query": "Integrate Meilisearch for full-text search",
+    "expectedPrimaryDomain": "search-retrieval-systems",
+    "expectedSupportingDomains": ["performance-runtime-engineering"],
+    "forbiddenDomains": ["ai-intelligence-systems"]
+  },
+  {
+    "id": "bench-035",
+    "query": "Handle third-party API webhooks with Saloon",
+    "expectedPrimaryDomain": "api-integration-engineering",
+    "expectedSupportingDomains": ["api-crud-system-engineering"],
+    "forbiddenDomains": ["real-time-systems"]
+  },
+  {
+    "id": "bench-036",
+    "query": "Implement rate limiting on API endpoints",
+    "expectedPrimaryDomain": "api-crud-system-engineering",
+    "expectedSupportingDomains": ["security-identity-engineering"],
+    "expectedSkillCategories": ["laravel-security"]
+  },
+  {
+    "id": "bench-037",
+    "query": "Optimize cloud costs for a Laravel deployment",
+    "expectedPrimaryDomain": "cost-resource-optimization",
+    "expectedSupportingDomains": ["devops-infrastructure", "performance-runtime-engineering"],
+    "forbiddenDomains": ["real-time-systems"]
+  },
+  {
+    "id": "bench-038",
+    "query": "Add GDPR compliance features including data retention",
+    "expectedPrimaryDomain": "governance-compliance-engineering",
+    "expectedSupportingDomains": ["security-identity-engineering", "data-storage-systems"],
+    "forbiddenDomains": ["real-time-systems"]
+  },
+  {
+    "id": "bench-039",
+    "query": "Set up Laravel Octane for high performance",
+    "expectedPrimaryDomain": "performance-runtime-engineering",
+    "expectedSupportingDomains": ["devops-infrastructure", "laravel-execution-lifecycle"],
+    "forbiddenDomains": ["governance-compliance-engineering"]
+  },
+  {
+    "id": "bench-040",
+    "query": "Design a multi-tenant database with schema per tenant",
+    "expectedPrimaryDomain": "data-storage-systems",
+    "expectedSupportingDomains": ["security-identity-engineering", "laravel-eloquent-domain-modeling"],
+    "forbiddenDomains": ["real-time-systems"]
+  },
+  {
+    "id": "bench-041",
+    "query": "Add event sourcing to track domain events",
+    "expectedPrimaryDomain": "backend-architecture-design",
+    "expectedSupportingDomains": ["application-architecture-patterns", "data-storage-systems"],
+    "forbiddenDomains": ["devops-infrastructure"]
+  },
+  {
+    "id": "bench-042",
+    "query": "Create a custom Artisan command with attributes",
+    "expectedPrimaryDomain": "platform-engineering-developer-experience",
+    "expectedSupportingDomains": ["laravel-core-application-engineering"],
+    "forbiddenDomains": ["ai-intelligence-systems"]
+  },
+  {
+    "id": "bench-043",
+    "query": "Optimize eager loading to prevent N+1 in Eloquent",
+    "expectedPrimaryDomain": "laravel-eloquent-domain-modeling",
+    "expectedSupportingDomains": ["data-storage-systems", "performance-runtime-engineering"],
+    "expectedSkillCategories": ["laravel-eloquent"]
+  },
+  {
+    "id": "bench-044",
+    "query": "Set up Horizon for queue monitoring",
+    "expectedPrimaryDomain": "async-distributed-systems",
+    "expectedSupportingDomains": ["observability-production-intelligence"],
+    "forbiddenDomains": ["search-retrieval-systems"]
+  },
+  {
+    "id": "bench-045",
+    "query": "Build a real-time dashboard with broadcasting",
+    "expectedPrimaryDomain": "real-time-systems",
+    "expectedSupportingDomains": ["laravel-core-application-engineering", "observability-production-intelligence"],
+    "forbiddenDomains": ["governance-compliance-engineering"]
+  },
+  {
+    "id": "bench-046",
+    "query": "Configure service container binding and dependency injection",
+    "expectedPrimaryDomain": "laravel-execution-lifecycle",
+    "expectedSupportingDomains": ["laravel-core-application-engineering"],
+    "expectedSkillCategories": ["laravel-core-internals"]
+  },
+  {
+    "id": "bench-047",
+    "query": "Use Laravel middleware for request filtering and logging",
+    "expectedPrimaryDomain": "laravel-core-application-engineering",
+    "expectedSupportingDomains": ["laravel-execution-lifecycle"],
+    "forbiddenDomains": ["ai-intelligence-systems"]
+  },
+  {
+    "id": "bench-048",
+    "query": "Design a value object and DTO architecture",
+    "expectedPrimaryDomain": "backend-architecture-design",
+    "expectedSupportingDomains": ["laravel-core-application-engineering", "application-architecture-patterns"],
+    "expectedSkillCategories": ["laravel-patterns"]
+  },
+  {
+    "id": "bench-049",
+    "query": "Add pessimistic locking to prevent race conditions",
+    "expectedPrimaryDomain": "data-storage-systems",
+    "expectedSupportingDomains": ["async-distributed-systems", "performance-runtime-engineering"],
+    "forbiddenDomains": ["ai-intelligence-systems"]
+  },
+  {
+    "id": "bench-050",
+    "query": "Implement API versioning strategy",
+    "expectedPrimaryDomain": "api-crud-system-engineering",
+    "expectedSupportingDomains": ["api-integration-engineering"],
+    "expectedSkillCategories": ["laravel-api-rest"]
+  },
+  {
+    "id": "bench-051",
+    "query": "Create a service class for business logic",
+    "expectedPrimaryDomain": "backend-architecture-design",
+    "expectedSupportingDomains": ["laravel-core-application-engineering", "application-architecture-patterns"],
+    "forbiddenDomains": ["real-time-systems"]
+  },
+  {
+    "id": "bench-052",
+    "query": "Configure Redis for caching and sessions",
+    "expectedPrimaryDomain": "performance-runtime-engineering",
+    "expectedSupportingDomains": ["data-storage-systems", "laravel-core-application-engineering"],
+    "forbiddenDomains": ["governance-compliance-engineering"]
+  },
+  {
+    "id": "bench-053",
+    "query": "Add distributed tracing with OpenTelemetry",
+    "expectedPrimaryDomain": "observability-production-intelligence",
+    "expectedSupportingDomains": ["devops-infrastructure", "async-distributed-systems"],
+    "forbiddenDomains": ["application-architecture-patterns"]
+  },
+  {
+    "id": "bench-054",
+    "query": "Design database indexes for query performance",
+    "expectedPrimaryDomain": "data-storage-systems",
+    "expectedSupportingDomains": ["performance-runtime-engineering"],
+    "expectedSkillCategories": ["laravel-database"]
+  },
+  {
+    "id": "bench-055",
+    "query": "Handle file uploads securely in Laravel",
+    "expectedPrimaryDomain": "security-identity-engineering",
+    "expectedSupportingDomains": ["laravel-core-application-engineering", "data-storage-systems"],
+    "expectedSkillCategories": ["laravel-security"]
+  },
+  {
+    "id": "bench-056",
+    "query": "Run architecture tests with Pest to enforce code structure",
+    "expectedPrimaryDomain": "testing-reliability-engineering",
+    "expectedSupportingDomains": ["backend-architecture-design"],
+    "expectedSkillCategories": ["laravel-tdd"]
+  },
+  {
+    "id": "bench-057",
+    "query": "Configure server-sent events for live updates",
+    "expectedPrimaryDomain": "real-time-systems",
+    "expectedSupportingDomains": ["laravel-core-application-engineering"],
+    "forbiddenDomains": ["governance-compliance-engineering"]
+  },
+  {
+    "id": "bench-058",
+    "query": "Set up a monorepo with shared Laravel packages",
+    "expectedPrimaryDomain": "platform-engineering-developer-experience",
+    "expectedSupportingDomains": ["application-architecture-patterns"],
+    "forbiddenDomains": ["security-identity-engineering"]
+  },
+  {
+    "id": "bench-059",
+    "query": "Implement cursor-based pagination for an API",
+    "expectedPrimaryDomain": "api-crud-system-engineering",
+    "expectedSupportingDomains": ["data-storage-systems", "performance-runtime-engineering"],
+    "expectedSkillCategories": ["laravel-api-rest"]
+  },
+  {
+    "id": "bench-060",
+    "query": "Add mutation testing with Pest to improve test quality",
+    "expectedPrimaryDomain": "testing-reliability-engineering",
+    "expectedSupportingDomains": ["platform-engineering-developer-experience"],
+    "forbiddenDomains": ["real-time-systems"]
+  },
+  {
+    "id": "bench-061",
+    "query": "Design a hexagonal architecture for a Laravel application",
+    "expectedPrimaryDomain": "backend-architecture-design",
+    "expectedSupportingDomains": ["application-architecture-patterns", "laravel-core-application-engineering"],
+    "forbiddenDomains": ["real-time-systems"]
+  },
+  {
+    "id": "bench-062",
+    "query": "Handle deadlock prevention in database transactions",
+    "expectedPrimaryDomain": "data-storage-systems",
+    "expectedSupportingDomains": ["performance-runtime-engineering"],
+    "forbiddenDomains": ["ai-intelligence-systems"]
+  },
+  {
+    "id": "bench-063",
+    "query": "Create a feature flag system with governance",
+    "expectedPrimaryDomain": "governance-compliance-engineering",
+    "expectedSupportingDomains": ["platform-engineering-developer-experience", "application-architecture-patterns"],
+    "forbiddenDomains": ["real-time-systems"]
+  },
+  {
+    "id": "bench-064",
+    "query": "Build an ETL pipeline for analytics reporting",
+    "expectedPrimaryDomain": "data-engineering-analytics",
+    "expectedSupportingDomains": ["data-storage-systems", "async-distributed-systems"],
+    "forbiddenDomains": ["real-time-systems"]
+  },
+  {
+    "id": "bench-065",
+    "query": "Use polymorphic relationships in Eloquent models",
+    "expectedPrimaryDomain": "laravel-eloquent-domain-modeling",
+    "expectedSupportingDomains": ["data-storage-systems", "application-architecture-patterns"],
+    "expectedSkillCategories": ["laravel-eloquent"]
+  }
+]

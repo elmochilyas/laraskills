@@ -3,6 +3,16 @@ import { existsSync, readFileSync, copyFileSync, mkdirSync, cpSync, writeFileSyn
 import { join, dirname } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { createRequire } from 'node:module';
+import {
+  retrieveContext,
+  searchKnowledge,
+  getKnowledgeUnit,
+  getPrerequisites,
+  getRelatedTopics,
+  validateIntelligence,
+  retrieveAndFormat,
+} from '../src/retrieval/index.mjs';
+import { formatAsMarkdown, formatAsJson, formatKuDetail } from '../src/retrieval/formatter.mjs';
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const ROOT = join(__dirname, '..');
@@ -17,6 +27,7 @@ const VALID_COMPONENTS = [
 function log(msg) { console.log(`[Laravel ECC] ${msg}`); }
 function warn(msg) { console.warn(`[Laravel ECC] WARNING: ${msg}`); }
 function err(msg) { console.error(`[Laravel ECC] ERROR: ${msg}`); process.exit(1); }
+function logRet(msg) { console.log(msg); }
 
 function detectTools(target) {
   const tools = [];
@@ -311,6 +322,245 @@ function doUpdate(target) {
   }
 }
 
+function parseFlags(args) {
+  const flags = {};
+  for (let i = 0; i < args.length; i++) {
+    if (args[i].startsWith('--')) {
+      const key = args[i].replace(/^--/, '').replace(/-/g, '');
+      const next = args[i + 1];
+      if (next && !next.startsWith('--')) {
+        flags[key] = next;
+        i++;
+      } else {
+        flags[key] = true;
+      }
+    }
+  }
+  return flags;
+}
+
+function getEccRoot(flags) {
+  return flags.eccroot || process.env.ECC_ROOT || null;
+}
+
+function cmdRetrieve(retrieveArgs) {
+  if (retrieveArgs.length === 0) {
+    err('Usage: npx laravel-ecc retrieve "<query>" [options]\n\nOptions:\n  --mode compact|standard|deep\n  --format markdown|json\n  --ecc-root <path>\n  --max-kus <number>\n  --max-rules <number>\n  --max-skills <number>\n  --max-related <number>\n  --max-prerequisites <number>\n  --prerequisite-depth <number>\n  --related-depth <number>\n  --budget <number>\n  --domain <domain-id>');
+  }
+
+  const query = retrieveArgs[0];
+  const flags = parseFlags(retrieveArgs.slice(1));
+
+  try {
+    const result = retrieveAndFormat(query, {
+      mode: flags.mode || 'standard',
+      format: flags.format || 'markdown',
+      explicitEccRoot: getEccRoot(flags),
+      maxKus: flags.maxkus ? parseInt(flags.maxkus, 10) : undefined,
+      maxRules: flags.maxrules ? parseInt(flags.maxrules, 10) : undefined,
+      maxSkills: flags.maxskills ? parseInt(flags.maxskills, 10) : undefined,
+      maxRelated: flags.maxrelated ? parseInt(flags.maxrelated, 10) : undefined,
+      maxPrerequisites: flags.maxprerequisites ? parseInt(flags.maxprerequisites, 10) : undefined,
+      prerequisiteDepth: flags.prerequisitedepth ? parseInt(flags.prerequisitedepth, 10) : undefined,
+      relatedDepth: flags.relateddepth ? parseInt(flags.relateddepth, 10) : undefined,
+      budget: flags.budget ? parseInt(flags.budget, 10) : undefined,
+      domain: flags.domain || undefined,
+    });
+    logRet(result);
+  } catch (e) {
+    err(e.message);
+  }
+}
+
+function cmdSearch(searchArgs) {
+  if (searchArgs.length === 0) {
+    err('Usage: npx laravel-ecc search "<query>" [options]\n\nOptions:\n  --format markdown|json\n  --limit <number>\n  --domain <domain-id>\n  --ecc-root <path>');
+  }
+
+  const query = searchArgs[0];
+  const flags = parseFlags(searchArgs.slice(1));
+  const format = flags.format || 'markdown';
+
+  try {
+    const results = searchKnowledge(query, {
+      limit: flags.limit ? parseInt(flags.limit, 10) : 20,
+      domain: flags.domain || undefined,
+      explicitEccRoot: getEccRoot(flags),
+    });
+
+    if (format === 'json') {
+      logRet(JSON.stringify({ query, results: results.map(r => ({
+        id: r.id,
+        score: r.score,
+        domain: r.ku?.domain || '',
+        subdomain: r.ku?.subdomain || '',
+        name: r.ku?.knowledge_unit || '',
+        breakdown: r.breakdown || [],
+      }))}, null, 2));
+    } else {
+      const lines = [`# Search Results: ${query}`, '', `Found ${results.length} matching knowledge units`, ''];
+      for (const r of results.slice(0, 30)) {
+        lines.push(`## ${r.ku?.knowledge_unit || r.id} (score: ${r.score})`);
+        lines.push(`- **ID:** \`${r.id}\``);
+        lines.push(`- **Domain:** ${r.ku?.domain || ''}`);
+        lines.push(`- **Subdomain:** ${r.ku?.subdomain || ''}`);
+        lines.push(`- **Difficulty:** ${r.ku?.difficulty || 'unknown'}`);
+        if (r.breakdown && r.breakdown.length > 0) {
+          lines.push(`- **Top signal:** ${r.breakdown[0].signal} (+${r.breakdown[0].value})`);
+        }
+        lines.push('');
+      }
+      logRet(lines.join('\n'));
+    }
+  } catch (e) {
+    err(e.message);
+  }
+}
+
+function cmdGet(getArgs) {
+  if (getArgs.length === 0) {
+    err('Usage: npx laravel-ecc get <knowledge-unit-id> [options]\n\nOptions:\n  --include-content\n  --format markdown|json\n  --ecc-root <path>');
+  }
+
+  const kuId = getArgs[0];
+  const flags = parseFlags(getArgs.slice(1));
+  const format = flags.format || 'markdown';
+
+  try {
+    const result = getKnowledgeUnit(kuId, {
+      includeContent: !!flags.includecontent,
+      explicitEccRoot: getEccRoot(flags),
+    });
+
+    if (!result) {
+      err(`Knowledge unit not found: ${kuId}`);
+    }
+
+    if (format === 'json') {
+      logRet(JSON.stringify(result, null, 2));
+    } else {
+      logRet(result.detail);
+    }
+  } catch (e) {
+    err(e.message);
+  }
+}
+
+function cmdPrerequisites(preArgs) {
+  if (preArgs.length === 0) {
+    err('Usage: npx laravel-ecc prerequisites <knowledge-unit-id> [options]\n\nOptions:\n  --depth <number>\n  --format markdown|json\n  --ecc-root <path>');
+  }
+
+  const kuId = preArgs[0];
+  const flags = parseFlags(preArgs.slice(1));
+  const format = flags.format || 'markdown';
+
+  try {
+    const results = getPrerequisites(kuId, {
+      depth: flags.depth ? parseInt(flags.depth, 10) : 1,
+      limit: flags.limit ? parseInt(flags.limit, 10) : 20,
+      explicitEccRoot: getEccRoot(flags),
+    });
+
+    if (format === 'json') {
+      logRet(JSON.stringify({ knowledgeUnitId: kuId, prerequisites: results }, null, 2));
+    } else {
+      const lines = [`# Prerequisites for \`${kuId}\``, ''];
+      if (results.length === 0) {
+        lines.push('No prerequisites found.');
+      } else {
+        for (const p of results) {
+          lines.push(`- **\`${p.id}\`**`);
+          if (p.reason) lines.push(`  - Reason: ${p.reason}`);
+          if (p.depth !== undefined) lines.push(`  - Depth: ${p.depth}`);
+          lines.push('');
+        }
+      }
+      logRet(lines.join('\n'));
+    }
+  } catch (e) {
+    err(e.message);
+  }
+}
+
+function cmdRelated(relArgs) {
+  if (relArgs.length === 0) {
+    err('Usage: npx laravel-ecc related <knowledge-unit-id> [options]\n\nOptions:\n  --depth <number>\n  --limit <number>\n  --format markdown|json\n  --ecc-root <path>');
+  }
+
+  const kuId = relArgs[0];
+  const flags = parseFlags(relArgs.slice(1));
+  const format = flags.format || 'markdown';
+
+  try {
+    const results = getRelatedTopics(kuId, {
+      depth: flags.depth ? parseInt(flags.depth, 10) : 1,
+      limit: flags.limit ? parseInt(flags.limit, 10) : 20,
+      explicitEccRoot: getEccRoot(flags),
+    });
+
+    if (format === 'json') {
+      logRet(JSON.stringify({ knowledgeUnitId: kuId, relatedTopics: results }, null, 2));
+    } else {
+      const lines = [`# Related Topics for \`${kuId}\``, ''];
+      if (results.length === 0) {
+        lines.push('No related topics found.');
+      } else {
+        for (const r of results) {
+          lines.push(`- **\`${r.id}\`**`);
+          if (r.reason) lines.push(`  - Reason: ${r.reason}`);
+          if (r.depth !== undefined) lines.push(`  - Depth: ${r.depth}`);
+          lines.push('');
+        }
+      }
+      logRet(lines.join('\n'));
+    }
+  } catch (e) {
+    err(e.message);
+  }
+}
+
+function cmdValidate(validateArgs) {
+  const flags = parseFlags(validateArgs);
+
+  try {
+    const results = validateIntelligence({
+      explicitEccRoot: getEccRoot(flags),
+    });
+
+    if (flags.format === 'json') {
+      logRet(JSON.stringify(results, null, 2));
+    } else {
+      const lines = [`# ECC Intelligence Validation`, ''];
+      lines.push(`**Status:** ${results.valid ? '✓ VALID' : '✗ ISSUES FOUND'}`);
+      lines.push(`**Knowledge Units:** ${results.knowledgeUnitCount}`);
+      lines.push(`**Dependency Edges:** ${results.dependencyEdgeCount}`);
+      lines.push(`**Relationship Edges:** ${results.relationshipEdgeCount}`);
+      lines.push(`**Aliases:** ${results.aliasesCount}`);
+      lines.push(`**External Concepts:** ${results.externalConceptsCount}`);
+      lines.push('');
+
+      if (results.issues.length > 0) {
+        lines.push(`### Issues (${results.issues.length})`);
+        lines.push('');
+        for (const issue of results.issues) {
+          lines.push(`- ${issue}`);
+        }
+        lines.push('');
+      } else {
+        lines.push('No issues found. All structures are consistent.');
+        lines.push('');
+      }
+
+      logRet(lines.join('\n'));
+    }
+
+    if (!results.valid) process.exit(1);
+  } catch (e) {
+    err(e.message);
+  }
+}
+
 function showHelp() {
   console.log(`
 Laravel ECC v${pkg.version}
@@ -320,7 +570,32 @@ Usage:
   npx laravel-ecc add <component>                          Add a component
   npx laravel-ecc update                                   Update to latest version
   npx laravel-ecc doctor                                   Check installation state
+
+  npx laravel-ecc retrieve "<query>" [options]             Retrieve ECC context bundle
+  npx laravel-ecc search "<query>" [options]               Search knowledge units
+  npx laravel-ecc get <ku-id> [options]                    Get knowledge unit details
+  npx laravel-ecc prerequisites <ku-id> [options]          Get prerequisites
+  npx laravel-ecc related <ku-id> [options]                Get related topics
+  npx laravel-ecc validate [options]                       Validate intelligence layer
+
   npx laravel-ecc --help                                   Show this help
+
+Retrieval Options:
+  --mode compact|standard|deep              Context bundle mode (default: standard)
+  --format markdown|json                    Output format (default: markdown)
+  --ecc-root <path>                         Path to laravel-ecc repository root
+  --max-kus <number>                        Max knowledge units to include
+  --max-rules <number>                      Max rules to include
+  --max-skills <number>                     Max skills to include
+  --max-related <number>                    Max related topics (retrieve)
+  --max-prerequisites <number>              Max prerequisites (retrieve)
+  --prerequisite-depth <number>             Prerequisite graph depth (default: 1)
+  --related-depth <number>                  Related topic graph depth (default: 1)
+  --budget <number>                         Estimated token budget
+  --domain <domain-id>                      Filter by domain (search only)
+  --limit <number>                          Result limit (search/prerequisites/related)
+  --depth <number>                          Graph depth (prerequisites/related)
+  --include-content                         Include Markdown content (get only)
 
 Profiles:
   minimal   Skills only (3 skills)
@@ -341,6 +616,9 @@ Components:
 Also install via install scripts:
   ./install.ps1 --profile minimal|core|full   Windows
   ./install.sh --profile minimal|core|full    macOS/Linux
+
+ECC_ROOT environment variable:
+  Set ECC_ROOT to the laravel-ecc repository path for retrieval commands.
 `);
 }
 
@@ -374,6 +652,36 @@ if (args[0] === 'add') {
 
 if (args[0] === 'update') {
   doUpdate(target);
+  process.exit(0);
+}
+
+if (args[0] === 'retrieve') {
+  cmdRetrieve(args.slice(1));
+  process.exit(0);
+}
+
+if (args[0] === 'search') {
+  cmdSearch(args.slice(1));
+  process.exit(0);
+}
+
+if (args[0] === 'get') {
+  cmdGet(args.slice(1));
+  process.exit(0);
+}
+
+if (args[0] === 'prerequisites') {
+  cmdPrerequisites(args.slice(1));
+  process.exit(0);
+}
+
+if (args[0] === 'related') {
+  cmdRelated(args.slice(1));
+  process.exit(0);
+}
+
+if (args[0] === 'validate') {
+  cmdValidate(args.slice(1));
   process.exit(0);
 }
 
