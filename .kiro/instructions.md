@@ -1,5 +1,10 @@
 # Kiro — Laravel 13 Instructions
 
+For full agent operating instructions and knowledge layer navigation, see:
+- [`AGENTS.md`](../AGENTS.md)
+- [`agent/retrieval-guide.md`](../agent/retrieval-guide.md)
+- [`agent/domain-routing-index.md`](../agent/domain-routing-index.md)
+
 ## Key Laravel 13 Patterns
 
 - Attribute-driven models: `#[Table('users')]` `#[Fillable(['name', 'email'])]`

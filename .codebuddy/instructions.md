@@ -1,5 +1,10 @@
 # CodeBuddy — Laravel 13 Instructions
 
+For full agent operating instructions and knowledge layer navigation, see:
+- [`AGENTS.md`](../AGENTS.md)
+- [`agent/retrieval-guide.md`](../agent/retrieval-guide.md)
+- [`agent/domain-routing-index.md`](../agent/domain-routing-index.md)
+
 ## Development Rules
 
 1. **Architecture**: Modular by domain (`app/Modules/`), Actions + DTOs pattern; Controller → Action → Service → Contract flow

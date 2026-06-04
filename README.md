@@ -2,27 +2,95 @@
 
 **Laravel 13 AI-ready skills, rules, agents, and CLI harness configs** for OpenCode, Claude Code, Cursor, Gemini CLI, Codex CLI, Copilot, VS Code, Zed, Trae, Qwen, CodeBuddy, and Kiro.
 
+A Laravel-focused AI coding-agent **operating layer** and **engineering knowledge system**.
+
 Builds on the [ECC](https://github.com/affaan-m/ECC) ecosystem with Laravel 13-specific depth.
 
 ```bash
 # Install from GitHub
 npx skills add elmochilyas/laravel-ecc
-gh skill install elmochilyas/laravel-ecc
 
 # Install from npm
 npx laravel-ecc@beta add laravel-patterns
+```
+
+## Repository Architecture
+
+### Curated Operating Layer
+
+The curated layer teaches AI coding agents how to behave and operate inside Laravel projects:
+
+```
+agents/       — 12 Laravel-specific agent definitions
+skills/       — 12 deep Laravel 13 skills
+rules/        — 41 always-follow guidelines (4 categories)
+commands/     — 7 Laravel/ECC console command references
+hooks/        — Git/agent hook automations
+mcp-configs/  — MCP server configurations
+```
+
+### Knowledge Intelligence Layer
+
+The knowledge layer provides deep Laravel engineering knowledge, navigation, and machine-readable indexes:
+
+```
+knowledge/     — 21 engineering domains, 2,321 knowledge units
+intelligence/  — JSON files, indexes, dependency graph
+agent/         — Routing maps, retrieval guides, domain indexes
+meta/          — Domain discovery analysis
+tools/         — Rebuild and generation scripts
 ```
 
 ## What's Included
 
 | Category | Count | Description |
 |----------|-------|-------------|
-| Skills | 11 | Deep Laravel 13 skills (~35-40 code examples each) |
-| Rules | 40 | common(10) + php(5) + web(7) + laravel(18) |
-| Agents | 10 | Laravel Artisan, Eloquent, Migration, Database, Container, REST, JSON:API, GraphQL, gRPC, Microservices agents |
-| Commands | 4 | artisan, migrate, seed, route-list |
+| Skills | 12 | Deep Laravel 13 skills (~35-40 code examples each) |
+| Rules | 41 | common(10) + php(5) + web(7) + laravel(19) |
+| Agents | 12 | Artisan, Eloquent, Migration, Database, Container, REST, JSON:API, GraphQL, gRPC, Microservices, Authentication, Identity Architecture |
+| Commands | 7 | artisan, migrate, seed, route-list, tdd, code-review, plan |
 | Harness Configs | 12 | OpenCode, Claude Code, Cursor, Gemini, Codex, Copilot, VS Code, Zed, Trae, Qwen, CodeBuddy, Kiro |
 | MCP Configs | 2 | Laravel docs + Composer security |
+
+### Intelligence Layer
+
+| Metric | Value |
+|---|---|
+| Engineering Domains | 21 |
+| Canonical Knowledge Units | 2,321 |
+| JSON Intelligence Files | 8 |
+| Markdown Indexes | 7 |
+| Dependency Edges | 264 |
+| Relationship Edges | 3,626 |
+| Agent Navigation Files | 5 |
+
+## How AI Agents Should Use ECC
+
+```
+Task
+↓
+Identify Domain
+↓
+Consult Routing Map
+↓
+Load Relevant Knowledge
+↓
+Apply Rules
+↓
+Use Skill Workflow
+↓
+Check Decision Trees
+↓
+Avoid Anti-Patterns
+↓
+Validate With Checklist
+```
+
+Reference files:
+- [`AGENTS.md`](AGENTS.md) — Full agent operating instructions
+- [`agent/retrieval-guide.md`](agent/retrieval-guide.md) — Optimal retrieval strategy
+- [`agent/domain-routing-index.md`](agent/domain-routing-index.md) — Flat domain index
+- [`agent/task-to-skill-map.md`](agent/task-to-skill-map.md) — Task-to-skill mapping
 
 ## Quick Start
 
@@ -46,7 +114,7 @@ npx laravel-ecc@beta doctor
 ### Install from GitHub
 
 ```bash
-# All 3 skills via Vercel Skills CLI
+# All skills via Vercel Skills CLI
 npx skills add elmochilyas/laravel-ecc
 
 # Or via GitHub CLI
@@ -59,15 +127,15 @@ npx skills add elmochilyas/laravel-ecc --skill laravel-patterns
 ### Install Scripts
 
 ```bash
-# Minimal (3 skills only)
+# Minimal (skills only)
 ./install.ps1 --profile minimal   # Windows
 ./install.sh --profile minimal    # macOS/Linux
 
-# Core (5 skills + rules + agents — default)
+# Core (skills + rules + agents — default)
 ./install.ps1                     # Windows
 ./install.sh                      # macOS/Linux
 
-# Full (everything)
+# Full (everything including harness configs)
 ./install.ps1 --profile full      # Windows
 ./install.sh --profile full       # macOS/Linux
 ```
@@ -94,6 +162,15 @@ npx laravel-ecc@beta doctor
 
 The update script reads your existing installation state (`.laravel-ecc-state.json`) and syncs all components to the latest package version while preserving your installation profile.
 
+## Distribution
+
+The npm package (`laravel-ecc`) includes:
+- Curated **operating layer**: skills, rules, agents, commands, hooks, MCP configs
+- CLI harness configurations for 12 AI coding tools
+- Install and update scripts
+
+The full **knowledge intelligence layer** (knowledge/, intelligence/, agent/, meta/, tools/) is available from the [GitHub repository](https://github.com/elmochilyas/laravel-ecc) but is not included in the npm package to keep it lightweight. The knowledge layer may be published as a release artifact or separate optional package in the future.
+
 ## Laravel 13
 
 Targets **Laravel 13** (PHP 8.3+, Pest 4).
@@ -106,7 +183,7 @@ Key features:
 - Pest 4 browser testing with Playwright
 - Horizon Redis Cluster support
 
-## Eleven Skills
+## Twelve Skills
 
 ### laravel-patterns
 Architecture: modular domains, Actions/Services/DTOs, Eloquent optimization, attribute models, Form Requests, API Resources, Queues, Events, Caching, Policies, Pipeline, Service container, Rate limiting
@@ -140,6 +217,9 @@ gRPC and Protocol Buffers for Laravel: proto syntax and field numbering optimiza
 
 ### laravel-api-microservices
 Internal microservice architecture: service boundaries (one domain per service), database ownership (no direct cross-service DB access), communication strategy (events preferred, gRPC, REST), event-driven integration (event catalog, publishing, cross-service listeners), saga pattern for distributed transactions (orchestration/choreography, compensating actions), health checks, structured logging, distributed tracing, deployment
+
+### laravel-authentication
+Authentication & authorization: Sanctum, Passport, OAuth2, OIDC, JWT, Policies, Gates, Roles, Permissions, Multi-tenant, SSO, Enterprise IAM, Zero-trust, MFA
 
 ## CLI Harness Support
 

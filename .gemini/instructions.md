@@ -1,5 +1,10 @@
 # Gemini CLI — Laravel 13 Instructions
 
+For full agent operating instructions and knowledge layer navigation, see:
+- [`AGENTS.md`](../AGENTS.md)
+- [`agent/retrieval-guide.md`](../agent/retrieval-guide.md)
+- [`agent/domain-routing-index.md`](../agent/domain-routing-index.md)
+
 When working with Laravel 13 projects, follow these guidelines:
 
 ## Architecture
