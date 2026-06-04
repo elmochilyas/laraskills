@@ -58,10 +58,11 @@ tools/         — Rebuild and generation scripts
 |---|---|
 | Engineering Domains | 21 |
 | Canonical Knowledge Units | 2,321 |
-| JSON Intelligence Files | 8 |
+| JSON Intelligence Files | 10 |
 | Markdown Indexes | 7 |
-| Dependency Edges | 264 |
-| Relationship Edges | 3,626 |
+| Dependency Edges | 456 (266 direct + 190 alias-resolved) |
+| Relationship Edges | 3,634 |
+| Circular Dependencies | 0 (verified by automated DFS on every generation) |
 | Agent Navigation Files | 5 |
 
 ## How AI Agents Should Use ECC
@@ -168,8 +169,9 @@ The npm package (`laravel-ecc`) includes:
 - Curated **operating layer**: skills, rules, agents, commands, hooks, MCP configs
 - CLI harness configurations for 12 AI coding tools
 - Install and update scripts
+- **Intelligence layer metadata**: JSON intelligence files (10), markdown indexes (7), alias mappings (aliases.json), external concept registry (external-concepts.json)
 
-The full **knowledge intelligence layer** (knowledge/, intelligence/, agent/, meta/, tools/) is available from the [GitHub repository](https://github.com/elmochilyas/laravel-ecc) but is not included in the npm package to keep it lightweight. The knowledge layer may be published as a release artifact or separate optional package in the future.
+The full **knowledge intelligence layer** (knowledge/, intelligence/, agent/, meta/, tools/) is available from the [GitHub repository](https://github.com/elmochilyas/laravel-ecc) but is not included in the npm package to keep it lightweight.
 
 ## Laravel 13
 
