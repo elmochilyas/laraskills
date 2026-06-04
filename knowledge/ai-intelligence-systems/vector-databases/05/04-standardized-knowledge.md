@@ -1,0 +1,178 @@
+---
+id: ku-05
+title: "Performance & Scaling"
+subdomain: "vector-database-integration"
+ku-type: "infrastructure"
+date-created: "2026-06-02"
+domain-maturity: "mature"
+status: "standardized"
+file-path: "research/workspaces/ai-intelligence-systems/vector-database-integration/ku-05/04-standardized-knowledge.md"
+---
+
+# Performance & Scaling
+
+## Overview
+
+Performance and scaling for vector databases covers optimizing query latency, indexing throughput, memory usage, and capacity for growing datasets. As the vector collection grows from thousands to millions of vectors, search latency and memory requirements scale non-linearly. Performance optimization involves index tuning, hardware provisioning, sharding, caching, and choosing between self-hosted and managed vector database services.
+
+## Core Concepts
+
+- **Query Latency:** The time between sending a query and receiving results. Target: <50ms for user-facing search, <200ms for RAG pipelines.
+- **Indexing Throughput:** The rate at which vectors can be inserted into the index. Critical for batch backfills and real-time sync.
+- **Memory Hierarchy:** Vector data may live in RAM (fastest), SSD (memory-mapped), or HDD (slowest). ANN indexes perform best in RAM.
+- **Sharding:** Partitioning a large vector index across multiple nodes. Each shard handles a subset of vectors.
+- **Replication:** Copying shards across nodes for high availability and read throughput.
+- **Distributed Search:** Querying across multiple shards and merging results. Adds latency proportional to the number of shards.
+- **Query Concurrency:** The number of simultaneous queries the vector DB can handle. Scales with CPU cores and available RAM.
+- **Cache Hit Rate:** Results from the query cache (identical or similar queries) served in <1ms instead of 5-50ms.
+
+## When To Use
+
+- Production deployments with >100K vectors — performance tuning is required.
+- Systems that need consistent sub-50ms search latency.
+- Growing datasets that will exceed current capacity within 6-12 months.
+- Multi-region deployments requiring low-latency search across regions.
+
+## When NOT To Use
+
+- Small datasets (<10K vectors) where brute force search is fast enough.
+- Development environments where performance isn't critical.
+- Systems that will be replaced before hitting scale limits.
+
+## Best Practices
+
+- **Provision enough RAM for the index.** The index should fit in RAM for best performance. Monitor memory pressure.
+- **Use SSDs for disk-based vector DBs** (Qdrant, Milvus). HDDs add 10-100x latency for index reads.
+- **Separate indexing and query workloads.** Indexing (inserts) consumes CPU and I/O that competes with query performance.
+- **Benchmark with production data size.** Benchmarks with 10K vectors don't predict performance at 1M vectors.
+- **Monitor query latency percentiles (p50/p95/p99).** Average latency hides tail latency issues.
+- **Plan for data growth.** Vector storage grows linearly with data. A 1M vector index today may be 10M next year.
+- **Use a managed service for most deployments.** Qdrant Cloud, Pinecone, and Weaviate Cloud handle sharding, replication, and backups.
+
+## Architecture Guidelines
+
+- For self-hosted vector DBs, deploy on **dedicated instances** (not shared with the application server) — vector DBs are memory and CPU intensive.
+- Use **sharding for datasets >1M vectors** — distribute the index across multiple nodes for parallel search.
+- Use **replication for high availability** — replicate shards across availability zones.
+- Implement a **query cache layer** (Redis) in front of the vector DB for frequent queries.
+- For multi-region deployments, use **geo-distributed vector DB** (Pinecone, Qdrant Cloud) or replicate indexes per region.
+- For Laravel, use **dedicated queue workers** for indexing jobs and **separate database connections** for production queries.
+
+## Performance Considerations
+
+| Dataset Size | Memory (1536-dim) | Index Type | Approx. Latency | Recommended Setup |
+|-------------|-------------------|------------|-----------------|-------------------|
+| 10K | 60MB | HNSW | 2-5ms | Single node, app memory |
+| 100K | 600MB | HNSW | 5-15ms | Single node, dedicated |
+| 1M | 6GB | HNSW | 10-30ms | Single node, dedicated |
+| 10M | 60GB | IVF+PQ | 20-80ms | Sharded (2-4 nodes) |
+| 100M | 600GB | IVF+PQ | 50-200ms | Sharded (8-16 nodes) |
+
+- HNSW memory: 2-4x raw vector size (graph edges consume additional memory).
+- IVF memory: 1.1x raw vector size (centroids only).
+- PQ reduces memory by 4-8x with 1-5% recall loss.
+- Query concurrency: a single node can handle 50-200 QPS depending on latency target.
+- Sharding improves both capacity and QPS (search N shards in parallel, merge results).
+
+## Common Mistakes
+
+- Under-provisioning RAM — the index doesn't fit in memory, causing 10-100x slower searches.
+- Using HNSW without considering memory — a 10M vector HNSW index can use 60GB+ RAM.
+- Running vector DB on the same server as the application — resource contention degrades both.
+- Not sharding before hitting performance limits — performance degrades gradually, then suddenly.
+- Assuming all vector DBs scale the same — each has different sharding, replication, and consistency models.
+- Not monitoring index growth — capacity planning is reactive instead of proactive.
+
+## Anti-Patterns
+
+- **Over-Provisioning:** Running 10 nodes for a 100K vector dataset. Cloud costs are wasted on idle capacity.
+- **No Caching:** Every query hits the vector DB, even when 40% of queries are repeats of the same or similar queries.
+- **Re-index-on-Query:** Triggering index rebuilds based on query activity. Index operations should be scheduled, not reactive.
+- **Single-Region Single-Node:** All queries route to one instance in one region. Downtime affects all users.
+- **Ignoring Cold Start:** The first query after a restart is slow (index loading from disk). Pre-warm the index.
+- **Manual Scaling:** Manually adding nodes when performance degrades. Auto-scale based on CPU/memory/QPS metrics.
+
+## Examples
+
+### Vector DB Capacity Planner
+```php
+class VectorDBCapacityPlanner {
+    public function plan(int $vectorCount, int $dimensions, string $indexType): CapacityPlan {
+        $bytesPerElement = 4; // float32
+        $vectorSize = $dimensions * $bytesPerElement;
+        $rawSize = $vectorCount * $vectorSize;
+
+        $memoryMultiplier = match($indexType) {
+            'hnsw' => 3.0,   // HNSW uses 2-4x
+            'ivf' => 1.2,    // IVF uses ~1.1x
+            'ivf_pq' => 0.5, // PQ uses 0.3-0.5x
+            default => 1.0,
+        };
+
+        $requiredRAM = $rawSize * $memoryMultiplier;
+
+        $nodes = match(true) {
+            $requiredRAM < 1 * 1024**3 => 1,   // <1GB
+            $requiredRAM < 8 * 1024**3 => 1,   // <8GB, single node
+            $requiredRAM < 64 * 1024**3 => 2,  // <64GB, two nodes
+            default => ceil($requiredRAM / (32 * 1024**3)), // 32GB per node
+        };
+
+        return new CapacityPlan(
+            requiredRAM: $requiredRAM,
+            recommendedNodes: $nodes,
+            recommendedNodeSize: '32GB RAM, 4 vCPU',
+        );
+    }
+}
+```
+
+### Multi-Node Query Distribution
+```php
+class DistributedVectorStore implements VectorStore {
+    /** @param VectorStore[] $shards */
+    public function __construct(private array $shards) {}
+
+    public function search(VectorQuery $query): SearchResult {
+        $allResults = [];
+
+        // Query all shards in parallel
+        $promises = [];
+        foreach ($this->shards as $shard) {
+            $shardQuery = clone $query;
+            $shardQuery->topK = $query->topK; // Each shard returns top-K
+            $promises[] = async(fn() => $shard->search($shardQuery));
+        }
+
+        $allResults = awaitAll($promises);
+
+        // Merge and re-rank results from all shards
+        return $this->mergeResults($allResults, $query->topK);
+    }
+}
+```
+
+## Related Topics
+
+- ku-01 (Vector Database Fundamentals): Foundation for scaling.
+- ku-02 (Indexing Strategies): Index selection affects scaling.
+- ku-03 (Query Patterns & Filtering): Query patterns affect QPS.
+- retrieval-augmented-generation/ku-01: RAG scaling with vector DBs.
+- streaming-real-time-ai/ku-05: Scaling streaming alongside vector DB.
+
+## AI Agent Notes
+
+- When asked about vector DB performance, first check: dataset size, index type, RAM provisioning, and query latency percentiles.
+- For scaling issues, check: sharding configuration, query concurrency, cache hit rate, and node resource utilization.
+- Prefer reading the capacity plan and monitoring data before infrastructure recommendations.
+- When generating scaling code, include: capacity planning, sharding configuration, caching, and auto-scaling rules.
+
+## Verification
+
+- [ ] Index fits in RAM (memory provisioning is adequate for index type and dataset size).
+- [ ] Query latency p50 <50ms and p99 <200ms for the target dataset size.
+- [ ] Vector DB runs on dedicated instances (not shared with application).
+- [ ] Sharding is configured for datasets >1M vectors.
+- [ ] Query cache (Redis) is implemented for frequent queries.
+- [ ] Capacity planning accounts for data growth over 6-12 months.
+- [ ] Query latency and QPS are monitored with alerts for degradation.

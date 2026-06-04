@@ -1,0 +1,101 @@
+﻿# 11-16 Testing Migrations In Ci
+
+## Metadata
+
+| Field | Value |
+|-------|-------|
+| Domain | Data & Storage Systems |
+| Subdomain | Production Schema Operations |
+| Knowledge Unit ID | 11-16 |
+| Knowledge Unit Title | Testing Migrations In Ci |
+| Difficulty Level | Advanced |
+| Classification | A |
+| Dependencies | 11.15 Canary | 11.10 Verification |
+| Last Updated | 2026-06-02 |
+
+## Overview
+
+Migrations should be tested in CI: syntax check (PHP lint on migration files), dry run (run `migrate --pretend` against CI database), forward/rollback test (migrate then rollback, verify reversibility), and data integrity test (seed data, run migration, verify data). Prevents migration failures during deployment.
+
+---
+
+## Core Concepts
+
+- **Syntax check**: `php -l database/migrations/*.php`. Catches PHP syntax errors in migration files.
+- **Dry run**: `php artisan migrate --pretend --database=testing`. Outputs SQL without executing. Catches syntax errors in raw SQL.
+- **Forward/rollback**: `php artisan migrate` then `php artisan migrate:rollback` in CI. Verifies `down()` works.
+- **Seed + migrate + verify**: Seed test data, run migration, verify data integrity (row counts, column values).
+
+
+## When To Use
+
+- When the core functionality described in this KU is required
+- When the benefits outweigh the operational complexity
+- After simpler alternatives have been exhausted
+
+## When NOT To Use
+
+- When simpler alternatives (replicas, caching, optimization) suffice
+- As a premature optimization before measuring actual bottlenecks
+- When the team lacks operational expertise for this pattern
+
+## Best Practices
+
+- **CI migration test workflow**: (1) Create test DB. (2) `php artisan migrate:fresh`. (3) Seed data. (4) Run new migrations. (5) Verify. (6) Rollback. (7) Verify rollback restored previous state.
+- **Multi-DB migration test**: Test migrations on each connection type (tenant, central, reporting) in CI.
+
+
+## Architecture Guidelines
+
+- gh-ost: MySQL 8.0+, binlog trigger-free, millisecond lock. pt-osc: MySQL 5.7+, trigger-based, millisecond lock. pgroll: PostgreSQL 14+, view-based, no exclusive locks.
+
+## Performance Considerations
+
+- Online DDL consumes IO and CPU during row copying. Monitor buffer pool and replication lag. Expand-contract dual-write doubles write throughput.
+
+## Security Considerations
+
+- Ensure proper access controls for database resources
+- Use encryption (TLS) for data in transit
+- Audit configuration changes and access patterns
+- Follow the principle of least privilege
+
+## Common Mistakes
+
+| # | Description | Cause | Consequence | Better Approach |
+|---|---|---|---|---|
+| 1 | No migration testing in CI**: Migration deploys to production, fails (syntax error, constraint violation). Entire deployment is blocked. | Incorrect configuration or lack of awareness | Performance degradation, errors, or data issues | Follow best practices in this document |
+| 2 | --- | Incorrect configuration or lack of awareness | Performance degradation, errors, or data issues | Follow best practices in this document |
+
+## Anti-Patterns
+
+- Trigger overhead from pt-osc degrades write performance. gh-ost cut-over fails under high write load. Insufficient disk space during online DDL.
+
+## Examples
+
+Refer to the domain-analysis.md and folder-architecture.md source documents for detailed examples.
+
+## Related Topics
+
+- **Prerequisites**: Core concepts in Production Schema Operations
+- **Closely Related**: Other KUs within Production Schema Operations
+- **Advanced**: Expert-level KUs building on this concept
+- **Cross-Domain**: Related topics from other subdomains in Data andamp; Storage Systems
+
+## AI Agent Notes
+
+- Apply these concepts based on specific implementation requirements
+- Consider tradeoffs between different approaches
+- Validate assumptions with actual measurements
+- Review related KUs for additional context
+
+## Verification
+
+- [ ] Core concepts are understood and applied correctly
+- [ ] Configuration follows documented best practices
+- [ ] Common mistakes are avoided through code review
+- [ ] Performance characteristics are validated with measurements
+- [ ] Security considerations are addressed
+- [ ] Architecture decisions are documented with rationale
+- [ ] Related KUs have been consulted for cross-cutting concerns
+

@@ -96,9 +96,9 @@ Test types:
 ## Project Structure
 
 ```
-skills/          — 6 Laravel 13 deep skills
+skills/          — 12 Laravel 13 deep skills
 rules/           — Always-follow guidelines (common + php + web + laravel)
-agents/          — 5 Laravel-specific agents (+ 4 MCP agents in mcp-configs)
+agents/          — 12 Laravel-specific agents
 commands/        — 4 Laravel commands + ECC commands
 hooks/           — Trigger-based automations for Pint, PHPStan, Pest
 mcp-configs/     — MCP server configurations
@@ -106,3 +106,110 @@ scripts/         — Cross-platform Node.js utilities
 update.ps1       — Windows update script (syncs to latest package version)
 update.sh        — Unix update script (syncs to latest package version)
 ```
+
+---
+
+## ECC Knowledge Architecture
+
+The ECC repository now includes a complete generated knowledge base spanning 21 domains of Laravel engineering.
+
+### Knowledge Layer Structure
+
+- `knowledge/{domain}/{subdomain}/{ku}/` — Generated knowledge units with 6 phase files each:
+  - `04-standardized-knowledge.md` — Core knowledge content
+  - `05-rules.md` — Domain-specific rules
+  - `06-skills.md` — Domain-specific skills
+  - `07-decision-trees.md` — Decision frameworks
+  - `08-anti-patterns.md` — Common mistakes
+  - `09-checklists.md` — Validation checklists
+
+### Intelligence Layer
+
+- `intelligence/indexes/` — 7 cross-repository indexes (checklist-index, rule-index, skill-index, decision-tree-index, dependency-index, knowledge-unit-index, anti-pattern-index)
+- `intelligence/registry/` — knowledge-registry.md
+- `intelligence/json/` — Machine-readable JSON intelligence (7 files)
+
+### Agent Navigation Layer
+
+- `agent/agent-routing-map.md` — Task-to-domain routing
+- `agent/domain-selection-guide.md` — Problem-to-domain matching
+- `agent/retrieval-guide.md` — Optimal retrieval workflow
+- `agent/task-to-skill-map.md` — Task-to-skill mapping
+- `agent/domain-routing-index.md` — Flat domain index
+
+### Discovery Artifacts
+
+- `meta/domain-discovery/` — Phase 1 domain discovery analysis (21 domains)
+
+## Knowledge Discovery Workflow
+
+For AI agents:
+
+1. **Identify the task** → Route via `agent/agent-routing-map.md`
+2. **Select the domain** → Confirm via `agent/domain-selection-guide.md`
+3. **Locate the KU** → Find in `intelligence/indexes/knowledge-unit-index.md`
+4. **Read the content** → Open `knowledge/{domain}/{subdomain}/{ku}/04-standardized-knowledge.md`
+5. **Apply rules** → Read `05-rules.md` for that KU
+6. **Learn skills** → Read `06-skills.md` for that KU
+7. **Check decisions** → Read `07-decision-trees.md` for that KU
+8. **Prevent anti-patterns** → Read `08-anti-patterns.md` for that KU
+9. **Validate work** → Read `09-checklists.md` for that KU
+10. **Cross-reference** → Use `intelligence/indexes/checklist-index.md` for broader validation
+
+## When to Use Indexes vs Knowledge
+
+### Use indexes FIRST when:
+- You don't know which domain covers your task
+- You need cross-domain validation
+- You need checklist items that span multiple KUs
+- You need to find rules across the entire repository
+
+### Use knowledge FIRST when:
+- You already know the domain and subdomain
+- You need deep understanding of a specific topic
+- You need detailed implementation guidance
+- You need KU-specific rules, skills, or decision trees
+
+## 21 Domain Reference
+
+| Domain | Folder | Description |
+|--------|--------|-------------|
+| AI Intelligence Systems | `knowledge/ai-intelligence-systems/` | AI provider integration, Laravel AI SDK, agentic workflows, RAG, vector databases, streaming, token management |
+| API CRUD System Engineering | `knowledge/api-crud-system-engineering/` | RESTful CRUD patterns, resource controllers, validation, pagination, API versioning |
+| API Integration Engineering | `knowledge/api-integration-engineering/` | External API integration, webhooks, OAuth clients, rate limiting, retry strategies |
+| Application Architecture Patterns | `knowledge/application-architecture-patterns/` | Architectural patterns, modular monoliths, hexagonal architecture, DDD, CQRS |
+| Async & Distributed Systems | `knowledge/async-distributed-systems/` | Queues, job pipelines, event-driven architecture, message brokers, distributed processing |
+| Backend Architecture Design | `knowledge/backend-architecture-design/` | Backend design principles, service layer, DTOs, actions, SOLID in Laravel |
+| Cost & Resource Optimization | `knowledge/cost-resource-optimization/` | Cloud cost optimization, resource sizing, caching strategies, query optimization |
+| Data Engineering & Analytics | `knowledge/data-engineering-analytics/` | ETL pipelines, data warehousing, analytics queries, reporting systems |
+| Data Storage Systems | `knowledge/data-storage-systems/` | Database schema design, storage engines, data modeling, indexing strategies |
+| DevOps & Infrastructure | `knowledge/devops-infrastructure/` | CI/CD pipelines, containerization, deployment strategies, environment management |
+| Governance & Compliance Engineering | `knowledge/governance-compliance-engineering/` | GDPR, SOC2, HIPAA compliance, audit logging, data retention policies |
+| Laravel Core Application Engineering | `knowledge/laravel-core-application-engineering/` | Core Laravel application structure, routing, middleware, request lifecycle |
+| Laravel Eloquent Domain Modeling | `knowledge/laravel-eloquent-domain-modeling/` | Advanced Eloquent ORM, relationships, domain events, value objects, query optimization |
+| Laravel Execution Lifecycle | `knowledge/laravel-execution-lifecycle/` | Framework bootstrapping, service providers, middleware pipeline, kernel lifecycle |
+| Observability & Production Intelligence | `knowledge/observability-production-intelligence/` | Logging, monitoring, tracing, APM, alerting, health checks |
+| Performance & Runtime Engineering | `knowledge/performance-runtime-engineering/` | Performance tuning, opcode caching, database optimization, profiling |
+| Platform Engineering & Developer Experience | `knowledge/platform-engineering-developer-experience/` | Developer tooling, local environment, scaffolding, code generation |
+| Real-Time Systems | `knowledge/real-time-systems/` | WebSockets, Laravel Echo, broadcasting, presence channels, event streaming |
+| Search & Retrieval Systems | `knowledge/search-retrieval-systems/` | Full-text search, Meilisearch, Algolia, Scout, custom search engines |
+| Security & Identity Engineering | `knowledge/security-identity-engineering/` | Authentication, authorization, encryption, security best practices, IAM |
+| Testing & Reliability Engineering | `knowledge/testing-reliability-engineering/` | Pest testing, TDD, fixture factories, CI test suites, reliability engineering |
+
+## Pre-Commit Validation Process
+
+Before finalizing any implementation:
+
+1. [ ] Identify the domain → Use `agent/domain-selection-guide.md`
+2. [ ] Open the relevant `09-checklists.md` in the knowledge unit
+3. [ ] Verify every checklist item is addressed
+4. [ ] Cross-reference with `intelligence/indexes/checklist-index.md` for cross-cutting concerns
+5. [ ] Review `intelligence/indexes/rule-index.md` for applicable rules
+6. [ ] Check `08-anti-patterns.md` to avoid common mistakes
+7. [ ] Consult `agent/task-to-skill-map.md` for relevant skill patterns
+8. [ ] Pass the 5 Repository-Wide Completion Gates:
+    - Gate 1: Architecture Complete
+    - Gate 2: Security Complete
+    - Gate 3: Testing Complete
+    - Gate 4: Performance Complete
+    - Gate 5: Production Ready

@@ -1,0 +1,135 @@
+﻿# ECC Anti-Patterns -- Eventual consistency across context boundaries
+
+---
+
+## Metadata
+
+| Field | Value |
+|-------|-------|
+| **Domain** | Application Architecture Patterns |
+| **Subdomain** | Domain Boundaries and Bounded Contexts |
+| **Knowledge Unit** | Eventual consistency across context boundaries |
+| **Generated** | 2026-06-03 |
+
+---
+
+## Anti-Pattern Inventory
+
+1. Forcing strong consistency across contexts
+2. No staleness handling
+
+---
+
+## Repository-Wide Anti-Patterns
+
+- God Classes / Fat Services
+- Architecture Without Enforcement
+- Premature Abstraction
+- Inconsistent Pattern Application
+- Missing Documentation and Rationale
+
+---
+
+# Anti-Pattern Sections
+
+## Anti-Pattern 1: Forcing strong consistency across contexts
+
+### Category
+Design / Architecture
+
+### Description
+Forcing strong consistency across contexts. This pattern violates best practices and introduces technical debt that compounds over time.
+
+### Why It Happens
+Convenience over correctness during development. Lack of automated enforcement. Insufficient architectural awareness. Time pressure prioritizing speed over structural integrity.
+
+### Warning Signs
+- Instances of this pattern visible during code review
+- No automated checks detecting this pattern
+- Repeated conversations about the same issues
+- Inconsistent application across the codebase
+
+### Why It Is Harmful
+Increases coupling between components. Makes the codebase harder to test and maintain. Pattern violations accumulate as technical debt, making future changes more expensive.
+
+### Real-World Consequences
+Feature velocity decreases. Debugging complexity increases. Architectural migration becomes prohibitively expensive. Team morale suffers from working in an inconsistent, hard-to-navigate codebase.
+
+### Preferred Alternative
+Follow the documented best practices from this knowledge unit. Implement automated enforcement. Establish team conventions and document rationale for architectural decisions.
+
+### Refactoring Strategy
+1. Audit the codebase for all instances of this anti-pattern
+2. Prioritize remediation by impact and effort
+3. Systematically replace with the preferred alternative
+4. Add automated checks to prevent recurrence
+5. Update team documentation
+6. Verify completeness with tests
+
+### Detection Checklist
+- [ ] Automated checks detect this pattern
+- [ ] CI pipeline includes relevant checks
+- [ ] Code review guidelines mention this pattern
+- [ ] Team conventions address this pattern
+
+### Related Rules
+- DBC-12/05-rules.md
+
+### Related Skills
+- DBC-12/06-skills.md
+
+### Related Decision Trees
+- DBC-12/07-decision-trees.md
+
+## Anti-Pattern 2: No staleness handling
+
+### Category
+Design / Architecture
+
+### Description
+No staleness handling. This pattern violates best practices and introduces technical debt that compounds over time.
+
+### Why It Happens
+Convenience over correctness during development. Lack of automated enforcement. Insufficient architectural awareness. Time pressure prioritizing speed over structural integrity.
+
+### Warning Signs
+- Instances of this pattern visible during code review
+- No automated checks detecting this pattern
+- Repeated conversations about the same issues
+- Inconsistent application across the codebase
+
+### Why It Is Harmful
+Increases coupling between components. Makes the codebase harder to test and maintain. Pattern violations accumulate as technical debt, making future changes more expensive.
+
+### Real-World Consequences
+Feature velocity decreases. Debugging complexity increases. Architectural migration becomes prohibitively expensive. Team morale suffers from working in an inconsistent, hard-to-navigate codebase.
+
+### Preferred Alternative
+Follow the documented best practices from this knowledge unit. Implement automated enforcement. Establish team conventions and document rationale for architectural decisions.
+
+### Refactoring Strategy
+1. Audit the codebase for all instances of this anti-pattern
+2. Prioritize remediation by impact and effort
+3. Systematically replace with the preferred alternative
+4. Add automated checks to prevent recurrence
+5. Update team documentation
+6. Verify completeness with tests
+
+### Detection Checklist
+- [ ] Automated checks detect this pattern
+- [ ] CI pipeline includes relevant checks
+- [ ] Code review guidelines mention this pattern
+- [ ] Team conventions address this pattern
+
+### Related Rules
+- DBC-12/05-rules.md
+
+### Related Skills
+- DBC-12/06-skills.md
+
+### Related Decision Trees
+- DBC-12/07-decision-trees.md
+
+---
+
+*Generated on 2026-06-03 as part of the ECC Anti-Patterns documentation suite.*

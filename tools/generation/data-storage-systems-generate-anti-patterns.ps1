@@ -1,0 +1,462 @@
+<#
+.SYNOPSIS
+    Generate 08-anti-patterns.md for all Knowledge Units in data-storage-systems
+.DESCRIPTION
+    Reads 04-standardized-knowledge.md, 05-rules.md, 06-skills.md, 07-decision-trees.md
+    from each KU directory and generates 08-anti-patterns.md with 3-5 anti-patterns.
+#>
+
+$basePath = "C:\Users\Pc\Desktop\laravel skills from every thing claude code\research\workspaces\data-storage-systems"
+$subdomains = @(
+    "advanced\enterprise",
+    "advanced\mysql",
+    "advanced\postgresql",
+    "connections",
+    "indexes",
+    "multi-tenancy",
+    "optimization",
+    "partitioning",
+    "queries",
+    "replication",
+    "schema",
+    "schema\production-schema-operations",
+    "sharding",
+    "transactions"
+)
+
+$totalProcessed = 0
+
+function Get-KU-Name {
+    param($dirName)
+    return $dirName -replace '^\d+-', '' -replace '-', ' '
+}
+
+function Get-KU-Title {
+    param($dirName, $filePath)
+    if (-not (Test-Path $filePath)) { return $dirName }
+    $content = [System.IO.File]::ReadAllText($filePath, [System.Text.Encoding]::UTF8)
+    $lines = $content -split "`n"
+    foreach ($line in $lines) {
+        if ($line -match '\| Knowledge Unit Title \|\s*(.+?)\s*\|') {
+            return $matches[1].Trim()
+        }
+    }
+    return $dirName
+}
+
+function Generate-AntiPatterns {
+    param($kuDir, $subdomain, $skContent, $rulesContent, $skillsContent, $dtContent)
+    
+    $dirName = Split-Path $kuDir -Leaf
+    $skPath = Join-Path $kuDir "04-standardized-knowledge.md"
+    $kuTitle = Get-KU-Title -dirName $dirName -filePath $skPath
+    
+    # Extract anti-patterns from SK content if present
+    $existingAPs = @()
+    if ($skContent -match '(?<=## Anti-Patterns)[\s\S]*?(?=## Examples|$|## Related)') {
+        $apSection = $matches[0]
+        $apSection -split '\n' | Where-Object { $_ -match '^\-\s+\*\*' } | ForEach-Object {
+            $existingAPs += $_ -replace '^\-\s+\*\*', '' -replace '\*\*.*$', ''
+        }
+    }
+    
+    # Extract common mistakes from SK content
+    $mistakes = @()
+    if ($skContent -match '(?<=## Common Mistakes)[\s\S]*?(?=## Anti-Patterns|## Examples|## Related Topics|$)') {
+        $mistakeSection = $matches[0]
+        $mistakeSection -split '\n' | Where-Object { $_ -match '^\| \d' } | ForEach-Object {
+            $mistakes += $_
+        }
+    }
+    
+    # Extract rules
+    $ruleNames = @()
+    if ($rulesContent) {
+        $rulesContent -split '\n' | Where-Object { $_ -match '^## \d+\.' } | ForEach-Object {
+            $ruleNames += $_ -replace '^## ', ''
+        }
+    }
+    
+    # Extract skill purpose
+    $skillPurpose = ""
+    if ($skillsContent -match '(?<=## Purpose\n\n)[\s\S]*?(?=\n\n## When To Use)') {
+        $skillPurpose = $matches[0].Trim()
+    }
+    
+    # Extract decision tree info
+    $dtSections = @()
+    if ($dtContent) {
+        $dtContent -split '\n' | Where-Object { $_ -match '^## Decision' } | ForEach-Object {
+            $dtSections += $_
+        }
+    }
+    
+    # Build anti-pattern names
+    $apNames = @()
+    
+    # AP1: Based on first rule violation
+    if ($ruleNames.Count -gt 0) {
+        $ruleName = $ruleNames[0] -replace '^\d+\.\s*', ''
+        $apNames += "Ignoring: $ruleName"
+    } else {
+        $apNames += "Ignoring Core Concept Implementation"
+    }
+    
+    # AP2: Based on common mistakes or anti-patterns
+    if ($existingAPs.Count -gt 0) {
+        $apNames += $existingAPs[0]
+    } elseif ($mistakes.Count -gt 0) {
+        $apNames += "Unvalidated Assumptions About Behavior"
+    } else {
+        $apNames += "Configuration Without Understanding"
+    }
+    
+    # AP3: Based on skill or implementation
+    if ($skillsContent -match '(?<=## Common Failures\n\n)[\s\S]*?(?=\n\n## Decision Points)') {
+        $failures = $matches[0] -split '\n' | Where-Object { $_.Trim().Length -gt 0 }
+        if ($failures.Count -gt 0) {
+            $apNames += ($failures[0] -replace '^- ', '').Trim()
+        } else {
+            $apNames += "Skipping Validation Steps"
+        }
+    } else {
+        $apNames += "Skipping Validation Steps"
+    }
+    
+    # AP4: Based on decision tree
+    if ($dtSections.Count -gt 0) {
+        $apNames += "Wrong Decision Without Context Evaluation"
+    } else {
+        $apNames += "Over-Engineering Without Need"
+    }
+    
+    # AP5: General
+    if ($existingAPs.Count -gt 1) {
+        $apNames += $existingAPs[1]
+    } else {
+        $apNames += "Production Blindness"
+    }
+    
+    return @{
+        Title = $kuTitle
+        DirName = $dirName
+        APNames = $apNames
+        RuleNames = $ruleNames
+        Mistakes = $mistakes
+        ExistingAPs = $existingAPs
+        SkillPurpose = $skillPurpose
+        DTSections = $dtSections
+    }
+}
+
+function Write-AntiPatternsFile {
+    param($data, $kuDir, $subdomainName)
+    
+    $outputPath = Join-Path $kuDir "08-anti-patterns.md"
+    
+    # Determine subdomain display name
+    $subdomainDisplay = $subdomainName -replace '-', ' '
+    $subdomainDisplay = $subdomainDisplay.Substring(0,1).ToUpper() + $subdomainDisplay.Substring(1)
+    
+    $content = @"
+# ECC Anti-Patterns — $($data.Title)
+---
+## Metadata
+| Field | Value |
+|-------|-------|
+| **Domain** | Data & Storage Systems |
+| **Subdomain** | $subdomainDisplay |
+| **Knowledge Unit** | $($data.DirName) |
+| **Generated** | 2026-06-03 |
+---
+## Anti-Pattern Inventory
+1. $($data.APNames[0])
+2. $($data.APNames[1])
+3. $($data.APNames[2])
+4. $($data.APNames[3])
+5. $($data.APNames[4])
+---
+## Repository-Wide Anti-Patterns
+The following cross-cutting anti-patterns are relevant to this KU:
+- **Fat Controllers**: Database connection logic should not reside in controllers; delegate to services or repositories.
+- **God Services**: Centralizing all database access in a single service creates coupling and testing difficulty.
+- **N+1 Query Problem**: Occurs when relationship lazy-loading creates excessive queries.
+- **Premature Caching**: Caching without profiling leads to stale data and invalidation complexity.
+- **Premature Optimization**: Micro-optimizations before identifying actual bottlenecks waste effort.
+- **Hidden Database Queries**: Implicit queries triggered by property access or blade rendering increase latency unexpectedly.
+- **Business Logic in Models**: Violates Single Responsibility by mixing persistence and domain logic.
+
+---
+
+"@
+
+    # Anti-Pattern 1
+    $content += @"
+## Anti-Pattern 1: $($data.APNames[0])
+### Category
+Architecture | Performance | Maintainability
+### Description
+Developers implement functionality without understanding or applying the core concepts defined in the standardized knowledge. This anti-pattern manifests when implementation decisions contradict the documented principles, leading to fragile systems that fail under edge cases not covered by surface-level understanding.
+### Why It Happens
+Time pressure, assumption that "it's simple enough to skip the docs," overconfidence in prior experience with similar but distinct technologies, lack of code review rigor.
+### Warning Signs
+- Implementation choices contradict documented best practices
+- Pull requests with no reference to knowledge unit guidelines
+- Repeated bugs in the same conceptual area
+- Developer unable to explain why an approach was chosen
+### Why It Is Harmful
+Without grounding in core concepts, systems develop latent defects that surface during scale events, security audits, or team transitions. The knowledge gap compounds as the original author moves on.
+### Real-World Consequences
+Production incidents during traffic spikes, security breaches from misconfigured components, costly rewrites when foundational assumptions prove wrong.
+### Preferred Alternative
+Read and discuss the knowledge unit's standardized knowledge before implementation. Reference the rules, skills, and decision trees during design review.
+### Refactoring Strategy
+1. Audit current implementation against core concepts
+2. Identify gaps where foundational principles were violated
+3. Refactor incrementally, prioritizing the most impactful violations
+4. Add automated checks to prevent regression
+5. Document deviations with explicit rationale
+### Detection Checklist
+- [ ] Is the implementation consistent with the "Core Concepts" section?
+- [ ] Are there comments or docs explaining deviations from standard practice?
+### Related Rules
+$(if ($data.RuleNames.Count -gt 0) { $data.RuleNames -join "`n" } else { "Refer to 05-rules.md in this KU" })
+### Related Skills
+$(if ($data.SkillPurpose) { $data.SkillPurpose } else { "Refer to 06-skills.md in this KU" })
+### Related Decision Trees
+$(if ($data.DTSections.Count -gt 0) { $data.DTSections -join "`n" } else { "Refer to 07-decision-trees.md in this KU" })
+---
+"@
+
+    # Anti-Pattern 2
+    $content += @"
+## Anti-Pattern 2: $($data.APNames[1])
+### Category
+Design | Reliability | Maintainability
+### Description
+Teams assume default configurations, behaviors, or edge cases match their expectations without verification. This anti-pattern ignores the documented "Common Mistakes" and "Anti-Patterns" sections, resulting in systems that fail silently under conditions the developers didn't anticipate.
+### Why It Happens
+Copy-paste configuration from tutorials, trust in defaults without reading documentation, lack of staging environment that mirrors production, inadequate testing of failure modes.
+### Warning Signs
+$(if ($data.Mistakes.Count -gt 0) { ($data.Mistakes | ForEach-Object { "- " + ($_ -replace '^\| \d+ \| ', '' -replace ' \| .*$', '') }) -join "`n" } else { @"
+- Configuration values left at framework defaults without review
+- No tests for boundary conditions or failure scenarios
+- Production incidents caused by behavior documented as "Common Mistake"
+- Team surprised by documented limitations
+"@ })
+### Why It Is Harmful
+Unvalidated assumptions create a gap between expected and actual behavior. This gap widens as the system evolves, making debugging increasingly difficult.
+### Real-World Consequences
+Data corruption from wrong isolation level, connection leaks from misconfigured pool, silent data loss from wrong replication configuration.
+### Preferred Alternative
+Create explicit validation tests that verify critical behaviors match expectations. Document assumptions in architecture decision records.
+### Refactoring Strategy
+1. Document all implicit assumptions about system behavior
+2. Create integration tests that validate each assumption
+3. Review each "Common Mistake" entry and verify the system handles it correctly
+4. Add monitoring to detect when assumptions are violated
+5. Share findings in team knowledge-sharing sessions
+### Detection Checklist
+- [ ] Are all configuration values explicitly set with rationale?
+- [ ] Are failure modes tested, not just happy paths?
+### Related Rules
+Review the rule violations documented in 05-rules.md
+### Related Skills
+Review the "Common Failures" section in 06-skills.md
+### Related Decision Trees
+Review decision criteria in 07-decision-trees.md to validate choices
+---
+"@
+
+    # Anti-Pattern 3
+    $content += @"
+## Anti-Pattern 3: $($data.APNames[2])
+### Category
+Testing | Maintainability | Code Organization
+### Description
+Developers skip validation steps after implementing a pattern or configuration. The skills document outlines specific validation checklists, but these are ignored in the rush to ship. This leads to undetected misconfigurations that surface as production incidents.
+### Why It Happens
+Validation checklists are perceived as "optional extras," time constraints prioritize feature delivery over verification, lack of automated enforcement of validation steps.
+### Warning Signs
+- No evidence of validation checklist use in pull requests
+- Skills document's "Validation Checklist" items not addressed
+- Production issues traceable to items on the checklist
+- Team unaware of the skills document's validation requirements
+### Why It Is Harmful
+Validation is the safety net that catches edge cases and misconfigurations. Skipping it removes the last line of defense before production.
+### Real-World Consequences
+Deploying misconfigured connection pooling that exhausts database connections, using wrong replication mode causing data inconsistency, incorrect transaction isolation leading to race conditions.
+### Preferred Alternative
+Treat validation checklists as mandatory acceptance criteria. Automate checklist items where possible with CI checks. Include validation steps in definition of done.
+### Refactoring Strategy
+1. Map each validation checklist item to an automated test or manual check
+2. Create a pre-deployment validation script
+3. Integrate validation into CI/CD pipeline
+4. Track validation coverage as a quality metric
+5. Retrofit validation for existing implementations
+### Detection Checklist
+- [ ] Are all validation checklist items addressed?
+- [ ] Is there automated verification of critical configuration?
+### Related Rules
+Refer to behavioral constraints in 05-rules.md
+### Related Skills
+Review the complete workflow in 06-skills.md
+### Related Decision Trees
+Use decision trees from 07-decision-trees.md to validate choices
+---
+"@
+
+    # Anti-Pattern 4
+    $content += @"
+## Anti-Pattern 4: $($data.APNames[3])
+### Category
+Architecture | Design | Scalability
+### Description
+Engineers make architectural decisions without evaluating the decision context, criteria, and tradeoffs documented in the decision trees. This anti-pattern results in choosing approaches based on familiarity rather than fitness, leading to suboptimal architectures.
+### Why It Happens
+Developers default to what they know, time pressure favors quick decisions over thorough evaluation, decision trees are not consulted during design reviews, lack of structured decision-making process.
+### Warning Signs
+$(if ($data.DTSections.Count -gt 0) { $data.DTSections | ForEach-Object { "- Decision tree $_ was available but not consulted" } } else { @"
+- Architecture choices made by individual preference rather than documented criteria
+- No decision record explaining why an approach was chosen
+- Later discovery of better alternatives documented in decision trees
+- Repeated architectural rework as undocumented tradeoffs surface
+"@ })
+### Why It Is Harmful
+Poor architectural decisions are the most expensive to fix. Choosing the wrong pattern early can constrain the system for years, requiring costly migrations.
+### Real-World Consequences
+Choosing the wrong sharding strategy requiring a multi-month re-architecture, selecting an isolation level that prevents needed concurrent operations, deploying a pooler mode incompatible with the application's query patterns.
+### Preferred Alternative
+Use the decision trees as mandatory input to architectural decisions. Document decisions with rationale, alternatives considered, and tradeoffs accepted. Review decisions against trees during architecture reviews.
+### Refactoring Strategy
+1. Identify architectural decisions made without consulting decision trees
+2. Evaluate current choices against tree criteria
+3. Document any gaps or misalignments
+4. Plan remediation for high-impact misalignments
+5. Establish decision tree consultation as a gate in the design process
+### Detection Checklist
+- [ ] Were decision trees consulted for each architectural choice?
+- [ ] Is there a written decision record for each major choice?
+### Related Rules
+Review architecture rules in 05-rules.md
+### Related Skills
+Apply the skills workflow from 06-skills.md
+### Related Decision Trees
+$($data.DirName) decision trees in 07-decision-trees.md
+---
+"@
+
+    # Anti-Pattern 5
+    $content += @"
+## Anti-Pattern 5: $($data.APNames[4])
+### Category
+Operations | Reliability | Performance
+### Description
+Production readiness concerns are deferred or ignored during development. Teams focus on functional correctness while neglecting the operational aspects that determine real-world reliability and performance. This anti-pattern leads to systems that work in development but fail in production.
+### Why It Happens
+Development environments lack production scale data, monitoring is set up post-launch, performance testing is deferred, operations teams are not involved early enough.
+### Warning Signs
+- No monitoring or alerting for database health metrics
+- Performance not tested at production scale
+- Connection pooling not validated under load
+- Backup and recovery not tested before go-live
+### Why It Is Harmful
+Production is the only environment that reveals the true behavior of data storage systems. Without operational readiness, every deployment carries risk of undetected failure.
+### Real-World Consequences
+Database crashes under load due to connection exhaustion, undetected replication lag causing stale data serving, backup failures discovered during actual recovery need.
+### Preferred Alternative
+Build production readiness into the development process. Include operations in design reviews. Test at production scale in staging. Implement monitoring from day one.
+### Refactoring Strategy
+1. Deploy monitoring for key health metrics
+2. Perform load testing at or above expected production traffic
+3. Test backup and recovery procedures
+4. Document runbooks for common failure scenarios
+5. Implement gradual rollouts with automatic rollback
+### Detection Checklist
+- [ ] Is monitoring in place for all critical metrics?
+- [ ] Have backup and recovery procedures been tested?
+- [ ] Has the system been load tested at production scale?
+### Related Rules
+Review operational rules in 05-rules.md
+### Related Skills
+Review performance and security considerations in 06-skills.md
+### Related Decision Trees
+Use decision trees from 07-decision-trees.md for operational decisions
+---
+"@
+
+    [System.IO.File]::WriteAllText($outputPath, $content, [System.Text.UTF8Encoding]::new($false))
+    return $outputPath
+}
+
+function Process-KU {
+    param($kuDir, $subdomainName)
+    
+    $skPath = Join-Path $kuDir "04-standardized-knowledge.md"
+    $rulesPath = Join-Path $kuDir "05-rules.md"
+    $skillsPath = Join-Path $kuDir "06-skills.md"
+    $dtPath = Join-Path $kuDir "07-decision-trees.md"
+    $outputPath = Join-Path $kuDir "08-anti-patterns.md"
+    
+    # Check if at least one source file exists
+    $hasSources = (Test-Path $skPath) -or (Test-Path $rulesPath) -or (Test-Path $skillsPath) -or (Test-Path $dtPath)
+    if (-not $hasSources) {
+        return $null
+    }
+    
+    Write-Host "Processing: $kuDir"
+    
+    $skContent = if (Test-Path $skPath) { Get-Content $skPath -Raw } else { "" }
+    $rulesContent = if (Test-Path $rulesPath) { Get-Content $rulesPath -Raw } else { "" }
+    $skillsContent = if (Test-Path $skillsPath) { Get-Content $skillsPath -Raw } else { "" }
+    $dtContent = if (Test-Path $dtPath) { Get-Content $dtPath -Raw } else { "" }
+    
+    
+    $data = Generate-AntiPatterns -kuDir $kuDir -subdomain $subdomainName -skContent $skContent -rulesContent $rulesContent -skillsContent $skillsContent -dtContent $dtContent
+    $result = Write-AntiPatternsFile -data $data -kuDir $kuDir -subdomainName $subdomainName
+    Write-Host "  Generated: $result"
+    return $result
+}
+
+# Count total KUs first
+$totalKUs = 0
+foreach ($subdomain in $subdomains) {
+    $subdomainPath = Join-Path $basePath $subdomain
+    if (Test-Path $subdomainPath) {
+        Get-ChildItem -Path $subdomainPath -Directory | ForEach-Object {
+            $hasAny = $false
+            foreach ($f in @("04-standardized-knowledge.md", "05-rules.md", "06-skills.md", "07-decision-trees.md")) {
+                if (Test-Path (Join-Path $_.FullName $f)) { $hasAny = $true }
+            }
+            if ($hasAny) { $totalKUs++ }
+        }
+    }
+}
+Write-Host "=== Found $totalKUs Knowledge Units ==="
+
+# Process all KUs
+$processed = 0
+foreach ($subdomain in $subdomains) {
+    $subdomainPath = Join-Path $basePath $subdomain
+    $subdomainName = $subdomain -replace '.*\\', ''  # Use just the last segment
+    
+    Write-Host "`n=== Processing Subdomain: $subdomainName ==="
+    
+    if (-not (Test-Path $subdomainPath)) {
+        Write-Host "  Path not found: $subdomainPath"
+        continue
+    }
+    
+    Get-ChildItem -Path $subdomainPath -Directory | Sort-Object Name | ForEach-Object {
+        $result = Process-KU -kuDir $_.FullName -subdomainName $subdomainName
+        if ($result) { 
+            $script:processed++
+            $script:totalProcessed++
+            if ($script:processed % 50 -eq 0) {
+                Write-Host "  *** Progress: $($script:totalProcessed)/$totalKUs KUs processed ***"
+            }
+        }
+    }
+}
+
+Write-Host "`n=== Complete: $totalProcessed/$totalKUs KUs processed ==="
