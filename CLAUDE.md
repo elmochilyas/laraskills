@@ -2,9 +2,24 @@
 
 This file provides guidance to Claude Code when working with Laravel 13 projects using Laravel ECC.
 
+For full agent operating instructions, see [`AGENTS.md`](AGENTS.md).
+
 ## Project Overview
 
-Laravel ECC provides AI-ready Laravel 13 skills, rules, agents, and CLI harness configs for development with AI coding assistants.
+Laravel ECC provides a Laravel-focused AI coding-agent operating layer and engineering knowledge system with skills, rules, agents, knowledge units, and CLI harness configs.
+
+### Operating Layer (curated)
+- `agents/` — 12 agent definitions for Laravel specializations
+- `skills/` — 12 deep Laravel 13 skills
+- `rules/` — 41 always-follow guidelines (4 categories)
+
+### Knowledge Layer (for deep retrieval)
+- `knowledge/` — 21 engineering domains, 2,321 knowledge units
+- `agent/` — Domain routing maps, retrieval guides
+- `intelligence/` — Indexes, JSON files, dependency graph
+
+For domain selection: `agent/domain-routing-index.md`
+For retrieval strategy: `agent/retrieval-guide.md`
 
 ## Prompt Defense Baseline
 

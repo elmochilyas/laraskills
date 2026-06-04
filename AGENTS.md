@@ -2,7 +2,7 @@
 
 Laravel 13 AI-ready skills, rules, agents, and CLI harness configs for OpenCode, Claude Code, Cursor, Gemini CLI, Codex CLI, Copilot, and more.
 
-**Version:** 1.0.0-beta.5
+**Version:** 1.0.0-beta.7
 
 ## Core Principles
 
@@ -93,15 +93,29 @@ Test types:
 3. **Review** — Run `php artisan pint --test`, `./vendor/bin/phpstan analyse`
 4. **Commit** — Conventional commits format: `feat:`, `fix:`, `refactor:`, `test:`
 
-## Project Structure
+## Repository Purpose
+
+This repository contains two layers:
+
+1. **Curated Operating Layer** — Teaches AI coding agents how to behave and operate inside Laravel projects (skills, rules, agents, commands, hooks, harness configs).
+2. **Knowledge Intelligence Layer** — Deep Laravel engineering knowledge with navigation, machine-readable indexes, decision support, anti-pattern detection, and validation guidance (knowledge units, intelligence JSON, agent routing maps).
+
+AI agents should use both layers: the operating layer for behavioral instructions and the knowledge layer for domain-specific engineering depth.
+
+## Repository Architecture
 
 ```
-skills/          — 12 Laravel 13 deep skills
-rules/           — Always-follow guidelines (common + php + web + laravel)
-agents/          — 12 Laravel-specific agents
-commands/        — 4 Laravel commands + ECC commands
-hooks/           — Trigger-based automations for Pint, PHPStan, Pest
+agents/          — 12 Laravel-specific agent definitions
+skills/          — 12 deep Laravel 13 skills
+rules/           — 41 always-follow guidelines (common + php + web + laravel)
+commands/        — 7 Laravel/ECC console command references
+hooks/           — Git/agent hook automations
 mcp-configs/     — MCP server configurations
+knowledge/       — 21 engineering domains, 2,321 knowledge units
+intelligence/    — 8 JSON files, 7 markdown indexes, dependency graph
+agent/           — 5 navigation files: routing maps, retrieval guides, domain indexes
+tools/           — Rebuild and generation scripts for the knowledge layer
+docs/            — Architecture decisions, coverage baselines, repair reports
 scripts/         — Cross-platform Node.js utilities
 update.ps1       — Windows update script (syncs to latest package version)
 update.sh        — Unix update script (syncs to latest package version)
@@ -127,7 +141,7 @@ The ECC repository now includes a complete generated knowledge base spanning 21 
 
 - `intelligence/indexes/` — 7 cross-repository indexes (checklist-index, rule-index, skill-index, decision-tree-index, dependency-index, knowledge-unit-index, anti-pattern-index)
 - `intelligence/registry/` — knowledge-registry.md
-- `intelligence/json/` — Machine-readable JSON intelligence (7 files)
+- `intelligence/json/` — Machine-readable JSON intelligence (8 files)
 
 ### Agent Navigation Layer
 
@@ -155,6 +169,64 @@ For AI agents:
 8. **Prevent anti-patterns** → Read `08-anti-patterns.md` for that KU
 9. **Validate work** → Read `09-checklists.md` for that KU
 10. **Cross-reference** → Use `intelligence/indexes/checklist-index.md` for broader validation
+
+## Mandatory Agent Retrieval Workflow
+
+Before generating Laravel code, agents must:
+
+1. Identify the task type.
+2. Select the relevant ECC domain.
+3. Consult:
+   - `agent/domain-routing-index.md`
+   - `agent/domain-selection-guide.md`
+4. Load relevant:
+   - knowledge units;
+   - rules;
+   - skills;
+   - decision trees;
+   - anti-patterns;
+   - checklists.
+5. Use:
+   - `agent/retrieval-guide.md`
+   - `agent/task-to-skill-map.md`
+6. Validate implementation against relevant checklists before completion.
+
+## Retrieval Priority
+
+Use this order:
+
+1. `agent/domain-routing-index.md`
+2. `agent/task-to-skill-map.md`
+3. `intelligence/indexes/skill-index.md`
+4. `intelligence/indexes/rule-index.md`
+5. `intelligence/indexes/decision-tree-index.md`
+6. `intelligence/indexes/anti-pattern-index.md`
+7. `intelligence/indexes/checklist-index.md`
+8. `knowledge/<domain>/<subdomain>/<knowledge-unit>/`
+
+Indexes are navigation layers. Knowledge-unit files are deep sources. Avoid scanning the whole repository.
+
+## Machine-Readable Intelligence
+
+Future tools, MCP servers, and retrieval systems should consume these files:
+
+```
+intelligence/json/
+├── knowledge-units.json    — 2,321 KU metadata records
+├── rules.json              — 2,321 rule definitions
+├── skills.json             — 2,321 skill definitions
+├── decision-trees.json     — 2,321 decision tree definitions
+├── anti-patterns.json      — 2,321 anti-pattern definitions
+├── checklists.json         — 2,321 checklist definitions
+├── dependencies.json       — 264 dependency edges
+└── relationships.json      — 3,626 relationship edges
+```
+
+## Architectural Default
+
+Reference: `docs/architecture-decisions/repository-vs-direct-eloquent.md`
+
+Use direct Eloquent inside Actions or application services by default. Introduce repositories only when they create a meaningful abstraction boundary.
 
 ## When to Use Indexes vs Knowledge
 
