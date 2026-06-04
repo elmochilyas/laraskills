@@ -3,6 +3,11 @@ param(
     [string]$IntelligenceRoot = "C:\Users\Pc\Desktop\laravel skills from every thing claude code\laravel-ecc\intelligence"
 )
 
+function Write-Utf8File {
+    param([string]$Path, [string]$Value)
+    [System.IO.File]::WriteAllText($Path, $Value, (New-Object System.Text.UTF8Encoding $false))
+}
+
 $startTime = Get-Date
 
 # -----------------------------------------------
@@ -131,7 +136,8 @@ $kuJson = @{
         }
     }
 }
-$kuJson | ConvertTo-Json -Depth 10 | Set-Content -Path (Join-Path $jsonDir "knowledge-units.json") -Encoding UTF8
+$kuContent = $kuJson | ConvertTo-Json -Depth 10
+Write-Utf8File -Path (Join-Path $jsonDir "knowledge-units.json") -Value $kuContent
 Write-Host "  Done: $($kuData.Count) KUs" -ForegroundColor Green
 
 # 3b-3g: Artifact JSONs (rules, skills, decision-trees, anti-patterns, checklists)
@@ -164,7 +170,8 @@ foreach ($at in $artifactTypes) {
         total_entries  = $entries.Count
         entries        = $entries
     }
-    $atJson | ConvertTo-Json -Depth 10 | Set-Content -Path (Join-Path $jsonDir "$($at.key).json") -Encoding UTF8
+    $atContent = $atJson | ConvertTo-Json -Depth 10
+    Write-Utf8File -Path (Join-Path $jsonDir "$($at.key).json") -Value $atContent
     Write-Host "  Done: $($entries.Count) entries" -ForegroundColor Green
 }
 
@@ -180,10 +187,11 @@ $nodes = $kuData | ForEach-Object {
     }
 }
 $depJson = @{
-    nodes = $nodes
+    knowledge_units = $nodes
     edges = @()
 }
-$depJson | ConvertTo-Json -Depth 10 | Set-Content -Path (Join-Path $jsonDir "dependencies.json") -Encoding UTF8
+$depContent = $depJson | ConvertTo-Json -Depth 10
+Write-Utf8File -Path (Join-Path $jsonDir "dependencies.json") -Value $depContent
 Write-Host "  Done: $($nodes.Count) nodes" -ForegroundColor Green
 
 # -----------------------------------------------
@@ -250,7 +258,7 @@ foreach ($d in $domainList) {
     }
 }
 
-$kuIndexLines | Set-Content -Path (Join-Path $indexDir "knowledge-unit-index.md") -Encoding UTF8
+Write-Utf8File -Path (Join-Path $indexDir "knowledge-unit-index.md") -Value ($kuIndexLines -join "`n")
 Write-Host "  Done" -ForegroundColor Green
 
 # 4b-4f: artifact indexes
@@ -298,7 +306,7 @@ foreach ($tpl in $artifactIndexTemplates) {
             $lines += ""
         }
     }
-    $lines | Set-Content -Path (Join-Path $indexDir $tpl.key) -Encoding UTF8
+    Write-Utf8File -Path (Join-Path $indexDir $tpl.key) -Value ($lines -join "`n")
     Write-Host "  Done" -ForegroundColor Green
 }
 
@@ -335,7 +343,7 @@ foreach ($d in $domainList) {
     $depIndexLines += ""
 }
 
-$depIndexLines | Set-Content -Path (Join-Path $indexDir "dependency-index.md") -Encoding UTF8
+Write-Utf8File -Path (Join-Path $indexDir "dependency-index.md") -Value ($depIndexLines -join "`n")
 Write-Host "  Done" -ForegroundColor Green
 
 # -----------------------------------------------
@@ -415,7 +423,7 @@ foreach ($d in $domainList) {
     }
 }
 
-$regLines | Set-Content -Path (Join-Path $registryDir "knowledge-registry.md") -Encoding UTF8
+Write-Utf8File -Path (Join-Path $registryDir "knowledge-registry.md") -Value ($regLines -join "`n")
 Write-Host "  Done" -ForegroundColor Green
 
 # -----------------------------------------------

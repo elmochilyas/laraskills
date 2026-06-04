@@ -10,7 +10,8 @@
 | Knowledge Unit Title | Explain Output Interpretation |
 | Difficulty Level | Foundation |
 | Classification | I |
-| Dependencies | 4.2 EXPLAIN ANALYZE | 4.3 Type column values | 4.4 Extra column flags |
+| Dependencies | None |
+| Related KUs | EXPLAIN ANALYZE, Type column values, Extra column flags |
 | Last Updated | 2026-06-02 |
 
 ## Overview

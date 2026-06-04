@@ -10,7 +10,8 @@
 | Knowledge Unit Title | Connection lifecycle (connect, query, disconnect, reconnect) |
 | Difficulty Level | Foundational |
 | Classification | F |
-| Dependencies | 10.4 Laravel Octane connections, 10.7 Connection count management |
+| Dependencies | None |
+| Related KUs | Laravel Octane connections, Connection count management |
 | Last Updated | 2026-06-02 |
 
 ## Overview
