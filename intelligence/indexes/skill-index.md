@@ -1,4 +1,4 @@
-﻿# ECC Skill Index
+# ECC Skill Index
 
 Repository-wide skill registry. Rapid discovery of executable workflows.
 
@@ -6,7 +6,7 @@ Repository-wide skill registry. Rapid discovery of executable workflows.
 |---|---|
 | Total Skills | 2321 |
 | Domains | 21 |
-| Generated | 2026-06-04 16:19:33 |
+| Generated | 2026-06-04 23:11:34 |
 
 ---
 
@@ -3055,4 +3055,3 @@ Repository-wide skill registry. Rapid discovery of executable workflows.
 - **test-double-taxonomy** -- knowledge/testing-reliability-engineering/unit-testing/test-double-taxonomy/06-skills.md
 - **unit-testing-patterns** -- knowledge/testing-reliability-engineering/unit-testing/unit-testing-patterns/06-skills.md
 - **unit-test-structure** -- knowledge/testing-reliability-engineering/unit-testing/unit-test-structure/06-skills.md
-

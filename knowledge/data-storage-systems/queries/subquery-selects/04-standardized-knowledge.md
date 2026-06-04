@@ -10,7 +10,7 @@
 | Knowledge Unit Title | Subquery Selects |
 | Difficulty Level | Advanced |
 | Classification | A |
-| Dependencies | 2.9 Subquery ordering | 2.7 Relationship counting | 4.25 Subquery optimization |
+| Dependencies | 2.7 Relationship counting | 4.25 Subquery optimization |
 | Last Updated | 2026-06-02 |
 
 ## Overview
@@ -80,6 +80,7 @@ Refer to the domain-analysis.md and folder-architecture.md source documents for 
 
 - **Prerequisites**: Core concepts in Eloquent Orm Query Builder
 - **Closely Related**: Other KUs within Eloquent Orm Query Builder
+- **Closely Related**: 2.9 Subquery ordering
 - **Advanced**: Expert-level KUs building on this concept
 - **Cross-Domain**: Related topics from other subdomains in Data andamp; Storage Systems
 

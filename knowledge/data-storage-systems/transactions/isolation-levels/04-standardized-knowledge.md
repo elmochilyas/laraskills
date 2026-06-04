@@ -10,7 +10,7 @@
 | Knowledge Unit Title | Isolation Levels |
 | Difficulty Level | Intermediate |
 | Classification | I |
-| Dependencies | 9.3 PostgreSQL isolation specifics | 9.4 MySQL InnoDB specifics |
+| Dependencies | None |
 | Last Updated | 2026-06-02 |
 
 ## Overview
@@ -79,6 +79,7 @@ Refer to the domain-analysis.md and folder-architecture.md source documents for 
 
 - **Prerequisites**: Core concepts in Transaction Management Concurrency
 - **Closely Related**: Other KUs within Transaction Management Concurrency
+- **Closely Related**: 9.3 PostgreSQL isolation specifics, 9.4 MySQL InnoDB specifics
 - **Advanced**: Expert-level KUs building on this concept
 - **Cross-Domain**: Related topics from other subdomains in Data andamp; Storage Systems
 

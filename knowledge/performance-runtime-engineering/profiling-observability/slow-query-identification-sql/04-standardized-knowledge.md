@@ -11,6 +11,7 @@
 | Lifecycle | Diagnose, Optimize |
 | Version | 1.0 |
 | Last Updated | 2026-06-02 |
+| Dependencies | Sargable vs non sargable, Composite index column ordering |
 
 ## Overview
 

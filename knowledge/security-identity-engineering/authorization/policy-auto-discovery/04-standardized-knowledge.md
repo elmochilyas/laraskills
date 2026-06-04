@@ -8,6 +8,7 @@
 | Difficulty Level | Foundation |
 | Last Updated | 2026-06-02 |
 | Status | Stable |
+| Dependencies | Route model binding implicit |
 
 ---
 

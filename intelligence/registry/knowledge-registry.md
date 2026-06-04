@@ -1,4 +1,4 @@
-﻿# ECC Knowledge Registry
+# ECC Knowledge Registry
 
 Repository-wide inventory of the ECC knowledge system.
 
@@ -6,7 +6,7 @@ Repository-wide inventory of the ECC knowledge system.
 |---|---|
 | Total Knowledge Units | 2321 |
 | Total Domains | 21 |
-| Generated | 2026-06-04 16:19:33 |
+| Generated | 2026-06-04 23:11:34 |
 
 ---
 
@@ -3271,4 +3271,3 @@ Repository-wide inventory of the ECC knowledge system.
 - **[test-double-taxonomy](knowledge/testing-reliability-engineering/unit-testing/test-double-taxonomy/04-standardized-knowledge.md)** (intermediate)
 - **[unit-testing-patterns](knowledge/testing-reliability-engineering/unit-testing/unit-testing-patterns/04-standardized-knowledge.md)** (intermediate)
 - **[unit-test-structure](knowledge/testing-reliability-engineering/unit-testing/unit-test-structure/04-standardized-knowledge.md)** (intermediate)
-

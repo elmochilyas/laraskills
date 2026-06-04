@@ -1,4 +1,4 @@
-﻿# ECC Rule Index
+# ECC Rule Index
 
 Repository-wide rule registry. Centralized discovery for AI agents.
 
@@ -6,7 +6,7 @@ Repository-wide rule registry. Centralized discovery for AI agents.
 |---|---|
 | Total Rules | 2321 |
 | Domains | 21 |
-| Generated | 2026-06-04 16:19:33 |
+| Generated | 2026-06-04 23:11:34 |
 
 ---
 
@@ -3055,4 +3055,3 @@ Repository-wide rule registry. Centralized discovery for AI agents.
 - **test-double-taxonomy** -- knowledge/testing-reliability-engineering/unit-testing/test-double-taxonomy/05-rules.md
 - **unit-testing-patterns** -- knowledge/testing-reliability-engineering/unit-testing/unit-testing-patterns/05-rules.md
 - **unit-test-structure** -- knowledge/testing-reliability-engineering/unit-testing/unit-test-structure/05-rules.md
-

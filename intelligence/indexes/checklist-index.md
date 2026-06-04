@@ -1,4 +1,4 @@
-﻿# ECC Checklist Index
+# ECC Checklist Index
 
 Repository-wide checklist registry.
 
@@ -6,7 +6,7 @@ Repository-wide checklist registry.
 |---|---|
 | Total Checklists | 2321 |
 | Domains | 21 |
-| Generated | 2026-06-04 16:19:33 |
+| Generated | 2026-06-04 23:11:34 |
 
 ---
 
@@ -3055,4 +3055,3 @@ Repository-wide checklist registry.
 - **test-double-taxonomy** -- knowledge/testing-reliability-engineering/unit-testing/test-double-taxonomy/09-checklists.md
 - **unit-testing-patterns** -- knowledge/testing-reliability-engineering/unit-testing/unit-testing-patterns/09-checklists.md
 - **unit-test-structure** -- knowledge/testing-reliability-engineering/unit-testing/unit-test-structure/09-checklists.md
-

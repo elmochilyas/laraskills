@@ -170,8 +170,80 @@ $relContent = $relOutput | ConvertTo-Json -Depth 10
 Write-Utf8File -Path "$root\intelligence\json\relationships.json" -Value $relContent
 Write-Host "  relationships.json created with $($relEdges.Count) edges"
 
-# Phase 7: Update dependency-index.md with real data
-Write-Host "`nPhase 7: Regenerating dependency-index.md..."
+# Phase 7: Detect circular dependencies
+Write-Host "`nPhase 7: Detecting circular dependencies..."
+$graph = @{}
+foreach ($e in $edges) {
+    if (-not $graph.ContainsKey($e.source)) { $graph[$e.source] = @() }
+    $graph[$e.source] += $e.target
+}
+$visited = @{}; $recStack = @{}; $cycleSet = @{}
+function Check-Cycle {
+    param($node, $path)
+    if ($recStack.ContainsKey($node)) {
+        $idx = [array]::IndexOf($path, $node)
+        if ($idx -ge 0) { $c = $path[$idx..($path.Count-1)]; $key = ($c | Sort-Object) -join '|'; if (-not $cycleSet.ContainsKey($key)) { $cycleSet[$key] = $c } }
+        return
+    }
+    if ($visited.ContainsKey($node)) { return }
+    $visited[$node] = $true; $recStack[$node] = $true
+    if ($graph.ContainsKey($node)) { foreach ($n in $graph[$node]) { Check-Cycle -node $n -path ($path + $node) } }
+    $recStack.Remove($node)
+}
+foreach ($n in $graph.Keys) { if (-not $visited.ContainsKey($n)) { Check-Cycle -node $n -path @() } }
+$cycleCount = $cycleSet.Count
+Write-Host "  Cycles detected: $cycleCount"
+if ($cycleCount -gt 0) { $i=1; foreach ($c in $cycleSet.Values) { Write-Host "  Cycle $i : $($c -join ' -> ')"; $i++ } }
+
+# Phase 7b: Alias resolution pass
+Write-Host "`nPhase 7b: Resolving aliases..."
+$aliasPath = "$root\intelligence\json\aliases.json"
+$aliasResolved = 0
+if (Test-Path $aliasPath) {
+    $aliasRaw = Get-Content $aliasPath -Raw -Encoding UTF8
+    if ($aliasRaw[0] -eq 0xFEFF) { $aliasRaw = $aliasRaw.Substring(1) }
+    $aliasObj = $aliasRaw | ConvertFrom-Json
+    $aliasMap = @{}
+    foreach ($a in $aliasObj.aliases) {
+        $aliasMap[$a.alias.ToLower().Trim()] = $a.canonical_ku_id
+        $aliasMap[$a.normalized_alias.ToLower().Trim()] = $a.canonical_ku_id
+    }
+    $remainingUnmatched = @()
+    foreach ($u in $unmatched) {
+        $ref = ($u -split '\s*\(')[0].Trim().ToLower()
+        $resolved = $false
+        if ($aliasMap.ContainsKey($ref)) {
+            $targetId = $aliasMap[$ref]
+            $sourceId = if ($u -match '\(in\s*(.+)\)$') { $matches[1].Trim() } else { "" }
+            if ($sourceId -ne "") {
+                $ek = "$targetId->$sourceId"
+                if (-not $seenEdges.ContainsKey($ek)) {
+                    $seenEdges[$ek] = $true
+                    $edges += @{id=$ek; source=$targetId; target=$sourceId; type="prerequisite"; strength="recommended"; reason="Alias: '$ref'"; evidence_paths=@("knowledge/$sourceId/04-standardized-knowledge.md")}
+                    $aliasResolved++
+                    $resolved = $true
+                }
+            }
+        }
+        if (-not $resolved) { $remainingUnmatched += $u }
+    }
+    $unmatched = $remainingUnmatched
+    Write-Host "  Alias resolutions: $aliasResolved"
+    Write-Host "  Remaining unmatched: $($unmatched.Count)"
+}
+
+# Phase 7c: Update dependencies.json with alias-resolved edges
+Write-Host "`nPhase 7c: Updating dependencies.json after alias resolution..."
+$depRaw2 = Get-Content $depPath -Raw -Encoding UTF8
+if ($depRaw2[0] -eq 0xFEFF) { $depRaw2 = $depRaw2.Substring(1) }
+$depObj2 = $depRaw2 | ConvertFrom-Json
+$depObj2.edges = $edges
+$newDepJson2 = $depObj2 | ConvertTo-Json -Depth 10
+Write-Utf8File -Path $depPath -Value $newDepJson2
+Write-Host "  dependencies.json updated with $($edges.Count) edges"
+
+# Phase 7d: Update dependency-index.md with real data
+Write-Host "`nPhase 7d: Regenerating dependency-index.md..."
 $depIndexPath = "$root\intelligence\indexes\dependency-index.md"
 
 # Foundation KUs (most-depended-upon or highest in domain hierarchy)
@@ -287,11 +359,23 @@ foreach ($d in ($idToDomain.Values | Select-Object -Unique | Sort-Object)) {
     $index += "| $display | $($domainWithDeps.Count) | $($domainEdges.Count) |`n"
 }
 
+$cycleText = if ($cycleCount -eq 0) { "Circular dependencies were checked during generation. None found." } else { $t = "**" + $cycleCount + " circular dependencies detected:**`n"; $i = 1; foreach ($c in $cycleSet.Values) { $seq = $c -join ' -> '; $t += "$i. $seq`n"; $i++ }; $t }
+
 $index += @"
 
 ## Circular Dependencies
 
-Circular dependencies were checked during generation. None found.
+$cycleText
+
+## External Prerequisites
+
+External prerequisite concepts are tracked in \`intelligence/json/external-concepts.json\`.
+$($unmatched.Count) unmatched dependency references remain after alias resolution — see that file for the registry of external prerequisites.
+
+## Alias Resolution
+
+Internal aliases (e.g., section numbers, K-codes) are mapped in \`intelligence/json/aliases.json\`.
+$aliasResolved alias references were resolved to canonical KU IDs during this generation.
 
 ## Notes
 
@@ -299,8 +383,9 @@ Circular dependencies were checked during generation. None found.
 - Relationship edges are generated from \`Related KUs\` metadata fields and \`## Related KUs\` sections.
 - Edges are directional: A → B means "A is a prerequisite for B".
 - Relationships are bidirectional: A ↔ B means "A and B are related topics".
-- Unmatched dependency references (e.g., external concepts like "PHPUnit basics", "CSS selectors") are not included as edges because they reference external knowledge, not internal KUs.
-- "K-codes" from real-time-systems (K01-K38) and section-number references from data-storage-systems (e.g., "5.14 PostgreSQL RLS") are partial matches when the target KU can be identified.
+- External concepts (e.g., "PHPUnit basics", "CSS selectors") are tracked in external-concepts.json.
+- Internal aliases (e.g., section numbers, K-codes) are resolved via aliases.json.
+- Remaining unmatched references: $($unmatched.Count) after alias resolution.
 "@
 
 Write-Utf8File -Path $depIndexPath -Value $index
