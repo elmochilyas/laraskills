@@ -1,5 +1,10 @@
 # Codex CLI — Laravel 13 Instructions
 
+For full agent operating instructions and knowledge layer navigation, see:
+- [`AGENTS.md`](../AGENTS.md)
+- [`agent/retrieval-guide.md`](../agent/retrieval-guide.md)
+- [`agent/domain-routing-index.md`](../agent/domain-routing-index.md)
+
 ## Laravel 13 Setup
 
 PHP 8.3+ required. Structure your app by feature domain:

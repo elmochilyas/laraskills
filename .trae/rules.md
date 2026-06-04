@@ -1,5 +1,10 @@
 # Laravel 13 Rules for Trae IDE
 
+For full agent operating instructions and knowledge layer navigation, see:
+- [`AGENTS.md`](../AGENTS.md)
+- [`agent/retrieval-guide.md`](../agent/retrieval-guide.md)
+- [`agent/domain-routing-index.md`](../agent/domain-routing-index.md)
+
 ## File Structure
 
 - Modular organization: `app/Modules/{Feature}/{Type}.php`

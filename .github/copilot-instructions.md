@@ -1,5 +1,10 @@
 # GitHub Copilot Instructions for Laravel 13
 
+For full agent operating instructions and knowledge layer navigation, see:
+- [`AGENTS.md`](../AGENTS.md)
+- [`agent/retrieval-guide.md`](../agent/retrieval-guide.md)
+- [`agent/domain-routing-index.md`](../agent/domain-routing-index.md)
+
 ## Architecture
 
 - Use modular domain structure: `app/Modules/{Feature}/`
