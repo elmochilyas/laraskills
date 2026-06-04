@@ -1,4 +1,4 @@
-﻿{
+{
     "edges":  [
                   {
                       "id":  "api-crud-system-engineering/resource-controllers/controller-code-limits\u003c-\u003eapi-crud-system-engineering/resource-controllers/thin-controller-enforcement",
@@ -4991,10 +4991,20 @@
                                          ]
                   },
                   {
+                      "id":  "data-storage-systems/connections/connection-lifecycle\u003c-\u003edata-storage-systems/connections/laravel-octane-connections",
+                      "source":  "data-storage-systems/connections/connection-lifecycle",
+                      "type":  "related-topic",
+                      "reason":  "Related KU",
+                      "target":  "data-storage-systems/connections/laravel-octane-connections",
+                      "evidence_paths":  [
+                                             "knowledge/data-storage-systems/connections/connection-lifecycle/04-standardized-knowledge.md"
+                                         ]
+                  },
+                  {
                       "id":  "data-storage-systems/connections/connection-lifecycle\u003c-\u003edata-storage-systems/connections/connection-count-management",
                       "source":  "data-storage-systems/connections/connection-lifecycle",
                       "type":  "related-topic",
-                      "reason":  "Related: \u0027**Closely Related**: 10.2 Pool architecture, 10.7 Connection count management, 10.12 PHP-FPM vs Octane vs Swoole\u0027",
+                      "reason":  "Related KU",
                       "target":  "data-storage-systems/connections/connection-count-management",
                       "evidence_paths":  [
                                              "knowledge/data-storage-systems/connections/connection-lifecycle/04-standardized-knowledge.md"
@@ -16431,6 +16441,26 @@
                                          ]
                   },
                   {
+                      "id":  "data-storage-systems/partitioning/range-partitioning\u003c-\u003edata-storage-systems/partitioning/partition-pruning",
+                      "source":  "data-storage-systems/partitioning/range-partitioning",
+                      "type":  "related-topic",
+                      "reason":  "Related KU",
+                      "target":  "data-storage-systems/partitioning/partition-pruning",
+                      "evidence_paths":  [
+                                             "knowledge/data-storage-systems/partitioning/range-partitioning/04-standardized-knowledge.md"
+                                         ]
+                  },
+                  {
+                      "id":  "data-storage-systems/partitioning/range-partitioning\u003c-\u003edata-storage-systems/partitioning/partition-management",
+                      "source":  "data-storage-systems/partitioning/range-partitioning",
+                      "type":  "related-topic",
+                      "reason":  "Related KU",
+                      "target":  "data-storage-systems/partitioning/partition-management",
+                      "evidence_paths":  [
+                                             "knowledge/data-storage-systems/partitioning/range-partitioning/04-standardized-knowledge.md"
+                                         ]
+                  },
+                  {
                       "id":  "search-retrieval-systems/meilisearch/meilisearch-setup\u003c-\u003eai-intelligence-systems/vector-databases/02",
                       "source":  "search-retrieval-systems/meilisearch/meilisearch-setup",
                       "type":  "related-topic",
@@ -24451,26 +24481,6 @@
                                          ]
                   },
                   {
-                      "id":  "data-storage-systems/connections/connection-count-management\u003c-\u003edata-storage-systems/connections/pool-architecture",
-                      "source":  "data-storage-systems/connections/connection-count-management",
-                      "type":  "related-topic",
-                      "reason":  "Related: \u0027**Prerequisites**: 10.1 Connection lifecycle, 10.2 Pool architecture\u0027",
-                      "target":  "data-storage-systems/connections/pool-architecture",
-                      "evidence_paths":  [
-                                             "knowledge/data-storage-systems/connections/connection-count-management/04-standardized-knowledge.md"
-                                         ]
-                  },
-                  {
-                      "id":  "data-storage-systems/connections/connection-count-management\u003c-\u003edata-storage-systems/connections/transaction-pooling-limitations",
-                      "source":  "data-storage-systems/connections/connection-count-management",
-                      "type":  "related-topic",
-                      "reason":  "Related: \u0027**Advanced**: 10.10 Transaction pooling limitations, PgBouncer `default_pool_size` tuning\u0027",
-                      "target":  "data-storage-systems/connections/transaction-pooling-limitations",
-                      "evidence_paths":  [
-                                             "knowledge/data-storage-systems/connections/connection-count-management/04-standardized-knowledge.md"
-                                         ]
-                  },
-                  {
                       "id":  "api-crud-system-engineering/pagination-strategies/infinite-scroll-pagination\u003c-\u003elaravel-eloquent-domain-modeling/performance-and-integrity/cursor",
                       "source":  "api-crud-system-engineering/pagination-strategies/infinite-scroll-pagination",
                       "type":  "related-topic",
@@ -32381,6 +32391,36 @@
                                          ]
                   },
                   {
+                      "id":  "data-storage-systems/optimization/explain-output-interpretation\u003c-\u003edata-storage-systems/optimization/explain-analyze",
+                      "source":  "data-storage-systems/optimization/explain-output-interpretation",
+                      "type":  "related-topic",
+                      "reason":  "Related KU",
+                      "target":  "data-storage-systems/optimization/explain-analyze",
+                      "evidence_paths":  [
+                                             "knowledge/data-storage-systems/optimization/explain-output-interpretation/04-standardized-knowledge.md"
+                                         ]
+                  },
+                  {
+                      "id":  "data-storage-systems/optimization/explain-output-interpretation\u003c-\u003edata-storage-systems/optimization/type-column-values",
+                      "source":  "data-storage-systems/optimization/explain-output-interpretation",
+                      "type":  "related-topic",
+                      "reason":  "Related KU",
+                      "target":  "data-storage-systems/optimization/type-column-values",
+                      "evidence_paths":  [
+                                             "knowledge/data-storage-systems/optimization/explain-output-interpretation/04-standardized-knowledge.md"
+                                         ]
+                  },
+                  {
+                      "id":  "data-storage-systems/optimization/explain-output-interpretation\u003c-\u003edata-storage-systems/optimization/extra-column-flags",
+                      "source":  "data-storage-systems/optimization/explain-output-interpretation",
+                      "type":  "related-topic",
+                      "reason":  "Related KU",
+                      "target":  "data-storage-systems/optimization/extra-column-flags",
+                      "evidence_paths":  [
+                                             "knowledge/data-storage-systems/optimization/explain-output-interpretation/04-standardized-knowledge.md"
+                                         ]
+                  },
+                  {
                       "id":  "search-retrieval-systems/laravel-scout-foundation/make-all-searchable-using\u003c-\u003eai-intelligence-systems/vector-databases/01",
                       "source":  "search-retrieval-systems/laravel-scout-foundation/make-all-searchable-using",
                       "type":  "related-topic",
@@ -35586,6 +35626,16 @@
                       "type":  "related-topic",
                       "reason":  "Related: \u0027**Prerequisites**: 10.1 Connection lifecycle, TCP connection basics\u0027",
                       "target":  "data-storage-systems/connections/connection-lifecycle",
+                      "evidence_paths":  [
+                                             "knowledge/data-storage-systems/connections/pool-architecture/04-standardized-knowledge.md"
+                                         ]
+                  },
+                  {
+                      "id":  "data-storage-systems/connections/pool-architecture\u003c-\u003edata-storage-systems/connections/connection-count-management",
+                      "source":  "data-storage-systems/connections/pool-architecture",
+                      "type":  "related-topic",
+                      "reason":  "Related: \u0027**Closely Related**: 10.7 Connection count management, 10.12 PHP-FPM vs Octane vs Swoole\u0027",
+                      "target":  "data-storage-systems/connections/connection-count-management",
                       "evidence_paths":  [
                                              "knowledge/data-storage-systems/connections/pool-architecture/04-standardized-knowledge.md"
                                          ]

@@ -10,7 +10,8 @@
 | Knowledge Unit Title | Connection count management (max_connections, pool sizing, avoiding connection storms) |
 | Difficulty Level | Intermediate |
 | Classification | I |
-| Dependencies | 10.2 Pool architecture, 10.8 Connection tags observability |
+| Dependencies | 10.2 Pool architecture |
+| Related KUs | Connection tags observability |
 | Last Updated | 2026-06-02 |
 
 ## Overview

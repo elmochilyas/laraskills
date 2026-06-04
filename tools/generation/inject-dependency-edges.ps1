@@ -1,3 +1,8 @@
+function Write-Utf8File {
+    param([string]$Path, [string]$Value)
+    [System.IO.File]::WriteAllText($Path, $Value, (New-Object System.Text.UTF8Encoding $false))
+}
+
 $root = "C:\Users\Pc\Desktop\laravel skills from every thing claude code\laravel-ecc"
 
 # Phase 1: Build KU name-to-ID mapping
@@ -146,25 +151,14 @@ Write-Host "  Relationship edges: $($relEdges.Count)"
 # Phase 5: Inject edges into dependencies.json
 Write-Host "`nPhase 5: Updating dependencies.json..."
 $depPath = "$root\intelligence\json\dependencies.json"
-$depContent = Get-Content $depPath -Raw
+$depRaw = Get-Content $depPath -Raw -Encoding UTF8
+if ($depRaw[0] -eq 0xFEFF) { $depRaw = $depRaw.Substring(1) }
+$depObj = $depRaw | ConvertFrom-Json
 
-# Remove empty edges and replace with populated array
-$edgeJson = $edges | ConvertTo-Json -Depth 10
-# Get the edges array from the JSON
-$edgeArrayStart = $depContent.IndexOf('"edges":') + 9
-$edgeArrayEnd = $depContent.IndexOf('"nodes":')
-$beforeEdges = $depContent.Substring(0, $edgeArrayStart)
-$afterEdges = $depContent.Substring($edgeArrayEnd - 1)
+$depObj.edges = $edges
 
-# Build the edges JSON portion
-$edgesFormatted = if ($edges.Count -gt 0) {
-    ($edges | ForEach-Object { 
-        "        " + ($_ | ConvertTo-Json -Compress -Depth 10)
-    }) -join ",`n"
-} else { "" }
-
-$newDepContent = $beforeEdges + "[`n" + $edgesFormatted + "`n" + "              ]" + $afterEdges.Substring($afterEdges.IndexOf(','))
-$newDepContent | Set-Content -Path $depPath -Encoding UTF8
+$newDepJson = $depObj | ConvertTo-Json -Depth 10
+Write-Utf8File -Path $depPath -Value $newDepJson
 Write-Host "  dependencies.json updated with $($edges.Count) edges"
 
 # Phase 6: Create relationships.json
@@ -172,7 +166,8 @@ Write-Host "`nPhase 6: Creating relationships.json..."
 $relOutput = @{
     edges = $relEdges
 }
-$relOutput | ConvertTo-Json -Depth 10 | Set-Content -Path "$root\intelligence\json\relationships.json" -Encoding UTF8
+$relContent = $relOutput | ConvertTo-Json -Depth 10
+Write-Utf8File -Path "$root\intelligence\json\relationships.json" -Value $relContent
 Write-Host "  relationships.json created with $($relEdges.Count) edges"
 
 # Phase 7: Update dependency-index.md with real data
@@ -308,7 +303,7 @@ Circular dependencies were checked during generation. None found.
 - "K-codes" from real-time-systems (K01-K38) and section-number references from data-storage-systems (e.g., "5.14 PostgreSQL RLS") are partial matches when the target KU can be identified.
 "@
 
-$index | Set-Content -Path $depIndexPath -Encoding UTF8
+Write-Utf8File -Path $depIndexPath -Value $index
 Write-Host "  dependency-index.md regenerated ($((Get-Item $depIndexPath).Length) bytes)"
 
 Write-Host "`n=== COMPLETE ==="
