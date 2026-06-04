@@ -22,6 +22,8 @@ Encapsulate data access behind a consistent interface:
 - Business logic depends on the abstract interface, not the storage mechanism
 - Enables easy swapping of data sources and simplifies testing with mocks
 
+> **ECC Default:** Use direct Eloquent access inside Actions or application services by default. Do NOT require a Repository for every model. Use a Repository only when it creates a meaningful abstraction boundary (see Repository Justification Criteria in `docs/architecture-decisions/repository-vs-direct-eloquent.md`). Avoid repositories that merely proxy simple Eloquent calls.
+
 ### API Response Format
 
 Use a consistent envelope for all API responses:

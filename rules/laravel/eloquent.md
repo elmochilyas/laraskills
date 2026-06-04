@@ -15,6 +15,7 @@ paths:
 - Use **DTOs** to cross service boundaries — never pass raw request data or arrays.
 - Use **Value Objects** for domain concepts (Email, Money, Address) with custom casts.
 - Avoid generic `UserRepository` that wraps Eloquent — use Query Objects, Actions, or Custom Builders instead.
+- Meaningful domain repositories (multiple persistence implementations, external API data sources, complex reusable query logic) are acceptable — see Repository Justification Criteria in `docs/architecture-decisions/repository-vs-direct-eloquent.md`.
 
 ## Relationships
 

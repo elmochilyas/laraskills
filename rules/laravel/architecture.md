@@ -16,12 +16,12 @@ Action (orchestration)
     ↓
 Domain Service (business logic)
     ↓
-Contract (interface)
-    ↓
 Infrastructure (Stripe, Eloquent, Mailgun)
     ↓
 Database / External API
 ```
+
+> **Note on Contracts/Interfaces:** A Contract (interface) layer between Domain Service and Infrastructure is required ONLY when one of the Repository Justification Criteria applies (multiple persistence implementations, external API data sources, domain persistence-agnosticism, complex reusable query logic, module boundary stability, genuinely swappable implementations). For standard Eloquent-backed services, direct Eloquent access inside Actions or application services is the ECC default. See `docs/architecture-decisions/repository-vs-direct-eloquent.md`.
 
 ## Forbidden Flows
 
