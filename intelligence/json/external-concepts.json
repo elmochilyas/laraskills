@@ -1,0 +1,366 @@
+{
+  "concepts": [
+    {
+      "id": "external/playwright-basics",
+      "name": "Playwright Basics",
+      "slug": "playwright-basics",
+      "type": "external-prerequisite",
+      "referenced_by": [
+        "testing-reliability-engineering/browser-e2e-testing/pest-playwright",
+        "testing-reliability-engineering/browser-e2e-testing/pest-4-browser-testing"
+      ],
+      "reason": "Browser automation framework required for Pest 4 browser testing.",
+      "source_paths": [
+        "knowledge/testing-reliability-engineering/browser-e2e-testing/pest-playwright/04-standardized-knowledge.md",
+        "knowledge/testing-reliability-engineering/browser-e2e-testing/pest-4-browser-testing/04-standardized-knowledge.md"
+      ]
+    },
+    {
+      "id": "external/http-protocol",
+      "name": "HTTP Protocol",
+      "slug": "http-protocol",
+      "type": "external-prerequisite",
+      "referenced_by": [
+        "testing-reliability-engineering/performance-load-testing/loadforge",
+        "testing-reliability-engineering/performance-load-testing/apache-bench-jmeter"
+      ],
+      "reason": "Background knowledge required for API testing and load testing.",
+      "source_paths": [
+        "knowledge/testing-reliability-engineering/performance-load-testing/loadforge/04-standardized-knowledge.md",
+        "knowledge/testing-reliability-engineering/performance-load-testing/apache-bench-jmeter/04-standardized-knowledge.md"
+      ]
+    },
+    {
+      "id": "external/phpunit-basics",
+      "name": "PHPUnit Basics",
+      "slug": "phpunit-basics",
+      "type": "external-prerequisite",
+      "referenced_by": [
+        "testing-reliability-engineering/core-concepts/pest-fundamentals",
+        "testing-reliability-engineering/core-concepts/phpunit-compatibility"
+      ],
+      "reason": "PHPUnit is the underlying testing framework that Pest wraps.",
+      "source_paths": [
+        "knowledge/testing-reliability-engineering/core-concepts/pest-fundamentals/04-standardized-knowledge.md",
+        "knowledge/testing-reliability-engineering/core-concepts/phpunit-compatibility/04-standardized-knowledge.md"
+      ]
+    },
+    {
+      "id": "external/css-selectors",
+      "name": "CSS Selectors",
+      "slug": "css-selectors",
+      "type": "external-prerequisite",
+      "referenced_by": [
+        "testing-reliability-engineering/browser-e2e-testing/dusk-fundamentals",
+        "testing-reliability-engineering/browser-e2e-testing/dusk-selectors-page-objects"
+      ],
+      "reason": "Required for browser test element selection.",
+      "source_paths": [
+        "knowledge/testing-reliability-engineering/browser-e2e-testing/dusk-fundamentals/04-standardized-knowledge.md",
+        "knowledge/testing-reliability-engineering/browser-e2e-testing/dusk-selectors-page-objects/04-standardized-knowledge.md"
+      ]
+    },
+    {
+      "id": "external/html-dom-structure",
+      "name": "HTML/DOM Structure",
+      "slug": "html-dom-structure",
+      "type": "external-prerequisite",
+      "referenced_by": [
+        "testing-reliability-engineering/browser-e2e-testing/dusk-selectors-page-objects"
+      ],
+      "reason": "Required for understanding browser test assertions.",
+      "source_paths": [
+        "knowledge/testing-reliability-engineering/browser-e2e-testing/dusk-selectors-page-objects/04-standardized-knowledge.md"
+      ]
+    },
+    {
+      "id": "external/javascript-dom-basics",
+      "name": "JavaScript/DOM Basics",
+      "slug": "javascript-dom-basics",
+      "type": "external-prerequisite",
+      "referenced_by": [
+        "testing-reliability-engineering/browser-e2e-testing/dusk-fundamentals",
+        "testing-reliability-engineering/browser-e2e-testing/dusk-waiting-strategies",
+        "testing-reliability-engineering/accessibility-testing/accessibility-regression-testing"
+      ],
+      "reason": "Required for browser-based testing and accessibility testing.",
+      "source_paths": [
+        "knowledge/testing-reliability-engineering/browser-e2e-testing/dusk-fundamentals/04-standardized-knowledge.md",
+        "knowledge/testing-reliability-engineering/browser-e2e-testing/dusk-waiting-strategies/04-standardized-knowledge.md",
+        "knowledge/testing-reliability-engineering/accessibility-testing/accessibility-regression-testing/04-standardized-knowledge.md"
+      ]
+    },
+    {
+      "id": "external/composer-autoloading",
+      "name": "Composer Autoloading",
+      "slug": "composer-autoloading",
+      "type": "external-prerequisite",
+      "referenced_by": [
+        "testing-reliability-engineering/core-concepts/pest-fundamentals",
+        "testing-reliability-engineering/core-concepts/phpunit-compatibility"
+      ],
+      "reason": "Required understanding for PHP test bootstrapping.",
+      "source_paths": [
+        "knowledge/testing-reliability-engineering/core-concepts/pest-fundamentals/04-standardized-knowledge.md",
+        "knowledge/testing-reliability-engineering/core-concepts/phpunit-compatibility/04-standardized-knowledge.md"
+      ]
+    },
+    {
+      "id": "external/oop-design",
+      "name": "OOP Design",
+      "slug": "oop-design",
+      "type": "external-prerequisite",
+      "referenced_by": [
+        "testing-reliability-engineering/unit-testing/unit-testing-patterns"
+      ],
+      "reason": "Object-oriented programming concepts required for test design.",
+      "source_paths": [
+        "knowledge/testing-reliability-engineering/unit-testing/unit-testing-patterns/04-standardized-knowledge.md"
+      ]
+    },
+    {
+      "id": "external/docker-basics",
+      "name": "Docker Basics",
+      "slug": "docker-basics",
+      "type": "external-prerequisite",
+      "referenced_by": [
+        "testing-reliability-engineering/ci-cd-pipeline/matrix-testing"
+      ],
+      "reason": "Containerization knowledge required for CI matrix testing.",
+      "source_paths": [
+        "knowledge/testing-reliability-engineering/ci-cd-pipeline/matrix-testing/04-standardized-knowledge.md"
+      ]
+    },
+    {
+      "id": "external/github-actions-fundamentals",
+      "name": "GitHub Actions Fundamentals",
+      "slug": "github-actions-fundamentals",
+      "type": "external-prerequisite",
+      "referenced_by": [
+        "testing-reliability-engineering/ci-cd-pipeline/github-actions-cicd",
+        "testing-reliability-engineering/ci-cd-pipeline/matrix-testing",
+        "testing-reliability-engineering/ci-cd-pipeline/path-based-triggering",
+        "testing-reliability-engineering/ci-cd-pipeline/parallel-sharding-ci"
+      ],
+      "reason": "CI/CD platform knowledge required for pipeline configuration.",
+      "source_paths": [
+        "knowledge/testing-reliability-engineering/ci-cd-pipeline/github-actions-cicd/04-standardized-knowledge.md",
+        "knowledge/testing-reliability-engineering/ci-cd-pipeline/matrix-testing/04-standardized-knowledge.md",
+        "knowledge/testing-reliability-engineering/ci-cd-pipeline/path-based-triggering/04-standardized-knowledge.md",
+        "knowledge/testing-reliability-engineering/ci-cd-pipeline/parallel-sharding-ci/04-standardized-knowledge.md"
+      ]
+    },
+    {
+      "id": "external/yaml-syntax",
+      "name": "YAML Syntax",
+      "slug": "yaml-syntax",
+      "type": "external-prerequisite",
+      "referenced_by": [
+        "testing-reliability-engineering/ci-cd-pipeline/github-actions-cicd"
+      ],
+      "reason": "Required for writing GitHub Actions workflow files.",
+      "source_paths": [
+        "knowledge/testing-reliability-engineering/ci-cd-pipeline/github-actions-cicd/04-standardized-knowledge.md"
+      ]
+    },
+    {
+      "id": "external/linux-server-administration",
+      "name": "Linux Server Administration",
+      "slug": "linux-server-administration",
+      "type": "external-prerequisite",
+      "referenced_by": [
+        "testing-reliability-engineering/ci-cd-pipeline/zero-downtime-deployment"
+      ],
+      "reason": "Required for deployment and server management.",
+      "source_paths": [
+        "knowledge/testing-reliability-engineering/ci-cd-pipeline/zero-downtime-deployment/04-standardized-knowledge.md"
+      ]
+    },
+    {
+      "id": "external/nginx-apache-configuration",
+      "name": "Nginx/Apache Configuration",
+      "slug": "nginx-apache-configuration",
+      "type": "external-prerequisite",
+      "referenced_by": [
+        "testing-reliability-engineering/ci-cd-pipeline/zero-downtime-deployment",
+        "testing-reliability-engineering/performance-load-testing/apache-bench-jmeter"
+      ],
+      "reason": "Web server knowledge required for deployment and load testing.",
+      "source_paths": [
+        "knowledge/testing-reliability-engineering/ci-cd-pipeline/zero-downtime-deployment/04-standardized-knowledge.md",
+        "knowledge/testing-reliability-engineering/performance-load-testing/apache-bench-jmeter/04-standardized-knowledge.md"
+      ]
+    },
+    {
+      "id": "external/deployment-strategies",
+      "name": "Deployment Strategies",
+      "slug": "deployment-strategies",
+      "type": "external-prerequisite",
+      "referenced_by": [
+        "testing-reliability-engineering/ci-cd-pipeline/post-deployment-health-checks"
+      ],
+      "reason": "Required for health check design post-deployment.",
+      "source_paths": [
+        "knowledge/testing-reliability-engineering/ci-cd-pipeline/post-deployment-health-checks/04-standardized-knowledge.md"
+      ]
+    },
+    {
+      "id": "external/code-coverage-concepts",
+      "name": "Code Coverage Concepts",
+      "slug": "code-coverage-concepts",
+      "type": "external-prerequisite",
+      "referenced_by": [
+        "testing-reliability-engineering/mutation-testing/pest-mutation-testing",
+        "testing-reliability-engineering/ci-cd-pipeline/coverage-reporting-enforcement"
+      ],
+      "reason": "Required understanding for mutation testing and coverage enforcement.",
+      "source_paths": [
+        "knowledge/testing-reliability-engineering/mutation-testing/pest-mutation-testing/04-standardized-knowledge.md",
+        "knowledge/testing-reliability-engineering/ci-cd-pipeline/coverage-reporting-enforcement/04-standardized-knowledge.md"
+      ]
+    },
+    {
+      "id": "external/wcag-2-1",
+      "name": "WCAG 2.1 Understanding",
+      "slug": "wcag-2-1",
+      "type": "external-prerequisite",
+      "referenced_by": [
+        "testing-reliability-engineering/accessibility-testing/accessibility-regression-testing"
+      ],
+      "reason": "Accessibility standard knowledge required for accessibility testing.",
+      "source_paths": [
+        "knowledge/testing-reliability-engineering/accessibility-testing/accessibility-regression-testing/04-standardized-knowledge.md"
+      ]
+    },
+    {
+      "id": "external/blob-pattern-basics",
+      "name": "Glob Pattern Basics",
+      "slug": "glob-pattern-basics",
+      "type": "external-prerequisite",
+      "referenced_by": [
+        "testing-reliability-engineering/ci-cd-pipeline/path-based-triggering"
+      ],
+      "reason": "Required for path-based CI triggering configuration.",
+      "source_paths": [
+        "knowledge/testing-reliability-engineering/ci-cd-pipeline/path-based-triggering/04-standardized-knowledge.md"
+      ]
+    },
+    {
+      "id": "external/php-type-system",
+      "name": "PHP Type System",
+      "slug": "php-type-system",
+      "type": "external-prerequisite",
+      "referenced_by": [
+        "testing-reliability-engineering/architecture-testing/architecture-presets"
+      ],
+      "reason": "Required for architectural constraint testing.",
+      "source_paths": [
+        "knowledge/testing-reliability-engineering/architecture-testing/architecture-presets/04-standardized-knowledge.md"
+      ]
+    },
+    {
+      "id": "external/php-8-named-arguments",
+      "name": "PHP 8+ Named Arguments",
+      "slug": "php-8-named-arguments",
+      "type": "external-prerequisite",
+      "referenced_by": [
+        "testing-reliability-engineering/unit-testing/dto-test-factories"
+      ],
+      "reason": "Required for DTO test factory patterns.",
+      "source_paths": [
+        "knowledge/testing-reliability-engineering/unit-testing/dto-test-factories/04-standardized-knowledge.md"
+      ]
+    },
+    {
+      "id": "external/carbon-date-library",
+      "name": "Carbon Date Library",
+      "slug": "carbon-date-library",
+      "type": "external-prerequisite",
+      "referenced_by": [
+        "testing-reliability-engineering/mocking-fakes/time-manipulation"
+      ],
+      "reason": "Required for time manipulation testing with Carbon.",
+      "source_paths": [
+        "knowledge/testing-reliability-engineering/mocking-fakes/time-manipulation/04-standardized-knowledge.md"
+      ]
+    },
+    {
+      "id": "external/distributed-systems-fundamentals",
+      "name": "Distributed Systems Fundamentals",
+      "slug": "distributed-systems-fundamentals",
+      "type": "external-prerequisite",
+      "referenced_by": [
+        "testing-reliability-engineering/resilience-chaos-engineering/circuit-breaker-patterns"
+      ],
+      "reason": "Required for resilience and chaos engineering patterns.",
+      "source_paths": [
+        "knowledge/testing-reliability-engineering/resilience-chaos-engineering/circuit-breaker-patterns/04-standardized-knowledge.md"
+      ]
+    },
+    {
+      "id": "external/python-basics",
+      "name": "Python Basics",
+      "slug": "python-basics",
+      "type": "external-prerequisite",
+      "referenced_by": [
+        "testing-reliability-engineering/performance-load-testing/loadforge"
+      ],
+      "reason": "Required for writing Locust load test scripts.",
+      "source_paths": [
+        "knowledge/testing-reliability-engineering/performance-load-testing/loadforge/04-standardized-knowledge.md"
+      ]
+    },
+    {
+      "id": "external/php-process-management",
+      "name": "PHP Process Management",
+      "slug": "php-process-management",
+      "type": "external-prerequisite",
+      "referenced_by": [
+        "testing-reliability-engineering/performance-load-testing/volttest"
+      ],
+      "reason": "Required for PHP-level performance testing.",
+      "source_paths": [
+        "knowledge/testing-reliability-engineering/performance-load-testing/volttest/04-standardized-knowledge.md"
+      ]
+    },
+    {
+      "id": "external/php-extension-management",
+      "name": "PHP Extension Management (pcov/Xdebug)",
+      "slug": "php-extension-management",
+      "type": "external-prerequisite",
+      "referenced_by": [
+        "testing-reliability-engineering/ci-cd-pipeline/coverage-reporting-enforcement"
+      ],
+      "reason": "Required for code coverage tooling configuration.",
+      "source_paths": [
+        "knowledge/testing-reliability-engineering/ci-cd-pipeline/coverage-reporting-enforcement/04-standardized-knowledge.md"
+      ]
+    },
+    {
+      "id": "external/php-class-structure",
+      "name": "PHP Class Structure",
+      "slug": "php-class-structure",
+      "type": "external-prerequisite",
+      "referenced_by": [
+        "testing-reliability-engineering/architecture-testing/pest-arch-fundamentals"
+      ],
+      "reason": "Required for architecture testing.",
+      "source_paths": [
+        "knowledge/testing-reliability-engineering/architecture-testing/pest-arch-fundamentals/04-standardized-knowledge.md"
+      ]
+    },
+    {
+      "id": "external/load-balancer-concepts",
+      "name": "Load Balancer Concepts",
+      "slug": "load-balancer-concepts",
+      "type": "external-prerequisite",
+      "referenced_by": [
+        "testing-reliability-engineering/ci-cd-pipeline/post-deployment-health-checks"
+      ],
+      "reason": "Required for health check design behind load balancers.",
+      "source_paths": [
+        "knowledge/testing-reliability-engineering/ci-cd-pipeline/post-deployment-health-checks/04-standardized-knowledge.md"
+      ]
+    }
+  ]
+}

@@ -10,7 +10,7 @@
 | Knowledge Unit Title | Concurrent Index Creation |
 | Difficulty Level | Advanced |
 | Classification | A |
-| Dependencies | 1.27 Online index creation | 3.19 Index maintenance | 13.5 Online DDL |
+| Dependencies | 3.19 Index maintenance | 13.5 Online DDL |
 | Last Updated | 2026-06-02 |
 
 ## Overview
@@ -81,6 +81,7 @@ Refer to the domain-analysis.md and folder-architecture.md source documents for 
 
 - **Prerequisites**: Core concepts in Indexing Strategy Physical Design
 - **Closely Related**: Other KUs within Indexing Strategy Physical Design
+- **Closely Related**: 1.27 Online index creation
 - **Advanced**: Expert-level KUs building on this concept
 - **Cross-Domain**: Related topics from other subdomains in Data andamp; Storage Systems
 

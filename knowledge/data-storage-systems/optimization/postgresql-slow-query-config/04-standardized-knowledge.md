@@ -10,7 +10,7 @@
 | Knowledge Unit Title | Postgresql Slow Query Config |
 | Difficulty Level | Intermediate |
 | Classification | I |
-| Dependencies | 4.5 MySQL Slow Query Log | 4.30 Production optimization workflow |
+| Dependencies | 4.30 Production optimization workflow |
 | Last Updated | 2026-06-02 |
 
 ## Overview
@@ -78,6 +78,7 @@ Refer to the domain-analysis.md and folder-architecture.md source documents for 
 
 - **Prerequisites**: Core concepts in Query Optimization Profiling
 - **Closely Related**: Other KUs within Query Optimization Profiling
+- **Closely Related**: 4.5 MySQL Slow Query Log
 - **Advanced**: Expert-level KUs building on this concept
 - **Cross-Domain**: Related topics from other subdomains in Data andamp; Storage Systems
 

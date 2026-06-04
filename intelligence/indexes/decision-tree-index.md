@@ -1,4 +1,4 @@
-﻿# ECC Decision Tree Index
+# ECC Decision Tree Index
 
 Repository-wide decision tree registry.
 
@@ -6,7 +6,7 @@ Repository-wide decision tree registry.
 |---|---|
 | Total Decision Trees | 2321 |
 | Domains | 21 |
-| Generated | 2026-06-04 16:19:33 |
+| Generated | 2026-06-04 23:11:34 |
 
 ---
 
@@ -3055,4 +3055,3 @@ Repository-wide decision tree registry.
 - **test-double-taxonomy** -- knowledge/testing-reliability-engineering/unit-testing/test-double-taxonomy/07-decision-trees.md
 - **unit-testing-patterns** -- knowledge/testing-reliability-engineering/unit-testing/unit-testing-patterns/07-decision-trees.md
 - **unit-test-structure** -- knowledge/testing-reliability-engineering/unit-testing/unit-test-structure/07-decision-trees.md
-

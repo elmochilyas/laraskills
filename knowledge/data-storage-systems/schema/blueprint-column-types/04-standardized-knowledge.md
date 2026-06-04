@@ -10,7 +10,7 @@
 | Knowledge Unit Title | Blueprint Column Types |
 | Difficulty Level | Foundation |
 | Classification | I |
-| Dependencies | 1.3 Column modifiers | 1.4 Foreign key definition | 1.15 MySQL instant DDL | 12.1 JSONB column type |
+| Dependencies | 1.4 Foreign key definition | 1.15 MySQL instant DDL | 12.1 JSONB column type |
 | Last Updated | 2026-06-02 |
 
 ## Overview
@@ -98,6 +98,7 @@ Refer to the domain-analysis.md and folder-architecture.md source documents for 
 
 - **Prerequisites**: Core concepts in Schema Design & Migration Engineering
 - **Closely Related**: Other KUs within Schema Design & Migration Engineering
+- **Closely Related**: 1.3 Column modifiers
 - **Advanced**: Expert-level KUs building on this concept
 - **Cross-Domain**: Related topics from other subdomains in Data andamp; Storage Systems
 

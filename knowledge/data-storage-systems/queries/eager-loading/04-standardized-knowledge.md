@@ -10,7 +10,7 @@
 | Knowledge Unit Title | Eager Loading |
 | Difficulty Level | Foundation |
 | Classification | I |
-| Dependencies | 2.4 Lazy loading prevention | 2.5 Constrained eager loading | 2.14 N+1 detection |
+| Dependencies | 2.5 Constrained eager loading | 2.14 N+1 detection |
 | Last Updated | 2026-06-02 |
 
 ## Overview
@@ -86,6 +86,7 @@ Refer to the domain-analysis.md and folder-architecture.md source documents for 
 
 - **Prerequisites**: Core concepts in Eloquent Orm Query Builder
 - **Closely Related**: Other KUs within Eloquent Orm Query Builder
+- **Closely Related**: 2.4 Lazy loading prevention
 - **Advanced**: Expert-level KUs building on this concept
 - **Cross-Domain**: Related topics from other subdomains in Data andamp; Storage Systems
 

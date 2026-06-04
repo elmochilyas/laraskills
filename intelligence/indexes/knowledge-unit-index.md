@@ -1,4 +1,4 @@
-﻿# ECC Knowledge Unit Index
+# ECC Knowledge Unit Index
 
 Fast discovery of all Knowledge Units in the repository.
 
@@ -6,7 +6,7 @@ Fast discovery of all Knowledge Units in the repository.
 |---|---|
 | Total KUs | 2321 |
 | Domains | 21 |
-| Generated | 2026-06-04 16:19:33 |
+| Generated | 2026-06-04 23:11:34 |
 
 ---
 
@@ -3533,4 +3533,3 @@ Fast discovery of all Knowledge Units in the repository.
 | 6 | test-double-taxonomy | `knowledge/testing-reliability-engineering/unit-testing/test-double-taxonomy` |
 | 7 | unit-testing-patterns | `knowledge/testing-reliability-engineering/unit-testing/unit-testing-patterns` |
 | 8 | unit-test-structure | `knowledge/testing-reliability-engineering/unit-testing/unit-test-structure` |
-

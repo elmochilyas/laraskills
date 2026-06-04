@@ -10,7 +10,7 @@
 | Knowledge Unit Title | Online Index Creation |
 | Difficulty Level | Advanced |
 | Classification | A |
-| Dependencies | 3.20 Concurrent index creation | 1.26 MySQL ALGORITHM options | 3.1 B-Tree index structure |
+| Dependencies | 1.26 MySQL ALGORITHM options | 3.1 B-Tree index structure |
 | Last Updated | 2026-06-02 |
 
 ## Overview
@@ -93,6 +93,7 @@ Refer to the domain-analysis.md and folder-architecture.md source documents for 
 
 - **Prerequisites**: Core concepts in Schema Design & Migration Engineering
 - **Closely Related**: Other KUs within Schema Design & Migration Engineering
+- **Closely Related**: 3.20 Concurrent index creation
 - **Advanced**: Expert-level KUs building on this concept
 - **Cross-Domain**: Related topics from other subdomains in Data andamp; Storage Systems
 

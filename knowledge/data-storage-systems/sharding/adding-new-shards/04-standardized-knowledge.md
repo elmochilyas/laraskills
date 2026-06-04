@@ -10,7 +10,7 @@
 | Knowledge Unit Title | Adding New Shards |
 | Difficulty Level | Expert |
 | Classification | E |
-| Dependencies | 6.10 Shard rebalancing | 6.11 Shard splitting | 6.20 Consistent hashing |
+| Dependencies | 6.11 Shard splitting | 6.20 Consistent hashing |
 | Last Updated | 2026-06-02 |
 
 ## Overview
@@ -78,6 +78,7 @@ Refer to the domain-analysis.md and folder-architecture.md source documents for 
 
 - **Prerequisites**: Core concepts in Database Sharding & Horizontal Scaling
 - **Closely Related**: Other KUs within Database Sharding & Horizontal Scaling
+- **Closely Related**: 6.10 Shard rebalancing
 - **Advanced**: Expert-level KUs building on this concept
 - **Cross-Domain**: Related topics from other subdomains in Data andamp; Storage Systems
 

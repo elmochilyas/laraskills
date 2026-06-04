@@ -10,7 +10,7 @@
 | Knowledge Unit Title | Shard Splitting |
 | Difficulty Level | Expert |
 | Classification | E |
-| Dependencies | 6.10 Shard rebalancing | 6.12 Adding new shards | 6.24 Hot shard mitigation |
+| Dependencies | 6.10 Shard rebalancing | 6.24 Hot shard mitigation |
 | Last Updated | 2026-06-02 |
 
 ## Overview

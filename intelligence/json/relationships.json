@@ -5841,6 +5841,16 @@
                                          ]
                   },
                   {
+                      "id":  "data-storage-systems/sharding/shard-rebalancing\u003c-\u003edata-storage-systems/sharding/shard-splitting",
+                      "source":  "data-storage-systems/sharding/shard-rebalancing",
+                      "type":  "related-topic",
+                      "reason":  "Related: \u0027**Closely Related**: 6.11 Shard splitting\u0027",
+                      "target":  "data-storage-systems/sharding/shard-splitting",
+                      "evidence_paths":  [
+                                             "knowledge/data-storage-systems/sharding/shard-rebalancing/04-standardized-knowledge.md"
+                                         ]
+                  },
+                  {
                       "id":  "platform-engineering-developer-experience/monorepo-management/dependency-management-across-monorepo\u003c-\u003ebackend-architecture-design/patterns/repository",
                       "source":  "platform-engineering-developer-experience/monorepo-management/dependency-management-across-monorepo",
                       "type":  "related-topic",
@@ -11971,6 +11981,16 @@
                                          ]
                   },
                   {
+                      "id":  "data-storage-systems/sharding/adding-new-shards\u003c-\u003edata-storage-systems/sharding/shard-rebalancing",
+                      "source":  "data-storage-systems/sharding/adding-new-shards",
+                      "type":  "related-topic",
+                      "reason":  "Related: \u0027**Closely Related**: 6.10 Shard rebalancing\u0027",
+                      "target":  "data-storage-systems/sharding/shard-rebalancing",
+                      "evidence_paths":  [
+                                             "knowledge/data-storage-systems/sharding/adding-new-shards/04-standardized-knowledge.md"
+                                         ]
+                  },
+                  {
                       "id":  "data-storage-systems/multi-tenancy/database-per-tenant\u003c-\u003eapplication-architecture-patterns/modular-monolith-design/multi-tenancy",
                       "source":  "data-storage-systems/multi-tenancy/database-per-tenant",
                       "type":  "related-topic",
@@ -13641,6 +13661,16 @@
                                          ]
                   },
                   {
+                      "id":  "data-storage-systems/optimization/mysql-slow-query-log\u003c-\u003edata-storage-systems/optimization/postgresql-slow-query-config",
+                      "source":  "data-storage-systems/optimization/mysql-slow-query-log",
+                      "type":  "related-topic",
+                      "reason":  "Related: \u0027**Closely Related**: 4.6 PostgreSQL slow query config\u0027",
+                      "target":  "data-storage-systems/optimization/postgresql-slow-query-config",
+                      "evidence_paths":  [
+                                             "knowledge/data-storage-systems/optimization/mysql-slow-query-log/04-standardized-knowledge.md"
+                                         ]
+                  },
+                  {
                       "id":  "laravel-core-application-engineering/api-resources/resource-fundamentals\u003c-\u003elaravel-eloquent-domain-modeling/serialization/conditional-attributes",
                       "source":  "laravel-core-application-engineering/api-resources/resource-fundamentals",
                       "type":  "related-topic",
@@ -15268,6 +15298,16 @@
                       "target":  "laravel-execution-lifecycle/service-container/tagged-bindings",
                       "evidence_paths":  [
                                              "knowledge/laravel-execution-lifecycle/dependency-injection/interface-binding/04-standardized-knowledge.md"
+                                         ]
+                  },
+                  {
+                      "id":  "data-storage-systems/schema/blueprint-column-types\u003c-\u003edata-storage-systems/schema/column-modifiers",
+                      "source":  "data-storage-systems/schema/blueprint-column-types",
+                      "type":  "related-topic",
+                      "reason":  "Related: \u0027**Closely Related**: 1.3 Column modifiers\u0027",
+                      "target":  "data-storage-systems/schema/column-modifiers",
+                      "evidence_paths":  [
+                                             "knowledge/data-storage-systems/schema/blueprint-column-types/04-standardized-knowledge.md"
                                          ]
                   },
                   {
@@ -18361,6 +18401,16 @@
                                          ]
                   },
                   {
+                      "id":  "data-storage-systems/indexes/concurrent-index-creation\u003c-\u003edata-storage-systems/schema/online-index-creation",
+                      "source":  "data-storage-systems/indexes/concurrent-index-creation",
+                      "type":  "related-topic",
+                      "reason":  "Related: \u0027**Closely Related**: 1.27 Online index creation\u0027",
+                      "target":  "data-storage-systems/schema/online-index-creation",
+                      "evidence_paths":  [
+                                             "knowledge/data-storage-systems/indexes/concurrent-index-creation/04-standardized-knowledge.md"
+                                         ]
+                  },
+                  {
                       "id":  "api-integration-engineering/case-studies/case-studies\u003c-\u003eai-intelligence-systems/vector-databases/05",
                       "source":  "api-integration-engineering/case-studies/case-studies",
                       "type":  "related-topic",
@@ -21431,6 +21481,16 @@
                                          ]
                   },
                   {
+                      "id":  "data-storage-systems/transactions/isolation-levels\u003c-\u003edata-storage-systems/transactions/postgresql-isolation-specifics",
+                      "source":  "data-storage-systems/transactions/isolation-levels",
+                      "type":  "related-topic",
+                      "reason":  "Related: \u0027**Closely Related**: 9.3 PostgreSQL isolation specifics, 9.4 MySQL InnoDB specifics\u0027",
+                      "target":  "data-storage-systems/transactions/postgresql-isolation-specifics",
+                      "evidence_paths":  [
+                                             "knowledge/data-storage-systems/transactions/isolation-levels/04-standardized-knowledge.md"
+                                         ]
+                  },
+                  {
                       "id":  "security-identity-engineering/authorization/spatie-permission\u003c-\u003esecurity-identity-engineering/authorization/rbac-design",
                       "source":  "security-identity-engineering/authorization/spatie-permission",
                       "type":  "related-topic",
@@ -22236,6 +22296,16 @@
                       "type":  "related-topic",
                       "reason":  "Related: \u0027**Prerequisites**: Core concepts in Eloquent Orm Query Builder\u0027",
                       "target":  "backend-architecture-design/patterns/builder",
+                      "evidence_paths":  [
+                                             "knowledge/data-storage-systems/queries/subquery-selects/04-standardized-knowledge.md"
+                                         ]
+                  },
+                  {
+                      "id":  "data-storage-systems/queries/subquery-selects\u003c-\u003edata-storage-systems/queries/subquery-ordering",
+                      "source":  "data-storage-systems/queries/subquery-selects",
+                      "type":  "related-topic",
+                      "reason":  "Related: \u0027**Closely Related**: 2.9 Subquery ordering\u0027",
+                      "target":  "data-storage-systems/queries/subquery-ordering",
                       "evidence_paths":  [
                                              "knowledge/data-storage-systems/queries/subquery-selects/04-standardized-knowledge.md"
                                          ]
@@ -24236,6 +24306,16 @@
                       "type":  "related-topic",
                       "reason":  "Related: \u0027**Prerequisites**: Core concepts in Eloquent Orm Query Builder\u0027",
                       "target":  "backend-architecture-design/patterns/builder",
+                      "evidence_paths":  [
+                                             "knowledge/data-storage-systems/queries/eager-loading/04-standardized-knowledge.md"
+                                         ]
+                  },
+                  {
+                      "id":  "data-storage-systems/queries/eager-loading\u003c-\u003edata-storage-systems/queries/lazy-loading-prevention",
+                      "source":  "data-storage-systems/queries/eager-loading",
+                      "type":  "related-topic",
+                      "reason":  "Related: \u0027**Closely Related**: 2.4 Lazy loading prevention\u0027",
+                      "target":  "data-storage-systems/queries/lazy-loading-prevention",
                       "evidence_paths":  [
                                              "knowledge/data-storage-systems/queries/eager-loading/04-standardized-knowledge.md"
                                          ]

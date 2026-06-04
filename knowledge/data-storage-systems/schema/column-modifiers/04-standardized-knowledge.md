@@ -10,7 +10,7 @@
 | Knowledge Unit Title | Column Modifiers |
 | Difficulty Level | Foundation |
 | Classification | I |
-| Dependencies | 1.2 Blueprint column types | 1.4 Foreign key definition | 12.39 Generated columns (PostgreSQL) | 13.14 Generated columns (MySQL) |
+| Dependencies | 1.4 Foreign key definition | 12.39 Generated columns (PostgreSQL) | 13.14 Generated columns (MySQL) |
 | Last Updated | 2026-06-02 |
 
 ## Overview
@@ -98,6 +98,7 @@ Refer to the domain-analysis.md and folder-architecture.md source documents for 
 
 - **Prerequisites**: Core concepts in Schema Design & Migration Engineering
 - **Closely Related**: Other KUs within Schema Design & Migration Engineering
+- **Closely Related**: 1.2 Blueprint column types
 - **Advanced**: Expert-level KUs building on this concept
 - **Cross-Domain**: Related topics from other subdomains in Data andamp; Storage Systems
 

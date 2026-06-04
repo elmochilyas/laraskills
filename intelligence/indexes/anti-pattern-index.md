@@ -1,4 +1,4 @@
-﻿# ECC Anti-Pattern Index
+# ECC Anti-Pattern Index
 
 Repository-wide anti-pattern registry.
 
@@ -6,7 +6,7 @@ Repository-wide anti-pattern registry.
 |---|---|
 | Total Anti-Patterns | 2321 |
 | Domains | 21 |
-| Generated | 2026-06-04 16:19:33 |
+| Generated | 2026-06-04 23:11:34 |
 
 ---
 
@@ -3055,4 +3055,3 @@ Repository-wide anti-pattern registry.
 - **test-double-taxonomy** -- knowledge/testing-reliability-engineering/unit-testing/test-double-taxonomy/08-anti-patterns.md
 - **unit-testing-patterns** -- knowledge/testing-reliability-engineering/unit-testing/unit-testing-patterns/08-anti-patterns.md
 - **unit-test-structure** -- knowledge/testing-reliability-engineering/unit-testing/unit-test-structure/08-anti-patterns.md
-

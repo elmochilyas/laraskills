@@ -1,0 +1,964 @@
+{
+  "aliases": [
+    {
+      "alias": "N+1 queries",
+      "normalized_alias": "n-plus-one-queries",
+      "canonical_ku_id": "data-storage-systems/queries/n-plus-one-detection-elimination",
+      "source_paths": [
+        "knowledge/data-storage-systems/queries/n-plus-one-detection-elimination/04-standardized-knowledge.md"
+      ]
+    },
+    {
+      "alias": "Lazy loading",
+      "normalized_alias": "lazy-loading",
+      "canonical_ku_id": "data-storage-systems/queries/lazy-loading-prevention",
+      "source_paths": [
+        "knowledge/data-storage-systems/queries/lazy-loading-prevention/04-standardized-knowledge.md"
+      ]
+    },
+    {
+      "alias": "3.1 B-Tree index structure",
+      "normalized_alias": "b-tree-index-structure",
+      "canonical_ku_id": "data-storage-systems/indexes/b-tree-index-structure",
+      "source_paths": [
+        "knowledge/data-storage-systems/indexes/b-tree-index-structure/04-standardized-knowledge.md"
+      ]
+    },
+    {
+      "alias": "1.2 Blueprint column types",
+      "normalized_alias": "blueprint-column-types",
+      "canonical_ku_id": "data-storage-systems/schema/blueprint-column-types",
+      "source_paths": [
+        "knowledge/data-storage-systems/schema/blueprint-column-types/04-standardized-knowledge.md"
+      ]
+    },
+    {
+      "alias": "1.3 Column modifiers",
+      "normalized_alias": "column-modifiers",
+      "canonical_ku_id": "data-storage-systems/schema/column-modifiers",
+      "source_paths": [
+        "knowledge/data-storage-systems/schema/column-modifiers/04-standardized-knowledge.md"
+      ]
+    },
+    {
+      "alias": "1.1 Migration file structure",
+      "normalized_alias": "migration-file-structure",
+      "canonical_ku_id": "data-storage-systems/schema/laravel-migration-file-structure",
+      "source_paths": [
+        "knowledge/data-storage-systems/schema/laravel-migration-file-structure/04-standardized-knowledge.md"
+      ]
+    },
+    {
+      "alias": "1.4 Foreign key definition",
+      "normalized_alias": "foreign-key-definition",
+      "canonical_ku_id": "data-storage-systems/schema/foreign-key-definition",
+      "source_paths": [
+        "knowledge/data-storage-systems/schema/foreign-key-definition/04-standardized-knowledge.md"
+      ]
+    },
+    {
+      "alias": "1.6 Migration ordering",
+      "normalized_alias": "migration-ordering",
+      "canonical_ku_id": "data-storage-systems/schema/migration-ordering-naming",
+      "source_paths": [
+        "knowledge/data-storage-systems/schema/migration-ordering-naming/04-standardized-knowledge.md"
+      ]
+    },
+    {
+      "alias": "1.7 Migration batch tracking",
+      "normalized_alias": "migration-batch-tracking",
+      "canonical_ku_id": "data-storage-systems/schema/migration-batch-tracking",
+      "source_paths": [
+        "knowledge/data-storage-systems/schema/migration-batch-tracking/04-standardized-knowledge.md"
+      ]
+    },
+    {
+      "alias": "1.9 Migration isolation",
+      "normalized_alias": "migration-isolation",
+      "canonical_ku_id": "data-storage-systems/schema/migration-isolation",
+      "source_paths": [
+        "knowledge/data-storage-systems/schema/migration-isolation/04-standardized-knowledge.md"
+      ]
+    },
+    {
+      "alias": "1.10 Zero-downtime migration patterns",
+      "normalized_alias": "zero-downtime-migration-patterns",
+      "canonical_ku_id": "data-storage-systems/schema/zero-downtime-migration-patterns",
+      "source_paths": [
+        "knowledge/data-storage-systems/schema/zero-downtime-migration-patterns/04-standardized-knowledge.md"
+      ]
+    },
+    {
+      "alias": "1.11 gh-ost tool",
+      "normalized_alias": "gh-ost-tool",
+      "canonical_ku_id": "data-storage-systems/schema/gh-ost-tool",
+      "source_paths": [
+        "knowledge/data-storage-systems/schema/gh-ost-tool/04-standardized-knowledge.md"
+      ]
+    },
+    {
+      "alias": "1.12 pt-online-schema-change",
+      "normalized_alias": "pt-online-schema-change",
+      "canonical_ku_id": "data-storage-systems/schema/pt-online-schema-change",
+      "source_paths": [
+        "knowledge/data-storage-systems/schema/pt-online-schema-change/04-standardized-knowledge.md"
+      ]
+    },
+    {
+      "alias": "1.18 Expand-contract pattern",
+      "normalized_alias": "expand-contract-pattern",
+      "canonical_ku_id": "data-storage-systems/schema/expand-contract-pattern",
+      "source_paths": [
+        "knowledge/data-storage-systems/schema/expand-contract-pattern/04-standardized-knowledge.md"
+      ]
+    },
+    {
+      "alias": "1.26 MySQL ALGORITHM options",
+      "normalized_alias": "mysql-algorithm-options",
+      "canonical_ku_id": "data-storage-systems/schema/mysql-algorithm-lock-options",
+      "source_paths": [
+        "knowledge/data-storage-systems/schema/mysql-algorithm-lock-options/04-standardized-knowledge.md"
+      ]
+    },
+    {
+      "alias": "1.27 Online index creation",
+      "normalized_alias": "online-index-creation",
+      "canonical_ku_id": "data-storage-systems/schema/online-index-creation",
+      "source_paths": [
+        "knowledge/data-storage-systems/schema/online-index-creation/04-standardized-knowledge.md"
+      ]
+    },
+    {
+      "alias": "2.3 Eager loading",
+      "normalized_alias": "eager-loading",
+      "canonical_ku_id": "data-storage-systems/queries/eager-loading",
+      "source_paths": [
+        "knowledge/data-storage-systems/queries/eager-loading/04-standardized-knowledge.md"
+      ]
+    },
+    {
+      "alias": "2.4 Lazy loading prevention",
+      "normalized_alias": "lazy-loading-prevention",
+      "canonical_ku_id": "data-storage-systems/queries/lazy-loading-prevention",
+      "source_paths": [
+        "knowledge/data-storage-systems/queries/lazy-loading-prevention/04-standardized-knowledge.md"
+      ]
+    },
+    {
+      "alias": "2.5 Constrained eager loading",
+      "normalized_alias": "constrained-eager-loading",
+      "canonical_ku_id": "data-storage-systems/queries/constrained-eager-loading",
+      "source_paths": [
+        "knowledge/data-storage-systems/queries/constrained-eager-loading/04-standardized-knowledge.md"
+      ]
+    },
+    {
+      "alias": "2.8 Subquery selects",
+      "normalized_alias": "subquery-selects",
+      "canonical_ku_id": "data-storage-systems/queries/subquery-selects",
+      "source_paths": [
+        "knowledge/data-storage-systems/queries/subquery-selects/04-standardized-knowledge.md"
+      ]
+    },
+    {
+      "alias": "2.9 Subquery ordering",
+      "normalized_alias": "subquery-ordering",
+      "canonical_ku_id": "data-storage-systems/queries/subquery-ordering",
+      "source_paths": [
+        "knowledge/data-storage-systems/queries/subquery-ordering/04-standardized-knowledge.md"
+      ]
+    },
+    {
+      "alias": "2.14 N+1 detection",
+      "normalized_alias": "n-plus-one-detection",
+      "canonical_ku_id": "data-storage-systems/queries/n-plus-one-detection",
+      "source_paths": [
+        "knowledge/data-storage-systems/queries/n-plus-one-detection/04-standardized-knowledge.md"
+      ]
+    },
+    {
+      "alias": "2.16 Accessors and mutators",
+      "normalized_alias": "accessors-mutators",
+      "canonical_ku_id": "data-storage-systems/queries/accessors-mutators",
+      "source_paths": [
+        "knowledge/data-storage-systems/queries/accessors-mutators/04-standardized-knowledge.md"
+      ]
+    },
+    {
+      "alias": "2.18 Model serialization",
+      "normalized_alias": "model-serialization",
+      "canonical_ku_id": "data-storage-systems/queries/model-serialization",
+      "source_paths": [
+        "knowledge/data-storage-systems/queries/model-serialization/04-standardized-knowledge.md"
+      ]
+    },
+    {
+      "alias": "2.22 insertOrIgnore",
+      "normalized_alias": "insert-or-ignore",
+      "canonical_ku_id": "data-storage-systems/queries/insert-or-ignore",
+      "source_paths": [
+        "knowledge/data-storage-systems/queries/insert-or-ignore/04-standardized-knowledge.md"
+      ]
+    },
+    {
+      "alias": "2.28 N+1 detection via Telescope",
+      "normalized_alias": "n-plus-one-detection-via-telescope",
+      "canonical_ku_id": "data-storage-systems/queries/n-plus-one-detection",
+      "source_paths": [
+        "knowledge/data-storage-systems/queries/n-plus-one-detection/04-standardized-knowledge.md"
+      ]
+    },
+    {
+      "alias": "3.19 Index maintenance",
+      "normalized_alias": "index-maintenance",
+      "canonical_ku_id": "data-storage-systems/indexes/index-maintenance",
+      "source_paths": [
+        "knowledge/data-storage-systems/indexes/index-maintenance/04-standardized-knowledge.md"
+      ]
+    },
+    {
+      "alias": "3.20 Concurrent index creation",
+      "normalized_alias": "concurrent-index-creation",
+      "canonical_ku_id": "data-storage-systems/indexes/concurrent-index-creation",
+      "source_paths": [
+        "knowledge/data-storage-systems/indexes/concurrent-index-creation/04-standardized-knowledge.md"
+      ]
+    },
+    {
+      "alias": "3.28 Sargability rule",
+      "normalized_alias": "sargability-rule",
+      "canonical_ku_id": "data-storage-systems/indexes/sargability-rule",
+      "source_paths": [
+        "knowledge/data-storage-systems/indexes/sargability-rule/04-standardized-knowledge.md"
+      ]
+    },
+    {
+      "alias": "4.1 EXPLAIN output interpretation",
+      "normalized_alias": "explain-output-interpretation",
+      "canonical_ku_id": "data-storage-systems/optimization/explain-output-interpretation",
+      "source_paths": [
+        "knowledge/data-storage-systems/optimization/explain-output-interpretation/04-standardized-knowledge.md"
+      ]
+    },
+    {
+      "alias": "4.5 MySQL Slow Query Log",
+      "normalized_alias": "mysql-slow-query-log",
+      "canonical_ku_id": "data-storage-systems/optimization/mysql-slow-query-log",
+      "source_paths": [
+        "knowledge/data-storage-systems/optimization/mysql-slow-query-log/04-standardized-knowledge.md"
+      ]
+    },
+    {
+      "alias": "4.6 PostgreSQL slow query config",
+      "normalized_alias": "postgresql-slow-query-config",
+      "canonical_ku_id": "data-storage-systems/optimization/postgresql-slow-query-config",
+      "source_paths": [
+        "knowledge/data-storage-systems/optimization/postgresql-slow-query-config/04-standardized-knowledge.md"
+      ]
+    },
+    {
+      "alias": "4.7 Sargable vs non-sargable",
+      "normalized_alias": "sargable-vs-non-sargable",
+      "canonical_ku_id": "data-storage-systems/optimization/sargable-vs-non-sargable",
+      "source_paths": [
+        "knowledge/data-storage-systems/optimization/sargable-vs-non-sargable/04-standardized-knowledge.md"
+      ]
+    },
+    {
+      "alias": "4.13 N+1 detection and elimination",
+      "normalized_alias": "n-plus-one-detection-and-elimination",
+      "canonical_ku_id": "data-storage-systems/optimization/n-plus-one-detection-elimination",
+      "source_paths": [
+        "knowledge/data-storage-systems/optimization/n-plus-one-detection-elimination/04-standardized-knowledge.md"
+      ]
+    },
+    {
+      "alias": "4.25 Subquery optimization",
+      "normalized_alias": "subquery-optimization",
+      "canonical_ku_id": "data-storage-systems/optimization/subquery-optimization",
+      "source_paths": [
+        "knowledge/data-storage-systems/optimization/subquery-optimization/04-standardized-knowledge.md"
+      ]
+    },
+    {
+      "alias": "4.30 Production optimization workflow",
+      "normalized_alias": "production-optimization-workflow",
+      "canonical_ku_id": "data-storage-systems/optimization/production-optimization-workflow",
+      "source_paths": [
+        "knowledge/data-storage-systems/optimization/production-optimization-workflow/04-standardized-knowledge.md"
+      ]
+    },
+    {
+      "alias": "5.1 Shared-table",
+      "normalized_alias": "shared-table-single-db",
+      "canonical_ku_id": "data-storage-systems/multi-tenancy/shared-table-single-db",
+      "source_paths": [
+        "knowledge/data-storage-systems/multi-tenancy/shared-table-single-db/04-standardized-knowledge.md"
+      ]
+    },
+    {
+      "alias": "5.2 Schema-per-tenant",
+      "normalized_alias": "schema-per-tenant",
+      "canonical_ku_id": "data-storage-systems/multi-tenancy/schema-per-tenant",
+      "source_paths": [
+        "knowledge/data-storage-systems/multi-tenancy/schema-per-tenant/04-standardized-knowledge.md"
+      ]
+    },
+    {
+      "alias": "5.3 DB-per-tenant",
+      "normalized_alias": "database-per-tenant",
+      "canonical_ku_id": "data-storage-systems/multi-tenancy/database-per-tenant",
+      "source_paths": [
+        "knowledge/data-storage-systems/multi-tenancy/database-per-tenant/04-standardized-knowledge.md"
+      ]
+    },
+    {
+      "alias": "5.4 Tenant resolution",
+      "normalized_alias": "tenant-resolution-strategies",
+      "canonical_ku_id": "data-storage-systems/multi-tenancy/tenant-resolution-strategies",
+      "source_paths": [
+        "knowledge/data-storage-systems/multi-tenancy/tenant-resolution-strategies/04-standardized-knowledge.md"
+      ]
+    },
+    {
+      "alias": "5.6 Tenant middleware",
+      "normalized_alias": "tenant-aware-middleware",
+      "canonical_ku_id": "data-storage-systems/multi-tenancy/tenant-aware-middleware",
+      "source_paths": [
+        "knowledge/data-storage-systems/multi-tenancy/tenant-aware-middleware/04-standardized-knowledge.md"
+      ]
+    },
+    {
+      "alias": "5.9 Migration orchestration",
+      "normalized_alias": "migration-orchestration",
+      "canonical_ku_id": "data-storage-systems/multi-tenancy/migration-orchestration-across-tenants",
+      "source_paths": [
+        "knowledge/data-storage-systems/multi-tenancy/migration-orchestration-across-tenants/04-standardized-knowledge.md"
+      ]
+    },
+    {
+      "alias": "5.10 Tenant provisioning",
+      "normalized_alias": "tenant-provisioning-lifecycle",
+      "canonical_ku_id": "data-storage-systems/multi-tenancy/tenant-provisioning-lifecycle",
+      "source_paths": [
+        "knowledge/data-storage-systems/multi-tenancy/tenant-provisioning-lifecycle/04-standardized-knowledge.md"
+      ]
+    },
+    {
+      "alias": "5.11 Cross-tenant leak prevention",
+      "normalized_alias": "cross-tenant-data-leak-prevention",
+      "canonical_ku_id": "data-storage-systems/multi-tenancy/cross-tenant-data-leak-prevention",
+      "source_paths": [
+        "knowledge/data-storage-systems/multi-tenancy/cross-tenant-data-leak-prevention/04-standardized-knowledge.md"
+      ]
+    },
+    {
+      "alias": "5.14 PostgreSQL RLS",
+      "normalized_alias": "postgresql-row-level-security",
+      "canonical_ku_id": "data-storage-systems/multi-tenancy/postgresql-row-level-security",
+      "source_paths": [
+        "knowledge/data-storage-systems/multi-tenancy/postgresql-row-level-security/04-standardized-knowledge.md"
+      ]
+    },
+    {
+      "alias": "5.15 Noisy neighbor",
+      "normalized_alias": "noisy-neighbor-detection",
+      "canonical_ku_id": "data-storage-systems/multi-tenancy/noisy-neighbor-detection",
+      "source_paths": [
+        "knowledge/data-storage-systems/multi-tenancy/noisy-neighbor-detection/04-standardized-knowledge.md"
+      ]
+    },
+    {
+      "alias": "5.25 Tenant bootstrapper",
+      "normalized_alias": "tenant-bootstrapper-pattern",
+      "canonical_ku_id": "data-storage-systems/multi-tenancy/tenant-bootstrapper-pattern",
+      "source_paths": [
+        "knowledge/data-storage-systems/multi-tenancy/tenant-bootstrapper-pattern/04-standardized-knowledge.md"
+      ]
+    },
+    {
+      "alias": "6.1 Shard key selection",
+      "normalized_alias": "shard-key-selection-principles",
+      "canonical_ku_id": "data-storage-systems/sharding/shard-key-selection-principles",
+      "source_paths": [
+        "knowledge/data-storage-systems/sharding/shard-key-selection-principles/04-standardized-knowledge.md"
+      ]
+    },
+    {
+      "alias": "6.1 Shard key",
+      "normalized_alias": "shard-key",
+      "canonical_ku_id": "data-storage-systems/sharding/shard-key-selection-principles",
+      "source_paths": [
+        "knowledge/data-storage-systems/sharding/shard-key-selection-principles/04-standardized-knowledge.md"
+      ]
+    },
+    {
+      "alias": "6.2 Hash-based sharding",
+      "normalized_alias": "hash-based-sharding",
+      "canonical_ku_id": "data-storage-systems/sharding/hash-based-sharding",
+      "source_paths": [
+        "knowledge/data-storage-systems/sharding/hash-based-sharding/04-standardized-knowledge.md"
+      ]
+    },
+    {
+      "alias": "6.5 Shard routing",
+      "normalized_alias": "shard-mapping-routing",
+      "canonical_ku_id": "data-storage-systems/sharding/shard-mapping-routing",
+      "source_paths": [
+        "knowledge/data-storage-systems/sharding/shard-mapping-routing/04-standardized-knowledge.md"
+      ]
+    },
+    {
+      "alias": "6.7 Fan-out queries",
+      "normalized_alias": "fan-out-queries",
+      "canonical_ku_id": "data-storage-systems/sharding/fan-out-queries",
+      "source_paths": [
+        "knowledge/data-storage-systems/sharding/fan-out-queries/04-standardized-knowledge.md"
+      ]
+    },
+    {
+      "alias": "6.10 Shard rebalancing",
+      "normalized_alias": "shard-rebalancing",
+      "canonical_ku_id": "data-storage-systems/sharding/shard-rebalancing",
+      "source_paths": [
+        "knowledge/data-storage-systems/sharding/shard-rebalancing/04-standardized-knowledge.md"
+      ]
+    },
+    {
+      "alias": "6.11 Shard splitting",
+      "normalized_alias": "shard-splitting",
+      "canonical_ku_id": "data-storage-systems/sharding/shard-splitting",
+      "source_paths": [
+        "knowledge/data-storage-systems/sharding/shard-splitting/04-standardized-knowledge.md"
+      ]
+    },
+    {
+      "alias": "6.12 Adding new shards",
+      "normalized_alias": "adding-new-shards",
+      "canonical_ku_id": "data-storage-systems/sharding/adding-new-shards",
+      "source_paths": [
+        "knowledge/data-storage-systems/sharding/adding-new-shards/04-standardized-knowledge.md"
+      ]
+    },
+    {
+      "alias": "6.14 Shard model traits",
+      "normalized_alias": "shard-model-traits",
+      "canonical_ku_id": "data-storage-systems/sharding/shard-aware-model-traits",
+      "source_paths": [
+        "knowledge/data-storage-systems/sharding/shard-aware-model-traits/04-standardized-knowledge.md"
+      ]
+    },
+    {
+      "alias": "6.16 Swoole coroutine dispatch",
+      "normalized_alias": "swoole-coroutine-dispatch",
+      "canonical_ku_id": "data-storage-systems/sharding/swoole-octane-coroutine-dispatch",
+      "source_paths": [
+        "knowledge/data-storage-systems/sharding/swoole-octane-coroutine-dispatch/04-standardized-knowledge.md"
+      ]
+    },
+    {
+      "alias": "6.20 Consistent hashing",
+      "normalized_alias": "consistent-hashing",
+      "canonical_ku_id": "data-storage-systems/sharding/modulus-vs-consistent-hashing",
+      "source_paths": [
+        "knowledge/data-storage-systems/sharding/modulus-vs-consistent-hashing/04-standardized-knowledge.md"
+      ]
+    },
+    {
+      "alias": "6.22 Shard vs partition",
+      "normalized_alias": "shard-vs-partition",
+      "canonical_ku_id": "data-storage-systems/sharding/shard-vs-partition-distinction",
+      "source_paths": [
+        "knowledge/data-storage-systems/sharding/shard-vs-partition-distinction/04-standardized-knowledge.md"
+      ]
+    },
+    {
+      "alias": "7.1 Master-replica topology",
+      "normalized_alias": "master-replica-topology",
+      "canonical_ku_id": "data-storage-systems/replication/master-replica-topology",
+      "source_paths": [
+        "knowledge/data-storage-systems/replication/master-replica-topology/04-standardized-knowledge.md"
+      ]
+    },
+    {
+      "alias": "7.2 Laravel read/write config",
+      "normalized_alias": "laravel-read-write-config",
+      "canonical_ku_id": "data-storage-systems/replication/laravel-read-write-config",
+      "source_paths": [
+        "knowledge/data-storage-systems/replication/laravel-read-write-config/04-standardized-knowledge.md"
+      ]
+    },
+    {
+      "alias": "7.2 Read/write config",
+      "normalized_alias": "read-write-config",
+      "canonical_ku_id": "data-storage-systems/replication/laravel-read-write-config",
+      "source_paths": [
+        "knowledge/data-storage-systems/replication/laravel-read-write-config/04-standardized-knowledge.md"
+      ]
+    },
+    {
+      "alias": "7.3 Query routing",
+      "normalized_alias": "automatic-query-routing",
+      "canonical_ku_id": "data-storage-systems/replication/automatic-query-routing",
+      "source_paths": [
+        "knowledge/data-storage-systems/replication/automatic-query-routing/04-standardized-knowledge.md"
+      ]
+    },
+    {
+      "alias": "7.5 Replica lag",
+      "normalized_alias": "replica-lag",
+      "canonical_ku_id": "data-storage-systems/replication/replica-lag-causes",
+      "source_paths": [
+        "knowledge/data-storage-systems/replication/replica-lag-causes/04-standardized-knowledge.md"
+      ]
+    },
+    {
+      "alias": "7.6 Lag monitoring",
+      "normalized_alias": "replica-lag-monitoring",
+      "canonical_ku_id": "data-storage-systems/replication/replica-lag-monitoring",
+      "source_paths": [
+        "knowledge/data-storage-systems/replication/replica-lag-monitoring/04-standardized-knowledge.md"
+      ]
+    },
+    {
+      "alias": "7.10 Multi-master replication",
+      "normalized_alias": "multi-master-replication",
+      "canonical_ku_id": "data-storage-systems/replication/7-10-multi-master-replication",
+      "source_paths": [
+        "knowledge/data-storage-systems/replication/7-10-multi-master-replication/04-standardized-knowledge.md"
+      ]
+    },
+    {
+      "alias": "7.11 Connection failover",
+      "normalized_alias": "connection-failover",
+      "canonical_ku_id": "data-storage-systems/replication/replica-promotion-failover",
+      "source_paths": [
+        "knowledge/data-storage-systems/replication/replica-promotion-failover/04-standardized-knowledge.md"
+      ]
+    },
+    {
+      "alias": "7.11 Failover",
+      "normalized_alias": "failover",
+      "canonical_ku_id": "data-storage-systems/replication/replica-promotion-failover",
+      "source_paths": [
+        "knowledge/data-storage-systems/replication/replica-promotion-failover/04-standardized-knowledge.md"
+      ]
+    },
+    {
+      "alias": "7.14 GTID-based replication",
+      "normalized_alias": "gtid-based-replication",
+      "canonical_ku_id": "data-storage-systems/replication/7-14-gtid-based-replication",
+      "source_paths": [
+        "knowledge/data-storage-systems/replication/7-14-gtid-based-replication/04-standardized-knowledge.md"
+      ]
+    },
+    {
+      "alias": "7.18 Transaction pooling",
+      "normalized_alias": "transaction-pooling",
+      "canonical_ku_id": "data-storage-systems/connections/transaction-pooling-limitations",
+      "source_paths": [
+        "knowledge/data-storage-systems/connections/transaction-pooling-limitations/04-standardized-knowledge.md"
+      ]
+    },
+    {
+      "alias": "8.1 Table partitioning",
+      "normalized_alias": "table-partitioning",
+      "canonical_ku_id": "data-storage-systems/partitioning/range-partitioning",
+      "source_paths": [
+        "knowledge/data-storage-systems/partitioning/range-partitioning/04-standardized-knowledge.md"
+      ]
+    },
+    {
+      "alias": "8.8 Partition indexes",
+      "normalized_alias": "partition-index-design",
+      "canonical_ku_id": "data-storage-systems/partitioning/partition-index-design",
+      "source_paths": [
+        "knowledge/data-storage-systems/partitioning/partition-index-design/04-standardized-knowledge.md"
+      ]
+    },
+    {
+      "alias": "8.15 Partition switching",
+      "normalized_alias": "partition-switching",
+      "canonical_ku_id": "data-storage-systems/partitioning/partition-switching-archiving",
+      "source_paths": [
+        "knowledge/data-storage-systems/partitioning/partition-switching-archiving/04-standardized-knowledge.md"
+      ]
+    },
+    {
+      "alias": "9.1 ACID",
+      "normalized_alias": "acid-properties",
+      "canonical_ku_id": "data-storage-systems/transactions/acid-properties",
+      "source_paths": [
+        "knowledge/data-storage-systems/transactions/acid-properties/04-standardized-knowledge.md"
+      ]
+    },
+    {
+      "alias": "9.2 Isolation levels",
+      "normalized_alias": "isolation-levels",
+      "canonical_ku_id": "data-storage-systems/transactions/isolation-levels",
+      "source_paths": [
+        "knowledge/data-storage-systems/transactions/isolation-levels/04-standardized-knowledge.md"
+      ]
+    },
+    {
+      "alias": "9.3 PostgreSQL isolation specifics",
+      "normalized_alias": "postgresql-isolation-specifics",
+      "canonical_ku_id": "data-storage-systems/transactions/postgresql-isolation-specifics",
+      "source_paths": [
+        "knowledge/data-storage-systems/transactions/postgresql-isolation-specifics/04-standardized-knowledge.md"
+      ]
+    },
+    {
+      "alias": "9.4 MySQL InnoDB specifics",
+      "normalized_alias": "mysql-innodb-isolation-specifics",
+      "canonical_ku_id": "data-storage-systems/transactions/mysql-innodb-isolation-specifics",
+      "source_paths": [
+        "knowledge/data-storage-systems/transactions/mysql-innodb-isolation-specifics/04-standardized-knowledge.md"
+      ]
+    },
+    {
+      "alias": "9.5 Row-level locks",
+      "normalized_alias": "row-level-locks",
+      "canonical_ku_id": "data-storage-systems/transactions/row-level-locks",
+      "source_paths": [
+        "knowledge/data-storage-systems/transactions/row-level-locks/04-standardized-knowledge.md"
+      ]
+    },
+    {
+      "alias": "9.9 Deadlock prevention",
+      "normalized_alias": "deadlock-prevention",
+      "canonical_ku_id": "data-storage-systems/transactions/deadlock-prevention-patterns",
+      "source_paths": [
+        "knowledge/data-storage-systems/transactions/deadlock-prevention-patterns/04-standardized-knowledge.md"
+      ]
+    },
+    {
+      "alias": "9.11 Transaction scoping",
+      "normalized_alias": "transaction-scoping",
+      "canonical_ku_id": "data-storage-systems/transactions/transaction-scoping-laravel",
+      "source_paths": [
+        "knowledge/data-storage-systems/transactions/transaction-scoping-laravel/04-standardized-knowledge.md"
+      ]
+    },
+    {
+      "alias": "9.12 Nested transactions",
+      "normalized_alias": "nested-transactions",
+      "canonical_ku_id": "data-storage-systems/transactions/nested-transactions-savepoints",
+      "source_paths": [
+        "knowledge/data-storage-systems/transactions/nested-transactions-savepoints/04-standardized-knowledge.md"
+      ]
+    },
+    {
+      "alias": "9.13 Transaction length",
+      "normalized_alias": "transaction-length",
+      "canonical_ku_id": "data-storage-systems/transactions/transaction-length-management",
+      "source_paths": [
+        "knowledge/data-storage-systems/transactions/transaction-length-management/04-standardized-knowledge.md"
+      ]
+    },
+    {
+      "alias": "9.17 Serializable snapshot isolation",
+      "normalized_alias": "serializable-snapshot-isolation",
+      "canonical_ku_id": "data-storage-systems/transactions/serializable-snapshot-isolation",
+      "source_paths": [
+        "knowledge/data-storage-systems/transactions/serializable-snapshot-isolation/04-standardized-knowledge.md"
+      ]
+    },
+    {
+      "alias": "10.3 PgBouncer",
+      "normalized_alias": "pgbouncer",
+      "canonical_ku_id": "data-storage-systems/connections/pgbouncer-pooling-modes",
+      "source_paths": [
+        "knowledge/data-storage-systems/connections/pgbouncer-pooling-modes/04-standardized-knowledge.md"
+      ]
+    },
+    {
+      "alias": "10.4 Octane connections",
+      "normalized_alias": "octane-connections",
+      "canonical_ku_id": "data-storage-systems/connections/laravel-octane-connections",
+      "source_paths": [
+        "knowledge/data-storage-systems/connections/laravel-octane-connections/04-standardized-knowledge.md"
+      ]
+    },
+    {
+      "alias": "10.4 Octane pool",
+      "normalized_alias": "octane-pool",
+      "canonical_ku_id": "data-storage-systems/connections/laravel-octane-connections",
+      "source_paths": [
+        "knowledge/data-storage-systems/connections/laravel-octane-connections/04-standardized-knowledge.md"
+      ]
+    },
+    {
+      "alias": "10.6 Connection purging",
+      "normalized_alias": "connection-purging",
+      "canonical_ku_id": "data-storage-systems/connections/connection-purging-reconnection",
+      "source_paths": [
+        "knowledge/data-storage-systems/connections/connection-purging-reconnection/04-standardized-knowledge.md"
+      ]
+    },
+    {
+      "alias": "10.7 Connection count",
+      "normalized_alias": "connection-count",
+      "canonical_ku_id": "data-storage-systems/connections/connection-count-management",
+      "source_paths": [
+        "knowledge/data-storage-systems/connections/connection-count-management/04-standardized-knowledge.md"
+      ]
+    },
+    {
+      "alias": "10.9 Read/write separation",
+      "normalized_alias": "read-write-separation",
+      "canonical_ku_id": "data-storage-systems/connections/read-write-connection-separation",
+      "source_paths": [
+        "knowledge/data-storage-systems/connections/read-write-connection-separation/04-standardized-knowledge.md"
+      ]
+    },
+    {
+      "alias": "11.1 Zero-downtime taxonomy",
+      "normalized_alias": "zero-downtime-migration-taxonomy",
+      "canonical_ku_id": "data-storage-systems/schema/zero-downtime-migration-taxonomy",
+      "source_paths": [
+        "knowledge/data-storage-systems/schema/zero-downtime-migration-taxonomy/04-standardized-knowledge.md"
+      ]
+    },
+    {
+      "alias": "11.2 Online DDL",
+      "normalized_alias": "online-ddl",
+      "canonical_ku_id": "data-storage-systems/schema/mysql-algorithm-lock-options",
+      "source_paths": [
+        "knowledge/data-storage-systems/schema/mysql-algorithm-lock-options/04-standardized-knowledge.md"
+      ]
+    },
+    {
+      "alias": "11.6 Expand-contract",
+      "normalized_alias": "expand-contract",
+      "canonical_ku_id": "data-storage-systems/schema/expand-contract-detailed",
+      "source_paths": [
+        "knowledge/data-storage-systems/schema/expand-contract-detailed/04-standardized-knowledge.md"
+      ]
+    },
+    {
+      "alias": "11.8 MySQL ALGORITHM",
+      "normalized_alias": "mysql-algorithm",
+      "canonical_ku_id": "data-storage-systems/schema/mysql-algorithm-options",
+      "source_paths": [
+        "knowledge/data-storage-systems/schema/mysql-algorithm-options/04-standardized-knowledge.md"
+      ]
+    },
+    {
+      "alias": "11.9 Data backfill",
+      "normalized_alias": "data-backfill",
+      "canonical_ku_id": "data-storage-systems/schema/data-backfill-best-practices",
+      "source_paths": [
+        "knowledge/data-storage-systems/schema/data-backfill-best-practices/04-standardized-knowledge.md"
+      ]
+    },
+    {
+      "alias": "6.20 Consistent hashing",
+      "normalized_alias": "consistent-hashing-modulus",
+      "canonical_ku_id": "data-storage-systems/sharding/modulus-vs-consistent-hashing",
+      "source_paths": [
+        "knowledge/data-storage-systems/sharding/modulus-vs-consistent-hashing/04-standardized-knowledge.md"
+      ]
+    },
+    {
+      "alias": "12.1 JSONB column type",
+      "normalized_alias": "jsonb-column-type",
+      "canonical_ku_id": "data-storage-systems/advanced/jsonb-column-type",
+      "source_paths": [
+        "knowledge/data-storage-systems/advanced/jsonb-column-type/04-standardized-knowledge.md"
+      ]
+    },
+    {
+      "alias": "13.5 Online DDL",
+      "normalized_alias": "online-ddl-algorithms",
+      "canonical_ku_id": "data-storage-systems/schema/mysql-algorithm-lock-options",
+      "source_paths": [
+        "knowledge/data-storage-systems/schema/mysql-algorithm-lock-options/04-standardized-knowledge.md"
+      ]
+    },
+    {
+      "alias": "14.1 Event store",
+      "normalized_alias": "event-store",
+      "canonical_ku_id": "data-storage-systems/multi-tenancy/event-sourcing-multi-tenant",
+      "source_paths": [
+        "knowledge/data-storage-systems/multi-tenancy/event-sourcing-multi-tenant/04-standardized-knowledge.md"
+      ]
+    },
+    {
+      "alias": "K09",
+      "normalized_alias": "k09",
+      "canonical_ku_id": "real-time-systems/laravel-echo/laravel-echo-core-api",
+      "source_paths": [
+        "knowledge/real-time-systems/laravel-echo/laravel-echo-core-api/04-standardized-knowledge.md"
+      ]
+    },
+    {
+      "alias": "K11",
+      "normalized_alias": "k11",
+      "canonical_ku_id": "real-time-systems/channels/public-private-presence-channel-patterns",
+      "source_paths": [
+        "knowledge/real-time-systems/channels/public-private-presence-channel-patterns/04-standardized-knowledge.md"
+      ]
+    },
+    {
+      "alias": "K12",
+      "normalized_alias": "k12",
+      "canonical_ku_id": "real-time-systems/channels/channel-authorization-routes-channels-php",
+      "source_paths": [
+        "knowledge/real-time-systems/channels/channel-authorization-routes-channels-php/04-standardized-knowledge.md"
+      ]
+    },
+    {
+      "alias": "K13",
+      "normalized_alias": "k13",
+      "canonical_ku_id": "real-time-systems/channels/presence-channels-online-user-tracking",
+      "source_paths": [
+        "knowledge/real-time-systems/channels/presence-channels-online-user-tracking/04-standardized-knowledge.md"
+      ]
+    },
+    {
+      "alias": "K14",
+      "normalized_alias": "k14",
+      "canonical_ku_id": "real-time-systems/scaling-production/sticky-sessions-load-balancing-websocket",
+      "source_paths": [
+        "knowledge/real-time-systems/scaling-production/sticky-sessions-load-balancing-websocket/04-standardized-knowledge.md"
+      ]
+    },
+    {
+      "alias": "K15",
+      "normalized_alias": "k15",
+      "canonical_ku_id": "real-time-systems/scaling-production/reconnection-strategies-storm-mitigation",
+      "source_paths": [
+        "knowledge/real-time-systems/scaling-production/reconnection-strategies-storm-mitigation/04-standardized-knowledge.md"
+      ]
+    },
+    {
+      "alias": "K16",
+      "normalized_alias": "k16",
+      "canonical_ku_id": "real-time-systems/sse-server-sent-events/sse-implementation-laravel",
+      "source_paths": [
+        "knowledge/real-time-systems/sse-server-sent-events/sse-implementation-laravel/04-standardized-knowledge.md"
+      ]
+    },
+    {
+      "alias": "K17",
+      "normalized_alias": "k17",
+      "canonical_ku_id": "real-time-systems/sse-server-sent-events/laravel-wave-sse-package",
+      "source_paths": [
+        "knowledge/real-time-systems/sse-server-sent-events/laravel-wave-sse-package/04-standardized-knowledge.md"
+      ]
+    },
+    {
+      "alias": "K18",
+      "normalized_alias": "k18",
+      "canonical_ku_id": "real-time-systems/transport-comparison/websocket-vs-sse-vs-polling-decision-framework",
+      "source_paths": [
+        "knowledge/real-time-systems/transport-comparison/websocket-vs-sse-vs-polling-decision-framework/04-standardized-knowledge.md"
+      ]
+    },
+    {
+      "alias": "K19",
+      "normalized_alias": "k19",
+      "canonical_ku_id": "real-time-systems/real-time-notifications/real-time-notifications-broadcast-database",
+      "source_paths": [
+        "knowledge/real-time-systems/real-time-notifications/real-time-notifications-broadcast-database/04-standardized-knowledge.md"
+      ]
+    },
+    {
+      "alias": "K20",
+      "normalized_alias": "k20",
+      "canonical_ku_id": "real-time-systems/real-time-notifications/real-time-dashboard-architecture",
+      "source_paths": [
+        "knowledge/real-time-systems/real-time-notifications/real-time-dashboard-architecture/04-standardized-knowledge.md"
+      ]
+    },
+    {
+      "alias": "K24",
+      "normalized_alias": "k24",
+      "canonical_ku_id": "real-time-systems/security/websocket-security-tls-cors-auth-cswsh",
+      "source_paths": [
+        "knowledge/real-time-systems/security/websocket-security-tls-cors-auth-cswsh/04-standardized-knowledge.md"
+      ]
+    },
+    {
+      "alias": "K25",
+      "normalized_alias": "k25",
+      "canonical_ku_id": "real-time-systems/security/cve-2026-23524-reverb-redis-deserialization",
+      "source_paths": [
+        "knowledge/real-time-systems/security/cve-2026-23524-reverb-redis-deserialization/04-standardized-knowledge.md"
+      ]
+    },
+    {
+      "alias": "K27",
+      "normalized_alias": "k27",
+      "canonical_ku_id": "real-time-systems/deployment/supervisor-production-process-management",
+      "source_paths": [
+        "knowledge/real-time-systems/deployment/supervisor-production-process-management/04-standardized-knowledge.md"
+      ]
+    },
+    {
+      "alias": "K28",
+      "normalized_alias": "k28",
+      "canonical_ku_id": "real-time-systems/websocket-servers/laravel-cloud-managed-websockets",
+      "source_paths": [
+        "knowledge/real-time-systems/websocket-servers/laravel-cloud-managed-websockets/04-standardized-knowledge.md"
+      ]
+    },
+    {
+      "alias": "K29",
+      "normalized_alias": "k29",
+      "canonical_ku_id": "real-time-systems/channels/private-channel-auth-jwt-sanctum",
+      "source_paths": [
+        "knowledge/real-time-systems/channels/private-channel-auth-jwt-sanctum/04-standardized-knowledge.md"
+      ]
+    },
+    {
+      "alias": "K32",
+      "normalized_alias": "k32",
+      "canonical_ku_id": "real-time-systems/deployment/nginx-websocket-proxy-configuration",
+      "source_paths": [
+        "knowledge/real-time-systems/deployment/nginx-websocket-proxy-configuration/04-standardized-knowledge.md"
+      ]
+    },
+    {
+      "alias": "K33",
+      "normalized_alias": "k33",
+      "canonical_ku_id": "real-time-systems/laravel-echo/dedicated-reverb-fleet-architecture",
+      "source_paths": [
+        "knowledge/real-time-systems/laravel-echo/dedicated-reverb-fleet-architecture/04-standardized-knowledge.md"
+      ]
+    },
+    {
+      "alias": "K34",
+      "normalized_alias": "k34",
+      "canonical_ku_id": "real-time-systems/scaling-production/redis-dependency-failure-modes",
+      "source_paths": [
+        "knowledge/real-time-systems/scaling-production/redis-dependency-failure-modes/04-standardized-knowledge.md"
+      ]
+    },
+    {
+      "alias": "K36",
+      "normalized_alias": "k36",
+      "canonical_ku_id": "real-time-systems/channels/auth-endpoint-optimization-caching",
+      "source_paths": [
+        "knowledge/real-time-systems/channels/auth-endpoint-optimization-caching/04-standardized-knowledge.md"
+      ]
+    },
+    {
+      "alias": "K37",
+      "normalized_alias": "k37",
+      "canonical_ku_id": "real-time-systems/security/reverb-monitoring-metrics",
+      "source_paths": [
+        "knowledge/real-time-systems/security/reverb-monitoring-metrics/04-standardized-knowledge.md"
+      ]
+    },
+    {
+      "alias": "K38",
+      "normalized_alias": "k38",
+      "canonical_ku_id": "real-time-systems/security/serverless-websocket-limitations",
+      "source_paths": [
+        "knowledge/real-time-systems/security/serverless-websocket-limitations/04-standardized-knowledge.md"
+      ]
+    }
+  ]
+}
