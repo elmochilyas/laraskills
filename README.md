@@ -240,6 +240,35 @@ Authentication & authorization: Sanctum, Passport, OAuth2, OIDC, JWT, Policies, 
 | CodeBuddy | `.codebuddy/instructions.md` |
 | Kiro | `.kiro/instructions.md` |
 
+## Deterministic Retrieval CLI (Phase 11)
+
+The ECC retrieval CLI provides deterministic, explainable access to the knowledge intelligence layer:
+
+```bash
+# Retrieve a context bundle for a task
+npx laravel-ecc retrieve "Build a multi-tenant REST API using Sanctum and queued notifications"
+
+# Compact mode for quick routing
+npx laravel-ecc retrieve "Optimize an N+1 query" --mode compact
+
+# Search for knowledge units
+npx laravel-ecc search "Policies versus Gates"
+
+# Get knowledge unit details
+npx laravel-ecc get security-identity-engineering/authentication/sanctum-spa-authentication
+
+# Validate intelligence layer integrity
+npx laravel-ecc validate
+```
+
+**Modes:** `compact` (quick routing), `standard` (default), `deep` (detailed research)
+
+**Output:** `markdown` (human-readable) or `json` (machine-readable, MCP-ready)
+
+**Root discovery:** `--ecc-root <path>` or `ECC_ROOT` environment variable
+
+For full documentation, see `docs/retrieval-cli-guide.md`.
+
 ## License
 
 MIT — based on [ECC](https://github.com/affaan-m/ECC) by Affaan Mustafa.
