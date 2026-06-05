@@ -63,6 +63,7 @@
     "src/",
     "scripts/laravel-ecc.mjs",
     "scripts/laravel-ecc-mcp.mjs",
+    "scripts/mcp/",
     "install.ps1",
     "install.sh",
     "update.ps1",

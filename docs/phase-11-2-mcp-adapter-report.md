@@ -84,15 +84,10 @@ Both `laravel-ecc` (existing CLI) and `laravel-ecc-mcp` (new MCP server) are dec
 
 ## Total test results
 
-| Suite | Before | After |
-|-------|--------|-------|
-| Retrieval unit tests | 102 | 102 |
-| Encoding tests | 11 | 11 |
-| Validator tests | 29 | 29 |
-| MCP tests (NEW) | 0 | 34 |
-| **Total** | **142** | **176** |
+- `npm test` total: **139 / 139 PASS**
+- MCP-specific tests (subset of the 139): **34 / 34 PASS**
 
-**Result: 139 / 139 PASS** (the `npm test` wildcard pattern picks up the MCP test file; CLI tests = 105 + MCP = 34 = 139). All retrieval tests are unchanged.
+The `npm test` script uses a wildcard pattern (`node --test tests/retrieval/*.test.mjs`) that picks up the MCP test file. The MCP suite contributes 34 tests to the 139 total; the remaining 105 tests are pre-existing retrieval, encoding, and validator tests. All pre-existing tests are unchanged.
 
 ## Benchmark results
 
