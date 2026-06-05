@@ -113,6 +113,87 @@ const DOMAIN_KEYWORDS = {
   ],
 };
 
+const CONCEPT_PATTERNS = [
+  { pattern: /\bcrud\b/i, slot: 'crud', family: 'crud-controllers', domain: null },
+  { pattern: /\brest\s*api\b/i, slot: 'rest-api', family: 'rest-api-design', domain: null },
+  { pattern: /\bpolicies?\b/i, slot: 'policies', family: 'authorization', domain: 'security-identity-engineering' },
+  { pattern: /\bauthorization\b/i, slot: 'authorization', family: 'authorization', domain: 'security-identity-engineering' },
+  { pattern: /\bpagination\b/i, slot: 'pagination', family: 'pagination', domain: null },
+  { pattern: /\bvalidat/i, slot: 'validation', family: 'form-request', domain: 'laravel-core-application-engineering' },
+  { pattern: /\bform request\b/i, slot: 'form-request', family: 'form-request', domain: 'laravel-core-application-engineering' },
+  { pattern: /\b(?:resource\s*)?controller\b/i, slot: 'controller', family: 'crud-controllers', domain: null },
+  { pattern: /\b(?:api\s*)?resource\b(?!\s*controller)/i, slot: 'api-resource', family: 'api-resource', domain: null },
+  { pattern: /\b(?:eloquent|model|relation)\b/i, slot: 'eloquent', family: 'eloquent-modeling', domain: 'laravel-eloquent-domain-modeling' },
+  { pattern: /\bsanctum\b/i, slot: 'sanctum', family: 'api-authentication', domain: 'security-identity-engineering' },
+  { pattern: /\bqueue\b/i, slot: 'queue', family: 'queue', domain: 'async-distributed-systems' },
+  { pattern: /\bretry\b/i, slot: 'retry', family: 'retry-failure', domain: 'async-distributed-systems' },
+  { pattern: /\bidempoten\b/i, slot: 'idempotency', family: 'retry-failure', domain: 'async-distributed-systems' },
+  { pattern: /\btenant\b/i, slot: 'tenant', family: 'multi-tenancy', domain: 'security-identity-engineering' },
+  { pattern: /\b(?:pgvector|vector\s*search|embedding|semantic\s*search)\b/i, slot: 'vector-search', family: 'vector-search', domain: 'search-retrieval-systems' },
+  { pattern: /\bn\s*\+?\s*1\b/i, slot: 'n-plus-one', family: 'query-performance', domain: 'laravel-eloquent-domain-modeling' },
+  { pattern: /\beager\s*load(?:ing)?\b/i, slot: 'eager-loading', family: 'query-performance', domain: 'laravel-eloquent-domain-modeling' },
+  { pattern: /\bnotification\b/i, slot: 'notification', family: 'notification', domain: null },
+  { pattern: /\btest\b/i, slot: 'testing', family: 'testing', domain: 'testing-reliability-engineering' },
+];
+
+export function extractConcepts(normalizedQuery) {
+  const text = `${normalizedQuery.normalized} ${normalizedQuery.original}`;
+  const concepts = [];
+  const seenSlots = new Set();
+
+  for (const cp of CONCEPT_PATTERNS) {
+    const match = text.match(cp.pattern);
+    if (match) {
+      const slotKey = cp.slot;
+      if (!seenSlots.has(slotKey)) {
+        seenSlots.add(slotKey);
+        concepts.push({
+          term: match[0].toLowerCase(),
+          slot: slotKey,
+          family: cp.family,
+          domain: cp.domain,
+          matched: true,
+        });
+      }
+    }
+  }
+
+  return concepts;
+}
+
+const RANKING_STOPWORDS = new Set([
+  'api', 'crud', 'rest', 'design', 'engineering', 'system',
+  'architecture', 'laravel', 'implementation', 'development',
+  'pattern', 'application', 'framework', 'php', 'web',
+]);
+
+export function getKuConceptFamilies(kuId) {
+  const id = kuId.toLowerCase();
+  const parts = id.split('/');
+  const domain = parts[0] || '';
+  const subdomain = parts[1] || '';
+  const name = parts[2] || '';
+  const families = [];
+
+  if (/crud|controller/.test(name) || /crud|resource.controller/.test(subdomain)) families.push('crud-controllers');
+  if (/rest/.test(subdomain) && !/cors|hateoas|conditional|content-?negotiation|idempot/.test(name)) families.push('rest-api-design');
+  if (/polic|authorization/.test(name) || /authorization/.test(subdomain)) families.push('authorization');
+  if (/paginat/.test(name) || /paginat/.test(subdomain)) families.push('pagination');
+  if (/validat|form\.request/.test(name) || /validat/.test(subdomain) || /input.validation/.test(subdomain)) families.push('form-request');
+  if (/api\.resource/.test(name)) families.push('api-resource');
+  if (/eloquent|model/.test(name) || /modeling/.test(subdomain)) families.push('eloquent-modeling');
+  if (/sanctum/.test(name) || /auth/.test(subdomain)) families.push('api-authentication');
+  if (/queue|job/.test(name) || /queue|async/.test(subdomain)) families.push('queue');
+  if (/retry|failure|idempot/.test(name)) families.push('retry-failure');
+  if (/tenant/.test(name) || /tenant/.test(subdomain)) families.push('multi-tenancy');
+  if (/vector|embedding/.test(name) || /vector/.test(subdomain)) families.push('vector-search');
+  if (/n\.plus|eager/.test(name) || /performance/.test(subdomain)) families.push('query-performance');
+  if (/test|reliability/.test(domain) || /test/.test(subdomain)) families.push('testing');
+  if (/notification/.test(name)) families.push('notification');
+
+  return families;
+}
+
 export function analyzeQuery(normalized) {
   const { original, normalized: normalizedText, tokens } = normalized;
 
@@ -162,6 +243,8 @@ export function analyzeQuery(normalized) {
     ? sorted.slice(1).filter(([, s]) => s.score > 0).slice(0, 3).map(([d]) => d)
     : [];
 
+  const concepts = extractConcepts(normalized);
+
   return {
     originalQuery: original,
     normalizedText,
@@ -172,5 +255,6 @@ export function analyzeQuery(normalized) {
     intentConfidence: sorted.length > 0
       ? Math.min(100, Math.round(sorted[0][1].score * 100 / 50))
       : 0,
+    concepts,
   };
 }

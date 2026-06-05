@@ -8,7 +8,8 @@
 | Knowledge Unit ID | K14 |
 | Title | Sticky Sessions & Load Balancing for WebSocket |
 | Difficulty | Advanced |
-| Dependencies | K04, K32, K33, K15 |
+| Dependencies | K04, K33, K15 |
+| Related KUs | Nginx WebSocket proxy configuration |
 
 ## Overview
 WebSocket connections require session affinity (sticky sessions) when multiple server instances are deployed behind a load balancer. Unlike HTTP, where any server can handle any request, a WebSocket connection is pinned to the specific server instance that handled its initial upgrade handshake. The load balancer must consistently route subsequent WebSocket traffic from the same client to the same server. Sticky sessions are implemented via IP hash balancing, cookie-based affinity, or application-layer routing.

@@ -78,6 +78,17 @@
                                          ]
                   },
                   {
+                      "id":  "data-storage-systems/transactions/transaction-length-management-\u003edata-storage-systems/transactions/transaction-scoping-laravel",
+                      "source":  "data-storage-systems/transactions/transaction-length-management",
+                      "strength":  "recommended",
+                      "type":  "prerequisite",
+                      "reason":  "Dep: \u00279.13 Transaction length management\u0027",
+                      "target":  "data-storage-systems/transactions/transaction-scoping-laravel",
+                      "evidence_paths":  [
+                                             "knowledge/data-storage-systems/transactions/transaction-scoping-laravel/04-standardized-knowledge.md"
+                                         ]
+                  },
+                  {
                       "id":  "backend-architecture-design/patterns/factory-\u003etesting-reliability-engineering/test-data-management/minimal-data-principle",
                       "source":  "backend-architecture-design/patterns/factory",
                       "strength":  "recommended",
@@ -386,6 +397,17 @@
                                          ]
                   },
                   {
+                      "id":  "data-storage-systems/sharding/modulus-vs-consistent-hashing-\u003edata-storage-systems/sharding/hash-based-sharding",
+                      "source":  "data-storage-systems/sharding/modulus-vs-consistent-hashing",
+                      "strength":  "recommended",
+                      "type":  "prerequisite",
+                      "reason":  "Dep: \u00276.20 Modulus vs consistent hashing\u0027",
+                      "target":  "data-storage-systems/sharding/hash-based-sharding",
+                      "evidence_paths":  [
+                                             "knowledge/data-storage-systems/sharding/hash-based-sharding/04-standardized-knowledge.md"
+                                         ]
+                  },
+                  {
                       "id":  "data-storage-systems/indexes/gist-indexes-\u003edata-storage-systems/indexes/sp-gist-indexes",
                       "source":  "data-storage-systems/indexes/gist-indexes",
                       "strength":  "recommended",
@@ -394,6 +416,17 @@
                       "target":  "data-storage-systems/indexes/sp-gist-indexes",
                       "evidence_paths":  [
                                              "knowledge/data-storage-systems/indexes/sp-gist-indexes/04-standardized-knowledge.md"
+                                         ]
+                  },
+                  {
+                      "id":  "data-storage-systems/replication/sticky-writes-\u003edata-storage-systems/replication/automatic-query-routing",
+                      "source":  "data-storage-systems/replication/sticky-writes",
+                      "strength":  "recommended",
+                      "type":  "prerequisite",
+                      "reason":  "Dep: \u00277.4 Sticky writes\u0027",
+                      "target":  "data-storage-systems/replication/automatic-query-routing",
+                      "evidence_paths":  [
+                                             "knowledge/data-storage-systems/replication/automatic-query-routing/04-standardized-knowledge.md"
                                          ]
                   },
                   {
@@ -727,17 +760,6 @@
                                          ]
                   },
                   {
-                      "id":  "data-storage-systems/connections/pool-architecture-\u003edata-storage-systems/connections/laravel-octane-connections",
-                      "source":  "data-storage-systems/connections/pool-architecture",
-                      "strength":  "recommended",
-                      "type":  "prerequisite",
-                      "reason":  "Dep: \u002710.2 Pool architecture\u0027",
-                      "target":  "data-storage-systems/connections/laravel-octane-connections",
-                      "evidence_paths":  [
-                                             "knowledge/data-storage-systems/connections/laravel-octane-connections/04-standardized-knowledge.md"
-                                         ]
-                  },
-                  {
                       "id":  "data-storage-systems/connections/connection-count-management-\u003edata-storage-systems/connections/laravel-octane-connections",
                       "source":  "data-storage-systems/connections/connection-count-management",
                       "strength":  "recommended",
@@ -760,6 +782,17 @@
                                          ]
                   },
                   {
+                      "id":  "data-storage-systems/queries/casts-\u003edata-storage-systems/queries/model-serialization",
+                      "source":  "data-storage-systems/queries/casts",
+                      "strength":  "recommended",
+                      "type":  "prerequisite",
+                      "reason":  "Dep: \u00272.17 Casts\u0027",
+                      "target":  "data-storage-systems/queries/model-serialization",
+                      "evidence_paths":  [
+                                             "knowledge/data-storage-systems/queries/model-serialization/04-standardized-knowledge.md"
+                                         ]
+                  },
+                  {
                       "id":  "data-storage-systems/transactions/pessimistic-locking-\u003edata-storage-systems/transactions/optimistic-locking",
                       "source":  "data-storage-systems/transactions/pessimistic-locking",
                       "strength":  "recommended",
@@ -779,39 +812,6 @@
                       "target":  "data-storage-systems/connections/transaction-pooling-limitations",
                       "evidence_paths":  [
                                              "knowledge/data-storage-systems/connections/transaction-pooling-limitations/04-standardized-knowledge.md"
-                                         ]
-                  },
-                  {
-                      "id":  "ai-intelligence-systems/vector-databases/06-\u003ereal-time-systems/websocket-servers/soketi-self-hosted-setup",
-                      "source":  "ai-intelligence-systems/vector-databases/06",
-                      "strength":  "recommended",
-                      "type":  "prerequisite",
-                      "reason":  "Dep: \u0027K06\u0027",
-                      "target":  "real-time-systems/websocket-servers/soketi-self-hosted-setup",
-                      "evidence_paths":  [
-                                             "knowledge/real-time-systems/websocket-servers/soketi-self-hosted-setup/04-standardized-knowledge.md"
-                                         ]
-                  },
-                  {
-                      "id":  "ai-intelligence-systems/vector-databases/03-\u003ereal-time-systems/websocket-servers/soketi-self-hosted-setup",
-                      "source":  "ai-intelligence-systems/vector-databases/03",
-                      "strength":  "recommended",
-                      "type":  "prerequisite",
-                      "reason":  "Dep: \u0027K03\u0027",
-                      "target":  "real-time-systems/websocket-servers/soketi-self-hosted-setup",
-                      "evidence_paths":  [
-                                             "knowledge/real-time-systems/websocket-servers/soketi-self-hosted-setup/04-standardized-knowledge.md"
-                                         ]
-                  },
-                  {
-                      "id":  "ai-intelligence-systems/vector-databases/04-\u003ereal-time-systems/websocket-servers/soketi-self-hosted-setup",
-                      "source":  "ai-intelligence-systems/vector-databases/04",
-                      "strength":  "recommended",
-                      "type":  "prerequisite",
-                      "reason":  "Dep: \u0027K04\u0027",
-                      "target":  "real-time-systems/websocket-servers/soketi-self-hosted-setup",
-                      "evidence_paths":  [
-                                             "knowledge/real-time-systems/websocket-servers/soketi-self-hosted-setup/04-standardized-knowledge.md"
                                          ]
                   },
                   {
@@ -1200,14 +1200,14 @@
                                          ]
                   },
                   {
-                      "id":  "data-storage-systems/replication/replica-lag-causes-\u003edata-storage-systems/replication/replica-lag-monitoring",
-                      "source":  "data-storage-systems/replication/replica-lag-causes",
-                      "strength":  "recommended",
+                      "id":  "laravel-core-application-engineering/middleware/middleware-fundamentals-\u003esecurity-identity-engineering/authentication/auth-guards-providers",
+                      "source":  "laravel-core-application-engineering/middleware/middleware-fundamentals",
+                      "strength":  "required",
                       "type":  "prerequisite",
-                      "reason":  "Dep: \u00277.5 Replica lag causes\u0027",
-                      "target":  "data-storage-systems/replication/replica-lag-monitoring",
+                      "reason":  "Explicit dep",
+                      "target":  "security-identity-engineering/authentication/auth-guards-providers",
                       "evidence_paths":  [
-                                             "knowledge/data-storage-systems/replication/replica-lag-monitoring/04-standardized-knowledge.md"
+                                             "knowledge/security-identity-engineering/authentication/auth-guards-providers/04-standardized-knowledge.md"
                                          ]
                   },
                   {
@@ -1230,17 +1230,6 @@
                       "target":  "data-storage-systems/optimization/type-mismatch-implicit-casts",
                       "evidence_paths":  [
                                              "knowledge/data-storage-systems/optimization/type-mismatch-implicit-casts/04-standardized-knowledge.md"
-                                         ]
-                  },
-                  {
-                      "id":  "laravel-core-application-engineering/middleware/middleware-fundamentals-\u003esecurity-identity-engineering/authentication/auth-guards-providers",
-                      "source":  "laravel-core-application-engineering/middleware/middleware-fundamentals",
-                      "strength":  "required",
-                      "type":  "prerequisite",
-                      "reason":  "Explicit dep",
-                      "target":  "security-identity-engineering/authentication/auth-guards-providers",
-                      "evidence_paths":  [
-                                             "knowledge/security-identity-engineering/authentication/auth-guards-providers/04-standardized-knowledge.md"
                                          ]
                   },
                   {
@@ -1629,14 +1618,25 @@
                                          ]
                   },
                   {
-                      "id":  "data-storage-systems/partitioning/range-partitioning-\u003edata-storage-systems/partitioning/partition-switching-archiving",
-                      "source":  "data-storage-systems/partitioning/range-partitioning",
+                      "id":  "data-storage-systems/partitioning/partition-management-\u003edata-storage-systems/partitioning/partition-switching-archiving",
+                      "source":  "data-storage-systems/partitioning/partition-management",
                       "strength":  "recommended",
                       "type":  "prerequisite",
-                      "reason":  "Dep: \u00278.1 Range partitioning\u0027",
+                      "reason":  "Dep: \u00278.6 Partition management\u0027",
                       "target":  "data-storage-systems/partitioning/partition-switching-archiving",
                       "evidence_paths":  [
                                              "knowledge/data-storage-systems/partitioning/partition-switching-archiving/04-standardized-knowledge.md"
+                                         ]
+                  },
+                  {
+                      "id":  "backend-architecture-design/patterns/strategy-\u003edata-storage-systems/schema/migration-batch-tracking",
+                      "source":  "backend-architecture-design/patterns/strategy",
+                      "strength":  "recommended",
+                      "type":  "prerequisite",
+                      "reason":  "Dep: \u00271.25 Rollback strategy\u0027",
+                      "target":  "data-storage-systems/schema/migration-batch-tracking",
+                      "evidence_paths":  [
+                                             "knowledge/data-storage-systems/schema/migration-batch-tracking/04-standardized-knowledge.md"
                                          ]
                   },
                   {
@@ -2025,6 +2025,39 @@
                                          ]
                   },
                   {
+                      "id":  "ai-intelligence-systems/vector-databases/06-\u003ereal-time-systems/websocket-servers/soketi-self-hosted-setup",
+                      "source":  "ai-intelligence-systems/vector-databases/06",
+                      "strength":  "recommended",
+                      "type":  "prerequisite",
+                      "reason":  "Dep: \u0027K06\u0027",
+                      "target":  "real-time-systems/websocket-servers/soketi-self-hosted-setup",
+                      "evidence_paths":  [
+                                             "knowledge/real-time-systems/websocket-servers/soketi-self-hosted-setup/04-standardized-knowledge.md"
+                                         ]
+                  },
+                  {
+                      "id":  "ai-intelligence-systems/vector-databases/03-\u003ereal-time-systems/websocket-servers/soketi-self-hosted-setup",
+                      "source":  "ai-intelligence-systems/vector-databases/03",
+                      "strength":  "recommended",
+                      "type":  "prerequisite",
+                      "reason":  "Dep: \u0027K03\u0027",
+                      "target":  "real-time-systems/websocket-servers/soketi-self-hosted-setup",
+                      "evidence_paths":  [
+                                             "knowledge/real-time-systems/websocket-servers/soketi-self-hosted-setup/04-standardized-knowledge.md"
+                                         ]
+                  },
+                  {
+                      "id":  "ai-intelligence-systems/vector-databases/04-\u003ereal-time-systems/websocket-servers/soketi-self-hosted-setup",
+                      "source":  "ai-intelligence-systems/vector-databases/04",
+                      "strength":  "recommended",
+                      "type":  "prerequisite",
+                      "reason":  "Dep: \u0027K04\u0027",
+                      "target":  "real-time-systems/websocket-servers/soketi-self-hosted-setup",
+                      "evidence_paths":  [
+                                             "knowledge/real-time-systems/websocket-servers/soketi-self-hosted-setup/04-standardized-knowledge.md"
+                                         ]
+                  },
+                  {
                       "id":  "data-storage-systems/queries/subquery-selects-\u003edata-storage-systems/queries/subquery-ordering",
                       "source":  "data-storage-systems/queries/subquery-selects",
                       "strength":  "recommended",
@@ -2066,6 +2099,17 @@
                       "target":  "data-storage-systems/multi-tenancy/cross-tenant-analytics",
                       "evidence_paths":  [
                                              "knowledge/data-storage-systems/multi-tenancy/cross-tenant-analytics/04-standardized-knowledge.md"
+                                         ]
+                  },
+                  {
+                      "id":  "data-storage-systems/optimization/query-log-analysis-\u003edata-storage-systems/optimization/lazy-loading-detection",
+                      "source":  "data-storage-systems/optimization/query-log-analysis",
+                      "strength":  "recommended",
+                      "type":  "prerequisite",
+                      "reason":  "Dep: \u00274.26 Query log analysis\u0027",
+                      "target":  "data-storage-systems/optimization/lazy-loading-detection",
+                      "evidence_paths":  [
+                                             "knowledge/data-storage-systems/optimization/lazy-loading-detection/04-standardized-knowledge.md"
                                          ]
                   },
                   {
@@ -2187,17 +2231,6 @@
                       "target":  "testing-reliability-engineering/mocking-fakes/mockery-integration",
                       "evidence_paths":  [
                                              "knowledge/testing-reliability-engineering/mocking-fakes/mockery-integration/04-standardized-knowledge.md"
-                                         ]
-                  },
-                  {
-                      "id":  "data-storage-systems/optimization/query-log-analysis-\u003edata-storage-systems/optimization/lazy-loading-detection",
-                      "source":  "data-storage-systems/optimization/query-log-analysis",
-                      "strength":  "recommended",
-                      "type":  "prerequisite",
-                      "reason":  "Dep: \u00274.26 Query log analysis\u0027",
-                      "target":  "data-storage-systems/optimization/lazy-loading-detection",
-                      "evidence_paths":  [
-                                             "knowledge/data-storage-systems/optimization/lazy-loading-detection/04-standardized-knowledge.md"
                                          ]
                   },
                   {
@@ -2388,11 +2421,11 @@
                                          ]
                   },
                   {
-                      "id":  "data-storage-systems/queries/casts-\u003edata-storage-systems/queries/accessors-mutators",
-                      "source":  "data-storage-systems/queries/casts",
+                      "id":  "data-storage-systems/queries/model-serialization-\u003edata-storage-systems/queries/accessors-mutators",
+                      "source":  "data-storage-systems/queries/model-serialization",
                       "strength":  "recommended",
                       "type":  "prerequisite",
-                      "reason":  "Dep: \u00272.17 Casts\u0027",
+                      "reason":  "Dep: \u00272.18 Model serialization\u0027",
                       "target":  "data-storage-systems/queries/accessors-mutators",
                       "evidence_paths":  [
                                              "knowledge/data-storage-systems/queries/accessors-mutators/04-standardized-knowledge.md"
@@ -2718,17 +2751,6 @@
                                          ]
                   },
                   {
-                      "id":  "data-storage-systems/replication/pgbouncer-modes-\u003edata-storage-systems/connections/pgbouncer-pooling-modes",
-                      "source":  "data-storage-systems/replication/pgbouncer-modes",
-                      "strength":  "recommended",
-                      "type":  "prerequisite",
-                      "reason":  "Dep: \u00277.18 PgBouncer modes\u0027",
-                      "target":  "data-storage-systems/connections/pgbouncer-pooling-modes",
-                      "evidence_paths":  [
-                                             "knowledge/data-storage-systems/connections/pgbouncer-pooling-modes/04-standardized-knowledge.md"
-                                         ]
-                  },
-                  {
                       "id":  "ai-intelligence-systems/vector-databases/03-\u003ereal-time-systems/websocket-servers/reverb-horizontal-scaling-redis",
                       "source":  "ai-intelligence-systems/vector-databases/03",
                       "strength":  "recommended",
@@ -2949,39 +2971,6 @@
                                          ]
                   },
                   {
-                      "id":  "data-storage-systems/transactions/nested-transactions-savepoints-\u003edata-storage-systems/transactions/transaction-scoping-laravel",
-                      "source":  "data-storage-systems/transactions/nested-transactions-savepoints",
-                      "strength":  "recommended",
-                      "type":  "prerequisite",
-                      "reason":  "Alias: \u00279.12 nested transactions\u0027",
-                      "target":  "data-storage-systems/transactions/transaction-scoping-laravel",
-                      "evidence_paths":  [
-                                             "knowledge/data-storage-systems/transactions/transaction-scoping-laravel/04-standardized-knowledge.md"
-                                         ]
-                  },
-                  {
-                      "id":  "real-time-systems/sse-server-sent-events/sse-implementation-laravel-\u003ereal-time-systems/transport-comparison/websocket-vs-sse-vs-polling-decision-framework",
-                      "source":  "real-time-systems/sse-server-sent-events/sse-implementation-laravel",
-                      "strength":  "recommended",
-                      "type":  "prerequisite",
-                      "reason":  "Alias: \u0027k16\u0027",
-                      "target":  "real-time-systems/transport-comparison/websocket-vs-sse-vs-polling-decision-framework",
-                      "evidence_paths":  [
-                                             "knowledge/real-time-systems/transport-comparison/websocket-vs-sse-vs-polling-decision-framework/04-standardized-knowledge.md"
-                                         ]
-                  },
-                  {
-                      "id":  "real-time-systems/sse-server-sent-events/laravel-wave-sse-package-\u003ereal-time-systems/transport-comparison/websocket-vs-sse-vs-polling-decision-framework",
-                      "source":  "real-time-systems/sse-server-sent-events/laravel-wave-sse-package",
-                      "strength":  "recommended",
-                      "type":  "prerequisite",
-                      "reason":  "Alias: \u0027k17\u0027",
-                      "target":  "real-time-systems/transport-comparison/websocket-vs-sse-vs-polling-decision-framework",
-                      "evidence_paths":  [
-                                             "knowledge/real-time-systems/transport-comparison/websocket-vs-sse-vs-polling-decision-framework/04-standardized-knowledge.md"
-                                         ]
-                  },
-                  {
                       "id":  "real-time-systems/real-time-notifications/real-time-notifications-broadcast-database-\u003ereal-time-systems/transport-comparison/websocket-vs-sse-vs-polling-decision-framework",
                       "source":  "real-time-systems/real-time-notifications/real-time-notifications-broadcast-database",
                       "strength":  "recommended",
@@ -3001,17 +2990,6 @@
                       "target":  "data-storage-systems/multi-tenancy/per-tenant-backups-restore",
                       "evidence_paths":  [
                                              "knowledge/data-storage-systems/multi-tenancy/per-tenant-backups-restore/04-standardized-knowledge.md"
-                                         ]
-                  },
-                  {
-                      "id":  "data-storage-systems/replication/automatic-query-routing-\u003edata-storage-systems/replication/sticky-writes",
-                      "source":  "data-storage-systems/replication/automatic-query-routing",
-                      "strength":  "recommended",
-                      "type":  "prerequisite",
-                      "reason":  "Alias: \u00277.3 query routing\u0027",
-                      "target":  "data-storage-systems/replication/sticky-writes",
-                      "evidence_paths":  [
-                                             "knowledge/data-storage-systems/replication/sticky-writes/04-standardized-knowledge.md"
                                          ]
                   },
                   {
@@ -3158,17 +3136,6 @@
                                          ]
                   },
                   {
-                      "id":  "data-storage-systems/multi-tenancy/shared-table-single-db-\u003edata-storage-systems/multi-tenancy/schema-per-tenant",
-                      "source":  "data-storage-systems/multi-tenancy/shared-table-single-db",
-                      "strength":  "recommended",
-                      "type":  "prerequisite",
-                      "reason":  "Alias: \u00275.1 shared-table\u0027",
-                      "target":  "data-storage-systems/multi-tenancy/schema-per-tenant",
-                      "evidence_paths":  [
-                                             "knowledge/data-storage-systems/multi-tenancy/schema-per-tenant/04-standardized-knowledge.md"
-                                         ]
-                  },
-                  {
                       "id":  "data-storage-systems/replication/laravel-read-write-config-\u003edata-storage-systems/connections/read-write-connection-separation",
                       "source":  "data-storage-systems/replication/laravel-read-write-config",
                       "strength":  "recommended",
@@ -3180,17 +3147,6 @@
                                          ]
                   },
                   {
-                      "id":  "data-storage-systems/sharding/shard-key-selection-principles-\u003edata-storage-systems/sharding/hash-based-sharding",
-                      "source":  "data-storage-systems/sharding/shard-key-selection-principles",
-                      "strength":  "recommended",
-                      "type":  "prerequisite",
-                      "reason":  "Alias: \u00276.1 shard key selection\u0027",
-                      "target":  "data-storage-systems/sharding/hash-based-sharding",
-                      "evidence_paths":  [
-                                             "knowledge/data-storage-systems/sharding/hash-based-sharding/04-standardized-knowledge.md"
-                                         ]
-                  },
-                  {
                       "id":  "data-storage-systems/replication/replica-lag-causes-\u003edata-storage-systems/replication/multi-region-replication",
                       "source":  "data-storage-systems/replication/replica-lag-causes",
                       "strength":  "recommended",
@@ -3199,17 +3155,6 @@
                       "target":  "data-storage-systems/replication/multi-region-replication",
                       "evidence_paths":  [
                                              "knowledge/data-storage-systems/replication/multi-region-replication/04-standardized-knowledge.md"
-                                         ]
-                  },
-                  {
-                      "id":  "data-storage-systems/replication/laravel-read-write-config-\u003edata-storage-systems/replication/automatic-query-routing",
-                      "source":  "data-storage-systems/replication/laravel-read-write-config",
-                      "strength":  "recommended",
-                      "type":  "prerequisite",
-                      "reason":  "Alias: \u00277.2 read/write config\u0027",
-                      "target":  "data-storage-systems/replication/automatic-query-routing",
-                      "evidence_paths":  [
-                                             "knowledge/data-storage-systems/replication/automatic-query-routing/04-standardized-knowledge.md"
                                          ]
                   },
                   {
@@ -3279,11 +3224,11 @@
                                          ]
                   },
                   {
-                      "id":  "data-storage-systems/transactions/transaction-scoping-laravel-\u003edata-storage-systems/transactions/nested-transactions-savepoints",
-                      "source":  "data-storage-systems/transactions/transaction-scoping-laravel",
+                      "id":  "data-storage-systems/transactions/transaction-length-management-\u003edata-storage-systems/transactions/nested-transactions-savepoints",
+                      "source":  "data-storage-systems/transactions/transaction-length-management",
                       "strength":  "recommended",
                       "type":  "prerequisite",
-                      "reason":  "Alias: \u00279.11 transaction scoping\u0027",
+                      "reason":  "Alias: \u00279.13 transaction length\u0027",
                       "target":  "data-storage-systems/transactions/nested-transactions-savepoints",
                       "evidence_paths":  [
                                              "knowledge/data-storage-systems/transactions/nested-transactions-savepoints/04-standardized-knowledge.md"
@@ -3320,17 +3265,6 @@
                       "target":  "data-storage-systems/sharding/range-based-sharding",
                       "evidence_paths":  [
                                              "knowledge/data-storage-systems/sharding/range-based-sharding/04-standardized-knowledge.md"
-                                         ]
-                  },
-                  {
-                      "id":  "data-storage-systems/queries/accessors-mutators-\u003edata-storage-systems/queries/model-serialization",
-                      "source":  "data-storage-systems/queries/accessors-mutators",
-                      "strength":  "recommended",
-                      "type":  "prerequisite",
-                      "reason":  "Alias: \u00272.16 accessors and mutators\u0027",
-                      "target":  "data-storage-systems/queries/model-serialization",
-                      "evidence_paths":  [
-                                             "knowledge/data-storage-systems/queries/model-serialization/04-standardized-knowledge.md"
                                          ]
                   },
                   {
@@ -3422,39 +3356,6 @@
                                          ]
                   },
                   {
-                      "id":  "data-storage-systems/connections/transaction-pooling-limitations-\u003edata-storage-systems/connections/transaction-pooling-limitations",
-                      "source":  "data-storage-systems/connections/transaction-pooling-limitations",
-                      "strength":  "recommended",
-                      "type":  "prerequisite",
-                      "reason":  "Alias: \u00277.18 transaction pooling\u0027",
-                      "target":  "data-storage-systems/connections/transaction-pooling-limitations",
-                      "evidence_paths":  [
-                                             "knowledge/data-storage-systems/connections/transaction-pooling-limitations/04-standardized-knowledge.md"
-                                         ]
-                  },
-                  {
-                      "id":  "data-storage-systems/queries/insert-or-ignore-\u003edata-storage-systems/queries/upsert",
-                      "source":  "data-storage-systems/queries/insert-or-ignore",
-                      "strength":  "recommended",
-                      "type":  "prerequisite",
-                      "reason":  "Alias: \u00272.22 insertorignore\u0027",
-                      "target":  "data-storage-systems/queries/upsert",
-                      "evidence_paths":  [
-                                             "knowledge/data-storage-systems/queries/upsert/04-standardized-knowledge.md"
-                                         ]
-                  },
-                  {
-                      "id":  "real-time-systems/laravel-echo/dedicated-reverb-fleet-architecture-\u003ereal-time-systems/websocket-servers/soketi-self-hosted-setup",
-                      "source":  "real-time-systems/laravel-echo/dedicated-reverb-fleet-architecture",
-                      "strength":  "recommended",
-                      "type":  "prerequisite",
-                      "reason":  "Alias: \u0027k33\u0027",
-                      "target":  "real-time-systems/websocket-servers/soketi-self-hosted-setup",
-                      "evidence_paths":  [
-                                             "knowledge/real-time-systems/websocket-servers/soketi-self-hosted-setup/04-standardized-knowledge.md"
-                                         ]
-                  },
-                  {
                       "id":  "real-time-systems/deployment/supervisor-production-process-management-\u003ereal-time-systems/websocket-servers/reverb-installation-configuration",
                       "source":  "real-time-systems/deployment/supervisor-production-process-management",
                       "strength":  "recommended",
@@ -3485,17 +3386,6 @@
                       "target":  "real-time-systems/websocket-servers/reverb-installation-configuration",
                       "evidence_paths":  [
                                              "knowledge/real-time-systems/websocket-servers/reverb-installation-configuration/04-standardized-knowledge.md"
-                                         ]
-                  },
-                  {
-                      "id":  "real-time-systems/real-time-notifications/real-time-notifications-broadcast-database-\u003ereal-time-systems/real-time-notifications/real-time-dashboard-architecture",
-                      "source":  "real-time-systems/real-time-notifications/real-time-notifications-broadcast-database",
-                      "strength":  "recommended",
-                      "type":  "prerequisite",
-                      "reason":  "Alias: \u0027k19\u0027",
-                      "target":  "real-time-systems/real-time-notifications/real-time-dashboard-architecture",
-                      "evidence_paths":  [
-                                             "knowledge/real-time-systems/real-time-notifications/real-time-dashboard-architecture/04-standardized-knowledge.md"
                                          ]
                   },
                   {
@@ -3730,11 +3620,11 @@
                                          ]
                   },
                   {
-                      "id":  "data-storage-systems/schema/gh-ost-tool-\u003edata-storage-systems/schema/spirit-tool",
-                      "source":  "data-storage-systems/schema/gh-ost-tool",
+                      "id":  "data-storage-systems/schema/pt-online-schema-change-\u003edata-storage-systems/schema/spirit-tool",
+                      "source":  "data-storage-systems/schema/pt-online-schema-change",
                       "strength":  "recommended",
                       "type":  "prerequisite",
-                      "reason":  "Alias: \u00271.11 gh-ost tool\u0027",
+                      "reason":  "Alias: \u00271.12 pt-online-schema-change\u0027",
                       "target":  "data-storage-systems/schema/spirit-tool",
                       "evidence_paths":  [
                                              "knowledge/data-storage-systems/schema/spirit-tool/04-standardized-knowledge.md"
@@ -3895,17 +3785,6 @@
                                          ]
                   },
                   {
-                      "id":  "real-time-systems/security/cve-2026-23524-reverb-redis-deserialization-\u003ereal-time-systems/security/websocket-security-tls-cors-auth-cswsh",
-                      "source":  "real-time-systems/security/cve-2026-23524-reverb-redis-deserialization",
-                      "strength":  "recommended",
-                      "type":  "prerequisite",
-                      "reason":  "Alias: \u0027k25\u0027",
-                      "target":  "real-time-systems/security/websocket-security-tls-cors-auth-cswsh",
-                      "evidence_paths":  [
-                                             "knowledge/real-time-systems/security/websocket-security-tls-cors-auth-cswsh/04-standardized-knowledge.md"
-                                         ]
-                  },
-                  {
                       "id":  "real-time-systems/channels/private-channel-auth-jwt-sanctum-\u003ereal-time-systems/security/websocket-security-tls-cors-auth-cswsh",
                       "source":  "real-time-systems/channels/private-channel-auth-jwt-sanctum",
                       "strength":  "recommended",
@@ -3925,50 +3804,6 @@
                       "target":  "real-time-systems/security/websocket-security-tls-cors-auth-cswsh",
                       "evidence_paths":  [
                                              "knowledge/real-time-systems/security/websocket-security-tls-cors-auth-cswsh/04-standardized-knowledge.md"
-                                         ]
-                  },
-                  {
-                      "id":  "real-time-systems/deployment/nginx-websocket-proxy-configuration-\u003ereal-time-systems/security/websocket-security-tls-cors-auth-cswsh",
-                      "source":  "real-time-systems/deployment/nginx-websocket-proxy-configuration",
-                      "strength":  "recommended",
-                      "type":  "prerequisite",
-                      "reason":  "Alias: \u0027k32\u0027",
-                      "target":  "real-time-systems/security/websocket-security-tls-cors-auth-cswsh",
-                      "evidence_paths":  [
-                                             "knowledge/real-time-systems/security/websocket-security-tls-cors-auth-cswsh/04-standardized-knowledge.md"
-                                         ]
-                  },
-                  {
-                      "id":  "data-storage-systems/schema/zero-downtime-migration-taxonomy-\u003edata-storage-systems/schema/expand-contract-detailed",
-                      "source":  "data-storage-systems/schema/zero-downtime-migration-taxonomy",
-                      "strength":  "recommended",
-                      "type":  "prerequisite",
-                      "reason":  "Alias: \u002711.1 zero-downtime taxonomy\u0027",
-                      "target":  "data-storage-systems/schema/expand-contract-detailed",
-                      "evidence_paths":  [
-                                             "knowledge/data-storage-systems/schema/expand-contract-detailed/04-standardized-knowledge.md"
-                                         ]
-                  },
-                  {
-                      "id":  "data-storage-systems/connections/pgbouncer-pooling-modes-\u003edata-storage-systems/connections/pool-architecture",
-                      "source":  "data-storage-systems/connections/pgbouncer-pooling-modes",
-                      "strength":  "recommended",
-                      "type":  "prerequisite",
-                      "reason":  "Alias: \u002710.3 pgbouncer\u0027",
-                      "target":  "data-storage-systems/connections/pool-architecture",
-                      "evidence_paths":  [
-                                             "knowledge/data-storage-systems/connections/pool-architecture/04-standardized-knowledge.md"
-                                         ]
-                  },
-                  {
-                      "id":  "data-storage-systems/connections/laravel-octane-connections-\u003edata-storage-systems/connections/pool-architecture",
-                      "source":  "data-storage-systems/connections/laravel-octane-connections",
-                      "strength":  "recommended",
-                      "type":  "prerequisite",
-                      "reason":  "Alias: \u002710.4 octane connections\u0027",
-                      "target":  "data-storage-systems/connections/pool-architecture",
-                      "evidence_paths":  [
-                                             "knowledge/data-storage-systems/connections/pool-architecture/04-standardized-knowledge.md"
                                          ]
                   },
                   {
@@ -4082,6 +3917,17 @@
                                          ]
                   },
                   {
+                      "id":  "data-storage-systems/transactions/transaction-length-management-\u003edata-storage-systems/transactions/long-running-transaction-risks",
+                      "source":  "data-storage-systems/transactions/transaction-length-management",
+                      "strength":  "recommended",
+                      "type":  "prerequisite",
+                      "reason":  "Alias: \u00279.13 transaction length\u0027",
+                      "target":  "data-storage-systems/transactions/long-running-transaction-risks",
+                      "evidence_paths":  [
+                                             "knowledge/data-storage-systems/transactions/long-running-transaction-risks/04-standardized-knowledge.md"
+                                         ]
+                  },
+                  {
                       "id":  "data-storage-systems/sharding/shard-vs-partition-distinction-\u003edata-storage-systems/partitioning/partitioning-vs-sharding-framework",
                       "source":  "data-storage-systems/sharding/shard-vs-partition-distinction",
                       "strength":  "recommended",
@@ -4104,14 +3950,14 @@
                                          ]
                   },
                   {
-                      "id":  "data-storage-systems/partitioning/partition-switching-archiving-\u003edata-storage-systems/partitioning/range-partitioning",
-                      "source":  "data-storage-systems/partitioning/partition-switching-archiving",
+                      "id":  "data-storage-systems/schema/zero-downtime-migration-taxonomy-\u003edata-storage-systems/schema/add-column-default-postgresql",
+                      "source":  "data-storage-systems/schema/zero-downtime-migration-taxonomy",
                       "strength":  "recommended",
                       "type":  "prerequisite",
-                      "reason":  "Alias: \u00278.15 partition switching\u0027",
-                      "target":  "data-storage-systems/partitioning/range-partitioning",
+                      "reason":  "Alias: \u002711.1 zero-downtime taxonomy\u0027",
+                      "target":  "data-storage-systems/schema/add-column-default-postgresql",
                       "evidence_paths":  [
-                                             "knowledge/data-storage-systems/partitioning/range-partitioning/04-standardized-knowledge.md"
+                                             "knowledge/data-storage-systems/schema/add-column-default-postgresql/04-standardized-knowledge.md"
                                          ]
                   },
                   {
@@ -4159,17 +4005,6 @@
                                          ]
                   },
                   {
-                      "id":  "data-storage-systems/schema/gh-ost-tool-\u003edata-storage-systems/schema/zero-downtime-migration-patterns",
-                      "source":  "data-storage-systems/schema/gh-ost-tool",
-                      "strength":  "recommended",
-                      "type":  "prerequisite",
-                      "reason":  "Alias: \u00271.11 gh-ost tool\u0027",
-                      "target":  "data-storage-systems/schema/zero-downtime-migration-patterns",
-                      "evidence_paths":  [
-                                             "knowledge/data-storage-systems/schema/zero-downtime-migration-patterns/04-standardized-knowledge.md"
-                                         ]
-                  },
-                  {
                       "id":  "data-storage-systems/replication/replica-lag-causes-\u003edata-storage-systems/replication/7-18-replication-throttling",
                       "source":  "data-storage-systems/replication/replica-lag-causes",
                       "strength":  "recommended",
@@ -4200,17 +4035,6 @@
                       "target":  "data-storage-systems/sharding/shard-key-selection-principles",
                       "evidence_paths":  [
                                              "knowledge/data-storage-systems/sharding/shard-key-selection-principles/04-standardized-knowledge.md"
-                                         ]
-                  },
-                  {
-                      "id":  "data-storage-systems/schema/laravel-migration-file-structure-\u003edata-storage-systems/schema/migration-batch-tracking",
-                      "source":  "data-storage-systems/schema/laravel-migration-file-structure",
-                      "strength":  "recommended",
-                      "type":  "prerequisite",
-                      "reason":  "Alias: \u00271.1 migration file structure\u0027",
-                      "target":  "data-storage-systems/schema/migration-batch-tracking",
-                      "evidence_paths":  [
-                                             "knowledge/data-storage-systems/schema/migration-batch-tracking/04-standardized-knowledge.md"
                                          ]
                   },
                   {
@@ -4258,28 +4082,6 @@
                                          ]
                   },
                   {
-                      "id":  "data-storage-systems/multi-tenancy/event-sourcing-multi-tenant-\u003edata-storage-systems/multi-tenancy/event-sourcing-multi-tenant",
-                      "source":  "data-storage-systems/multi-tenancy/event-sourcing-multi-tenant",
-                      "strength":  "recommended",
-                      "type":  "prerequisite",
-                      "reason":  "Alias: \u002714.1 event store\u0027",
-                      "target":  "data-storage-systems/multi-tenancy/event-sourcing-multi-tenant",
-                      "evidence_paths":  [
-                                             "knowledge/data-storage-systems/multi-tenancy/event-sourcing-multi-tenant/04-standardized-knowledge.md"
-                                         ]
-                  },
-                  {
-                      "id":  "real-time-systems/deployment/nginx-websocket-proxy-configuration-\u003ereal-time-systems/deployment/supervisor-production-process-management",
-                      "source":  "real-time-systems/deployment/nginx-websocket-proxy-configuration",
-                      "strength":  "recommended",
-                      "type":  "prerequisite",
-                      "reason":  "Alias: \u0027k32\u0027",
-                      "target":  "real-time-systems/deployment/supervisor-production-process-management",
-                      "evidence_paths":  [
-                                             "knowledge/real-time-systems/deployment/supervisor-production-process-management/04-standardized-knowledge.md"
-                                         ]
-                  },
-                  {
                       "id":  "real-time-systems/laravel-echo/dedicated-reverb-fleet-architecture-\u003ereal-time-systems/deployment/supervisor-production-process-management",
                       "source":  "real-time-systems/laravel-echo/dedicated-reverb-fleet-architecture",
                       "strength":  "recommended",
@@ -4313,14 +4115,14 @@
                                          ]
                   },
                   {
-                      "id":  "data-storage-systems/schema/zero-downtime-migration-taxonomy-\u003edata-storage-systems/schema/add-column-default-postgresql",
-                      "source":  "data-storage-systems/schema/zero-downtime-migration-taxonomy",
+                      "id":  "real-time-systems/laravel-echo/dedicated-reverb-fleet-architecture-\u003ereal-time-systems/websocket-servers/soketi-self-hosted-setup",
+                      "source":  "real-time-systems/laravel-echo/dedicated-reverb-fleet-architecture",
                       "strength":  "recommended",
                       "type":  "prerequisite",
-                      "reason":  "Alias: \u002711.1 zero-downtime taxonomy\u0027",
-                      "target":  "data-storage-systems/schema/add-column-default-postgresql",
+                      "reason":  "Alias: \u0027k33\u0027",
+                      "target":  "real-time-systems/websocket-servers/soketi-self-hosted-setup",
                       "evidence_paths":  [
-                                             "knowledge/data-storage-systems/schema/add-column-default-postgresql/04-standardized-knowledge.md"
+                                             "knowledge/real-time-systems/websocket-servers/soketi-self-hosted-setup/04-standardized-knowledge.md"
                                          ]
                   },
                   {
@@ -4332,17 +4134,6 @@
                       "target":  "data-storage-systems/replication/7-13-plan-replication-topology",
                       "evidence_paths":  [
                                              "knowledge/data-storage-systems/replication/7-13-plan-replication-topology/04-standardized-knowledge.md"
-                                         ]
-                  },
-                  {
-                      "id":  "data-storage-systems/transactions/transaction-length-management-\u003edata-storage-systems/transactions/long-running-transaction-risks",
-                      "source":  "data-storage-systems/transactions/transaction-length-management",
-                      "strength":  "recommended",
-                      "type":  "prerequisite",
-                      "reason":  "Alias: \u00279.13 transaction length\u0027",
-                      "target":  "data-storage-systems/transactions/long-running-transaction-risks",
-                      "evidence_paths":  [
-                                             "knowledge/data-storage-systems/transactions/long-running-transaction-risks/04-standardized-knowledge.md"
                                          ]
                   },
                   {
@@ -4376,17 +4167,6 @@
                       "target":  "data-storage-systems/replication/lag-aware-read-splitting",
                       "evidence_paths":  [
                                              "knowledge/data-storage-systems/replication/lag-aware-read-splitting/04-standardized-knowledge.md"
-                                         ]
-                  },
-                  {
-                      "id":  "data-storage-systems/queries/accessors-mutators-\u003edata-storage-systems/queries/casts",
-                      "source":  "data-storage-systems/queries/accessors-mutators",
-                      "strength":  "recommended",
-                      "type":  "prerequisite",
-                      "reason":  "Alias: \u00272.16 accessors and mutators\u0027",
-                      "target":  "data-storage-systems/queries/casts",
-                      "evidence_paths":  [
-                                             "knowledge/data-storage-systems/queries/casts/04-standardized-knowledge.md"
                                          ]
                   },
                   {
@@ -4533,17 +4313,6 @@
                                          ]
                   },
                   {
-                      "id":  "real-time-systems/scaling-production/sticky-sessions-load-balancing-websocket-\u003ereal-time-systems/scaling-production/reconnection-strategies-storm-mitigation",
-                      "source":  "real-time-systems/scaling-production/sticky-sessions-load-balancing-websocket",
-                      "strength":  "recommended",
-                      "type":  "prerequisite",
-                      "reason":  "Alias: \u0027k14\u0027",
-                      "target":  "real-time-systems/scaling-production/reconnection-strategies-storm-mitigation",
-                      "evidence_paths":  [
-                                             "knowledge/real-time-systems/scaling-production/reconnection-strategies-storm-mitigation/04-standardized-knowledge.md"
-                                         ]
-                  },
-                  {
                       "id":  "real-time-systems/channels/auth-endpoint-optimization-caching-\u003ereal-time-systems/scaling-production/reconnection-strategies-storm-mitigation",
                       "source":  "real-time-systems/channels/auth-endpoint-optimization-caching",
                       "strength":  "recommended",
@@ -4563,17 +4332,6 @@
                       "target":  "real-time-systems/scaling-production/reconnection-strategies-storm-mitigation",
                       "evidence_paths":  [
                                              "knowledge/real-time-systems/scaling-production/reconnection-strategies-storm-mitigation/04-standardized-knowledge.md"
-                                         ]
-                  },
-                  {
-                      "id":  "real-time-systems/sse-server-sent-events/sse-implementation-laravel-\u003ereal-time-systems/sse-server-sent-events/laravel-wave-sse-package",
-                      "source":  "real-time-systems/sse-server-sent-events/sse-implementation-laravel",
-                      "strength":  "recommended",
-                      "type":  "prerequisite",
-                      "reason":  "Alias: \u0027k16\u0027",
-                      "target":  "real-time-systems/sse-server-sent-events/laravel-wave-sse-package",
-                      "evidence_paths":  [
-                                             "knowledge/real-time-systems/sse-server-sent-events/laravel-wave-sse-package/04-standardized-knowledge.md"
                                          ]
                   },
                   {
@@ -4599,11 +4357,11 @@
                                          ]
                   },
                   {
-                      "id":  "data-storage-systems/schema/pt-online-schema-change-\u003edata-storage-systems/schema/gh-ost-tool",
-                      "source":  "data-storage-systems/schema/pt-online-schema-change",
+                      "id":  "data-storage-systems/schema/zero-downtime-migration-patterns-\u003edata-storage-systems/schema/gh-ost-tool",
+                      "source":  "data-storage-systems/schema/zero-downtime-migration-patterns",
                       "strength":  "recommended",
                       "type":  "prerequisite",
-                      "reason":  "Alias: \u00271.12 pt-online-schema-change\u0027",
+                      "reason":  "Alias: \u00271.10 zero-downtime migration patterns\u0027",
                       "target":  "data-storage-systems/schema/gh-ost-tool",
                       "evidence_paths":  [
                                              "knowledge/data-storage-systems/schema/gh-ost-tool/04-standardized-knowledge.md"
@@ -4632,22 +4390,11 @@
                                          ]
                   },
                   {
-                      "id":  "data-storage-systems/multi-tenancy/schema-per-tenant-\u003edata-storage-systems/multi-tenancy/shared-table-single-db",
-                      "source":  "data-storage-systems/multi-tenancy/schema-per-tenant",
+                      "id":  "data-storage-systems/schema/zero-downtime-migration-patterns-\u003edata-storage-systems/schema/pt-online-schema-change",
+                      "source":  "data-storage-systems/schema/zero-downtime-migration-patterns",
                       "strength":  "recommended",
                       "type":  "prerequisite",
-                      "reason":  "Alias: \u00275.2 schema-per-tenant\u0027",
-                      "target":  "data-storage-systems/multi-tenancy/shared-table-single-db",
-                      "evidence_paths":  [
-                                             "knowledge/data-storage-systems/multi-tenancy/shared-table-single-db/04-standardized-knowledge.md"
-                                         ]
-                  },
-                  {
-                      "id":  "data-storage-systems/schema/gh-ost-tool-\u003edata-storage-systems/schema/pt-online-schema-change",
-                      "source":  "data-storage-systems/schema/gh-ost-tool",
-                      "strength":  "recommended",
-                      "type":  "prerequisite",
-                      "reason":  "Alias: \u00271.11 gh-ost tool\u0027",
+                      "reason":  "Alias: \u00271.10 zero-downtime migration patterns\u0027",
                       "target":  "data-storage-systems/schema/pt-online-schema-change",
                       "evidence_paths":  [
                                              "knowledge/data-storage-systems/schema/pt-online-schema-change/04-standardized-knowledge.md"
@@ -4662,17 +4409,6 @@
                       "target":  "data-storage-systems/sharding/sharding-packages",
                       "evidence_paths":  [
                                              "knowledge/data-storage-systems/sharding/sharding-packages/04-standardized-knowledge.md"
-                                         ]
-                  },
-                  {
-                      "id":  "real-time-systems/deployment/nginx-websocket-proxy-configuration-\u003ereal-time-systems/scaling-production/sticky-sessions-load-balancing-websocket",
-                      "source":  "real-time-systems/deployment/nginx-websocket-proxy-configuration",
-                      "strength":  "recommended",
-                      "type":  "prerequisite",
-                      "reason":  "Alias: \u0027k32\u0027",
-                      "target":  "real-time-systems/scaling-production/sticky-sessions-load-balancing-websocket",
-                      "evidence_paths":  [
-                                             "knowledge/real-time-systems/scaling-production/sticky-sessions-load-balancing-websocket/04-standardized-knowledge.md"
                                          ]
                   },
                   {
@@ -4736,28 +4472,6 @@
                       "strength":  "recommended",
                       "type":  "prerequisite",
                       "reason":  "Alias: \u0027k13\u0027",
-                      "target":  "real-time-systems/scaling-production/redis-dependency-failure-modes",
-                      "evidence_paths":  [
-                                             "knowledge/real-time-systems/scaling-production/redis-dependency-failure-modes/04-standardized-knowledge.md"
-                                         ]
-                  },
-                  {
-                      "id":  "real-time-systems/security/cve-2026-23524-reverb-redis-deserialization-\u003ereal-time-systems/scaling-production/redis-dependency-failure-modes",
-                      "source":  "real-time-systems/security/cve-2026-23524-reverb-redis-deserialization",
-                      "strength":  "recommended",
-                      "type":  "prerequisite",
-                      "reason":  "Alias: \u0027k25\u0027",
-                      "target":  "real-time-systems/scaling-production/redis-dependency-failure-modes",
-                      "evidence_paths":  [
-                                             "knowledge/real-time-systems/scaling-production/redis-dependency-failure-modes/04-standardized-knowledge.md"
-                                         ]
-                  },
-                  {
-                      "id":  "real-time-systems/scaling-production/reconnection-strategies-storm-mitigation-\u003ereal-time-systems/scaling-production/redis-dependency-failure-modes",
-                      "source":  "real-time-systems/scaling-production/reconnection-strategies-storm-mitigation",
-                      "strength":  "recommended",
-                      "type":  "prerequisite",
-                      "reason":  "Alias: \u0027k15\u0027",
                       "target":  "real-time-systems/scaling-production/redis-dependency-failure-modes",
                       "evidence_paths":  [
                                              "knowledge/real-time-systems/scaling-production/redis-dependency-failure-modes/04-standardized-knowledge.md"
@@ -4852,17 +4566,6 @@
                                          ]
                   },
                   {
-                      "id":  "data-storage-systems/sharding/hash-based-sharding-\u003edata-storage-systems/sharding/modulus-vs-consistent-hashing",
-                      "source":  "data-storage-systems/sharding/hash-based-sharding",
-                      "strength":  "recommended",
-                      "type":  "prerequisite",
-                      "reason":  "Alias: \u00276.2 hash-based sharding\u0027",
-                      "target":  "data-storage-systems/sharding/modulus-vs-consistent-hashing",
-                      "evidence_paths":  [
-                                             "knowledge/data-storage-systems/sharding/modulus-vs-consistent-hashing/04-standardized-knowledge.md"
-                                         ]
-                  },
-                  {
                       "id":  "data-storage-systems/schema/pt-online-schema-change-\u003edata-storage-systems/schema/pg-repack",
                       "source":  "data-storage-systems/schema/pt-online-schema-change",
                       "strength":  "recommended",
@@ -4926,17 +4629,6 @@
                       "target":  "data-storage-systems/transactions/row-level-locks",
                       "evidence_paths":  [
                                              "knowledge/data-storage-systems/transactions/row-level-locks/04-standardized-knowledge.md"
-                                         ]
-                  },
-                  {
-                      "id":  "data-storage-systems/transactions/transaction-scoping-laravel-\u003edata-storage-systems/transactions/transaction-length-management",
-                      "source":  "data-storage-systems/transactions/transaction-scoping-laravel",
-                      "strength":  "recommended",
-                      "type":  "prerequisite",
-                      "reason":  "Alias: \u00279.11 transaction scoping\u0027",
-                      "target":  "data-storage-systems/transactions/transaction-length-management",
-                      "evidence_paths":  [
-                                             "knowledge/data-storage-systems/transactions/transaction-length-management/04-standardized-knowledge.md"
                                          ]
                   },
                   {

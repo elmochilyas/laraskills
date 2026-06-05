@@ -10,7 +10,8 @@
 | Knowledge Unit Title | Modulus Vs Consistent Hashing |
 | Difficulty Level | Expert |
 | Classification | E |
-| Dependencies | 6.2 Hash-based sharding | 6.10 Shard rebalancing | 6.12 Adding new shards |
+| Dependencies | None |
+| Related KUs | 6.2 Hash-based sharding, 6.10 Shard rebalancing, 6.12 Adding new shards |
 | Last Updated | 2026-06-02 |
 
 ## Overview

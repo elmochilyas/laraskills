@@ -1,4 +1,14 @@
+import { existsSync, readFileSync } from 'node:fs';
+import { join } from 'node:path';
 import { MODE_CONFIG, DOMAIN_NAMES } from './config.mjs';
+
+const ARTIFACT_FILES = {
+  rules: { file: '05-rules.md', label: 'Rules' },
+  skills: { file: '06-skills.md', label: 'Skills' },
+  decisionTrees: { file: '07-decision-trees.md', label: 'Decision Trees' },
+  antiPatterns: { file: '08-anti-patterns.md', label: 'Anti-Patterns' },
+  checklists: { file: '09-checklists.md', label: 'Checklists' },
+};
 
 function estimateTokens(text) {
   if (!text) return 0;
@@ -11,36 +21,94 @@ function estimateTokens(text) {
   return Math.ceil(count * 1.3);
 }
 
-function collectArtifacts(catalog, kuId, artifactMap) {
-  const result = [];
-  for (const [key, entries] of Object.entries(artifactMap)) {
-    if (!entries) continue;
-    for (const entry of entries) {
-      if (entry.id && entry.id.startsWith(kuId)) {
-        result.push({ artifactType: key, entry });
-      }
+function loadArtifactContent(eccRoot, directory, file) {
+  if (!directory || !eccRoot) return null;
+  const filePath = join(eccRoot, directory, file);
+  if (!existsSync(filePath)) return null;
+  try {
+    return readFileSync(filePath, 'utf-8');
+  } catch {
+    return null;
+  }
+}
+
+function extractHeadings(content) {
+  if (!content) return [];
+  const headings = [];
+  const lines = content.split('\n');
+  for (const line of lines) {
+    const match = line.match(/^#{2,4}\s+(.+)/);
+    if (match) headings.push(match[1].trim());
+  }
+  return headings.slice(0, 10);
+}
+
+function extractListItems(content) {
+  if (!content) return [];
+  const items = [];
+  const lines = content.split('\n');
+  for (const line of lines) {
+    const match = line.match(/^[-*]\s+(.+)/);
+    if (match) items.push(match[1].trim());
+  }
+  return items.slice(0, 8);
+}
+
+function extractKeyEntries(content) {
+  if (!content) return [];
+  const entries = [];
+  const lines = content.split('\n');
+  let inCodeBlock = false;
+  for (const line of lines) {
+    if (line.trim().startsWith('```')) { inCodeBlock = !inCodeBlock; continue; }
+    if (inCodeBlock) continue;
+    const headingMatch = line.match(/^##+\s+(.+)/);
+    if (headingMatch) {
+      entries.push({ type: 'heading', text: headingMatch[1].trim() });
+      continue;
+    }
+    const itemMatch = line.match(/^[-*]\s+(.+)/);
+    if (itemMatch) {
+      entries.push({ type: 'item', text: itemMatch[1].trim() });
+      continue;
     }
   }
-  return result;
+  return entries.slice(0, 15);
+}
+
+function processArtifactForKu(eccRoot, directory, artifactType, config) {
+  const configEntry = ARTIFACT_FILES[artifactType];
+  if (!configEntry) return null;
+  if (artifactType === 'decisionTrees' && !config.includeDecisionTrees) return null;
+  if (artifactType === 'antiPatterns' && !config.includeAntiPatterns) return null;
+
+  const content = loadArtifactContent(eccRoot, directory, configEntry.file);
+  if (!content) return null;
+
+  const lines = content.length;
+  let extracted = null;
+
+  if (config.loadContent) {
+    extracted = content.slice(0, 2000);
+  } else {
+    const headings = extractHeadings(content);
+    const items = extractListItems(content);
+    extracted = { headings, items, lines };
+  }
+
+  return extracted;
 }
 
 export function buildContextBundle(options, rankedKus, graphResult, routes, aliasResult, domainAnalysis, catalog) {
   const mode = MODE_CONFIG[options.mode] || MODE_CONFIG.standard;
+  const eccRoot = options.eccRoot || null;
 
   const effectiveMaxKus = options.maxKus || mode.maxKus;
   const effectiveMaxRules = options.maxRules || mode.maxRules;
   const effectiveMaxSkills = options.maxSkills || mode.maxSkills;
 
   const selectedKus = rankedKus.slice(0, effectiveMaxKus);
-  const selectedKuIds = new Set(selectedKus.map(k => k.id));
-
-  const artifactMap = {
-    rules: catalog.rules,
-    skills: catalog.skills,
-    decisionTrees: catalog.decisionTrees,
-    antiPatterns: catalog.antiPatterns,
-    checklists: catalog.checklists,
-  };
+  const selectedKuIdsSet = new Set(selectedKus.map(k => k.id));
 
   const bundledRules = [];
   const bundledSkills = [];
@@ -49,29 +117,77 @@ export function buildContextBundle(options, rankedKus, graphResult, routes, alia
   const bundledChecklists = [];
   const seenIds = { rules: new Set(), skills: new Set(), decisionTrees: new Set(), antiPatterns: new Set(), checklists: new Set() };
 
-  const targetMap = {
-    rules: { dest: bundledRules, seen: seenIds.rules, max: effectiveMaxRules },
-    skills: { dest: bundledSkills, seen: seenIds.skills, max: effectiveMaxSkills },
-  };
-
-  if (mode.includeDecisionTrees) {
-    targetMap.decisionTrees = { dest: bundledDecisionTrees, seen: seenIds.decisionTrees, max: effectiveMaxRules };
-  }
-  if (mode.includeAntiPatterns) {
-    targetMap.antiPatterns = { dest: bundledAntiPatterns, seen: seenIds.antiPatterns, max: effectiveMaxRules };
-  }
-  targetMap.checklists = { dest: bundledChecklists, seen: seenIds.checklists, max: 3 };
-
   for (const ku of selectedKus) {
-    for (const [type, entries] of Object.entries(artifactMap)) {
-      const target = targetMap[type];
-      if (!target) continue;
-      for (const entry of entries) {
-        if (entry.id && entry.id.startsWith(ku.id) && !target.seen.has(entry.id)) {
-          target.seen.add(entry.id);
-          target.dest.push({ ...entry, forKuId: ku.id });
-        }
+    const kuObj = ku.ku || {};
+    const directory = kuObj.directory || '';
+
+    const rulesContent = processArtifactForKu(eccRoot, directory, 'rules', mode);
+    if (rulesContent && !seenIds.rules.has(`${ku.id}/rules`)) {
+      seenIds.rules.add(`${ku.id}/rules`);
+      bundledRules.push({
+        id: `${ku.id}/rules`,
+        domain: kuObj.domain,
+        forKuId: ku.id,
+        summary: `Rules for ${kuObj.knowledge_unit || ku.id}`,
+        actionable: rulesContent,
+        sourceFile: `${directory}/05-rules.md`,
+      });
+    }
+
+    const skillsContent = processArtifactForKu(eccRoot, directory, 'skills', mode);
+    if (skillsContent && !seenIds.skills.has(`${ku.id}/skills`)) {
+      seenIds.skills.add(`${ku.id}/skills`);
+      bundledSkills.push({
+        id: `${ku.id}/skills`,
+        domain: kuObj.domain,
+        forKuId: ku.id,
+        summary: `Skills for ${kuObj.knowledge_unit || ku.id}`,
+        actionable: skillsContent,
+        sourceFile: `${directory}/06-skills.md`,
+      });
+    }
+
+    if (mode.includeDecisionTrees) {
+      const dtContent = processArtifactForKu(eccRoot, directory, 'decisionTrees', mode);
+      if (dtContent && !seenIds.decisionTrees.has(`${ku.id}/decision-trees`)) {
+        seenIds.decisionTrees.add(`${ku.id}/decision-trees`);
+        bundledDecisionTrees.push({
+          id: `${ku.id}/decision-trees`,
+          domain: kuObj.domain,
+          forKuId: ku.id,
+          summary: `Decision Trees for ${kuObj.knowledge_unit || ku.id}`,
+          actionable: dtContent,
+          sourceFile: `${directory}/07-decision-trees.md`,
+        });
       }
+    }
+
+    if (mode.includeAntiPatterns) {
+      const apContent = processArtifactForKu(eccRoot, directory, 'antiPatterns', mode);
+      if (apContent && !seenIds.antiPatterns.has(`${ku.id}/anti-patterns`)) {
+        seenIds.antiPatterns.add(`${ku.id}/anti-patterns`);
+        bundledAntiPatterns.push({
+          id: `${ku.id}/anti-patterns`,
+          domain: kuObj.domain,
+          forKuId: ku.id,
+          summary: `Anti-Patterns for ${kuObj.knowledge_unit || ku.id}`,
+          actionable: apContent,
+          sourceFile: `${directory}/08-anti-patterns.md`,
+        });
+      }
+    }
+
+    const checkContent = processArtifactForKu(eccRoot, directory, 'checklists', mode);
+    if (checkContent && !seenIds.checklists.has(`${ku.id}/checklists`)) {
+      seenIds.checklists.add(`${ku.id}/checklists`);
+      bundledChecklists.push({
+        id: `${ku.id}/checklists`,
+        domain: kuObj.domain,
+        forKuId: ku.id,
+        summary: `Checklists for ${kuObj.knowledge_unit || ku.id}`,
+        actionable: checkContent,
+        sourceFile: `${directory}/09-checklists.md`,
+      });
     }
   }
 
@@ -110,49 +226,19 @@ export function buildContextBundle(options, rankedKus, graphResult, routes, alia
       directory: ku.ku.directory || '',
       sourcePath: ku.ku.directory ? `${ku.ku.directory}/04-standardized-knowledge.md` : '',
     })),
-    rules: bundledRules.slice(0, effectiveMaxRules).map(r => ({
-      id: r.id,
-      domain: r.domain,
-      summary: r.summary,
-      sourcePath: r.source_path || '',
-      forKuId: r.forKuId,
-    })),
-    skills: bundledSkills.slice(0, effectiveMaxSkills).map(s => ({
-      id: s.id,
-      domain: s.domain,
-      summary: s.summary,
-      sourcePath: s.source_path || '',
-      forKuId: s.forKuId,
-    })),
+    rules: bundledRules.slice(0, effectiveMaxRules),
+    skills: bundledSkills.slice(0, effectiveMaxSkills),
   };
 
   if (mode.includeDecisionTrees) {
-    bundle.decisionTrees = bundledDecisionTrees.slice(0, effectiveMaxRules).map(d => ({
-      id: d.id,
-      domain: d.domain,
-      summary: d.summary,
-      sourcePath: d.source_path || '',
-      forKuId: d.forKuId,
-    }));
+    bundle.decisionTrees = bundledDecisionTrees.slice(0, effectiveMaxRules);
   }
 
   if (mode.includeAntiPatterns) {
-    bundle.antiPatterns = bundledAntiPatterns.slice(0, effectiveMaxRules).map(a => ({
-      id: a.id,
-      domain: a.domain,
-      summary: a.summary,
-      sourcePath: a.source_path || '',
-      forKuId: a.forKuId,
-    }));
+    bundle.antiPatterns = bundledAntiPatterns.slice(0, effectiveMaxRules);
   }
 
-  bundle.checklists = bundledChecklists.slice(0, 3).map(c => ({
-    id: c.id,
-    domain: c.domain,
-    summary: c.summary,
-    sourcePath: c.source_path || '',
-    forKuId: c.forKuId,
-  }));
+  bundle.checklists = bundledChecklists.slice(0, 3);
 
   bundle.prerequisites = graphResult.prerequisites.map(p => ({
     id: p.id,
@@ -199,7 +285,7 @@ export function buildContextBundle(options, rankedKus, graphResult, routes, alia
     rankingSummary: selectedKus.slice(0, 3).map(ku => ({
       id: ku.id,
       score: ku.score,
-      signals: ku.breakdown.map(b => `${b.signal}: ${b.value}`).join(', '),
+      signals: ku.breakdown ? ku.breakdown.map(b => `${b.signal}: ${b.value}`).join(', ') : '',
     })),
   };
 

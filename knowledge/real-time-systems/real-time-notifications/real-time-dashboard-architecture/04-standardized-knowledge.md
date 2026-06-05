@@ -8,7 +8,8 @@
 | Knowledge Unit ID | K20 |
 | Title | Real-Time Dashboard Architecture |
 | Difficulty | Advanced |
-| Dependencies | K19, K37, K21, K11 |
+| Dependencies | K37, K21, K11 |
+| Related KUs | K19 |
 
 ## Overview
 Real-time dashboards require continuous data flow from backend systems to frontend visualization components. The architecture involves metric collection, data aggregation (pre-computed metrics for real-time display), event broadcasting (pushing aggregated data to connected clients), and frontend rendering (charts, gauges, tables updating without page refresh). Laravel Pulse is the canonical example—a first-party real-time dashboard that uses Reverb broadcasting to push system metrics to the monitoring interface. Custom dashboards follow the same pattern: collect metrics, aggregate at appropriate intervals, broadcast via events, and subscribe via Echo.

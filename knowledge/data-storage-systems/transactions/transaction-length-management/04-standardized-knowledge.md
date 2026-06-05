@@ -10,7 +10,8 @@
 | Knowledge Unit Title | Transaction Length Management |
 | Difficulty Level | Intermediate |
 | Classification | I |
-| Dependencies | 9.11 Transaction scoping | 9.19 Long-running transaction risks |
+| Dependencies | 9.19 Long-running transaction risks |
+| Related KUs | 9.11 Transaction scoping |
 | Last Updated | 2026-06-02 |
 
 ## Overview

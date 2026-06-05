@@ -8,7 +8,8 @@
 | Knowledge Unit ID | K17 |
 | Title | Laravel Wave SSE Package |
 | Difficulty | Intermediate |
-| Dependencies | K16, K18, K01, K09 |
+| Dependencies | K18, K01, K09 |
+| Related KUs | SSE implementation |
 
 ## Overview
 `qruto/laravel-wave` is a community package that bridges Server-Sent Events with Laravel's broadcasting API, enabling Echo-compatible SSE without a WebSocket server. Wave implements the Echo server protocol over SSE, allowing developers to use `Echo.channel()`, `Echo.private()`, and `.listen()` with SSE as the transport. This provides real-time server-to-client events with standard HTTP infrastructure—no WebSocket ports, sticky sessions, or WebSocket-specific scaling.

@@ -10,7 +10,8 @@
 | Knowledge Unit Title | PgBouncer pooling modes (session, transaction, statement) |
 | Difficulty Level | Advanced |
 | Classification | A |
-| Dependencies | 10.2 Pool architecture, 7.18 PgBouncer modes |
+| Dependencies | 10.2 Pool architecture |
+| Related KUs | PgBouncer modes |
 | Last Updated | 2026-06-02 |
 
 ## Overview

@@ -10,7 +10,8 @@
 | Knowledge Unit Title | Upsert |
 | Difficulty Level | Advanced |
 | Classification | A |
-| Dependencies | 2.22 insertOrIgnore | 2.26 updateOrCreate, firstOrCreate |
+| Dependencies | 2.26 updateOrCreate, firstOrCreate |
+| Related KUs | 2.22 insertOrIgnore |
 | Last Updated | 2026-06-02 |
 
 ## Overview

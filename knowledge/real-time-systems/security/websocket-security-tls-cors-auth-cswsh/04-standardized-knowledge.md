@@ -8,7 +8,8 @@
 | Knowledge Unit ID | K24 |
 | Title | WebSocket Security (TLS, CORS, Auth, CSWSH) |
 | Difficulty | Intermediate |
-| Dependencies | K25, K29, K12, K32 |
+| Dependencies | K29, K12 |
+| Related KUs | Nginx WebSocket proxy configuration, CVE-2026-23524 Reverb Redis deserialization |
 
 ## Overview
 WebSocket security spans multiple layers: transport security (WSS/TLS), origin validation (CORS, CSWSH prevention), authentication (token, session, ticket-based), authorization (channel-level via Laravel's broadcasting auth), and input validation (message size, payload sanitization). The primary threats are Cross-Site WebSocket Hijacking (CSWSH) and data interception on unencrypted connections.

@@ -10,7 +10,8 @@
 | Knowledge Unit Title | Hash Based Sharding |
 | Difficulty Level | Advanced |
 | Classification | A |
-| Dependencies | 6.1 Shard key selection | 6.20 Modulus vs consistent hashing |
+| Dependencies | 6.20 Modulus vs consistent hashing |
+| Related KUs | 6.1 Shard key selection |
 | Last Updated | 2026-06-02 |
 
 ## Overview

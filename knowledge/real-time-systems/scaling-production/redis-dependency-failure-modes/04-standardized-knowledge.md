@@ -8,7 +8,8 @@
 | Knowledge Unit ID | K34 |
 | Title | Redis Dependency & Failure Modes |
 | Difficulty | Advanced |
-| Dependencies | K04, K13, K25, K15 |
+| Dependencies | K04, K13 |
+| Related KUs | CVE-2026-23524 Reverb Redis deserialization, Reconnection strategies storm mitigation |
 
 ## Overview
 Redis is a critical dependency for Reverb horizontal scaling, presence channel state, and the queue system powering broadcast dispatch. A Redis outage cascades into complete broadcasting failure: queue workers cannot process broadcast jobs, Reverb instances cannot coordinate cross-instance events, and presence channel state is lost. Understanding Redis failure modes—network partitions, OOM conditions, failover events, and pub/sub limitations—is essential for operating reliable real-time systems.

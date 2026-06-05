@@ -10,7 +10,8 @@
 | Knowledge Unit Title | Model Serialization |
 | Difficulty Level | Foundation |
 | Classification | I |
-| Dependencies | 2.16 Accessors and mutators | 2.17 Casts | 2.27 API resource classes |
+| Dependencies | 2.17 Casts | 2.27 API resource classes |
+| Related KUs | 2.16 Accessors and mutators |
 | Last Updated | 2026-06-02 |
 
 ## Overview

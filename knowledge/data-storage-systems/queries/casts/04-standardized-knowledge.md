@@ -10,7 +10,8 @@
 | Knowledge Unit Title | Casts |
 | Difficulty Level | Intermediate |
 | Classification | I |
-| Dependencies | 2.16 Accessors and mutators | 2.18 Model serialization |
+| Dependencies | None |
+| Related KUs | 2.16 Accessors and mutators, 2.18 Model serialization |
 | Last Updated | 2026-06-02 |
 
 ## Overview

@@ -10,8 +10,8 @@
 | Knowledge Unit Title | Range Partitioning |
 | Difficulty Level | Advanced |
 | Classification | A |
-| Dependencies | 8.15 Partition switching |
-| Related KUs | Partition pruning, Partition management |
+| Dependencies | None |
+| Related KUs | Partition pruning, Partition management, Partition switching |
 | Last Updated | 2026-06-02 |
 
 ## Overview

@@ -10,7 +10,8 @@
 | Knowledge Unit Title | Transaction Scoping Laravel |
 | Difficulty Level | Foundational |
 | Classification | F |
-| Dependencies | 9.12 Nested transactions | 9.13 Transaction length management |
+| Dependencies | 9.13 Transaction length management |
+| Related KUs | 9.12 Nested transactions |
 | Last Updated | 2026-06-02 |
 
 ## Overview

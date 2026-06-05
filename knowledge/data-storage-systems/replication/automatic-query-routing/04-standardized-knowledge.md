@@ -10,7 +10,8 @@
 | Knowledge Unit Title | Automatic Query Routing |
 | Difficulty Level | Intermediate |
 | Classification | I |
-| Dependencies | 7.2 Read/write config | 7.4 Sticky writes |
+| Dependencies | 7.4 Sticky writes |
+| Related KUs | 7.2 Read/write config |
 | Last Updated | 2026-06-02 |
 
 ## Overview

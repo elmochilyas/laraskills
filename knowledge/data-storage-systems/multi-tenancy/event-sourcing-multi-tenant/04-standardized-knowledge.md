@@ -10,7 +10,8 @@
 | Knowledge Unit Title | Event Sourcing Multi Tenant |
 | Difficulty Level | Expert |
 | Classification | E |
-| Dependencies | 14.1 Event store | 14.6 Projection building |
+| Dependencies | 14.6 Projection building |
+| Related KUs | Event store |
 | Last Updated | 2026-06-02 |
 
 ## Overview

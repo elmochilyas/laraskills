@@ -5,14 +5,19 @@ export function generateExplanation(bundle, options) {
     retrievalStrategy: buildStrategyDescription(bundle, options),
     domainSelection: explainDomainSelection(bundle),
     topKuSelection: explainKuSelection(bundle),
-    scoreMethodology: 'Weighted signal-based deterministic scoring. Each result receives a score from configurable weights. Higher scores indicate stronger relevance. Tie-breaking is lexicographic by KU ID.',
+    scoreMethodology: 'Field-aware deterministic scoring with concept slot coverage. Each result receives independent weighted signals from KU name, subdomain, skill relevance, concept coverage, and domain routing. Higher scores indicate stronger relevance. Tie-breaking is lexicographic by KU ID.',
     appliedAliases: bundle.explanation?.appliedAliases || [],
     signalsUsed: [
       { name: 'exactKuName', weight: 100, description: 'Exact match between query and canonical KU name' },
       { name: 'exactAlias', weight: 95, description: 'Query matched a known alias for this KU' },
-      { name: 'exactSkill', weight: 90, description: 'KU has an associated skill entry' },
-      { name: 'domainRoute', weight: 45, description: 'KU belongs to a routed domain' },
-      { name: 'tokenOverlap', weight: '10-35', description: 'Token overlap between query and KU metadata' },
+      { name: 'exactSkillMatch', weight: 90, description: 'Skill name or workflow matches query terms' },
+      { name: 'exactPhraseKuName', weight: 80, description: 'Exact phrase match in KU name' },
+      { name: 'conceptCoverage', weight: 30, description: 'Covers an explicit query concept slot' },
+      { name: 'domainRoute', weight: 25, description: 'KU belongs to a routed domain' },
+      { name: 'tokenKuName', weight: 15, description: 'Meaningful token match in KU name' },
+      { name: 'tokenSubdomain', weight: 8, description: 'Token match in subdomain' },
+      { name: 'genericToken', weight: 2, description: 'Low-value generic token match in domain path' },
+      { name: 'artifactAvailability', weight: 3, description: 'Has associated skill file (bonus only)' },
     ],
   };
 

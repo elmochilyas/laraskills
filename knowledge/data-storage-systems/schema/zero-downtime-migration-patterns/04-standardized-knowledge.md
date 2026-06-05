@@ -10,7 +10,7 @@
 | Knowledge Unit Title | Zero Downtime Migration Patterns |
 | Difficulty Level | Expert |
 | Classification | E |
-| Dependencies | 1.11 gh-ost tool | 1.12 pt-online-schema-change | 1.14 pgroll tool | 1.16 MySQL instant DDL | 1.17 PostgreSQL lazy ADD COLUMN DEFAULT | 1.18 Expand-contract pattern detailed | 1.19 Data backfill strategies |
+| Dependencies | None |
 | Last Updated | 2026-06-02 |
 
 ## Overview
