@@ -225,6 +225,18 @@ The retrieval CLI produces deterministic, explainable output with ranked knowled
 3. Run `npx laravel-ecc retrieve "your task" --mode standard` for full context
 4. Use `npx laravel-ecc get <ku-id>` to inspect specific KUs in detail
 
+## Retrieval MCP Server (Phase 11.2)
+
+When a coding agent is connected to the local `laravel-ecc-mcp` MCP server, prefer the MCP tools over the CLI — they return identical results and are discoverable by the agent:
+
+1. `retrieve_context_bundle` — get the smallest useful context for the current task.
+2. `search_ecc` — exploratory search across KUs.
+3. `get_knowledge_unit` — deep inspection of one KU.
+4. `get_graph_context` — prerequisites + related topics in one call.
+5. `validate_ecc` — confirm graph integrity if uncertain.
+
+Prefer `compact` or `standard` mode before `deep`. Avoid loading the entire repository. See `docs/mcp-tool-reference.md` for per-tool schemas.
+
 ## Machine-Readable Intelligence
 
 Future tools, MCP servers, and retrieval systems should consume these files:

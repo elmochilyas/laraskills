@@ -1,0 +1,16 @@
+{
+  "$schema": "https://opencode.ai/config.json",
+  "mcp": {
+    "laravel-ecc": {
+      "type": "local",
+      "command": [
+        "laravel-ecc-mcp"
+      ],
+      "enabled": true,
+      "timeout": 10000,
+      "environment": {
+        "ECC_ROOT": "C:\\path\\to\\laravel-ecc"
+      }
+    }
+  }
+}
