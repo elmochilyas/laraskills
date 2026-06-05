@@ -269,6 +269,42 @@ npx laravel-ecc validate
 
 For full documentation, see `docs/retrieval-cli-guide.md`.
 
+## Local MCP Server (Phase 11.2)
+
+A thin local stdio MCP server (`laravel-ecc-mcp`) exposes the same retrieval core to MCP-capable agents (OpenCode, Claude Code, Cursor, etc.). It is a **read-only, deterministic adapter** — no duplicate ranking logic, no graph changes.
+
+```jsonc
+// .opencode/opencode.json (or examples/opencode-mcp.local.jsonc)
+{
+  "mcp": {
+    "laravel-ecc": {
+      "type": "local",
+      "command": ["node", "C:\\path\\to\\laravel-ecc\\scripts\\laravel-ecc-mcp.mjs"],
+      "enabled": true,
+      "timeout": 10000,
+      "environment": { "ECC_ROOT": "C:\\path\\to\\laravel-ecc" }
+    }
+  }
+}
+```
+
+Five read-only tools:
+
+| Tool | Purpose |
+|------|---------|
+| `retrieve_context_bundle` | Smallest useful bundle for a Laravel task |
+| `search_ecc` | Ranked KU search |
+| `get_knowledge_unit` | Inspect one KU by ID |
+| `get_graph_context` | Prerequisites + related topics in one call |
+| `validate_ecc` | Validate intelligence layer integrity |
+
+See:
+
+- `docs/mcp-server-guide.md` — architecture, stdio rule, lightweight strategy
+- `docs/mcp-opencode-setup.md` — OpenCode configuration snippets
+- `docs/mcp-tool-reference.md` — per-tool schema and return shape
+- `docs/mcp-troubleshooting.md` — actionable error recovery
+
 ## License
 
 MIT — based on [ECC](https://github.com/affaan-m/ECC) by Affaan Mustafa.
