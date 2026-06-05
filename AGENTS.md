@@ -2,7 +2,7 @@
 
 Laravel 13 AI-ready skills, rules, agents, and CLI harness configs for OpenCode, Claude Code, Cursor, Gemini CLI, Codex CLI, Copilot, and more.
 
-**Version:** 1.0.0-beta.7
+**Version:** 1.0.0-beta.8
 
 ## Core Principles
 
@@ -112,7 +112,7 @@ commands/        — 7 Laravel/ECC console command references
 hooks/           — Git/agent hook automations
 mcp-configs/     — MCP server configurations
 knowledge/       — 21 engineering domains, 2,321 knowledge units
-intelligence/    — 8 JSON files, 7 markdown indexes, dependency graph
+intelligence/    — 10 JSON files, 7 markdown indexes, dependency graph
 agent/           — 5 navigation files: routing maps, retrieval guides, domain indexes
 tools/           — Rebuild and generation scripts for the knowledge layer
 docs/            — Architecture decisions, coverage baselines, repair reports
@@ -141,7 +141,7 @@ The ECC repository now includes a complete generated knowledge base spanning 21 
 
 - `intelligence/indexes/` — 7 cross-repository indexes (checklist-index, rule-index, skill-index, decision-tree-index, dependency-index, knowledge-unit-index, anti-pattern-index)
 - `intelligence/registry/` — knowledge-registry.md
-- `intelligence/json/` — Machine-readable JSON intelligence (8 files)
+- `intelligence/json/` — Machine-readable JSON intelligence (10 files)
 
 ### Agent Navigation Layer
 
@@ -231,14 +231,16 @@ Future tools, MCP servers, and retrieval systems should consume these files:
 
 ```
 intelligence/json/
-├── knowledge-units.json    — 2,321 KU metadata records
-├── rules.json              — 2,321 rule definitions
-├── skills.json             — 2,321 skill definitions
-├── decision-trees.json     — 2,321 decision tree definitions
-├── anti-patterns.json      — 2,321 anti-pattern definitions
-├── checklists.json         — 2,321 checklist definitions
-├── dependencies.json       — 264 dependency edges
-└── relationships.json      — 3,626 relationship edges
+├── knowledge-units.json      — 2,321 KU metadata records
+├── rules.json                — 2,321 rule definitions
+├── skills.json               — 2,321 skill definitions
+├── decision-trees.json       — 2,321 decision tree definitions
+├── anti-patterns.json        — 2,321 anti-pattern definitions
+├── checklists.json           — 2,321 checklist definitions
+├── dependencies.json         — 428 dependency edges
+├── relationships.json        — 3,633 relationship edges
+├── aliases.json              — 120 alias mappings
+└── external-concepts.json    — 26 external concept references
 ```
 
 ## Architectural Default

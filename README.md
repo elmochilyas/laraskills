@@ -60,8 +60,8 @@ tools/         — Rebuild and generation scripts
 | Canonical Knowledge Units | 2,321 |
 | JSON Intelligence Files | 10 |
 | Markdown Indexes | 7 |
-| Dependency Edges | 456 (266 direct + 190 alias-resolved) |
-| Relationship Edges | 3,634 |
+| Dependency Edges | 428 |
+| Relationship Edges | 3,633 |
 | Circular Dependencies | 0 (verified by automated DFS on every generation) |
 | Agent Navigation Files | 5 |
 

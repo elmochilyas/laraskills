@@ -8,6 +8,7 @@ const __dirname = dirname(fileURLToPath(import.meta.url));
 const ROOT = join(__dirname, '../..');
 
 import { validateIntelligence } from '../../src/retrieval/index.mjs';
+import { findEccRoot } from '../../src/retrieval/catalog-loader.mjs';
 
 // Helper: replicate Kahn's topological sort for synthetic graphs
 function topologicalSort(nodes, edges) {
@@ -364,5 +365,27 @@ describe('Reciprocal related-topic references', () => {
     const result = topologicalSort(nodes, prereqs);
     assert.strictEqual(result.reachableCount, 2);
     assert.strictEqual(result.unreachable.length, 0);
+  });
+});
+
+describe('CLI Error Handling — missing intelligence files', () => {
+  it('findEccRoot throws actionable error when root not found', () => {
+    assert.throws(
+      () => findEccRoot(process.cwd(), '/nonexistent/ecc/path'),
+      { message: 'ECC root not found at specified path: /nonexistent/ecc/path' },
+    );
+  });
+
+  it('findEccRoot throws actionable error when ECC_ROOT env path is invalid', () => {
+    assert.throws(
+      () => findEccRoot(process.cwd(), null, '/invalid/ecc/env/root'),
+      { message: 'ECC root not found at ECC_ROOT: /invalid/ecc/env/root' },
+    );
+  });
+
+  it('findEccRoot fallback to process.cwd() succeeds when inside the repo', () => {
+    const root = findEccRoot(process.cwd());
+    assert.ok(root);
+    assert.ok(root.includes('laravel-ecc'));
   });
 });
