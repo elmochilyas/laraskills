@@ -1,0 +1,646 @@
+{
+  "query": "Build a CRUD REST API for products with policies and pagination",
+  "mode": "standard",
+  "selectedDomains": [
+    {
+      "id": "api-crud-system-engineering",
+      "name": "API & CRUD System Engineering",
+      "score": 90,
+      "reason": "API development task"
+    },
+    {
+      "id": "security-identity-engineering",
+      "name": "Security & Identity Engineering",
+      "score": 60,
+      "reason": "Supporting domain"
+    },
+    {
+      "id": "testing-reliability-engineering",
+      "name": "Testing & Reliability Engineering",
+      "score": 60,
+      "reason": "Supporting domain"
+    },
+    {
+      "id": "data-storage-systems",
+      "name": "Data Storage Systems",
+      "score": 60,
+      "reason": "Supporting domain"
+    }
+  ],
+  "knowledgeUnits": [
+    {
+      "id": "api-crud-system-engineering/pagination-strategies/pagination-with-complex-filters",
+      "domain": "api-crud-system-engineering",
+      "subdomain": "pagination-strategies",
+      "name": "pagination-with-complex-filters",
+      "difficulty": "intermediate",
+      "score": 160,
+      "breakdown": [
+        {
+          "signal": "skillExists",
+          "value": 90,
+          "detail": "Has associated skill"
+        },
+        {
+          "signal": "tokenOverlap",
+          "value": 25,
+          "detail": "5 overlapping tokens across name, id, and subdomain"
+        },
+        {
+          "signal": "primaryDomain",
+          "value": 45,
+          "detail": "In primary domain"
+        }
+      ],
+      "directory": "knowledge/api-crud-system-engineering/pagination-strategies/pagination-with-complex-filters",
+      "sourcePath": "knowledge/api-crud-system-engineering/pagination-strategies/pagination-with-complex-filters/04-standardized-knowledge.md"
+    },
+    {
+      "id": "api-crud-system-engineering/rest-api-design/conditional-requests",
+      "domain": "api-crud-system-engineering",
+      "subdomain": "rest-api-design",
+      "name": "conditional-requests",
+      "difficulty": "intermediate",
+      "score": 160,
+      "breakdown": [
+        {
+          "signal": "skillExists",
+          "value": 90,
+          "detail": "Has associated skill"
+        },
+        {
+          "signal": "tokenOverlap",
+          "value": 25,
+          "detail": "5 overlapping tokens across name, id, and subdomain"
+        },
+        {
+          "signal": "primaryDomain",
+          "value": 45,
+          "detail": "In primary domain"
+        }
+      ],
+      "directory": "knowledge/api-crud-system-engineering/rest-api-design/conditional-requests",
+      "sourcePath": "knowledge/api-crud-system-engineering/rest-api-design/conditional-requests/04-standardized-knowledge.md"
+    },
+    {
+      "id": "api-crud-system-engineering/rest-api-design/content-negotiation",
+      "domain": "api-crud-system-engineering",
+      "subdomain": "rest-api-design",
+      "name": "content-negotiation",
+      "difficulty": "intermediate",
+      "score": 160,
+      "breakdown": [
+        {
+          "signal": "skillExists",
+          "value": 90,
+          "detail": "Has associated skill"
+        },
+        {
+          "signal": "tokenOverlap",
+          "value": 25,
+          "detail": "5 overlapping tokens across name, id, and subdomain"
+        },
+        {
+          "signal": "primaryDomain",
+          "value": 45,
+          "detail": "In primary domain"
+        }
+      ],
+      "directory": "knowledge/api-crud-system-engineering/rest-api-design/content-negotiation",
+      "sourcePath": "knowledge/api-crud-system-engineering/rest-api-design/content-negotiation/04-standardized-knowledge.md"
+    },
+    {
+      "id": "api-crud-system-engineering/rest-api-design/cors-design",
+      "domain": "api-crud-system-engineering",
+      "subdomain": "rest-api-design",
+      "name": "cors-design",
+      "difficulty": "intermediate",
+      "score": 160,
+      "breakdown": [
+        {
+          "signal": "skillExists",
+          "value": 90,
+          "detail": "Has associated skill"
+        },
+        {
+          "signal": "tokenOverlap",
+          "value": 25,
+          "detail": "5 overlapping tokens across name, id, and subdomain"
+        },
+        {
+          "signal": "primaryDomain",
+          "value": 45,
+          "detail": "In primary domain"
+        }
+      ],
+      "directory": "knowledge/api-crud-system-engineering/rest-api-design/cors-design",
+      "sourcePath": "knowledge/api-crud-system-engineering/rest-api-design/cors-design/04-standardized-knowledge.md"
+    },
+    {
+      "id": "api-crud-system-engineering/rest-api-design/hateoas-hypermedia-controls",
+      "domain": "api-crud-system-engineering",
+      "subdomain": "rest-api-design",
+      "name": "hateoas-hypermedia-controls",
+      "difficulty": "intermediate",
+      "score": 160,
+      "breakdown": [
+        {
+          "signal": "skillExists",
+          "value": 90,
+          "detail": "Has associated skill"
+        },
+        {
+          "signal": "tokenOverlap",
+          "value": 25,
+          "detail": "5 overlapping tokens across name, id, and subdomain"
+        },
+        {
+          "signal": "primaryDomain",
+          "value": 45,
+          "detail": "In primary domain"
+        }
+      ],
+      "directory": "knowledge/api-crud-system-engineering/rest-api-design/hateoas-hypermedia-controls",
+      "sourcePath": "knowledge/api-crud-system-engineering/rest-api-design/hateoas-hypermedia-controls/04-standardized-knowledge.md"
+    },
+    {
+      "id": "api-crud-system-engineering/rest-api-design/http-method-semantics",
+      "domain": "api-crud-system-engineering",
+      "subdomain": "rest-api-design",
+      "name": "http-method-semantics",
+      "difficulty": "intermediate",
+      "score": 160,
+      "breakdown": [
+        {
+          "signal": "skillExists",
+          "value": 90,
+          "detail": "Has associated skill"
+        },
+        {
+          "signal": "tokenOverlap",
+          "value": 25,
+          "detail": "5 overlapping tokens across name, id, and subdomain"
+        },
+        {
+          "signal": "primaryDomain",
+          "value": 45,
+          "detail": "In primary domain"
+        }
+      ],
+      "directory": "knowledge/api-crud-system-engineering/rest-api-design/http-method-semantics",
+      "sourcePath": "knowledge/api-crud-system-engineering/rest-api-design/http-method-semantics/04-standardized-knowledge.md"
+    },
+    {
+      "id": "api-crud-system-engineering/rest-api-design/http-status-code-selection",
+      "domain": "api-crud-system-engineering",
+      "subdomain": "rest-api-design",
+      "name": "http-status-code-selection",
+      "difficulty": "intermediate",
+      "score": 160,
+      "breakdown": [
+        {
+          "signal": "skillExists",
+          "value": 90,
+          "detail": "Has associated skill"
+        },
+        {
+          "signal": "tokenOverlap",
+          "value": 25,
+          "detail": "5 overlapping tokens across name, id, and subdomain"
+        },
+        {
+          "signal": "primaryDomain",
+          "value": 45,
+          "detail": "In primary domain"
+        }
+      ],
+      "directory": "knowledge/api-crud-system-engineering/rest-api-design/http-status-code-selection",
+      "sourcePath": "knowledge/api-crud-system-engineering/rest-api-design/http-status-code-selection/04-standardized-knowledge.md"
+    },
+    {
+      "id": "api-crud-system-engineering/rest-api-design/idempotency-semantics",
+      "domain": "api-crud-system-engineering",
+      "subdomain": "rest-api-design",
+      "name": "idempotency-semantics",
+      "difficulty": "intermediate",
+      "score": 160,
+      "breakdown": [
+        {
+          "signal": "skillExists",
+          "value": 90,
+          "detail": "Has associated skill"
+        },
+        {
+          "signal": "tokenOverlap",
+          "value": 25,
+          "detail": "5 overlapping tokens across name, id, and subdomain"
+        },
+        {
+          "signal": "primaryDomain",
+          "value": 45,
+          "detail": "In primary domain"
+        }
+      ],
+      "directory": "knowledge/api-crud-system-engineering/rest-api-design/idempotency-semantics",
+      "sourcePath": "knowledge/api-crud-system-engineering/rest-api-design/idempotency-semantics/04-standardized-knowledge.md"
+    },
+    {
+      "id": "api-crud-system-engineering/rest-api-design/resource-naming-conventions",
+      "domain": "api-crud-system-engineering",
+      "subdomain": "rest-api-design",
+      "name": "resource-naming-conventions",
+      "difficulty": "intermediate",
+      "score": 160,
+      "breakdown": [
+        {
+          "signal": "skillExists",
+          "value": 90,
+          "detail": "Has associated skill"
+        },
+        {
+          "signal": "tokenOverlap",
+          "value": 25,
+          "detail": "5 overlapping tokens across name, id, and subdomain"
+        },
+        {
+          "signal": "primaryDomain",
+          "value": 45,
+          "detail": "In primary domain"
+        }
+      ],
+      "directory": "knowledge/api-crud-system-engineering/rest-api-design/resource-naming-conventions",
+      "sourcePath": "knowledge/api-crud-system-engineering/rest-api-design/resource-naming-conventions/04-standardized-knowledge.md"
+    },
+    {
+      "id": "api-crud-system-engineering/rest-api-design/resource-vs-action-orientation",
+      "domain": "api-crud-system-engineering",
+      "subdomain": "rest-api-design",
+      "name": "resource-vs-action-orientation",
+      "difficulty": "intermediate",
+      "score": 160,
+      "breakdown": [
+        {
+          "signal": "skillExists",
+          "value": 90,
+          "detail": "Has associated skill"
+        },
+        {
+          "signal": "tokenOverlap",
+          "value": 25,
+          "detail": "5 overlapping tokens across name, id, and subdomain"
+        },
+        {
+          "signal": "primaryDomain",
+          "value": 45,
+          "detail": "In primary domain"
+        }
+      ],
+      "directory": "knowledge/api-crud-system-engineering/rest-api-design/resource-vs-action-orientation",
+      "sourcePath": "knowledge/api-crud-system-engineering/rest-api-design/resource-vs-action-orientation/04-standardized-knowledge.md"
+    }
+  ],
+  "rules": [
+    {
+      "id": "api-crud-system-engineering/pagination-strategies/pagination-with-complex-filters/rules",
+      "domain": "api-crud-system-engineering",
+      "summary": "Rules for pagination-with-complex-filters",
+      "sourcePath": "knowledge/api-crud-system-engineering/pagination-strategies/pagination-with-complex-filters/05-rules.md",
+      "forKuId": "api-crud-system-engineering/pagination-strategies/pagination-with-complex-filters"
+    },
+    {
+      "id": "api-crud-system-engineering/rest-api-design/conditional-requests/rules",
+      "domain": "api-crud-system-engineering",
+      "summary": "Rules for conditional-requests",
+      "sourcePath": "knowledge/api-crud-system-engineering/rest-api-design/conditional-requests/05-rules.md",
+      "forKuId": "api-crud-system-engineering/rest-api-design/conditional-requests"
+    },
+    {
+      "id": "api-crud-system-engineering/rest-api-design/content-negotiation/rules",
+      "domain": "api-crud-system-engineering",
+      "summary": "Rules for content-negotiation",
+      "sourcePath": "knowledge/api-crud-system-engineering/rest-api-design/content-negotiation/05-rules.md",
+      "forKuId": "api-crud-system-engineering/rest-api-design/content-negotiation"
+    },
+    {
+      "id": "api-crud-system-engineering/rest-api-design/cors-design/rules",
+      "domain": "api-crud-system-engineering",
+      "summary": "Rules for cors-design",
+      "sourcePath": "knowledge/api-crud-system-engineering/rest-api-design/cors-design/05-rules.md",
+      "forKuId": "api-crud-system-engineering/rest-api-design/cors-design"
+    },
+    {
+      "id": "api-crud-system-engineering/rest-api-design/hateoas-hypermedia-controls/rules",
+      "domain": "api-crud-system-engineering",
+      "summary": "Rules for hateoas-hypermedia-controls",
+      "sourcePath": "knowledge/api-crud-system-engineering/rest-api-design/hateoas-hypermedia-controls/05-rules.md",
+      "forKuId": "api-crud-system-engineering/rest-api-design/hateoas-hypermedia-controls"
+    }
+  ],
+  "skills": [
+    {
+      "id": "api-crud-system-engineering/pagination-strategies/pagination-with-complex-filters/skills",
+      "domain": "api-crud-system-engineering",
+      "summary": "Skills for pagination-with-complex-filters",
+      "sourcePath": "knowledge/api-crud-system-engineering/pagination-strategies/pagination-with-complex-filters/06-skills.md",
+      "forKuId": "api-crud-system-engineering/pagination-strategies/pagination-with-complex-filters"
+    },
+    {
+      "id": "api-crud-system-engineering/rest-api-design/conditional-requests/skills",
+      "domain": "api-crud-system-engineering",
+      "summary": "Skills for conditional-requests",
+      "sourcePath": "knowledge/api-crud-system-engineering/rest-api-design/conditional-requests/06-skills.md",
+      "forKuId": "api-crud-system-engineering/rest-api-design/conditional-requests"
+    },
+    {
+      "id": "api-crud-system-engineering/rest-api-design/content-negotiation/skills",
+      "domain": "api-crud-system-engineering",
+      "summary": "Skills for content-negotiation",
+      "sourcePath": "knowledge/api-crud-system-engineering/rest-api-design/content-negotiation/06-skills.md",
+      "forKuId": "api-crud-system-engineering/rest-api-design/content-negotiation"
+    },
+    {
+      "id": "api-crud-system-engineering/rest-api-design/cors-design/skills",
+      "domain": "api-crud-system-engineering",
+      "summary": "Skills for cors-design",
+      "sourcePath": "knowledge/api-crud-system-engineering/rest-api-design/cors-design/06-skills.md",
+      "forKuId": "api-crud-system-engineering/rest-api-design/cors-design"
+    },
+    {
+      "id": "api-crud-system-engineering/rest-api-design/hateoas-hypermedia-controls/skills",
+      "domain": "api-crud-system-engineering",
+      "summary": "Skills for hateoas-hypermedia-controls",
+      "sourcePath": "knowledge/api-crud-system-engineering/rest-api-design/hateoas-hypermedia-controls/06-skills.md",
+      "forKuId": "api-crud-system-engineering/rest-api-design/hateoas-hypermedia-controls"
+    }
+  ],
+  "decisionTrees": [
+    {
+      "id": "api-crud-system-engineering/pagination-strategies/pagination-with-complex-filters/decision-trees",
+      "domain": "api-crud-system-engineering",
+      "summary": "Decision Trees for pagination-with-complex-filters",
+      "sourcePath": "knowledge/api-crud-system-engineering/pagination-strategies/pagination-with-complex-filters/07-decision-trees.md",
+      "forKuId": "api-crud-system-engineering/pagination-strategies/pagination-with-complex-filters"
+    },
+    {
+      "id": "api-crud-system-engineering/rest-api-design/conditional-requests/decision-trees",
+      "domain": "api-crud-system-engineering",
+      "summary": "Decision Trees for conditional-requests",
+      "sourcePath": "knowledge/api-crud-system-engineering/rest-api-design/conditional-requests/07-decision-trees.md",
+      "forKuId": "api-crud-system-engineering/rest-api-design/conditional-requests"
+    },
+    {
+      "id": "api-crud-system-engineering/rest-api-design/content-negotiation/decision-trees",
+      "domain": "api-crud-system-engineering",
+      "summary": "Decision Trees for content-negotiation",
+      "sourcePath": "knowledge/api-crud-system-engineering/rest-api-design/content-negotiation/07-decision-trees.md",
+      "forKuId": "api-crud-system-engineering/rest-api-design/content-negotiation"
+    },
+    {
+      "id": "api-crud-system-engineering/rest-api-design/cors-design/decision-trees",
+      "domain": "api-crud-system-engineering",
+      "summary": "Decision Trees for cors-design",
+      "sourcePath": "knowledge/api-crud-system-engineering/rest-api-design/cors-design/07-decision-trees.md",
+      "forKuId": "api-crud-system-engineering/rest-api-design/cors-design"
+    },
+    {
+      "id": "api-crud-system-engineering/rest-api-design/hateoas-hypermedia-controls/decision-trees",
+      "domain": "api-crud-system-engineering",
+      "summary": "Decision Trees for hateoas-hypermedia-controls",
+      "sourcePath": "knowledge/api-crud-system-engineering/rest-api-design/hateoas-hypermedia-controls/07-decision-trees.md",
+      "forKuId": "api-crud-system-engineering/rest-api-design/hateoas-hypermedia-controls"
+    }
+  ],
+  "antiPatterns": [
+    {
+      "id": "api-crud-system-engineering/pagination-strategies/pagination-with-complex-filters/anti-patterns",
+      "domain": "api-crud-system-engineering",
+      "summary": "Anti-Patterns for pagination-with-complex-filters",
+      "sourcePath": "knowledge/api-crud-system-engineering/pagination-strategies/pagination-with-complex-filters/08-anti-patterns.md",
+      "forKuId": "api-crud-system-engineering/pagination-strategies/pagination-with-complex-filters"
+    },
+    {
+      "id": "api-crud-system-engineering/rest-api-design/conditional-requests/anti-patterns",
+      "domain": "api-crud-system-engineering",
+      "summary": "Anti-Patterns for conditional-requests",
+      "sourcePath": "knowledge/api-crud-system-engineering/rest-api-design/conditional-requests/08-anti-patterns.md",
+      "forKuId": "api-crud-system-engineering/rest-api-design/conditional-requests"
+    },
+    {
+      "id": "api-crud-system-engineering/rest-api-design/content-negotiation/anti-patterns",
+      "domain": "api-crud-system-engineering",
+      "summary": "Anti-Patterns for content-negotiation",
+      "sourcePath": "knowledge/api-crud-system-engineering/rest-api-design/content-negotiation/08-anti-patterns.md",
+      "forKuId": "api-crud-system-engineering/rest-api-design/content-negotiation"
+    },
+    {
+      "id": "api-crud-system-engineering/rest-api-design/cors-design/anti-patterns",
+      "domain": "api-crud-system-engineering",
+      "summary": "Anti-Patterns for cors-design",
+      "sourcePath": "knowledge/api-crud-system-engineering/rest-api-design/cors-design/08-anti-patterns.md",
+      "forKuId": "api-crud-system-engineering/rest-api-design/cors-design"
+    },
+    {
+      "id": "api-crud-system-engineering/rest-api-design/hateoas-hypermedia-controls/anti-patterns",
+      "domain": "api-crud-system-engineering",
+      "summary": "Anti-Patterns for hateoas-hypermedia-controls",
+      "sourcePath": "knowledge/api-crud-system-engineering/rest-api-design/hateoas-hypermedia-controls/08-anti-patterns.md",
+      "forKuId": "api-crud-system-engineering/rest-api-design/hateoas-hypermedia-controls"
+    }
+  ],
+  "checklists": [
+    {
+      "id": "api-crud-system-engineering/pagination-strategies/pagination-with-complex-filters/checklists",
+      "domain": "api-crud-system-engineering",
+      "summary": "Checklists for pagination-with-complex-filters",
+      "sourcePath": "knowledge/api-crud-system-engineering/pagination-strategies/pagination-with-complex-filters/09-checklists.md",
+      "forKuId": "api-crud-system-engineering/pagination-strategies/pagination-with-complex-filters"
+    },
+    {
+      "id": "api-crud-system-engineering/rest-api-design/conditional-requests/checklists",
+      "domain": "api-crud-system-engineering",
+      "summary": "Checklists for conditional-requests",
+      "sourcePath": "knowledge/api-crud-system-engineering/rest-api-design/conditional-requests/09-checklists.md",
+      "forKuId": "api-crud-system-engineering/rest-api-design/conditional-requests"
+    },
+    {
+      "id": "api-crud-system-engineering/rest-api-design/content-negotiation/checklists",
+      "domain": "api-crud-system-engineering",
+      "summary": "Checklists for content-negotiation",
+      "sourcePath": "knowledge/api-crud-system-engineering/rest-api-design/content-negotiation/09-checklists.md",
+      "forKuId": "api-crud-system-engineering/rest-api-design/content-negotiation"
+    }
+  ],
+  "prerequisites": [],
+  "relatedTopics": [
+    {
+      "id": "laravel-eloquent-domain-modeling/performance-and-integrity/cursor",
+      "sourceKuId": "api-crud-system-engineering/pagination-strategies/pagination-with-complex-filters",
+      "reason": "Related: 'Multi-Column Cursor Pagination â€” Composite indexes for filter+sort'",
+      "depth": 1
+    },
+    {
+      "id": "api-crud-system-engineering/pagination-strategies/total-count-performance",
+      "sourceKuId": "api-crud-system-engineering/pagination-strategies/pagination-with-complex-filters",
+      "reason": "Related: 'Total Count Performance â€” Count with complex WHERE clauses'",
+      "depth": 1
+    },
+    {
+      "id": "laravel-eloquent-domain-modeling/serialization/pagination",
+      "sourceKuId": "api-crud-system-engineering/pagination-strategies/pagination-with-complex-filters",
+      "reason": "Related: 'Full-Text Search Integration â€” Search + pagination patterns'",
+      "depth": 1
+    },
+    {
+      "id": "api-crud-system-engineering/pagination-strategies/multi-column-cursor-pagination",
+      "sourceKuId": "api-crud-system-engineering/pagination-strategies/pagination-with-complex-filters",
+      "reason": "Related: 'Pagination with Complex Filters â€” Combining filters with multi-column sort'",
+      "depth": 1
+    },
+    {
+      "id": "laravel-execution-lifecycle/middleware-pipeline/pre-and-post-middleware-code",
+      "sourceKuId": "api-crud-system-engineering/rest-api-design/content-negotiation",
+      "reason": "Related: '**Response Mutations**: Content negotiation with post-middleware.'",
+      "depth": 1
+    }
+  ],
+  "externalConcepts": [],
+  "warnings": [
+    "Results were truncated due to max limits"
+  ],
+  "estimatedTokens": 2833,
+  "explanation": {
+    "appliedAliases": [],
+    "rankingSummary": [
+      {
+        "id": "api-crud-system-engineering/pagination-strategies/pagination-with-complex-filters",
+        "score": 160,
+        "signals": "skillExists: 90, tokenOverlap: 25, primaryDomain: 45"
+      },
+      {
+        "id": "api-crud-system-engineering/rest-api-design/conditional-requests",
+        "score": 160,
+        "signals": "skillExists: 90, tokenOverlap: 25, primaryDomain: 45"
+      },
+      {
+        "id": "api-crud-system-engineering/rest-api-design/content-negotiation",
+        "score": 160,
+        "signals": "skillExists: 90, tokenOverlap: 25, primaryDomain: 45"
+      }
+    ]
+  },
+  "_explanation": {
+    "query": "Build a CRUD REST API for products with policies and pagination",
+    "mode": "standard",
+    "retrievalStrategy": "Mode: standard. Selected 10 KUs from 4 domains. Expanded 5 related topics.",
+    "domainSelection": [
+      {
+        "id": "api-crud-system-engineering",
+        "name": "API & CRUD System Engineering",
+        "score": 90,
+        "reason": "API development task"
+      },
+      {
+        "id": "security-identity-engineering",
+        "name": "Security & Identity Engineering",
+        "score": 60,
+        "reason": "Supporting domain"
+      },
+      {
+        "id": "testing-reliability-engineering",
+        "name": "Testing & Reliability Engineering",
+        "score": 60,
+        "reason": "Supporting domain"
+      },
+      {
+        "id": "data-storage-systems",
+        "name": "Data Storage Systems",
+        "score": 60,
+        "reason": "Supporting domain"
+      }
+    ],
+    "topKuSelection": [
+      {
+        "id": "api-crud-system-engineering/pagination-strategies/pagination-with-complex-filters",
+        "score": 160,
+        "signals": [
+          "skillExists (+90)",
+          "tokenOverlap (+25)",
+          "primaryDomain (+45)"
+        ],
+        "source": "knowledge/api-crud-system-engineering/pagination-strategies/pagination-with-complex-filters/04-standardized-knowledge.md"
+      },
+      {
+        "id": "api-crud-system-engineering/rest-api-design/conditional-requests",
+        "score": 160,
+        "signals": [
+          "skillExists (+90)",
+          "tokenOverlap (+25)",
+          "primaryDomain (+45)"
+        ],
+        "source": "knowledge/api-crud-system-engineering/rest-api-design/conditional-requests/04-standardized-knowledge.md"
+      },
+      {
+        "id": "api-crud-system-engineering/rest-api-design/content-negotiation",
+        "score": 160,
+        "signals": [
+          "skillExists (+90)",
+          "tokenOverlap (+25)",
+          "primaryDomain (+45)"
+        ],
+        "source": "knowledge/api-crud-system-engineering/rest-api-design/content-negotiation/04-standardized-knowledge.md"
+      },
+      {
+        "id": "api-crud-system-engineering/rest-api-design/cors-design",
+        "score": 160,
+        "signals": [
+          "skillExists (+90)",
+          "tokenOverlap (+25)",
+          "primaryDomain (+45)"
+        ],
+        "source": "knowledge/api-crud-system-engineering/rest-api-design/cors-design/04-standardized-knowledge.md"
+      },
+      {
+        "id": "api-crud-system-engineering/rest-api-design/hateoas-hypermedia-controls",
+        "score": 160,
+        "signals": [
+          "skillExists (+90)",
+          "tokenOverlap (+25)",
+          "primaryDomain (+45)"
+        ],
+        "source": "knowledge/api-crud-system-engineering/rest-api-design/hateoas-hypermedia-controls/04-standardized-knowledge.md"
+      }
+    ],
+    "scoreMethodology": "Weighted signal-based deterministic scoring. Each result receives a score from configurable weights. Higher scores indicate stronger relevance. Tie-breaking is lexicographic by KU ID.",
+    "appliedAliases": [],
+    "signalsUsed": [
+      {
+        "name": "exactKuName",
+        "weight": 100,
+        "description": "Exact match between query and canonical KU name"
+      },
+      {
+        "name": "exactAlias",
+        "weight": 95,
+        "description": "Query matched a known alias for this KU"
+      },
+      {
+        "name": "exactSkill",
+        "weight": 90,
+        "description": "KU has an associated skill entry"
+      },
+      {
+        "name": "domainRoute",
+        "weight": 45,
+        "description": "KU belongs to a routed domain"
+      },
+      {
+        "name": "tokenOverlap",
+        "weight": "10-35",
+        "description": "Token overlap between query and KU metadata"
+      }
+    ],
+    "warnings": [
+      "Results were truncated due to max limits"
+    ]
+  }
+}

@@ -8,7 +8,8 @@
 | Knowledge Unit ID | K27 |
 | Title | Supervisor & Production Process Management |
 | Difficulty | Intermediate |
-| Dependencies | K03, K32, K05, K33 |
+| Dependencies | K03, K05, K33 |
+| Related KUs | Nginx WebSocket proxy configuration |
 
 ## Overview
 Supervisor is the standard process manager for keeping Reverb running as a daemon in production. It auto-starts Reverb on system boot, restarts it after crashes, and manages graceful shutdowns. Configuration uses INI-style `.conf` files in `/etc/supervisor/conf.d/`. Key directives include `command`, `autostart`, `autorestart`, `user`, `numprocs`, `stopwaitsecs`, and `stdout_logfile`. Supervisor integration is the default approach for Laravel Forge deployments.

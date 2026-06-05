@@ -4,8 +4,27 @@ function scoreTag(score) {
   return '○ LOW';
 }
 
-function indent(level) {
-  return '  '.repeat(level);
+function formatActionable(actionable, mode) {
+  if (!actionable) return '';
+  if (typeof actionable === 'string') {
+    const lines = actionable.split('\n').filter(l => l.trim());
+    const truncated = lines.slice(0, 15);
+    return truncated.map(l => `    ${l.trim()}`).join('\n');
+  }
+  const parts = [];
+  if (actionable.headings && actionable.headings.length > 0) {
+    parts.push('    Topics:');
+    for (const h of actionable.headings.slice(0, 5)) {
+      parts.push(`      - ${h}`);
+    }
+  }
+  if (actionable.items && actionable.items.length > 0) {
+    parts.push('    Key items:');
+    for (const item of actionable.items.slice(0, 5)) {
+      parts.push(`      - ${item}`);
+    }
+  }
+  return parts.join('\n');
 }
 
 function formatDomainSection(domains) {
@@ -46,7 +65,11 @@ function formatArtifactSection(title, items, label) {
   for (const item of items) {
     lines.push(`- **${item.id}**`);
     if (item.summary) lines.push(`  - Summary: ${item.summary}`);
-    if (item.sourcePath) lines.push(`  - Source: \`${item.sourcePath}\``);
+    if (item.actionable) {
+      const formatted = formatActionable(item.actionable, 'standard');
+      if (formatted) lines.push(formatted);
+    }
+    if (item.sourceFile) lines.push(`  - Source: \`${item.sourceFile}\``);
     if (item.forKuId) lines.push(`  - For KU: \`${item.forKuId}\``);
     lines.push('');
   }

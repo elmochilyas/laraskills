@@ -8,7 +8,8 @@
 | Knowledge Unit ID | K18 |
 | Title | WebSocket vs SSE vs Polling Decision Framework |
 | Difficulty | Foundation |
-| Dependencies | K16, K03, K17, K19 |
+| Dependencies | K03, K19 |
+| Related KUs | SSE implementation, SSE Laravel Wave package |
 
 ## Overview
 Choosing the correct real-time transport depends on directionality, latency requirements, infrastructure constraints, and browser support. The four primary options are WebSocket (full-duplex, ~20ms latency, 98%+ browser support), SSE (unidirectional server-to-client, ~50ms latency, 96% support, auto-reconnect), Long Polling (simulated real-time, ~100-200ms latency, universal support), and Short Polling (fixed-interval, latency = interval, simplest implementation). The 2026 consensus: use SSE for server-to-client scenarios, WebSocket for bidirectional needs, Long Polling as HTTP-only fallback, and Short Polling only for low-frequency updates.

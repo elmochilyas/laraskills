@@ -8,7 +8,8 @@
 | Knowledge Unit ID | K15 |
 | Title | Reconnection Strategies & Storm Mitigation |
 | Difficulty | Advanced |
-| Dependencies | K14, K36, K27, K05 |
+| Dependencies | K36, K27, K05 |
+| Related KUs | Sticky sessions load balancing WebSocket |
 
 ## Overview
 Reconnection storms occur when a large number of WebSocket clients disconnect and attempt to reconnect simultaneously, overwhelming the server, auth endpoint, and infrastructure. This typically happens after server restarts, network partitions, or deployment rollouts. Mitigation strategies operate at two levels: client-side (jitter, exponential backoff, staggered reconnection) and server-side (connection rate limiting, auth endpoint throttling, connection draining).

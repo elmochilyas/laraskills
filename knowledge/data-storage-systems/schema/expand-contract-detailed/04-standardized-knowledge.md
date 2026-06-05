@@ -10,7 +10,8 @@
 | Knowledge Unit Title | Expand Contract Detailed |
 | Difficulty Level | Advanced |
 | Classification | A |
-| Dependencies | 11.1 Zero-downtime taxonomy | 11.9 Data backfill |
+| Dependencies | None |
+| Related KUs | 11.1 Zero-downtime taxonomy, 11.9 Data backfill |
 | Last Updated | 2026-06-02 |
 
 ## Overview

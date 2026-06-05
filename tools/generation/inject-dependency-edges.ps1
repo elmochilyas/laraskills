@@ -3,6 +3,21 @@ function Write-Utf8File {
     [System.IO.File]::WriteAllText($Path, $Value, (New-Object System.Text.UTF8Encoding $false))
 }
 
+# Normalize common UTF-8 mojibake sequences to proper Unicode characters
+function Normalize-Mojibake {
+    param([string]$Text)
+    if ([string]::IsNullOrEmpty($Text)) { return $Text }
+    # Em-dash mojibake: bytes 0xE2 0x80 0x94 read as Latin-1 -> â (U+00E2) € (U+20AC) " (U+201D) -> proper em-dash U+2014
+    $search = [string][char]0x00E2 + [char]0x20AC + [char]0x201D
+    $replace = [string][char]0x2014
+    $Text = $Text.Replace([string]$search, [string]$replace)
+    # Right arrow mojibake
+    $search2 = [string][char]0x00E2 + [char]0x2020 + [char]0x2019
+    $replace2 = [string][char]0x2192
+    $Text = $Text.Replace([string]$search2, [string]$replace2)
+    return $Text
+}
+
 $root = "C:\Users\Pc\Desktop\laravel skills from every thing claude code\laravel-ecc"
 
 # Phase 1: Build KU name-to-ID mapping
@@ -19,7 +34,7 @@ foreach ($d in $kuDirs) {
     $id = ($d.FullName.Replace("$root\knowledge\", "") -replace '\\', '/')
     $domain = $d.Parent.Parent.Name
     $subdomain = $d.Parent.Name
-    $raw = Get-Content (Join-Path $d.FullName "02-knowledge-unit.md") -Raw -ErrorAction SilentlyContinue
+    $raw = Get-Content (Join-Path $d.FullName "02-knowledge-unit.md") -Raw -Encoding UTF8 -ErrorAction SilentlyContinue
     $name = ""
     if ($raw -match '^---\s*\n.*?\ntitle:\s*"?(.+?)"?\s*\n') { $name = $matches[1].Trim() }
     if (-not $name -and $raw -match '^#\s+Knowledge Unit:\s*(.+)$') { $name = $matches[1].Trim() }
@@ -44,21 +59,21 @@ foreach ($d in $kuDirs) {
     $id = ($d.FullName.Replace("$root\knowledge\", "") -replace '\\', '/')
     $fourFile = Join-Path $d.FullName "04-standardized-knowledge.md"
     if (-not (Test-Path $fourFile)) { continue }
-    $fourContent = Get-Content $fourFile -TotalCount 60 -ErrorAction SilentlyContinue
+    $fourContent = Get-Content $fourFile -TotalCount 60 -Encoding UTF8 -ErrorAction SilentlyContinue
     
     foreach ($line in $fourContent) {
         if ($line -match '^\|\s*Dependenc(?:y|ies)\s*\|\s*(.+?)\s*\|') {
             $val = $matches[1].Trim()
-            if ($val -ne '' -and $val -notmatch '^(None|none|N/A)$') { $explicitDeps[$id] = ($val -split '[,|]') | ForEach-Object { $_.Trim() } }
+            if ($val -ne '' -and $val -notmatch '^(None|none|N/A)$') { $explicitDeps[$id] = ($val -split '[,|]') | ForEach-Object { Normalize-Mojibake $_.Trim() } }
         }
         if ($line -match '^\|\s*Related\s+(?:KU|KUs|Topics?)\s*\|\s*(.+?)\s*\|') {
             $val = $matches[1].Trim()
-            if ($val -ne '' -and $val -notmatch '^(None|none|N/A)$') { $explicitRelated[$id] = ($val -split '[,|]') | ForEach-Object { $_.Trim() } }
+            if ($val -ne '' -and $val -notmatch '^(None|none|N/A)$') { $explicitRelated[$id] = ($val -split '[,|]') | ForEach-Object { Normalize-Mojibake $_.Trim() } }
         }
     }
     
     # Check for ## Related KUs section
-    $full = Get-Content $fourFile -ErrorAction SilentlyContinue
+    $full = Get-Content $fourFile -Encoding UTF8 -ErrorAction SilentlyContinue
     $inSection = $false; $sectionItems = @()
     foreach ($line in $full) {
         if ($line -match '^##\s+Related\s+(?:KU|KUs|Topics?)') { $inSection = $true; continue }
@@ -69,6 +84,7 @@ foreach ($d in $kuDirs) {
             $item = $item.Trim()
             # Remove leading hyphen or colon remnants
             $item = $item -replace '^[-–—]\s*', ''
+            $item = Normalize-Mojibake $item
             if ($item -ne '' -and $item.Length -gt 2) { $sectionItems += $item }
         }
     }
@@ -158,6 +174,7 @@ $depObj = $depRaw | ConvertFrom-Json
 $depObj.edges = $edges
 
 $newDepJson = $depObj | ConvertTo-Json -Depth 10
+$newDepJson = Normalize-Mojibake $newDepJson
 Write-Utf8File -Path $depPath -Value $newDepJson
 Write-Host "  dependencies.json updated with $($edges.Count) edges"
 
@@ -167,6 +184,7 @@ $relOutput = @{
     edges = $relEdges
 }
 $relContent = $relOutput | ConvertTo-Json -Depth 10
+$relContent = Normalize-Mojibake $relContent
 Write-Utf8File -Path "$root\intelligence\json\relationships.json" -Value $relContent
 Write-Host "  relationships.json created with $($relEdges.Count) edges"
 
@@ -242,8 +260,33 @@ $newDepJson2 = $depObj2 | ConvertTo-Json -Depth 10
 Write-Utf8File -Path $depPath -Value $newDepJson2
 Write-Host "  dependencies.json updated with $($edges.Count) edges"
 
-# Phase 7d: Update dependency-index.md with real data
-Write-Host "`nPhase 7d: Regenerating dependency-index.md..."
+# Phase 7d: Detect circular dependencies on final graph (including alias edges)
+Write-Host "`nPhase 7d: Detecting circular dependencies on final graph..."
+$graph3 = @{}
+foreach ($e in $edges) {
+    if (-not $graph3.ContainsKey($e.source)) { $graph3[$e.source] = @() }
+    $graph3[$e.source] += $e.target
+}
+$visited3 = @{}; $recStack3 = @{}; $cycleSet3 = @{}
+function Check-Cycle3 {
+    param($node, $path)
+    if ($recStack3.ContainsKey($node)) {
+        $idx = [array]::IndexOf($path, $node)
+        if ($idx -ge 0) { $c = $path[$idx..($path.Count-1)]; $key = ($c | Sort-Object) -join '|'; if (-not $cycleSet3.ContainsKey($key)) { $cycleSet3[$key] = $c } }
+        return
+    }
+    if ($visited3.ContainsKey($node)) { return }
+    $visited3[$node] = $true; $recStack3[$node] = $true
+    if ($graph3.ContainsKey($node)) { foreach ($n in $graph3[$node]) { Check-Cycle3 -node $n -path ($path + $node) } }
+    $recStack3.Remove($node)
+}
+foreach ($n in $graph3.Keys) { if (-not $visited3.ContainsKey($n)) { Check-Cycle3 -node $n -path @() } }
+$cycleCount3 = $cycleSet3.Count
+Write-Host "  Cycles detected in final graph: $cycleCount3"
+if ($cycleCount3 -gt 0) { $i=1; foreach ($c in $cycleSet3.Values) { Write-Host "  Cycle $i : $($c -join ' -> ')"; $i++ } }
+
+# Phase 7e: Update dependency-index.md with real data
+Write-Host "`nPhase 7e: Regenerating dependency-index.md..."
 $depIndexPath = "$root\intelligence\indexes\dependency-index.md"
 
 # Foundation KUs (most-depended-upon or highest in domain hierarchy)
@@ -359,7 +402,7 @@ foreach ($d in ($idToDomain.Values | Select-Object -Unique | Sort-Object)) {
     $index += "| $display | $($domainWithDeps.Count) | $($domainEdges.Count) |`n"
 }
 
-$cycleText = if ($cycleCount -eq 0) { "Circular dependencies were checked during generation. None found." } else { $t = "**" + $cycleCount + " circular dependencies detected:**`n"; $i = 1; foreach ($c in $cycleSet.Values) { $seq = $c -join ' -> '; $t += "$i. $seq`n"; $i++ }; $t }
+$cycleText = if ($cycleCount3 -eq 0) { "Circular dependencies were checked during generation. None found." } else { $t = "**" + $cycleCount3 + " circular dependencies detected:**`n"; $i = 1; foreach ($c in $cycleSet3.Values) { $seq = $c -join ' -> '; $t += "$i. $seq`n"; $i++ }; $t }
 
 $index += @"
 

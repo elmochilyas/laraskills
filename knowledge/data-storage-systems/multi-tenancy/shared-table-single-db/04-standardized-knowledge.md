@@ -10,7 +10,8 @@
 | Knowledge Unit Title | Shared Table Single Db |
 | Difficulty Level | Intermediate |
 | Classification | I |
-| Dependencies | 5.2 Schema-per-tenant | 5.3 Database-per-tenant | 5.5 Eloquent global scopes |
+| Dependencies | 5.3 Database-per-tenant | 5.5 Eloquent global scopes |
+| Related KUs | 5.2 Schema-per-tenant |
 | Last Updated | 2026-06-02 |
 
 ## Overview

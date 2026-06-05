@@ -10,7 +10,8 @@
 | Knowledge Unit Title | Gh Ost Tool |
 | Difficulty Level | Expert |
 | Classification | E |
-| Dependencies | 1.12 pt-online-schema-change | 1.13 Spirit tool | 1.10 Zero-downtime migration patterns | 1.18 Expand-contract pattern |
+| Dependencies | 1.10 Zero-downtime migration patterns | 1.18 Expand-contract pattern |
+| Related KUs | 1.12 pt-online-schema-change, 1.13 Spirit tool |
 | Last Updated | 2026-06-02 |
 
 ## Overview

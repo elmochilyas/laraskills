@@ -116,7 +116,7 @@ const ROUTING_RULES = [
     reason: 'Platform engineering or developer experience task',
   },
   {
-    taskPattern: /\b(solid|dto|value.object|service.class|service.layer|cohesion|coupling|grasp|clean.architecture|business.logic|action|cqrs|event.sourcing)\b/i,
+    taskPattern: /\b(solid|dto|value.object|service.class|service.layer|cohesion|coupling|grasp|clean.architecture|business.logic|action|actions|cqrs|event.sourcing|fat.controller)\b/i,
     primaryDomain: 'backend-architecture-design',
     supportingDomains: ['application-architecture-patterns', 'laravel-core-application-engineering'],
     reason: 'Backend architecture design task',
@@ -220,6 +220,11 @@ export function routeQuery(normalizedQuery, analysis) {
     if (b.primaryDomain.confidence !== a.primaryDomain.confidence) {
       return b.primaryDomain.confidence - a.primaryDomain.confidence;
     }
+    const aScore = analysis.domains.find(d => d.domain === a.primaryDomain.id);
+    const bScore = analysis.domains.find(d => d.domain === b.primaryDomain.id);
+    const aDomainScore = aScore ? aScore.score : 0;
+    const bDomainScore = bScore ? bScore.score : 0;
+    if (bDomainScore !== aDomainScore) return bDomainScore - aDomainScore;
     return a.primaryDomain.id.localeCompare(b.primaryDomain.id);
   });
   return routes;

@@ -10,7 +10,8 @@
 | Knowledge Unit Title | Partition Switching Archiving |
 | Difficulty Level | Advanced |
 | Classification | A |
-| Dependencies | 8.1 Range partitioning | 8.6 Partition management | 8.14 Backup/restore |
+| Dependencies | 8.6 Partition management | 8.14 Backup/restore |
+| Related KUs | 8.1 Range partitioning |
 | Last Updated | 2026-06-02 |
 
 ## Overview

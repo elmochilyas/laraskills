@@ -10,7 +10,8 @@
 | Knowledge Unit Title | Pt Online Schema Change |
 | Difficulty Level | Advanced |
 | Classification | A |
-| Dependencies | 1.11 gh-ost tool | 1.13 Spirit tool | 1.10 Zero-downtime migration patterns | 1.26 MySQL ALGORITHM/LOCK options |
+| Dependencies | 1.10 Zero-downtime migration patterns | 1.26 MySQL ALGORITHM/LOCK options |
+| Related KUs | 1.11 gh-ost tool, 1.13 Spirit tool |
 | Last Updated | 2026-06-02 |
 
 ## Overview

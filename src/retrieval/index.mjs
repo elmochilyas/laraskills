@@ -35,7 +35,7 @@ export function retrieveContext(rawQuery, options = {}) {
     maxRelated: mergedOptions.maxRelated || DEFAULTS.maxRelated,
   });
   const bundle = buildContextBundle(
-    { ...mergedOptions, originalQuery: rawQuery },
+    { ...mergedOptions, originalQuery: rawQuery, eccRoot: actualRoot },
     ranked,
     graphResult,
     routes,

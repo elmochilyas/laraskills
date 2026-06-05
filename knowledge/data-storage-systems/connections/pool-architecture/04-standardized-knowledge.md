@@ -10,7 +10,8 @@
 | Knowledge Unit Title | Pool architecture (client-side vs server-side, ProxySQL, PgBouncer, RDS Proxy) |
 | Difficulty Level | Intermediate |
 | Classification | I |
-| Dependencies | 10.3 PgBouncer, 10.4 Octane connections, 10.9 Read/write separation |
+| Dependencies | 10.9 Read/write separation |
+| Related KUs | 10.3 PgBouncer, 10.4 Octane connections |
 | Last Updated | 2026-06-02 |
 
 ## Overview

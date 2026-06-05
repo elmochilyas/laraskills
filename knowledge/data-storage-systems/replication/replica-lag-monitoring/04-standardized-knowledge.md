@@ -10,7 +10,8 @@
 | Knowledge Unit Title | Replica Lag Monitoring |
 | Difficulty Level | Advanced |
 | Classification | A |
-| Dependencies | 7.5 Replica lag causes | 7.7 Lag-aware read splitting |
+| Dependencies | 7.7 Lag-aware read splitting |
+| Related KUs | 7.5 Replica lag causes |
 | Last Updated | 2026-06-02 |
 
 ## Overview

@@ -10,7 +10,8 @@
 | Knowledge Unit Title | Sticky Writes |
 | Difficulty Level | Intermediate |
 | Classification | I |
-| Dependencies | 7.3 Query routing | 7.7 Lag-aware read splitting |
+| Dependencies | 7.7 Lag-aware read splitting |
+| Related KUs | 7.3 Query routing |
 | Last Updated | 2026-06-02 |
 
 ## Overview

@@ -10,7 +10,8 @@
 | Knowledge Unit Title | Migration Batch Tracking |
 | Difficulty Level | Foundation |
 | Classification | I |
-| Dependencies | 1.1 Migration file structure | 1.6 Migration ordering | 1.25 Rollback strategy |
+| Dependencies | 1.25 Rollback strategy |
+| Related KUs | 1.1 Migration file structure, 1.6 Migration ordering |
 | Last Updated | 2026-06-02 |
 
 ## Overview

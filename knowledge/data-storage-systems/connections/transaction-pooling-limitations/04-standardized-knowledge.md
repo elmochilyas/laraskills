@@ -10,7 +10,8 @@
 | Knowledge Unit Title | Transaction pooling limitations (prepared statements, session state, SET commands) |
 | Difficulty Level | Expert |
 | Classification | E |
-| Dependencies | 10.3 PgBouncer modes, 7.18 Transaction pooling |
+| Dependencies | 10.3 PgBouncer modes |
+| Related KUs | Transaction pooling |
 | Last Updated | 2026-06-02 |
 
 ## Overview

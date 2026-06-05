@@ -10,7 +10,8 @@
 | Knowledge Unit Title | Nested Transactions Savepoints |
 | Difficulty Level | Intermediate |
 | Classification | I |
-| Dependencies | 9.11 Transaction scoping | 9.13 Transaction length |
+| Dependencies | 9.13 Transaction length |
+| Related KUs | 9.11 Transaction scoping |
 | Last Updated | 2026-06-02 |
 
 ## Overview

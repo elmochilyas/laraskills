@@ -454,5 +454,46 @@
     "expectedPrimaryDomain": "laravel-eloquent-domain-modeling",
     "expectedSupportingDomains": ["data-storage-systems", "application-architecture-patterns"],
     "expectedSkillCategories": ["laravel-eloquent"]
+  },
+  {
+    "id": "bench-066",
+    "query": "Build a CRUD REST API for products with policies and pagination",
+    "expectedPrimaryDomain": "api-crud-system-engineering",
+    "expectedSupportingDomains": ["security-identity-engineering", "data-storage-systems"],
+    "forbiddenDomains": ["async-distributed-systems", "ai-intelligence-systems"],
+    "forbiddenKus": ["conditional-requests"],
+    "expectedTopKus": ["pagination", "policy", "controller"]
+  },
+  {
+    "id": "bench-067",
+    "query": "Fix N+1 query in Eloquent with eager loading and caching",
+    "expectedPrimaryDomain": "laravel-eloquent-domain-modeling",
+    "expectedSupportingDomains": ["data-storage-systems", "performance-runtime-engineering"],
+    "forbiddenDomains": ["ai-intelligence-systems"],
+    "expectedTopKus": ["n-plus-one", "eager-loading"]
+  },
+  {
+    "id": "bench-068",
+    "query": "Add Sanctum SPA auth with multi-tenant isolation",
+    "expectedPrimaryDomain": "security-identity-engineering",
+    "expectedSupportingDomains": ["api-crud-system-engineering", "data-storage-systems"],
+    "forbiddenDomains": ["real-time-systems", "ai-intelligence-systems"],
+    "expectedTopKus": ["sanctum", "tenant"]
+  },
+  {
+    "id": "bench-069",
+    "query": "Queue email notifications with retry and failure handling",
+    "expectedPrimaryDomain": "async-distributed-systems",
+    "expectedSupportingDomains": ["performance-runtime-engineering"],
+    "forbiddenDomains": ["real-time-systems"],
+    "expectedTopKus": ["queue", "retry", "failure"]
+  },
+  {
+    "id": "bench-070",
+    "query": "Add semantic search with embeddings and pgvector",
+    "expectedPrimaryDomain": "search-retrieval-systems",
+    "expectedSupportingDomains": ["ai-intelligence-systems", "data-storage-systems"],
+    "forbiddenDomains": ["real-time-systems"],
+    "expectedTopKus": ["search", "pgvector", "vector"]
   }
 ]

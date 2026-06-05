@@ -10,7 +10,8 @@
 | Knowledge Unit Title | Laravel Octane connection pool configuration (min/max connections) |
 | Difficulty Level | Advanced |
 | Classification | A |
-| Dependencies | 10.2 Pool architecture, 10.7 Connection count management |
+| Dependencies | 10.7 Connection count management |
+| Related KUs | Pool architecture |
 | Last Updated | 2026-06-02 |
 
 ## Overview

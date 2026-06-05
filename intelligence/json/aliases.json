@@ -3,7 +3,7 @@
     {
       "alias": "N+1 queries",
       "normalized_alias": "n-plus-one-queries",
-      "canonical_ku_id": "data-storage-systems/queries/n-plus-one-detection-elimination",
+      "canonical_ku_id": "data-storage-systems/optimization/n-plus-one-detection-elimination",
       "source_paths": [
         "knowledge/data-storage-systems/queries/n-plus-one-detection-elimination/04-standardized-knowledge.md"
       ]
@@ -763,7 +763,7 @@
     {
       "alias": "12.1 JSONB column type",
       "normalized_alias": "jsonb-column-type",
-      "canonical_ku_id": "data-storage-systems/advanced/jsonb-column-type",
+      "canonical_ku_id": "data-storage-systems/schema/blueprint-column-types",
       "source_paths": [
         "knowledge/data-storage-systems/advanced/jsonb-column-type/04-standardized-knowledge.md"
       ]

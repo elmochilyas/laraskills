@@ -10,7 +10,8 @@
 | Knowledge Unit Title | Schema Per Tenant |
 | Difficulty Level | Advanced |
 | Classification | A |
-| Dependencies | 5.1 Shared-table | 5.3 Database-per-tenant | 5.9 Migration orchestration |
+| Dependencies | 5.3 Database-per-tenant | 5.9 Migration orchestration |
+| Related KUs | 5.1 Shared-table |
 | Last Updated | 2026-06-02 |
 
 ## Overview
