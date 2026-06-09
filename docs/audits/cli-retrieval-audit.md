@@ -10,7 +10,7 @@
 | Command | Exit Code | Status |
 |---------|-----------|--------|
 | `--help` | 0 | 13 subcommands displayed, no mojibake |
-| `validate` | 0 | 2321 KUs, 428 deps, 3633 rels, 120 aliases, 26 externals |
+| `validate` | 0 | 2321 KUs, 429 deps, 3513 rels, 120 aliases, 26 externals |
 | `search "Sanctum tenant auth"` | 0 | 20 results, top: cross-tenant-data-leak-prevention (283) |
 | `retrieve "CRUD..." --mode standard` | 0 | 5146 tokens, 4 domains, 10 KUs |
 | `retrieve "N+1 query" --mode compact` | 0 | 2092 tokens, 5 KUs, no decision trees |

@@ -32,7 +32,7 @@
 5. Process **queries** (2-21 through 2-30): ~10 KUs
 
 ## Critical Context
-- Domain location: `C:\Users\Pc\Desktop\laravel skills from every thing claude code\research\workspaces\data-storage-systems`
+- Domain location: `<research-workspace-root>/data-storage-systems`
 - Total KUs with DTs now: ~160 out of ~279; remaining ~119
 
 ## Relevant Files

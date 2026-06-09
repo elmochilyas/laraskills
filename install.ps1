@@ -53,7 +53,7 @@ if (Test-Path (Join-Path $targetDir '.cursor')) { $detectedTools += 'cursor' }
 if (Test-Path (Join-Path $targetDir '.gemini')) { $detectedTools += 'gemini' }
 if (Test-Path (Join-Path $targetDir '.codex')) { $detectedTools += 'codex' }
 
-Write-Status "Laravel ECC v1.0.0-beta.6"
+Write-Status "Laravel ECC v1.0.0-beta.8"
 Write-Status "Target: $targetDir"
 Write-Status "Profile: $profile"
 Write-Status "Detected tools: $($detectedTools -join ', ')"
@@ -141,13 +141,15 @@ foreach ($agent in @('laravel-artisan.md', 'laravel-eloquent.md', 'laravel-migra
 }
 
 if ($profile -eq 'full') {
-    # Copy all ECC agents
+    # Full profile: ecc-clone agents (optional, requires cloned repository)
+    # NOTE: ..\ecc-clone\agents references a non-existent sibling directory — this silently fails unless
+    # the full ECC repository is cloned alongside laravel-ecc. Consider removing this dead branch.
     $eccAgentsDir = Join-Path $scriptDir '..\ecc-clone\agents'
     if (Test-Path $eccAgentsDir) {
         Get-ChildItem -Path $eccAgentsDir -Filter '*.md' | ForEach-Object {
             Copy-Item -Path $_.FullName -Destination (Join-Path $agentsDir $_.Name) -Force
         }
-        Write-Status "  ✓ Installed all 63 ECC agents"
+        Write-Status "  ✓ Installed all ECC agents"
     }
 
     # Copy commands
@@ -162,7 +164,7 @@ if ($profile -eq 'full') {
 
 # Save state
 $state = @{
-    version = '1.0.0-beta.6'
+    version = '1.0.0-beta.8'
     target = $targetDir
     installed_at = (Get-Date).ToString('o')
     profile = $profile

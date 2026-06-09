@@ -1,4 +1,10 @@
-$base = "C:\Users\Pc\Desktop\laravel skills from every thing claude code\research\workspaces\cost-resource-optimization"
+param(
+    [Parameter(Mandatory = $true)]
+    [string]$ResearchRoot
+)
+
+$base = Join-Path $ResearchRoot "cost-resource-optimization"
+if (-not (Test-Path $base)) { Write-Error "Research workspace not found: $base"; exit 1 }
 $date = "2026-06-03"
 
 function Write-DecisionTrees {

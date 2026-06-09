@@ -15,7 +15,7 @@
 | decision-tree-index.md | 3,057 lines | 2,321 | 2,321 ✅ |
 | anti-pattern-index.md | 3,057 lines | 2,321 | 2,321 ✅ |
 | checklist-index.md | 3,057 lines | 2,321 | 2,321 ✅ |
-| dependency-index.md | 112 lines | 2321 KUs, 428 deps, 3,633 rels | Confirmed ✅ |
+| dependency-index.md | 112 lines | 2321 KUs, 429 deps, 3,513 rels | Confirmed ✅ |
 
 ## Index Verification
 

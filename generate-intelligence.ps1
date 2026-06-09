@@ -1,7 +1,7 @@
 param(
-    [string]$KnowledgeUnitsJson = "C:\Users\Pc\Desktop\laravel skills from every thing claude code\laravel-ecc\intelligence\json\knowledge-units.json",
-    [string]$TargetDir = "C:\Users\Pc\Desktop\laravel skills from every thing claude code\laravel-ecc\intelligence\json",
-    [string]$KnowledgeRoot = "C:\Users\Pc\Desktop\laravel skills from every thing claude code\laravel-ecc\knowledge"
+    [string]$KnowledgeUnitsJson = (Resolve-Path (Join-Path $PSScriptRoot "intelligence\json\knowledge-units.json")).Path,
+    [string]$TargetDir = (Resolve-Path (Join-Path $PSScriptRoot "intelligence\json")).Path,
+    [string]$KnowledgeRoot = (Resolve-Path (Join-Path $PSScriptRoot "knowledge")).Path
 )
 
 Write-Host "=== ECC Intelligence JSON Generator ===" -ForegroundColor Cyan
@@ -382,7 +382,8 @@ function Write-JsonFile {
         $i++
     }
     $prettyJson = $sb.ToString()
-    Out-File -FilePath $Path -InputObject $prettyJson -Encoding UTF8 -Force
+    $utf8NoBom = New-Object System.Text.UTF8Encoding $false
+    [System.IO.File]::WriteAllText($Path, $prettyJson, $utf8NoBom)
 }
 
 # Rules

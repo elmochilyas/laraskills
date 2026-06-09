@@ -30,7 +30,7 @@
   "issues": []
 }
 ```
-**Status: PASS** ✅ (matches expected: 2321 KUs, 428 deps, 3633 rels, 0 cycles, 0 self-loops, 0 dangling)
+**Status: PASS** ✅ (matches expected: 2321 KUs, 429 deps, 3513 rels, 0 cycles, 0 self-loops, 0 dangling)
 
 ### retrieve_context_bundle
 Task: "Build a CRUD REST API for products with policies and pagination"

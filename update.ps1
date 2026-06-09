@@ -16,7 +16,7 @@ $ErrorActionPreference = 'Stop'
 $scriptDir = Split-Path -Parent $PSCommandPath
 
 function Write-Status   { param([string]$Message, [string]$Color = 'Green')  Write-Host "[Laravel ECC] $Message" -ForegroundColor $Color }
-function Write-Warn     { param([string]$Message)                             Write-Host "[Laravel ECC] WARNING: $Message" -ForegroundColor $Yellow = 'Yellow'; Write-Host "[Laravel ECC] WARNING: $Message" -ForegroundColor Yellow }
+function Write-Warn     { param([string]$Message)                             Write-Host "[Laravel ECC] WARNING: $Message" -ForegroundColor Yellow }
 function Write-Error    { param([string]$Message)                             Write-Host "[Laravel ECC] ERROR: $Message" -ForegroundColor Red }
 
 # Resolve target project directory (current directory or specified)

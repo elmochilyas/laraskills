@@ -38,7 +38,7 @@ while [[ $# -gt 0 ]]; do
     esac
 done
 
-echo "Laravel ECC v1.0.0-beta.6"
+echo "Laravel ECC v1.0.0-beta.8"
 echo "Target: $TARGET_DIR"
 echo "Profile: $PROFILE"
 
@@ -95,6 +95,9 @@ done
 
 # Full profile extras
 if [ "$PROFILE" = "full" ]; then
+    # Full profile: ecc-clone agents (optional, requires cloned repository)
+    # NOTE: ../ecc-clone/agents is a non-existent sibling directory — this path will silently fail unless the
+    # full ECC repository (not just laravel-ecc) is cloned alongside. Consider removing this dead branch.
     ECC_AGENTS="$SCRIPT_DIR/../ecc-clone/agents"
     if [ -d "$ECC_AGENTS" ]; then
         cp "$ECC_AGENTS"/*.md "$TARGET_DIR/agents/" 2>/dev/null || true
@@ -109,7 +112,7 @@ fi
 # Save state
 cat > "$STATE_FILE" <<EOF
 {
-  "version": "1.0.0-beta.6",
+  "version": "1.0.0-beta.8",
   "target": "$TARGET_DIR",
   "installed_at": "$(date -u +%Y-%m-%dT%H:%M:%SZ)",
   "profile": "$PROFILE",

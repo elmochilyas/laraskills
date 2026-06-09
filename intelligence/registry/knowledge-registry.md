@@ -6,7 +6,7 @@ Repository-wide inventory of the ECC knowledge system.
 |---|---|
 | Total Knowledge Units | 2321 |
 | Total Domains | 21 |
-| Generated | 2026-06-04 23:11:34 |
+| Generated | 2026-06-09 00:41:19 |
 
 ---
 

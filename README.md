@@ -50,7 +50,7 @@ tools/         — Rebuild and generation scripts
 | Agents | 12 | Artisan, Eloquent, Migration, Database, Container, REST, JSON:API, GraphQL, gRPC, Microservices, Authentication, Identity Architecture |
 | Commands | 7 | artisan, migrate, seed, route-list, tdd, code-review, plan |
 | Harness Configs | 12 | OpenCode, Claude Code, Cursor, Gemini, Codex, Copilot, VS Code, Zed, Trae, Qwen, CodeBuddy, Kiro |
-| MCP Configs | 2 | Laravel docs + Composer security |
+| MCP Config Files | 1 | mcp-servers.json (defines Laravel docs + Composer security servers) |
 
 ### Intelligence Layer
 
@@ -60,8 +60,8 @@ tools/         — Rebuild and generation scripts
 | Canonical Knowledge Units | 2,321 |
 | JSON Intelligence Files | 10 |
 | Markdown Indexes | 7 |
-| Dependency Edges | 428 |
-| Relationship Edges | 3,633 |
+| Dependency Edges | 429 |
+| Relationship Edges | 3,513 |
 | Circular Dependencies | 0 (verified by automated DFS on every generation) |
 | Agent Navigation Files | 5 |
 

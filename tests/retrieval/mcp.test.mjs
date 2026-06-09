@@ -413,14 +413,14 @@ describe('MCP Tool — validate_ecc', () => {
     assert.strictEqual(res.structuredContent.knowledgeUnitCount, 2321);
   });
 
-  it('reports 428 dependency edges', async () => {
+  it('reports 429 dependency edges', async () => {
     const res = await client.callTool({ name: 'validate_ecc', arguments: {} });
-    assert.strictEqual(res.structuredContent.dependencyEdgeCount, 428);
+    assert.strictEqual(res.structuredContent.dependencyEdgeCount, 429);
   });
 
-  it('reports 3633 relationship edges', async () => {
+  it('reports 3513 relationship edges', async () => {
     const res = await client.callTool({ name: 'validate_ecc', arguments: {} });
-    assert.strictEqual(res.structuredContent.relationshipEdgeCount, 3633);
+    assert.strictEqual(res.structuredContent.relationshipEdgeCount, 3513);
   });
 
   it('reports 0 cycles', async () => {
