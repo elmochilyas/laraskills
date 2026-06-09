@@ -69,14 +69,14 @@ Accessing a singleton relationship inside a loop over parent resources triggers 
 ---
 ## Bad Example
 `php
- = User::all();
-foreach ( as ) { C:\Users\Pc\Documents\WindowsPowerShell\Microsoft.PowerShell_profile.ps1 = ->profile; ... } // N+1 queries
+$users = User::all();
+foreach ($users as $user) { $profile = $user->profile; ... } // N+1 queries
 `
 ---
 ## Good Example
 `php
- = User::with('profile')->get();
-foreach ( as ) { C:\Users\Pc\Documents\WindowsPowerShell\Microsoft.PowerShell_profile.ps1 = ->profile; ... } // 2 queries total
+$users = User::with('profile')->get();
+foreach ($users as $user) { $profile = $user->profile; ... } // 2 queries total
 `
 ---
 ## Exceptions
@@ -129,12 +129,12 @@ Singleton routes resolve the singleton via the parent's relationship. The parent
 ---
 ## Bad Example
 `php
-class ProfileController extends Controller { public function show(Profile C:\Users\Pc\Documents\WindowsPowerShell\Microsoft.PowerShell_profile.ps1) { ... } } // Singleton is not a route parameter
+class ProfileController extends Controller { public function show(User $user) { ... } } // Singleton is not a route parameter
 `
 ---
 ## Good Example
 `php
-class ProfileController extends Controller { public function show(User ) { return ->profile; } } // Parent is the route parameter
+class ProfileController extends Controller { public function show(User $user) { return $user->profile; } } // Parent is the route parameter
 `
 ---
 ## Exceptions

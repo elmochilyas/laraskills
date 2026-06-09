@@ -1,4 +1,10 @@
-$domain = "C:\Users\Pc\Desktop\laravel skills from every thing claude code\research\workspaces\ai-intelligence-systems"
+param(
+    [Parameter(Mandatory = $true)]
+    [string]$ResearchRoot
+)
+
+$domain = Join-Path $ResearchRoot "ai-intelligence-systems"
+if (-not (Test-Path $domain)) { Write-Error "Research workspace not found: $domain"; exit 1 }
 $subdomains = Get-ChildItem -LiteralPath $domain -Directory -Name | Where-Object { $_ -notmatch '^_' }
 
 $total = 0

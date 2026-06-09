@@ -1,5 +1,11 @@
 param(
-    [string]$BasePath = "C:\Users\Pc\Desktop\laravel skills from every thing claude code\research\workspaces\data-storage-systems"
+    [string]param(
+    [Parameter(Mandatory = $true)]
+    [string]$ResearchRoot
+)
+
+$BasePath = Join-Path $ResearchRoot "data-storage-systems"
+if (-not (Test-Path $BasePath)) { Write-Error "Research workspace not found: $BasePath"; exit 1 }
 )
 
 $logPath = Join-Path $BasePath "checklist-generation-log.txt"

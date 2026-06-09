@@ -14,7 +14,7 @@
 | Individual rule files | 41 |
 | Commands (commands/ .md files) | 7 |
 | Harness configs | 12 |
-| MCP configs | 2 |
+| MCP config files | 1 |
 | Engineering domains (knowledge/) | 21 |
 | Canonical KUs | 2,321 |
 | JSON intelligence files | 8 |

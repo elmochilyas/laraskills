@@ -183,7 +183,7 @@ Hard checks:
 - ✓ Exactly 5 tools
 - ✓ 139/139 tests pass
 - ✓ 70/70 benchmarks pass
-- ✓ `laravel-ecc validate` passes (2,321 KUs, 428 dep edges, 3,633 rel edges, 0 cycles, 0 self-loops, 0 dangling)
+- ✓ `laravel-ecc validate` passes (2,321 KUs, 429 dep edges, 3,513 rel edges, 0 cycles, 0 self-loops, 0 dangling)
 - ✓ `npm pack --dry-run` shows the lightweight strategy is preserved
 - ✓ OpenCode connection roundtrip is fully verified by the official MCP client test suite
 - ✓ Inspector test path is documented and per-tool coverage exists in the test suite

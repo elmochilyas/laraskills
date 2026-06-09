@@ -18,7 +18,7 @@ function Normalize-Mojibake {
     return $Text
 }
 
-$root = "C:\Users\Pc\Desktop\laravel skills from every thing claude code\laravel-ecc"
+$root = (Resolve-Path (Join-Path $PSScriptRoot "..\..")).Path
 
 # Phase 1: Build KU name-to-ID mapping
 Write-Host "Phase 1: Building KU mapping..."
@@ -100,40 +100,73 @@ Write-Host "Phase 3: Building dependency edges..."
 $edges = @(); $seenEdges = @{}
 $unmatched = @()
 
-foreach ($kuId in $explicitDeps.Keys) {
-    foreach ($dep in $explicitDeps[$kuId]) {
+# Build normalized name lookup for deterministic matching
+$normalizedNameMap = @{}
+foreach ($kn in ($kuMap.Keys | Sort-Object)) {
+    $normalized = $kn -replace '[^a-z0-9]+', ' ' -replace '\s+', ' ' -replace '^\s+|\s+$', ''
+    if (-not $normalizedNameMap.ContainsKey($normalized)) { $normalizedNameMap[$normalized] = @() }
+    $normalizedNameMap[$normalized] += $kuMap[$kn]
+}
+
+foreach ($kuId in ($explicitDeps.Keys | Sort-Object)) {
+    foreach ($dep in ($explicitDeps[$kuId] | Sort-Object)) {
         $depLower = $dep.ToLower().Trim()
         $matched = $false
         
-        if ($depLower -match '^(K\d+)$') {
-            # Try K-code
-            foreach ($kn in $kuMap.Keys) {
-                if ($kn -match [regex]::Escape($depLower)) { 
-                    $targetId = $kuMap[$kn]; $ek = "$targetId->$kuId"
-                    if (-not $seenEdges.ContainsKey($ek)) { $seenEdges[$ek] = $true; $edges += @{id=$ek; source=$targetId; target=$kuId; type="prerequisite"; strength="recommended"; reason="Dep: '$dep'"; evidence_paths=@("knowledge/$kuId/04-standardized-knowledge.md")} }
-                    $matched = $true; break
-                }
+        # Resolution order 1: Exact canonical KU ID
+        if (-not $matched -and $idToName.ContainsKey($depLower)) {
+            $targetId = $depLower
+            if ($targetId -ne $kuId) {
+                $ek = "$targetId->$kuId"
+                if (-not $seenEdges.ContainsKey($ek)) { $seenEdges[$ek] = $true; $edges += @{id=$ek; source=$targetId; target=$kuId; type="prerequisite"; strength="required"; reason="Explicit dep by ID"; evidence_paths=@("knowledge/$kuId/04-standardized-knowledge.md")} }
             }
-        }
-        
-        if (-not $matched -and $kuMap.ContainsKey($depLower)) {
-            $targetId = $kuMap[$depLower]; $ek = "$targetId->$kuId"
-            if (-not $seenEdges.ContainsKey($ek)) { $seenEdges[$ek] = $true; $edges += @{id=$ek; source=$targetId; target=$kuId; type="prerequisite"; strength="required"; reason="Explicit dep"; evidence_paths=@("knowledge/$kuId/04-standardized-knowledge.md")} }
             $matched = $true
         }
         
+        # Resolution order 2: Exact KU name match
+        if (-not $matched -and $kuMap.ContainsKey($depLower)) {
+            $targetId = $kuMap[$depLower]
+            if ($targetId -ne $kuId) {
+                $ek = "$targetId->$kuId"
+                if (-not $seenEdges.ContainsKey($ek)) { $seenEdges[$ek] = $true; $edges += @{id=$ek; source=$targetId; target=$kuId; type="prerequisite"; strength="required"; reason="Explicit dep"; evidence_paths=@("knowledge/$kuId/04-standardized-knowledge.md")} }
+            }
+            $matched = $true
+        }
+        
+        # Resolution order 3: Alias (will be resolved in Phase 7b)
+        # Resolution order 4: Normalized name if unique
         if (-not $matched) {
-            foreach ($kn in $kuMap.Keys) {
-                if ($kn -match [regex]::Escape($depLower) -or $depLower -match [regex]::Escape($kn)) {
-                    $targetId = $kuMap[$kn]; $ek = "$targetId->$kuId"
+            $normalized = $depLower -replace '[^a-z0-9]+', ' ' -replace '\s+', ' ' -replace '^\s+|\s+$', ''
+            if ($normalizedNameMap.ContainsKey($normalized) -and $normalizedNameMap[$normalized].Count -eq 1) {
+                $targetId = $normalizedNameMap[$normalized][0]
+                if ($targetId -ne $kuId) {
+                    $ek = "$targetId->$kuId"
                     if (-not $seenEdges.ContainsKey($ek)) { $seenEdges[$ek] = $true; $edges += @{id=$ek; source=$targetId; target=$kuId; type="prerequisite"; strength="recommended"; reason="Dep: '$dep'"; evidence_paths=@("knowledge/$kuId/04-standardized-knowledge.md")} }
+                }
+                $matched = $true
+            }
+        }
+        
+        # Resolution order 5: Fuzzy substring match with sorted keys (deterministic)
+        if (-not $matched) {
+            foreach ($kn in ($kuMap.Keys | Sort-Object)) {
+                if ($kn -match [regex]::Escape($depLower) -or $depLower -match [regex]::Escape($kn)) {
+                    $targetId = $kuMap[$kn]
+                    if ($targetId -ne $kuId) {
+                        $ek = "$targetId->$kuId"
+                        if (-not $seenEdges.ContainsKey($ek)) { $seenEdges[$ek] = $true; $edges += @{id=$ek; source=$targetId; target=$kuId; type="prerequisite"; strength="recommended"; reason="Dep: '$dep'"; evidence_paths=@("knowledge/$kuId/04-standardized-knowledge.md")} }
+                    }
                     $matched = $true; break
                 }
             }
         }
+        
         if (-not $matched) { $unmatched += "$dep (in $kuId)" }
     }
 }
+
+# Sort edges deterministically
+$edges = $edges | Sort-Object source, target, type, strength
 Write-Host "  Dependency edges: $($edges.Count), Unmatched: $($unmatched.Count)"
 $unmatched | Select-Object -First 10 | ForEach-Object { Write-Host "    $_" }
 
@@ -141,27 +174,49 @@ $unmatched | Select-Object -First 10 | ForEach-Object { Write-Host "    $_" }
 Write-Host "Phase 4: Building relationship edges..."
 $relEdges = @(); $seenRels = @{}
 
-foreach ($kuId in $explicitRelated.Keys) {
-    foreach ($rel in $explicitRelated[$kuId]) {
+foreach ($kuId in ($explicitRelated.Keys | Sort-Object)) {
+    foreach ($rel in ($explicitRelated[$kuId] | Sort-Object)) {
         $relLower = $rel.ToLower().Trim(); $matched = $false
         
+        # Resolution order 1: Exact KU name match (with self-loop check)
         if ($kuMap.ContainsKey($relLower)) {
-            $targetId = $kuMap[$relLower]; $rk = "$kuId<->$targetId"
-            if (-not $seenRels.ContainsKey($rk)) { $seenRels[$rk]=$true; $seenRels["$targetId<->$kuId"]=$true; $relEdges += @{id="$kuId<->$targetId"; source=$kuId; target=$targetId; type="related-topic"; reason="Related KU"; evidence_paths=@("knowledge/$kuId/04-standardized-knowledge.md")} }
+            $targetId = $kuMap[$relLower]
+            if ($targetId -ne $kuId) {
+                $rk = "$kuId<->$targetId"
+                if (-not $seenRels.ContainsKey($rk)) { $seenRels[$rk]=$true; $seenRels["$targetId<->$kuId"]=$true; $relEdges += @{id="$kuId<->$targetId"; source=$kuId; target=$targetId; type="related-topic"; reason="Related KU"; evidence_paths=@("knowledge/$kuId/04-standardized-knowledge.md")} }
+            }
             $matched = $true
         }
         
+        # Resolution order 2: Normalized name if unique
         if (-not $matched) {
-            foreach ($kn in $kuMap.Keys) {
-                if ($kn -match [regex]::Escape($relLower) -or $relLower -match [regex]::Escape($kn)) {
-                    $targetId = $kuMap[$kn]; $rk = "$kuId<->$targetId"
+            $normalized = $relLower -replace '[^a-z0-9]+', ' ' -replace '\s+', ' ' -replace '^\s+|\s+$', ''
+            if ($normalizedNameMap.ContainsKey($normalized) -and $normalizedNameMap[$normalized].Count -eq 1) {
+                $targetId = $normalizedNameMap[$normalized][0]
+                if ($targetId -ne $kuId) {
+                    $rk = "$kuId<->$targetId"
                     if (-not $seenRels.ContainsKey($rk)) { $seenRels[$rk]=$true; $seenRels["$targetId<->$kuId"]=$true; $relEdges += @{id="$kuId<->$targetId"; source=$kuId; target=$targetId; type="related-topic"; reason="Related: '$rel'"; evidence_paths=@("knowledge/$kuId/04-standardized-knowledge.md")} }
+                }
+                $matched = $true
+            }
+        }
+        
+        # Resolution order 3: Fuzzy substring match with sorted keys (deterministic)
+        if (-not $matched) {
+            foreach ($kn in ($kuMap.Keys | Sort-Object)) {
+                if ($kn -match [regex]::Escape($relLower) -or $relLower -match [regex]::Escape($kn)) {
+                    $targetId = $kuMap[$kn]
+                    if ($targetId -ne $kuId) {
+                        $rk = "$kuId<->$targetId"
+                        if (-not $seenRels.ContainsKey($rk)) { $seenRels[$rk]=$true; $seenRels["$targetId<->$kuId"]=$true; $relEdges += @{id="$kuId<->$targetId"; source=$kuId; target=$targetId; type="related-topic"; reason="Related: '$rel'"; evidence_paths=@("knowledge/$kuId/04-standardized-knowledge.md")} }
+                    }
                     $matched = $true; break
                 }
             }
         }
     }
 }
+$relEdges = $relEdges | Sort-Object source, target, type, id
 Write-Host "  Relationship edges: $($relEdges.Count)"
 
 # Phase 5: Inject edges into dependencies.json

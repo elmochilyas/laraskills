@@ -6,7 +6,7 @@ Repository-wide decision tree registry.
 |---|---|
 | Total Decision Trees | 2321 |
 | Domains | 21 |
-| Generated | 2026-06-04 23:11:34 |
+| Generated | 2026-06-09 00:41:19 |
 
 ---
 

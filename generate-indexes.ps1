@@ -1,9 +1,10 @@
 #Requires -Version 5.1
 $ErrorActionPreference = 'Stop'
 
-$JsonDir   = "C:\Users\Pc\Desktop\laravel skills from every thing claude code\laravel-ecc\intelligence\json"
-$IndexDir  = "C:\Users\Pc\Desktop\laravel skills from every thing claude code\laravel-ecc\intelligence\indexes"
-$RegDir    = "C:\Users\Pc\Desktop\laravel skills from every thing claude code\laravel-ecc\intelligence\registry"
+$RootDir   = Split-Path -Parent $PSCommandPath
+$JsonDir   = Join-Path $RootDir "intelligence\json"
+$IndexDir  = Join-Path $RootDir "intelligence\indexes"
+$RegDir    = Join-Path $RootDir "intelligence\registry"
 
 $generated = Get-Date -Format "yyyy-MM-dd HH:mm:ss"
 $generatedDate = Get-Date -Format "yyyy-MM-dd"
@@ -116,7 +117,8 @@ $sortedDomains = $domainCounts.Keys | Sort-Object
 function Out-MarkdownFile {
     param([string]$Path, [string[]]$Lines)
     $content = $Lines -join "`r`n"
-    [System.IO.File]::WriteAllText($Path, $content, [System.Text.Encoding]::UTF8)
+    $utf8NoBom = New-Object System.Text.UTF8Encoding $false
+    [System.IO.File]::WriteAllText($Path, $content, $utf8NoBom)
 }
 
 # ===================================================================
@@ -427,7 +429,7 @@ $depEdgeList = @()
 foreach ($edge in $depEdges) {
     $srcId = $edge.source
     $tgtId = $edge.target
-    $srcKU = $kus | Where-Object { $_.ku_id -eq $srcId }
+    $srcKU = $kus | Where-Object { $_.id -eq $srcId }
     if ($srcKU) {
         $depEdgeList += [PSCustomObject]@{
             Domain = $srcKU.domain_norm
@@ -470,7 +472,7 @@ foreach ($d in $sortedDomains) {
     $lines += "| Knowledge Unit | Depends On |"
     $lines += "|---------------|-----------|"
     foreach ($src in ($srcGroups.Keys | Sort-Object)) {
-        $srcKU2 = $kus | Where-Object { $_.ku_id -eq $src }
+        $srcKU2 = $kus | Where-Object { $_.id -eq $src }
         $srcName = if ($srcKU2) { $srcKU2.knowledge_unit } else { $src.Split('/')[-1] }
         $tgt = ($srcGroups[$src] | Select-Object -Unique) -join ", "
         $lines += "| $srcName | $tgt |"
@@ -572,7 +574,8 @@ foreach ($d in $sortedDomains) {
 }
 
 $regContent = $regLines -join "`r`n"
-[System.IO.File]::WriteAllText("$RegDir\knowledge-registry.md", $regContent, [System.Text.Encoding]::UTF8)
+$utf8NoBom = New-Object System.Text.UTF8Encoding $false
+[System.IO.File]::WriteAllText("$RegDir\knowledge-registry.md", $regContent, $utf8NoBom)
 Write-Host "  -> $($regLines.Count) lines"
 
 Write-Host ""

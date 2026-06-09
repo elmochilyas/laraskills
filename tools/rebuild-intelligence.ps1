@@ -1,6 +1,6 @@
 param(
-    [string]$KnowledgeRoot = "C:\Users\Pc\Desktop\laravel skills from every thing claude code\laravel-ecc\knowledge",
-    [string]$IntelligenceRoot = "C:\Users\Pc\Desktop\laravel skills from every thing claude code\laravel-ecc\intelligence"
+    [string]$KnowledgeRoot = (Resolve-Path (Join-Path $PSScriptRoot "..\knowledge")).Path,
+    [string]$IntelligenceRoot = (Resolve-Path (Join-Path $PSScriptRoot "..\intelligence")).Path
 )
 
 function Write-Utf8File {
@@ -48,7 +48,7 @@ function ConvertTo-DisplayName {
 # Step 1: Walk knowledge tree, collect all KUs
 # -----------------------------------------------
 Write-Host "Walking knowledge tree for KU directories..." -ForegroundColor Cyan
-$kuDirs = Get-ChildItem -Path $KnowledgeRoot -Recurse -Directory | Where-Object { Test-Path (Join-Path $_.FullName "02-knowledge-unit.md") }
+$kuDirs = Get-ChildItem -Path $KnowledgeRoot -Recurse -Directory | Where-Object { Test-Path (Join-Path $_.FullName "02-knowledge-unit.md") } | Sort-Object FullName
 Write-Host "Found $($kuDirs.Count) KUs" -ForegroundColor Green
 
 $kuData = @()

@@ -152,7 +152,8 @@ if command -v jq &> /dev/null; then
        '.version = $v | .updated_at = $t' \
        "$STATE_FILE" > "${STATE_FILE}.tmp" && mv "${STATE_FILE}.tmp" "$STATE_FILE"
 else
-    sed -i "s/\"version\": \"[^\"]*\"/\"version\": \"$NEW_VERSION\"/" "$STATE_FILE"
+    # Use temp file for BSD/macOS sed compatibility
+    sed "s/\"version\": \"[^\"]*\"/\"version\": \"$NEW_VERSION\"/" "$STATE_FILE" > "${STATE_FILE}.tmp" && mv "${STATE_FILE}.tmp" "$STATE_FILE"
 fi
 
 log "Update complete!"

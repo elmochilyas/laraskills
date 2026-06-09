@@ -6,7 +6,13 @@
     from each KU directory and generates 08-anti-patterns.md with 3-5 anti-patterns.
 #>
 
-$basePath = "C:\Users\Pc\Desktop\laravel skills from every thing claude code\research\workspaces\data-storage-systems"
+param(
+    [Parameter(Mandatory = $true)]
+    [string]$ResearchRoot
+)
+
+$basePath = Join-Path $ResearchRoot "data-storage-systems"
+if (-not (Test-Path $basePath)) { Write-Error "Research workspace not found: $basePath"; exit 1 }
 $subdomains = @(
     "advanced\enterprise",
     "advanced\mysql",

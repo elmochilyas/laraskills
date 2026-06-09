@@ -75,8 +75,8 @@
 | 5 | Version: `1.0.0-beta.7` | `1.0.0-beta.8` |
 | 115 | `8 JSON files, 7 markdown indexes` | `10 JSON files, 7 markdown indexes` |
 | 144 | `Machine-readable JSON intelligence (8 files)` | `Machine-readable JSON intelligence (10 files)` |
-| 240 | `dependencies.json — 264 dependency edges` | `dependencies.json — 428 dependency edges` |
-| 241 | `relationships.json — 3,626 relationship edges` | `relationships.json — 3,633 relationship edges` |
+| 240 | `dependencies.json — 264 dependency edges` | `dependencies.json — 429 dependency edges` |
+| 241 | `relationships.json — 3,626 relationship edges` | `relationships.json — 3,513 relationship edges` |
 | 233–241 | Missing `aliases.json` and `external-concepts.json` | Add both |
 
 ### README.md

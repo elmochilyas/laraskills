@@ -249,8 +249,8 @@ intelligence/json/
 ├── decision-trees.json       — 2,321 decision tree definitions
 ├── anti-patterns.json        — 2,321 anti-pattern definitions
 ├── checklists.json           — 2,321 checklist definitions
-├── dependencies.json         — 428 dependency edges
-├── relationships.json        — 3,633 relationship edges
+├── dependencies.json         — 429 dependency edges
+├── relationships.json        — 3,513 relationship edges
 ├── aliases.json              — 120 alias mappings
 └── external-concepts.json    — 26 external concept references
 ```

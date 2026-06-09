@@ -1,4 +1,4 @@
-$root = "C:\Users\Pc\Desktop\laravel skills from every thing claude code\laravel-ecc"
+$root = (Resolve-Path (Join-Path $PSScriptRoot "..\..")).Path
 
 $paths = @(
     "api-crud-system-engineering/input-validation-architecture/form-request-customization-points"
