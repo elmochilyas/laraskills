@@ -12,7 +12,7 @@ import {
   getRelatedTopics,
   validateIntelligence,
 } from '../src/retrieval/index.mjs';
-import { findEccRoot } from '../src/retrieval/catalog-loader.mjs';
+import { resolveEccRootWithPrecedence } from '../src/runtime/ecc-root-resolver.mjs';
 import {
   bundleOutputSchema,
   searchResultListSchema,
@@ -67,10 +67,25 @@ function parseEccRootArg(argv) {
 function resolveRootState() {
   const explicitEccRoot = parseEccRootArg(process.argv.slice(2));
   try {
-    const root = findEccRoot(process.cwd(), explicitEccRoot, process.env.ECC_ROOT);
-    return { ok: true, root, explicitEccRoot, envEccRoot: process.env.ECC_ROOT || null };
+    const result = resolveEccRootWithPrecedence({
+      explicitRoot: explicitEccRoot,
+      envRoot: process.env.ECC_ROOT,
+    });
+    return {
+      ok: true,
+      root: result.root,
+      source: result.source,
+      valid: result.valid,
+      explicitEccRoot,
+      envEccRoot: process.env.ECC_ROOT || null,
+    };
   } catch (err) {
-    return { ok: false, error: err.message, explicitEccRoot, envEccRoot: process.env.ECC_ROOT || null };
+    return {
+      ok: false,
+      error: err.message,
+      explicitEccRoot,
+      envEccRoot: process.env.ECC_ROOT || null,
+    };
   }
 }
 

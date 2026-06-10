@@ -163,12 +163,27 @@ npx laravel-ecc@beta doctor
 
 The update script reads your existing installation state (`.laravel-ecc-state.json`) and syncs all components to the latest package version while preserving your installation profile.
 
+## Quick Setup
+
+The npm package is intentionally lightweight — it contains the CLI, MCP adapter, and operating layer. Retrieval requires access to a full Laravel ECC checkout:
+
+```bash
+# Configure access to a full checkout
+npx laravel-ecc setup --ecc-root "/path/to/laravel-ecc"
+
+# Verify configuration
+npx laravel-ecc doctor
+```
+
+See `docs/onboarding/npm-setup.md` for detailed instructions.
+
 ## Distribution
 
 The npm package (`laravel-ecc`) includes:
 - Curated **operating layer**: skills, rules, agents, commands, hooks, MCP configs
 - CLI harness configurations for 12 AI coding tools
 - Install and update scripts
+- **Shared runtime modules**: ECC root resolver, user configuration
 - **Intelligence layer metadata**: JSON intelligence files (10), markdown indexes (7), alias mappings (aliases.json), external concept registry (external-concepts.json)
 
 The full **knowledge intelligence layer** (knowledge/, intelligence/, agent/, meta/, tools/) is available from the [GitHub repository](https://github.com/elmochilyas/laravel-ecc) but is not included in the npm package to keep it lightweight.
