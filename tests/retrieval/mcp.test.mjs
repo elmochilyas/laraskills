@@ -64,7 +64,18 @@ describe('MCP Server — stdio cleanliness', () => {
     let stderr = '';
     child.stdout.on('data', (d) => { stdout += d.toString('utf-8'); });
     child.stderr.on('data', (d) => { stderr += d.toString('utf-8'); });
-    await new Promise((r) => setTimeout(r, 1500));
+    await Promise.race([
+      new Promise((resolve) => {
+        const check = () => {
+          if (stderr.includes('laravel-ecc-mcp')) resolve(true);
+          else setTimeout(check, 50);
+        };
+        check();
+      }),
+      new Promise((_, reject) =>
+        setTimeout(() => reject(new Error('Timed out waiting for stderr banner')), 4000)
+      ),
+    ]);
     child.kill('SIGTERM');
     await new Promise((r) => child.once('exit', r));
     assert.strictEqual(stdout, '', `Expected empty stdout, got: ${stdout.slice(0, 200)}`);
@@ -217,6 +228,23 @@ describe('MCP Tool — retrieve_context_bundle', () => {
     assert.ok(hasPagination, 'Expected a pagination KU in the bundle');
   });
 
+  it('routes authorization tasks to security-identity-engineering domain', async () => {
+    const res = await client.callTool({
+      name: 'retrieve_context_bundle',
+      arguments: {
+        task: 'Add authorization policies for a Product model with endpoint enforcement',
+        mode: 'compact',
+      },
+    });
+    const domains = res.structuredContent.selectedDomains;
+    const kuIds = res.structuredContent.knowledgeUnits.map((k) => k.id).join(' ');
+    assert.ok(domains.some((d) => d.id === 'security-identity-engineering'),
+      `Expected security-identity-engineering in domains, got ${JSON.stringify(domains)}`);
+    const hasPolicy = /polic/.test(kuIds) || res.structuredContent.knowledgeUnits.some((k) => /polic/i.test(k.name));
+    assert.ok(hasPolicy, 'Expected a Policies KU for authorization task');
+    assert.ok(res.structuredContent.rules.length > 0, 'Expected rules in authorization bundle');
+  });
+
   it('matches the CLI retrieval semantics (same bundle shape as retrieveAndFormat JSON)', async () => {
     const { retrieveAndFormat } = await import('../../src/retrieval/index.mjs');
     const cliOut = retrieveAndFormat('Build a REST API for products with policies and pagination', {
@@ -282,6 +310,22 @@ describe('MCP Tool — search_ecc', () => {
     );
     assert.ok(hasAlias, 'Expected at least one alias-resolved hit');
   });
+
+  it('canonical-ID round-trip: search -> get -> verify cycle preserves ID', async () => {
+    const searchRes = await client.callTool({
+      name: 'search_ecc',
+      arguments: { query: 'pagination', limit: 3 },
+    });
+    assert.ok(searchRes.structuredContent.results.length > 0, 'search should find results');
+    const topId = searchRes.structuredContent.results[0].id;
+    assert.ok(typeof topId === 'string' && topId.length > 0, 'result should have a string ID');
+    const getRes = await client.callTool({
+      name: 'get_knowledge_unit',
+      arguments: { id: topId },
+    });
+    assert.strictEqual(getRes.isError, undefined, 'get_knowledge_unit should not be an error for a found KU');
+    assert.strictEqual(getRes.structuredContent.id, topId, 'ID should round-trip');
+  });
 });
 
 describe('MCP Tool — get_knowledge_unit', () => {
@@ -326,6 +370,18 @@ describe('MCP Tool — get_knowledge_unit', () => {
     });
     assert.strictEqual(res.isError, true);
     assert.ok(res.content[0].text.includes('not found'));
+    assert.ok(res.content[0].text.includes('search_ecc'));
+    assert.ok(res.content[0].text.includes('canonical'));
+  });
+
+  it('returns actionable error with search suggestion for non-canonical short IDs', async () => {
+    const res = await client.callTool({
+      name: 'get_knowledge_unit',
+      arguments: { id: 'cursor-based-pagination' },
+    });
+    assert.strictEqual(res.isError, true);
+    assert.ok(res.content[0].text.includes('search_ecc'));
+    assert.ok(res.content[0].text.includes('cursor'));
   });
 });
 
@@ -387,6 +443,16 @@ describe('MCP Tool — get_graph_context', () => {
     const elapsed = Date.now() - t0;
     assert.ok(elapsed < 2000, `Expected < 2s, got ${elapsed}ms`);
     assert.ok(res.structuredContent);
+  });
+
+  it('returns actionable error with search suggestion for unknown ID in graph context', async () => {
+    const res = await client.callTool({
+      name: 'get_graph_context',
+      arguments: { id: 'model-serialization' },
+    });
+    assert.strictEqual(res.isError, true);
+    assert.ok(res.content[0].text.includes('search_ecc'));
+    assert.ok(res.content[0].text.includes('model'));
   });
 });
 

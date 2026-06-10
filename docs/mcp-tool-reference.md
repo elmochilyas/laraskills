@@ -138,7 +138,7 @@ Inspect one canonical knowledge unit by ID.
 
 ### Errors
 
-- Unknown ID: `isError: true` with `Knowledge unit not found: <id>`.
+- Unknown ID: `isError: true` with `Knowledge unit not found: <id>. Use search_ecc to find the correct canonical ID. Canonical IDs follow the pattern: <domain>/<subdomain>/<knowledge-unit-name>.`
 - Missing intelligence: actionable isError.
 
 ---
@@ -172,7 +172,7 @@ Return prerequisites and related topics for a knowledge unit in a single call.
 
 ### Errors
 
-- Unknown ID: `isError: true` with `Knowledge unit not found: <id>`.
+- Unknown ID: `isError: true` with `Knowledge unit not found: <id>. Use search_ecc to find the correct canonical ID.`
 - Missing intelligence: actionable isError.
 
 ---

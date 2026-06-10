@@ -5585,16 +5585,16 @@
                             {
                                 "subdomain":  "api-authentication-authorization",
                                 "domain":  "api-crud-system-engineering",
-                                "directory":  "knowledge/api-crud-system-engineering/api-authentication-authorization/rate-limit-headers",
-                                "id":  "api-crud-system-engineering/api-authentication-authorization/rate-limit-headers",
-                                "knowledge_unit":  "rate-limit-headers"
+                                "directory":  "knowledge/api-crud-system-engineering/api-authentication-authorization/rate-limiter-definition",
+                                "id":  "api-crud-system-engineering/api-authentication-authorization/rate-limiter-definition",
+                                "knowledge_unit":  "rate-limiter-definition"
                             },
                             {
                                 "subdomain":  "api-authentication-authorization",
                                 "domain":  "api-crud-system-engineering",
-                                "directory":  "knowledge/api-crud-system-engineering/api-authentication-authorization/rate-limiter-definition",
-                                "id":  "api-crud-system-engineering/api-authentication-authorization/rate-limiter-definition",
-                                "knowledge_unit":  "rate-limiter-definition"
+                                "directory":  "knowledge/api-crud-system-engineering/api-authentication-authorization/rate-limit-headers",
+                                "id":  "api-crud-system-engineering/api-authentication-authorization/rate-limit-headers",
+                                "knowledge_unit":  "rate-limit-headers"
                             },
                             {
                                 "subdomain":  "api-authentication-authorization",
@@ -6138,16 +6138,16 @@
                             {
                                 "subdomain":  "api-versioning",
                                 "domain":  "api-crud-system-engineering",
-                                "directory":  "knowledge/api-crud-system-engineering/api-versioning/media-type-version-negotiation",
-                                "id":  "api-crud-system-engineering/api-versioning/media-type-version-negotiation",
-                                "knowledge_unit":  "media-type-version-negotiation"
+                                "directory":  "knowledge/api-crud-system-engineering/api-versioning/media-type-versioning",
+                                "id":  "api-crud-system-engineering/api-versioning/media-type-versioning",
+                                "knowledge_unit":  "media-type-versioning"
                             },
                             {
                                 "subdomain":  "api-versioning",
                                 "domain":  "api-crud-system-engineering",
-                                "directory":  "knowledge/api-crud-system-engineering/api-versioning/media-type-versioning",
-                                "id":  "api-crud-system-engineering/api-versioning/media-type-versioning",
-                                "knowledge_unit":  "media-type-versioning"
+                                "directory":  "knowledge/api-crud-system-engineering/api-versioning/media-type-version-negotiation",
+                                "id":  "api-crud-system-engineering/api-versioning/media-type-version-negotiation",
+                                "knowledge_unit":  "media-type-version-negotiation"
                             },
                             {
                                 "subdomain":  "api-versioning",
@@ -6201,16 +6201,16 @@
                             {
                                 "subdomain":  "api-versioning",
                                 "domain":  "api-crud-system-engineering",
-                                "directory":  "knowledge/api-crud-system-engineering/api-versioning/version-retirement-policy",
-                                "id":  "api-crud-system-engineering/api-versioning/version-retirement-policy",
-                                "knowledge_unit":  "version-retirement-policy"
+                                "directory":  "knowledge/api-crud-system-engineering/api-versioning/versioning-strategy-selection",
+                                "id":  "api-crud-system-engineering/api-versioning/versioning-strategy-selection",
+                                "knowledge_unit":  "versioning-strategy-selection"
                             },
                             {
                                 "subdomain":  "api-versioning",
                                 "domain":  "api-crud-system-engineering",
-                                "directory":  "knowledge/api-crud-system-engineering/api-versioning/versioning-strategy-selection",
-                                "id":  "api-crud-system-engineering/api-versioning/versioning-strategy-selection",
-                                "knowledge_unit":  "versioning-strategy-selection"
+                                "directory":  "knowledge/api-crud-system-engineering/api-versioning/version-retirement-policy",
+                                "id":  "api-crud-system-engineering/api-versioning/version-retirement-policy",
+                                "knowledge_unit":  "version-retirement-policy"
                             },
                             {
                                 "subdomain":  "api-versioning",
@@ -8791,6 +8791,13 @@
                             {
                                 "subdomain":  "job-batching-chaining",
                                 "domain":  "async-distributed-systems",
+                                "directory":  "knowledge/async-distributed-systems/job-batching-chaining/batchable-trait-cancellation",
+                                "id":  "async-distributed-systems/job-batching-chaining/batchable-trait-cancellation",
+                                "knowledge_unit":  "batchable-trait-cancellation"
+                            },
+                            {
+                                "subdomain":  "job-batching-chaining",
+                                "domain":  "async-distributed-systems",
                                 "directory":  "knowledge/async-distributed-systems/job-batching-chaining/batch-callbacks",
                                 "id":  "async-distributed-systems/job-batching-chaining/batch-callbacks",
                                 "knowledge_unit":  "batch-callbacks"
@@ -8815,13 +8822,6 @@
                                 "directory":  "knowledge/async-distributed-systems/job-batching-chaining/batch-state-tracking-locking",
                                 "id":  "async-distributed-systems/job-batching-chaining/batch-state-tracking-locking",
                                 "knowledge_unit":  "batch-state-tracking-locking"
-                            },
-                            {
-                                "subdomain":  "job-batching-chaining",
-                                "domain":  "async-distributed-systems",
-                                "directory":  "knowledge/async-distributed-systems/job-batching-chaining/batchable-trait-cancellation",
-                                "id":  "async-distributed-systems/job-batching-chaining/batchable-trait-cancellation",
-                                "knowledge_unit":  "batchable-trait-cancellation"
                             },
                             {
                                 "subdomain":  "job-batching-chaining",
@@ -8987,6 +8987,13 @@
                             {
                                 "subdomain":  "queue-engineering",
                                 "domain":  "async-distributed-systems",
+                                "directory":  "knowledge/async-distributed-systems/queue-engineering/queueable-mail-notifications-broadcast",
+                                "id":  "async-distributed-systems/queue-engineering/queueable-mail-notifications-broadcast",
+                                "knowledge_unit":  "queueable-mail-notifications-broadcast"
+                            },
+                            {
+                                "subdomain":  "queue-engineering",
+                                "domain":  "async-distributed-systems",
                                 "directory":  "knowledge/async-distributed-systems/queue-engineering/queue-connections-vs-queues",
                                 "id":  "async-distributed-systems/queue-engineering/queue-connections-vs-queues",
                                 "knowledge_unit":  "queue-connections-vs-queues"
@@ -9011,13 +9018,6 @@
                                 "directory":  "knowledge/async-distributed-systems/queue-engineering/queue-priority-multiple-queues",
                                 "id":  "async-distributed-systems/queue-engineering/queue-priority-multiple-queues",
                                 "knowledge_unit":  "queue-priority-multiple-queues"
-                            },
-                            {
-                                "subdomain":  "queue-engineering",
-                                "domain":  "async-distributed-systems",
-                                "directory":  "knowledge/async-distributed-systems/queue-engineering/queueable-mail-notifications-broadcast",
-                                "id":  "async-distributed-systems/queue-engineering/queueable-mail-notifications-broadcast",
-                                "knowledge_unit":  "queueable-mail-notifications-broadcast"
                             },
                             {
                                 "subdomain":  "queue-engineering",
@@ -10303,16 +10303,16 @@
                             {
                                 "subdomain":  "monitoring-observability-cost",
                                 "domain":  "cost-resource-optimization",
-                                "directory":  "knowledge/cost-resource-optimization/monitoring-observability-cost/data-retention-tiering",
-                                "id":  "cost-resource-optimization/monitoring-observability-cost/data-retention-tiering",
-                                "knowledge_unit":  "data-retention-tiering"
+                                "directory":  "knowledge/cost-resource-optimization/monitoring-observability-cost/datadog-enterprise-pricing",
+                                "id":  "cost-resource-optimization/monitoring-observability-cost/datadog-enterprise-pricing",
+                                "knowledge_unit":  "datadog-enterprise-pricing"
                             },
                             {
                                 "subdomain":  "monitoring-observability-cost",
                                 "domain":  "cost-resource-optimization",
-                                "directory":  "knowledge/cost-resource-optimization/monitoring-observability-cost/datadog-enterprise-pricing",
-                                "id":  "cost-resource-optimization/monitoring-observability-cost/datadog-enterprise-pricing",
-                                "knowledge_unit":  "datadog-enterprise-pricing"
+                                "directory":  "knowledge/cost-resource-optimization/monitoring-observability-cost/data-retention-tiering",
+                                "id":  "cost-resource-optimization/monitoring-observability-cost/data-retention-tiering",
+                                "knowledge_unit":  "data-retention-tiering"
                             },
                             {
                                 "subdomain":  "monitoring-observability-cost",
@@ -11024,16 +11024,16 @@
                             {
                                 "subdomain":  "indexes",
                                 "domain":  "data-storage-systems",
-                                "directory":  "knowledge/data-storage-systems/indexes/b-tree-index-structure",
-                                "id":  "data-storage-systems/indexes/b-tree-index-structure",
-                                "knowledge_unit":  "b-tree-index-structure"
+                                "directory":  "knowledge/data-storage-systems/indexes/brin-indexes",
+                                "id":  "data-storage-systems/indexes/brin-indexes",
+                                "knowledge_unit":  "brin-indexes"
                             },
                             {
                                 "subdomain":  "indexes",
                                 "domain":  "data-storage-systems",
-                                "directory":  "knowledge/data-storage-systems/indexes/brin-indexes",
-                                "id":  "data-storage-systems/indexes/brin-indexes",
-                                "knowledge_unit":  "brin-indexes"
+                                "directory":  "knowledge/data-storage-systems/indexes/b-tree-index-structure",
+                                "id":  "data-storage-systems/indexes/b-tree-index-structure",
+                                "knowledge_unit":  "b-tree-index-structure"
                             },
                             {
                                 "subdomain":  "indexes",
@@ -11136,6 +11136,13 @@
                             {
                                 "subdomain":  "indexes",
                                 "domain":  "data-storage-systems",
+                                "directory":  "knowledge/data-storage-systems/indexes/indexing-foreign-key-columns",
+                                "id":  "data-storage-systems/indexes/indexing-foreign-key-columns",
+                                "knowledge_unit":  "indexing-foreign-key-columns"
+                            },
+                            {
+                                "subdomain":  "indexes",
+                                "domain":  "data-storage-systems",
                                 "directory":  "knowledge/data-storage-systems/indexes/index-maintenance",
                                 "id":  "data-storage-systems/indexes/index-maintenance",
                                 "knowledge_unit":  "index-maintenance"
@@ -11164,13 +11171,6 @@
                             {
                                 "subdomain":  "indexes",
                                 "domain":  "data-storage-systems",
-                                "directory":  "knowledge/data-storage-systems/indexes/indexing-foreign-key-columns",
-                                "id":  "data-storage-systems/indexes/indexing-foreign-key-columns",
-                                "knowledge_unit":  "indexing-foreign-key-columns"
-                            },
-                            {
-                                "subdomain":  "indexes",
-                                "domain":  "data-storage-systems",
                                 "directory":  "knowledge/data-storage-systems/indexes/nulls-not-distinct",
                                 "id":  "data-storage-systems/indexes/nulls-not-distinct",
                                 "knowledge_unit":  "nulls-not-distinct"
@@ -11192,16 +11192,16 @@
                             {
                                 "subdomain":  "indexes",
                                 "domain":  "data-storage-systems",
-                                "directory":  "knowledge/data-storage-systems/indexes/r-tree-indexes",
-                                "id":  "data-storage-systems/indexes/r-tree-indexes",
-                                "knowledge_unit":  "r-tree-indexes"
+                                "directory":  "knowledge/data-storage-systems/indexes/rls-compatible-partial-indexes",
+                                "id":  "data-storage-systems/indexes/rls-compatible-partial-indexes",
+                                "knowledge_unit":  "rls-compatible-partial-indexes"
                             },
                             {
                                 "subdomain":  "indexes",
                                 "domain":  "data-storage-systems",
-                                "directory":  "knowledge/data-storage-systems/indexes/rls-compatible-partial-indexes",
-                                "id":  "data-storage-systems/indexes/rls-compatible-partial-indexes",
-                                "knowledge_unit":  "rls-compatible-partial-indexes"
+                                "directory":  "knowledge/data-storage-systems/indexes/r-tree-indexes",
+                                "id":  "data-storage-systems/indexes/r-tree-indexes",
+                                "knowledge_unit":  "r-tree-indexes"
                             },
                             {
                                 "subdomain":  "indexes",
@@ -11220,16 +11220,16 @@
                             {
                                 "subdomain":  "indexes",
                                 "domain":  "data-storage-systems",
-                                "directory":  "knowledge/data-storage-systems/indexes/sp-gist-indexes",
-                                "id":  "data-storage-systems/indexes/sp-gist-indexes",
-                                "knowledge_unit":  "sp-gist-indexes"
+                                "directory":  "knowledge/data-storage-systems/indexes/spatial-indexes",
+                                "id":  "data-storage-systems/indexes/spatial-indexes",
+                                "knowledge_unit":  "spatial-indexes"
                             },
                             {
                                 "subdomain":  "indexes",
                                 "domain":  "data-storage-systems",
-                                "directory":  "knowledge/data-storage-systems/indexes/spatial-indexes",
-                                "id":  "data-storage-systems/indexes/spatial-indexes",
-                                "knowledge_unit":  "spatial-indexes"
+                                "directory":  "knowledge/data-storage-systems/indexes/sp-gist-indexes",
+                                "id":  "data-storage-systems/indexes/sp-gist-indexes",
+                                "knowledge_unit":  "sp-gist-indexes"
                             },
                             {
                                 "subdomain":  "multi-tenancy",
@@ -11752,6 +11752,20 @@
                             {
                                 "subdomain":  "partitioning",
                                 "domain":  "data-storage-systems",
+                                "directory":  "knowledge/data-storage-systems/partitioning/partitioning-laravel-migrations",
+                                "id":  "data-storage-systems/partitioning/partitioning-laravel-migrations",
+                                "knowledge_unit":  "partitioning-laravel-migrations"
+                            },
+                            {
+                                "subdomain":  "partitioning",
+                                "domain":  "data-storage-systems",
+                                "directory":  "knowledge/data-storage-systems/partitioning/partitioning-vs-sharding-framework",
+                                "id":  "data-storage-systems/partitioning/partitioning-vs-sharding-framework",
+                                "knowledge_unit":  "partitioning-vs-sharding-framework"
+                            },
+                            {
+                                "subdomain":  "partitioning",
+                                "domain":  "data-storage-systems",
                                 "directory":  "knowledge/data-storage-systems/partitioning/partition-level-backup-restore",
                                 "id":  "data-storage-systems/partitioning/partition-level-backup-restore",
                                 "knowledge_unit":  "partition-level-backup-restore"
@@ -11776,20 +11790,6 @@
                                 "directory":  "knowledge/data-storage-systems/partitioning/partition-switching-archiving",
                                 "id":  "data-storage-systems/partitioning/partition-switching-archiving",
                                 "knowledge_unit":  "partition-switching-archiving"
-                            },
-                            {
-                                "subdomain":  "partitioning",
-                                "domain":  "data-storage-systems",
-                                "directory":  "knowledge/data-storage-systems/partitioning/partitioning-laravel-migrations",
-                                "id":  "data-storage-systems/partitioning/partitioning-laravel-migrations",
-                                "knowledge_unit":  "partitioning-laravel-migrations"
-                            },
-                            {
-                                "subdomain":  "partitioning",
-                                "domain":  "data-storage-systems",
-                                "directory":  "knowledge/data-storage-systems/partitioning/partitioning-vs-sharding-framework",
-                                "id":  "data-storage-systems/partitioning/partitioning-vs-sharding-framework",
-                                "knowledge_unit":  "partitioning-vs-sharding-framework"
                             },
                             {
                                 "subdomain":  "partitioning",
@@ -12718,6 +12718,13 @@
                             {
                                 "subdomain":  "sharding",
                                 "domain":  "data-storage-systems",
+                                "directory":  "knowledge/data-storage-systems/sharding/sharding-packages",
+                                "id":  "data-storage-systems/sharding/sharding-packages",
+                                "knowledge_unit":  "sharding-packages"
+                            },
+                            {
+                                "subdomain":  "sharding",
+                                "domain":  "data-storage-systems",
                                 "directory":  "knowledge/data-storage-systems/sharding/shard-key-selection-principles",
                                 "id":  "data-storage-systems/sharding/shard-key-selection-principles",
                                 "knowledge_unit":  "shard-key-selection-principles"
@@ -12763,13 +12770,6 @@
                                 "directory":  "knowledge/data-storage-systems/sharding/shard-vs-partition-distinction",
                                 "id":  "data-storage-systems/sharding/shard-vs-partition-distinction",
                                 "knowledge_unit":  "shard-vs-partition-distinction"
-                            },
-                            {
-                                "subdomain":  "sharding",
-                                "domain":  "data-storage-systems",
-                                "directory":  "knowledge/data-storage-systems/sharding/sharding-packages",
-                                "id":  "data-storage-systems/sharding/sharding-packages",
-                                "knowledge_unit":  "sharding-packages"
                             },
                             {
                                 "subdomain":  "sharding",
@@ -13213,6 +13213,27 @@
                                 "knowledge_unit":  "observability-monitoring"
                             },
                             {
+                                "subdomain":  "serverless-laravel",
+                                "domain":  "devops-infrastructure",
+                                "directory":  "knowledge/devops-infrastructure/serverless-laravel/bref-laravel",
+                                "id":  "devops-infrastructure/serverless-laravel/bref-laravel",
+                                "knowledge_unit":  "bref-laravel"
+                            },
+                            {
+                                "subdomain":  "serverless-laravel",
+                                "domain":  "devops-infrastructure",
+                                "directory":  "knowledge/devops-infrastructure/serverless-laravel/laravel-cloud",
+                                "id":  "devops-infrastructure/serverless-laravel/laravel-cloud",
+                                "knowledge_unit":  "laravel-cloud"
+                            },
+                            {
+                                "subdomain":  "serverless-laravel",
+                                "domain":  "devops-infrastructure",
+                                "directory":  "knowledge/devops-infrastructure/serverless-laravel/laravel-vapor",
+                                "id":  "devops-infrastructure/serverless-laravel/laravel-vapor",
+                                "knowledge_unit":  "laravel-vapor"
+                            },
+                            {
                                 "subdomain":  "server-provisioning",
                                 "domain":  "devops-infrastructure",
                                 "directory":  "knowledge/devops-infrastructure/server-provisioning/laravel-forge-provisioning",
@@ -13239,27 +13260,6 @@
                                 "directory":  "knowledge/devops-infrastructure/server-provisioning/server-hardening",
                                 "id":  "devops-infrastructure/server-provisioning/server-hardening",
                                 "knowledge_unit":  "server-hardening"
-                            },
-                            {
-                                "subdomain":  "serverless-laravel",
-                                "domain":  "devops-infrastructure",
-                                "directory":  "knowledge/devops-infrastructure/serverless-laravel/bref-laravel",
-                                "id":  "devops-infrastructure/serverless-laravel/bref-laravel",
-                                "knowledge_unit":  "bref-laravel"
-                            },
-                            {
-                                "subdomain":  "serverless-laravel",
-                                "domain":  "devops-infrastructure",
-                                "directory":  "knowledge/devops-infrastructure/serverless-laravel/laravel-cloud",
-                                "id":  "devops-infrastructure/serverless-laravel/laravel-cloud",
-                                "knowledge_unit":  "laravel-cloud"
-                            },
-                            {
-                                "subdomain":  "serverless-laravel",
-                                "domain":  "devops-infrastructure",
-                                "directory":  "knowledge/devops-infrastructure/serverless-laravel/laravel-vapor",
-                                "id":  "devops-infrastructure/serverless-laravel/laravel-vapor",
-                                "knowledge_unit":  "laravel-vapor"
                             },
                             {
                                 "subdomain":  "access-control-authorization",
@@ -14748,16 +14748,16 @@
                             {
                                 "subdomain":  "attributes-and-casting",
                                 "domain":  "laravel-eloquent-domain-modeling",
-                                "directory":  "knowledge/laravel-eloquent-domain-modeling/attributes-and-casting/cast-parameters",
-                                "id":  "laravel-eloquent-domain-modeling/attributes-and-casting/cast-parameters",
-                                "knowledge_unit":  "cast-parameters"
+                                "directory":  "knowledge/laravel-eloquent-domain-modeling/attributes-and-casting/castable-interface",
+                                "id":  "laravel-eloquent-domain-modeling/attributes-and-casting/castable-interface",
+                                "knowledge_unit":  "castable-interface"
                             },
                             {
                                 "subdomain":  "attributes-and-casting",
                                 "domain":  "laravel-eloquent-domain-modeling",
-                                "directory":  "knowledge/laravel-eloquent-domain-modeling/attributes-and-casting/castable-interface",
-                                "id":  "laravel-eloquent-domain-modeling/attributes-and-casting/castable-interface",
-                                "knowledge_unit":  "castable-interface"
+                                "directory":  "knowledge/laravel-eloquent-domain-modeling/attributes-and-casting/cast-parameters",
+                                "id":  "laravel-eloquent-domain-modeling/attributes-and-casting/cast-parameters",
+                                "knowledge_unit":  "cast-parameters"
                             },
                             {
                                 "subdomain":  "attributes-and-casting",
@@ -15476,16 +15476,16 @@
                             {
                                 "subdomain":  "query-strategy",
                                 "domain":  "laravel-eloquent-domain-modeling",
-                                "directory":  "knowledge/laravel-eloquent-domain-modeling/query-strategy/global-scope-suppression",
-                                "id":  "laravel-eloquent-domain-modeling/query-strategy/global-scope-suppression",
-                                "knowledge_unit":  "global-scope-suppression"
+                                "directory":  "knowledge/laravel-eloquent-domain-modeling/query-strategy/global-scopes",
+                                "id":  "laravel-eloquent-domain-modeling/query-strategy/global-scopes",
+                                "knowledge_unit":  "global-scopes"
                             },
                             {
                                 "subdomain":  "query-strategy",
                                 "domain":  "laravel-eloquent-domain-modeling",
-                                "directory":  "knowledge/laravel-eloquent-domain-modeling/query-strategy/global-scopes",
-                                "id":  "laravel-eloquent-domain-modeling/query-strategy/global-scopes",
-                                "knowledge_unit":  "global-scopes"
+                                "directory":  "knowledge/laravel-eloquent-domain-modeling/query-strategy/global-scope-suppression",
+                                "id":  "laravel-eloquent-domain-modeling/query-strategy/global-scope-suppression",
+                                "knowledge_unit":  "global-scope-suppression"
                             },
                             {
                                 "subdomain":  "query-strategy",
@@ -15777,16 +15777,16 @@
                             {
                                 "subdomain":  "serialization",
                                 "domain":  "laravel-eloquent-domain-modeling",
-                                "directory":  "knowledge/laravel-eloquent-domain-modeling/serialization/resource-wrapping",
-                                "id":  "laravel-eloquent-domain-modeling/serialization/resource-wrapping",
-                                "knowledge_unit":  "resource-wrapping"
+                                "directory":  "knowledge/laravel-eloquent-domain-modeling/serialization/resources-vs-dtos",
+                                "id":  "laravel-eloquent-domain-modeling/serialization/resources-vs-dtos",
+                                "knowledge_unit":  "resources-vs-dtos"
                             },
                             {
                                 "subdomain":  "serialization",
                                 "domain":  "laravel-eloquent-domain-modeling",
-                                "directory":  "knowledge/laravel-eloquent-domain-modeling/serialization/resources-vs-dtos",
-                                "id":  "laravel-eloquent-domain-modeling/serialization/resources-vs-dtos",
-                                "knowledge_unit":  "resources-vs-dtos"
+                                "directory":  "knowledge/laravel-eloquent-domain-modeling/serialization/resource-wrapping",
+                                "id":  "laravel-eloquent-domain-modeling/serialization/resource-wrapping",
+                                "knowledge_unit":  "resource-wrapping"
                             },
                             {
                                 "subdomain":  "serialization",
@@ -16113,16 +16113,16 @@
                             {
                                 "subdomain":  "dependency-injection",
                                 "domain":  "laravel-execution-lifecycle",
-                                "directory":  "knowledge/laravel-execution-lifecycle/dependency-injection/auto-resolution-strategy",
-                                "id":  "laravel-execution-lifecycle/dependency-injection/auto-resolution-strategy",
-                                "knowledge_unit":  "auto-resolution-strategy"
+                                "directory":  "knowledge/laravel-execution-lifecycle/dependency-injection/automatic-injection",
+                                "id":  "laravel-execution-lifecycle/dependency-injection/automatic-injection",
+                                "knowledge_unit":  "automatic-injection"
                             },
                             {
                                 "subdomain":  "dependency-injection",
                                 "domain":  "laravel-execution-lifecycle",
-                                "directory":  "knowledge/laravel-execution-lifecycle/dependency-injection/automatic-injection",
-                                "id":  "laravel-execution-lifecycle/dependency-injection/automatic-injection",
-                                "knowledge_unit":  "automatic-injection"
+                                "directory":  "knowledge/laravel-execution-lifecycle/dependency-injection/auto-resolution-strategy",
+                                "id":  "laravel-execution-lifecycle/dependency-injection/auto-resolution-strategy",
+                                "knowledge_unit":  "auto-resolution-strategy"
                             },
                             {
                                 "subdomain":  "dependency-injection",
@@ -17534,16 +17534,16 @@
                             {
                                 "subdomain":  "memory-management-gc",
                                 "domain":  "performance-runtime-engineering",
-                                "directory":  "knowledge/performance-runtime-engineering/memory-management-gc/weak-reference-api-usage",
-                                "id":  "performance-runtime-engineering/memory-management-gc/weak-reference-api-usage",
-                                "knowledge_unit":  "weak-reference-api-usage"
+                                "directory":  "knowledge/performance-runtime-engineering/memory-management-gc/weakreference-api-usage",
+                                "id":  "performance-runtime-engineering/memory-management-gc/weakreference-api-usage",
+                                "knowledge_unit":  "weakreference-api-usage"
                             },
                             {
                                 "subdomain":  "memory-management-gc",
                                 "domain":  "performance-runtime-engineering",
-                                "directory":  "knowledge/performance-runtime-engineering/memory-management-gc/weakreference-api-usage",
-                                "id":  "performance-runtime-engineering/memory-management-gc/weakreference-api-usage",
-                                "knowledge_unit":  "weakreference-api-usage"
+                                "directory":  "knowledge/performance-runtime-engineering/memory-management-gc/weak-reference-api-usage",
+                                "id":  "performance-runtime-engineering/memory-management-gc/weak-reference-api-usage",
+                                "knowledge_unit":  "weak-reference-api-usage"
                             },
                             {
                                 "subdomain":  "memory-management-gc",
@@ -19179,16 +19179,16 @@
                             {
                                 "subdomain":  "laravel-scout-foundation",
                                 "domain":  "search-retrieval-systems",
-                                "directory":  "knowledge/search-retrieval-systems/laravel-scout-foundation/index-schema-design",
-                                "id":  "search-retrieval-systems/laravel-scout-foundation/index-schema-design",
-                                "knowledge_unit":  "index-schema-design"
+                                "directory":  "knowledge/search-retrieval-systems/laravel-scout-foundation/indexing-strategies",
+                                "id":  "search-retrieval-systems/laravel-scout-foundation/indexing-strategies",
+                                "knowledge_unit":  "indexing-strategies"
                             },
                             {
                                 "subdomain":  "laravel-scout-foundation",
                                 "domain":  "search-retrieval-systems",
-                                "directory":  "knowledge/search-retrieval-systems/laravel-scout-foundation/indexing-strategies",
-                                "id":  "search-retrieval-systems/laravel-scout-foundation/indexing-strategies",
-                                "knowledge_unit":  "indexing-strategies"
+                                "directory":  "knowledge/search-retrieval-systems/laravel-scout-foundation/index-schema-design",
+                                "id":  "search-retrieval-systems/laravel-scout-foundation/index-schema-design",
+                                "knowledge_unit":  "index-schema-design"
                             },
                             {
                                 "subdomain":  "laravel-scout-foundation",
@@ -20572,16 +20572,16 @@
                             {
                                 "subdomain":  "core-concepts",
                                 "domain":  "testing-reliability-engineering",
-                                "directory":  "knowledge/testing-reliability-engineering/core-concepts/test-suite-profiling",
-                                "id":  "testing-reliability-engineering/core-concepts/test-suite-profiling",
-                                "knowledge_unit":  "test-suite-profiling"
+                                "directory":  "knowledge/testing-reliability-engineering/core-concepts/testing-environment-management",
+                                "id":  "testing-reliability-engineering/core-concepts/testing-environment-management",
+                                "knowledge_unit":  "testing-environment-management"
                             },
                             {
                                 "subdomain":  "core-concepts",
                                 "domain":  "testing-reliability-engineering",
-                                "directory":  "knowledge/testing-reliability-engineering/core-concepts/testing-environment-management",
-                                "id":  "testing-reliability-engineering/core-concepts/testing-environment-management",
-                                "knowledge_unit":  "testing-environment-management"
+                                "directory":  "knowledge/testing-reliability-engineering/core-concepts/test-suite-profiling",
+                                "id":  "testing-reliability-engineering/core-concepts/test-suite-profiling",
+                                "knowledge_unit":  "test-suite-profiling"
                             },
                             {
                                 "subdomain":  "database-testing",
@@ -20943,13 +20943,6 @@
                             {
                                 "subdomain":  "unit-testing",
                                 "domain":  "testing-reliability-engineering",
-                                "directory":  "knowledge/testing-reliability-engineering/unit-testing/test-double-taxonomy",
-                                "id":  "testing-reliability-engineering/unit-testing/test-double-taxonomy",
-                                "knowledge_unit":  "test-double-taxonomy"
-                            },
-                            {
-                                "subdomain":  "unit-testing",
-                                "domain":  "testing-reliability-engineering",
                                 "directory":  "knowledge/testing-reliability-engineering/unit-testing/test-doubles-mocks",
                                 "id":  "testing-reliability-engineering/unit-testing/test-doubles-mocks",
                                 "knowledge_unit":  "test-doubles-mocks"
@@ -20957,9 +20950,9 @@
                             {
                                 "subdomain":  "unit-testing",
                                 "domain":  "testing-reliability-engineering",
-                                "directory":  "knowledge/testing-reliability-engineering/unit-testing/unit-test-structure",
-                                "id":  "testing-reliability-engineering/unit-testing/unit-test-structure",
-                                "knowledge_unit":  "unit-test-structure"
+                                "directory":  "knowledge/testing-reliability-engineering/unit-testing/test-double-taxonomy",
+                                "id":  "testing-reliability-engineering/unit-testing/test-double-taxonomy",
+                                "knowledge_unit":  "test-double-taxonomy"
                             },
                             {
                                 "subdomain":  "unit-testing",
@@ -20967,6 +20960,13 @@
                                 "directory":  "knowledge/testing-reliability-engineering/unit-testing/unit-testing-patterns",
                                 "id":  "testing-reliability-engineering/unit-testing/unit-testing-patterns",
                                 "knowledge_unit":  "unit-testing-patterns"
+                            },
+                            {
+                                "subdomain":  "unit-testing",
+                                "domain":  "testing-reliability-engineering",
+                                "directory":  "knowledge/testing-reliability-engineering/unit-testing/unit-test-structure",
+                                "id":  "testing-reliability-engineering/unit-testing/unit-test-structure",
+                                "knowledge_unit":  "unit-test-structure"
                             }
                         ]
 }

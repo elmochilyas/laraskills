@@ -192,7 +192,9 @@ async function main() {
     withRoot(async (args, root) => {
       const result = buildKnowledgeUnitResult(args, { eccRoot: root });
       if (result.notFound) {
-        return makeToolErrorResult(`Knowledge unit not found: ${args.id}`);
+        return makeToolErrorResult(
+          `Knowledge unit not found: ${args.id}. Use 'search_ecc' to find the correct canonical ID (e.g., search_ecc({ query: '${args.id.split('/').pop() || args.id}' })). Canonical IDs follow the pattern: domain/subdomain/knowledge-unit-name`
+        );
       }
       return {
         content: [{ type: 'text', text: result.text }],
@@ -216,7 +218,9 @@ async function main() {
     withRoot(async (args, root) => {
       const result = buildGraphContextResult(args, { eccRoot: root });
       if (result.notFound) {
-        return makeToolErrorResult(`Knowledge unit not found: ${args.id}`);
+        return makeToolErrorResult(
+          `Knowledge unit not found: ${args.id}. Use 'search_ecc' to find the correct canonical ID (e.g., search_ecc({ query: '${args.id.split('/').pop() || args.id}' })). Canonical IDs follow the pattern: domain/subdomain/knowledge-unit-name`
+        );
       }
       return {
         content: [{ type: 'text', text: result.text }],

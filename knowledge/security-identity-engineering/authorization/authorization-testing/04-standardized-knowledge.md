@@ -21,7 +21,8 @@ Authorization testing in Laravel verifies that Gates, Policies, and permission c
 
 - **`actingAs($user, $guard)`**: Authenticate a specific user for HTTP tests.
 - **Gate/Policy Unit Tests**: Test individual authorization methods directly: `$this->assertTrue($user->can('update', $post))`.
-- **Authorization Assertions**: Test that authorized users get 200, unauthorized users get 403 or 401.
+- **Authorization Assertions**: Test that authorized users get 200, unauthorized users get 403, and unauthenticated users get 401.
+- **401 vs 403 Distinction**: 401 (Unauthenticated) means the request has no valid authentication — test by sending the request without `actingAs()`. 403 (Forbidden) means the user is authenticated but lacks permission — test by using `actingAs()` with a user who lacks the required permission. Never write tests that treat these as interchangeable.
 - **Permission Matrix**: Test all combinations of user types (guest, basic user, editor, admin, super-admin) for each action.
 - **Edge Cases**: Deleted/soft-deleted resources, deactivated users, users from other tenants.
 
@@ -43,7 +44,8 @@ Authorization testing in Laravel verifies that Gates, Policies, and permission c
 
 ## Best Practices
 
-- **Test Positive and Negative Cases**: Authorized user gets 200; unauthorized user gets 403.
+- **Test Positive and Negative Cases**: Authorized user gets 200; unauthorized user gets 403; unauthenticated user gets 401.
+- **Distinguish 401 from 403**: 401 means "not authenticated" (no valid session/token). 403 means "authenticated but not authorized" (lacks permission). Test unauthenticated access separately from unauthorized access — they are different security failures.
 - **Test All User Types**: Guest, basic user, editor, admin, super-admin — each with appropriate expectations.
 - **Test Model-Specific Scoping**: User A cannot update User B's resource.
 - **Test Edge Cases**: Soft-deleted resources, deactivated users, resources belonging to other tenants.
@@ -140,6 +142,40 @@ public function test_user_cannot_update_others_post(): void
 }
 ```
 
+**401 vs 403 test examples:**
+```php
+public function test_unauthenticated_user_gets_401(): void
+{
+    // No actingAs() — request has no authentication
+    $response = $this->getJson('/api/posts');
+    $response->assertStatus(401);
+}
+
+public function test_authenticated_user_without_permission_gets_403(): void
+{
+    $user = User::factory()->create(); // basic user, no special roles
+    $post = Post::factory()->for(User::factory()->create())->create();
+
+    $response = $this->actingAs($user)->putJson("/api/posts/{$post->id}", [
+        'title' => 'Hacked Title',
+    ]);
+
+    $response->assertStatus(403); // authenticated but not authorized
+}
+
+public function test_authenticated_user_with_permission_gets_200(): void
+{
+    $user = User::factory()->create();
+    $post = Post::factory()->for($user)->create();
+
+    $response = $this->actingAs($user)->putJson("/api/posts/{$post->id}", [
+        'title' => 'Updated Title',
+    ]);
+
+    $response->assertStatus(200); // authenticated AND authorized
+}
+```
+
 **Data provider for permission matrix:**
 ```php
 public static function authorizationMatrix(): array
@@ -184,7 +220,8 @@ public function test_authorization($userType, $action, $resourceType, $expected)
 ## Verification
 
 - [ ] Every Gate/Policy method has at least one positive and one negative test
-- [ ] Unauthenticated access tested (returns 401/403 or appropriate guest response)
+- [ ] Unauthenticated access returns 401 (not 403)
+- [ ] Unauthorized (authenticated but lacking permission) returns 403 (not 401)
 - [ ] Model-specific scoping tested (User A cannot access User B's resource)
 - [ ] Super-admin bypass tested (super-admin CAN access all)
 - [ ] Soft-delete resources tested (can/cannot access deleted resource)

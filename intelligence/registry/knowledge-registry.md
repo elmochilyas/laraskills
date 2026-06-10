@@ -6,7 +6,7 @@ Repository-wide inventory of the ECC knowledge system.
 |---|---|
 | Total Knowledge Units | 2321 |
 | Total Domains | 21 |
-| Generated | 2026-06-09 00:41:19 |
+| Generated | 2026-06-10 09:55:53 |
 
 ---
 
@@ -1674,18 +1674,18 @@ Repository-wide inventory of the ECC knowledge system.
 - **[infrastructure-monitoring-tools](knowledge/devops-infrastructure/observability-monitoring/infrastructure-monitoring-tools/04-standardized-knowledge.md)** (intermediate)
 - **[observability-monitoring](knowledge/devops-infrastructure/observability-monitoring/observability-monitoring/04-standardized-knowledge.md)** (intermediate)
 
+### Serverless Laravel
+
+- **[bref-laravel](knowledge/devops-infrastructure/serverless-laravel/bref-laravel/04-standardized-knowledge.md)** (intermediate)
+- **[laravel-cloud](knowledge/devops-infrastructure/serverless-laravel/laravel-cloud/04-standardized-knowledge.md)** (intermediate)
+- **[laravel-vapor](knowledge/devops-infrastructure/serverless-laravel/laravel-vapor/04-standardized-knowledge.md)** (intermediate)
+
 ### Server Provisioning
 
 - **[laravel-forge-provisioning](knowledge/devops-infrastructure/server-provisioning/laravel-forge-provisioning/04-standardized-knowledge.md)** (intermediate)
 - **[ploi-server-management](knowledge/devops-infrastructure/server-provisioning/ploi-server-management/04-standardized-knowledge.md)** (intermediate)
 - **[provisioning-tools](knowledge/devops-infrastructure/server-provisioning/provisioning-tools/04-standardized-knowledge.md)** (intermediate)
 - **[server-hardening](knowledge/devops-infrastructure/server-provisioning/server-hardening/04-standardized-knowledge.md)** (intermediate)
-
-### Serverless Laravel
-
-- **[bref-laravel](knowledge/devops-infrastructure/serverless-laravel/bref-laravel/04-standardized-knowledge.md)** (intermediate)
-- **[laravel-cloud](knowledge/devops-infrastructure/serverless-laravel/laravel-cloud/04-standardized-knowledge.md)** (intermediate)
-- **[laravel-vapor](knowledge/devops-infrastructure/serverless-laravel/laravel-vapor/04-standardized-knowledge.md)** (intermediate)
 
 ## Governance & Compliance Engineering
 

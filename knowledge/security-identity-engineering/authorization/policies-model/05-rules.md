@@ -216,3 +216,48 @@ Models without soft deletes.
 ---
 ## Consequences Of Violation
 Users cannot restore or force-delete, 403 errors on these actions.
+---
+
+## Enforce Policy at Every Protected Endpoint
+---
+## Category
+Security
+---
+## Rule
+Every non-public controller method must explicitly call `$this->authorize()`, `$request->user()->can()`, `Gate::authorize()`, or `authorizeResource()`. Creating and registering a Policy class does NOT automatically protect endpoints. Public routes (guest-accessible) are exempt.
+---
+## Reason
+Policy classes define authorization logic but do not automatically execute it. A controller method with authentication middleware (`auth`) verifies identity but does not authorize specific actions. Without an explicit authorization call in every controller method, the Policy exists but has zero effect — routes are unprotected. This is a critical security gap that is invisible during code review because the Policy file exists and appears to provide protection.
+---
+## Bad Example
+```php
+class PostController extends Controller {
+    public function __construct() {
+        $this->middleware('auth');
+    }
+    public function destroy(Post $post): void {
+        $post->delete(); // auth middleware passes but NO authorization check
+    }
+}
+// PostPolicy exists and is registered, but destroy() never calls $this->authorize()
+```
+---
+## Good Example
+```php
+class PostController extends Controller {
+    public function __construct() {
+        $this->middleware('auth');
+        $this->authorizeResource(Post::class, 'post'); // OR:
+    }
+    public function destroy(Post $post): void {
+        $this->authorize('delete', $post); // explicit enforcement
+        $post->delete();
+    }
+}
+```
+---
+## Exceptions
+Public endpoints that intentionally allow guest access (no authentication or authorization needed).
+---
+## Consequences Of Violation
+Routes appear protected (auth middleware + registered Policy) but have zero authorization — any authenticated user can perform any action.
