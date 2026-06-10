@@ -2,7 +2,7 @@
 
 Laravel 13 AI-ready skills, rules, agents, and CLI harness configs for OpenCode, Claude Code, Cursor, Gemini CLI, Codex CLI, Copilot, and more.
 
-**Version:** 1.0.0-beta.9
+**Version:** 1.0.0-beta.10
 
 ## Core Principles
 

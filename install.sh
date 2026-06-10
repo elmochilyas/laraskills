@@ -38,7 +38,7 @@ while [[ $# -gt 0 ]]; do
     esac
 done
 
-echo "Laravel ECC v1.0.0-beta.9"
+echo "Laravel ECC v1.0.0-beta.10"
 echo "Target: $TARGET_DIR"
 echo "Profile: $PROFILE"
 
@@ -112,7 +112,7 @@ fi
 # Save state
 cat > "$STATE_FILE" <<EOF
 {
-  "version": "1.0.0-beta.9",
+  "version": "1.0.0-beta.10",
   "target": "$TARGET_DIR",
   "installed_at": "$(date -u +%Y-%m-%dT%H:%M:%SZ)",
   "profile": "$PROFILE",
