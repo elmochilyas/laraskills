@@ -1233,16 +1233,6 @@
                         "source_path":  "knowledge/api-crud-system-engineering/api-authentication-authorization/policy-design-for-apis/05-rules.md"
                     },
                     {
-                        "knowledge_unit":  "rate-limit-headers",
-                        "id":  "api-crud-system-engineering/api-authentication-authorization/rate-limit-headers/rules",
-                        "subdomain":  "api-authentication-authorization",
-                        "difficulty":  "intermediate",
-                        "summary":  "Rules for rate-limit-headers",
-                        "has_content":  true,
-                        "domain":  "api-crud-system-engineering",
-                        "source_path":  "knowledge/api-crud-system-engineering/api-authentication-authorization/rate-limit-headers/05-rules.md"
-                    },
-                    {
                         "knowledge_unit":  "rate-limiter-definition",
                         "id":  "api-crud-system-engineering/api-authentication-authorization/rate-limiter-definition/rules",
                         "subdomain":  "api-authentication-authorization",
@@ -1251,6 +1241,16 @@
                         "has_content":  true,
                         "domain":  "api-crud-system-engineering",
                         "source_path":  "knowledge/api-crud-system-engineering/api-authentication-authorization/rate-limiter-definition/05-rules.md"
+                    },
+                    {
+                        "knowledge_unit":  "rate-limit-headers",
+                        "id":  "api-crud-system-engineering/api-authentication-authorization/rate-limit-headers/rules",
+                        "subdomain":  "api-authentication-authorization",
+                        "difficulty":  "intermediate",
+                        "summary":  "Rules for rate-limit-headers",
+                        "has_content":  true,
+                        "domain":  "api-crud-system-engineering",
+                        "source_path":  "knowledge/api-crud-system-engineering/api-authentication-authorization/rate-limit-headers/05-rules.md"
                     },
                     {
                         "knowledge_unit":  "rate-limiting-by-auth-tier",
@@ -2023,16 +2023,6 @@
                         "source_path":  "knowledge/api-crud-system-engineering/api-versioning/header-based-versioning/05-rules.md"
                     },
                     {
-                        "knowledge_unit":  "media-type-version-negotiation",
-                        "id":  "api-crud-system-engineering/api-versioning/media-type-version-negotiation/rules",
-                        "subdomain":  "api-versioning",
-                        "difficulty":  "intermediate",
-                        "summary":  "Rules for media-type-version-negotiation",
-                        "has_content":  true,
-                        "domain":  "api-crud-system-engineering",
-                        "source_path":  "knowledge/api-crud-system-engineering/api-versioning/media-type-version-negotiation/05-rules.md"
-                    },
-                    {
                         "knowledge_unit":  "media-type-versioning",
                         "id":  "api-crud-system-engineering/api-versioning/media-type-versioning/rules",
                         "subdomain":  "api-versioning",
@@ -2041,6 +2031,16 @@
                         "has_content":  true,
                         "domain":  "api-crud-system-engineering",
                         "source_path":  "knowledge/api-crud-system-engineering/api-versioning/media-type-versioning/05-rules.md"
+                    },
+                    {
+                        "knowledge_unit":  "media-type-version-negotiation",
+                        "id":  "api-crud-system-engineering/api-versioning/media-type-version-negotiation/rules",
+                        "subdomain":  "api-versioning",
+                        "difficulty":  "intermediate",
+                        "summary":  "Rules for media-type-version-negotiation",
+                        "has_content":  true,
+                        "domain":  "api-crud-system-engineering",
+                        "source_path":  "knowledge/api-crud-system-engineering/api-versioning/media-type-version-negotiation/05-rules.md"
                     },
                     {
                         "knowledge_unit":  "phased-deprecation-timeline",
@@ -2113,16 +2113,6 @@
                         "source_path":  "knowledge/api-crud-system-engineering/api-versioning/url-path-versioning/05-rules.md"
                     },
                     {
-                        "knowledge_unit":  "version-retirement-policy",
-                        "id":  "api-crud-system-engineering/api-versioning/version-retirement-policy/rules",
-                        "subdomain":  "api-versioning",
-                        "difficulty":  "intermediate",
-                        "summary":  "Rules for version-retirement-policy",
-                        "has_content":  true,
-                        "domain":  "api-crud-system-engineering",
-                        "source_path":  "knowledge/api-crud-system-engineering/api-versioning/version-retirement-policy/05-rules.md"
-                    },
-                    {
                         "knowledge_unit":  "versioning-strategy-selection",
                         "id":  "api-crud-system-engineering/api-versioning/versioning-strategy-selection/rules",
                         "subdomain":  "api-versioning",
@@ -2131,6 +2121,16 @@
                         "has_content":  true,
                         "domain":  "api-crud-system-engineering",
                         "source_path":  "knowledge/api-crud-system-engineering/api-versioning/versioning-strategy-selection/05-rules.md"
+                    },
+                    {
+                        "knowledge_unit":  "version-retirement-policy",
+                        "id":  "api-crud-system-engineering/api-versioning/version-retirement-policy/rules",
+                        "subdomain":  "api-versioning",
+                        "difficulty":  "intermediate",
+                        "summary":  "Rules for version-retirement-policy",
+                        "has_content":  true,
+                        "domain":  "api-crud-system-engineering",
+                        "source_path":  "knowledge/api-crud-system-engineering/api-versioning/version-retirement-policy/05-rules.md"
                     },
                     {
                         "knowledge_unit":  "when-to-create-new-version",
@@ -5813,6 +5813,16 @@
                         "source_path":  "knowledge/async-distributed-systems/job-batching-chaining/allow-failures-behavior/05-rules.md"
                     },
                     {
+                        "knowledge_unit":  "batchable-trait-cancellation",
+                        "id":  "async-distributed-systems/job-batching-chaining/batchable-trait-cancellation/rules",
+                        "subdomain":  "job-batching-chaining",
+                        "difficulty":  "intermediate",
+                        "summary":  "Rules for batchable-trait-cancellation",
+                        "has_content":  true,
+                        "domain":  "async-distributed-systems",
+                        "source_path":  "knowledge/async-distributed-systems/job-batching-chaining/batchable-trait-cancellation/05-rules.md"
+                    },
+                    {
                         "knowledge_unit":  "batch-callbacks",
                         "id":  "async-distributed-systems/job-batching-chaining/batch-callbacks/rules",
                         "subdomain":  "job-batching-chaining",
@@ -5851,16 +5861,6 @@
                         "has_content":  true,
                         "domain":  "async-distributed-systems",
                         "source_path":  "knowledge/async-distributed-systems/job-batching-chaining/batch-state-tracking-locking/05-rules.md"
-                    },
-                    {
-                        "knowledge_unit":  "batchable-trait-cancellation",
-                        "id":  "async-distributed-systems/job-batching-chaining/batchable-trait-cancellation/rules",
-                        "subdomain":  "job-batching-chaining",
-                        "difficulty":  "intermediate",
-                        "summary":  "Rules for batchable-trait-cancellation",
-                        "has_content":  true,
-                        "domain":  "async-distributed-systems",
-                        "source_path":  "knowledge/async-distributed-systems/job-batching-chaining/batchable-trait-cancellation/05-rules.md"
                     },
                     {
                         "knowledge_unit":  "bus-batch-architecture",
@@ -6093,6 +6093,16 @@
                         "source_path":  "knowledge/async-distributed-systems/queue-engineering/process-signals/05-rules.md"
                     },
                     {
+                        "knowledge_unit":  "queueable-mail-notifications-broadcast",
+                        "id":  "async-distributed-systems/queue-engineering/queueable-mail-notifications-broadcast/rules",
+                        "subdomain":  "queue-engineering",
+                        "difficulty":  "intermediate",
+                        "summary":  "Rules for queueable-mail-notifications-broadcast",
+                        "has_content":  true,
+                        "domain":  "async-distributed-systems",
+                        "source_path":  "knowledge/async-distributed-systems/queue-engineering/queueable-mail-notifications-broadcast/05-rules.md"
+                    },
+                    {
                         "knowledge_unit":  "queue-connections-vs-queues",
                         "id":  "async-distributed-systems/queue-engineering/queue-connections-vs-queues/rules",
                         "subdomain":  "queue-engineering",
@@ -6131,16 +6141,6 @@
                         "has_content":  true,
                         "domain":  "async-distributed-systems",
                         "source_path":  "knowledge/async-distributed-systems/queue-engineering/queue-priority-multiple-queues/05-rules.md"
-                    },
-                    {
-                        "knowledge_unit":  "queueable-mail-notifications-broadcast",
-                        "id":  "async-distributed-systems/queue-engineering/queueable-mail-notifications-broadcast/rules",
-                        "subdomain":  "queue-engineering",
-                        "difficulty":  "intermediate",
-                        "summary":  "Rules for queueable-mail-notifications-broadcast",
-                        "has_content":  true,
-                        "domain":  "async-distributed-systems",
-                        "source_path":  "knowledge/async-distributed-systems/queue-engineering/queueable-mail-notifications-broadcast/05-rules.md"
                     },
                     {
                         "knowledge_unit":  "rate-limited-job-middleware",
@@ -7973,16 +7973,6 @@
                         "source_path":  "knowledge/cost-resource-optimization/monitoring-observability-cost/cloudwatch-cost-analysis/05-rules.md"
                     },
                     {
-                        "knowledge_unit":  "data-retention-tiering",
-                        "id":  "cost-resource-optimization/monitoring-observability-cost/data-retention-tiering/rules",
-                        "subdomain":  "monitoring-observability-cost",
-                        "difficulty":  "intermediate",
-                        "summary":  "Rules for data-retention-tiering",
-                        "has_content":  true,
-                        "domain":  "cost-resource-optimization",
-                        "source_path":  "knowledge/cost-resource-optimization/monitoring-observability-cost/data-retention-tiering/05-rules.md"
-                    },
-                    {
                         "knowledge_unit":  "datadog-enterprise-pricing",
                         "id":  "cost-resource-optimization/monitoring-observability-cost/datadog-enterprise-pricing/rules",
                         "subdomain":  "monitoring-observability-cost",
@@ -7991,6 +7981,16 @@
                         "has_content":  true,
                         "domain":  "cost-resource-optimization",
                         "source_path":  "knowledge/cost-resource-optimization/monitoring-observability-cost/datadog-enterprise-pricing/05-rules.md"
+                    },
+                    {
+                        "knowledge_unit":  "data-retention-tiering",
+                        "id":  "cost-resource-optimization/monitoring-observability-cost/data-retention-tiering/rules",
+                        "subdomain":  "monitoring-observability-cost",
+                        "difficulty":  "intermediate",
+                        "summary":  "Rules for data-retention-tiering",
+                        "has_content":  true,
+                        "domain":  "cost-resource-optimization",
+                        "source_path":  "knowledge/cost-resource-optimization/monitoring-observability-cost/data-retention-tiering/05-rules.md"
                     },
                     {
                         "knowledge_unit":  "log-cost-optimization",
@@ -9003,16 +9003,6 @@
                         "source_path":  "knowledge/data-storage-systems/connections/transaction-pooling-limitations/05-rules.md"
                     },
                     {
-                        "knowledge_unit":  "b-tree-index-structure",
-                        "id":  "data-storage-systems/indexes/b-tree-index-structure/rules",
-                        "subdomain":  "indexes",
-                        "difficulty":  "intermediate",
-                        "summary":  "Rules for b-tree-index-structure",
-                        "has_content":  true,
-                        "domain":  "data-storage-systems",
-                        "source_path":  "knowledge/data-storage-systems/indexes/b-tree-index-structure/05-rules.md"
-                    },
-                    {
                         "knowledge_unit":  "brin-indexes",
                         "id":  "data-storage-systems/indexes/brin-indexes/rules",
                         "subdomain":  "indexes",
@@ -9021,6 +9011,16 @@
                         "has_content":  true,
                         "domain":  "data-storage-systems",
                         "source_path":  "knowledge/data-storage-systems/indexes/brin-indexes/05-rules.md"
+                    },
+                    {
+                        "knowledge_unit":  "b-tree-index-structure",
+                        "id":  "data-storage-systems/indexes/b-tree-index-structure/rules",
+                        "subdomain":  "indexes",
+                        "difficulty":  "intermediate",
+                        "summary":  "Rules for b-tree-index-structure",
+                        "has_content":  true,
+                        "domain":  "data-storage-systems",
+                        "source_path":  "knowledge/data-storage-systems/indexes/b-tree-index-structure/05-rules.md"
                     },
                     {
                         "knowledge_unit":  "composite-index-column-ordering",
@@ -9163,6 +9163,16 @@
                         "source_path":  "knowledge/data-storage-systems/indexes/index-alignment-with-query-patterns/05-rules.md"
                     },
                     {
+                        "knowledge_unit":  "indexing-foreign-key-columns",
+                        "id":  "data-storage-systems/indexes/indexing-foreign-key-columns/rules",
+                        "subdomain":  "indexes",
+                        "difficulty":  "intermediate",
+                        "summary":  "Rules for indexing-foreign-key-columns",
+                        "has_content":  true,
+                        "domain":  "data-storage-systems",
+                        "source_path":  "knowledge/data-storage-systems/indexes/indexing-foreign-key-columns/05-rules.md"
+                    },
+                    {
                         "knowledge_unit":  "index-maintenance",
                         "id":  "data-storage-systems/indexes/index-maintenance/rules",
                         "subdomain":  "indexes",
@@ -9203,16 +9213,6 @@
                         "source_path":  "knowledge/data-storage-systems/indexes/index-usage-statistics/05-rules.md"
                     },
                     {
-                        "knowledge_unit":  "indexing-foreign-key-columns",
-                        "id":  "data-storage-systems/indexes/indexing-foreign-key-columns/rules",
-                        "subdomain":  "indexes",
-                        "difficulty":  "intermediate",
-                        "summary":  "Rules for indexing-foreign-key-columns",
-                        "has_content":  true,
-                        "domain":  "data-storage-systems",
-                        "source_path":  "knowledge/data-storage-systems/indexes/indexing-foreign-key-columns/05-rules.md"
-                    },
-                    {
                         "knowledge_unit":  "nulls-not-distinct",
                         "id":  "data-storage-systems/indexes/nulls-not-distinct/rules",
                         "subdomain":  "indexes",
@@ -9243,16 +9243,6 @@
                         "source_path":  "knowledge/data-storage-systems/indexes/partial-indexes/05-rules.md"
                     },
                     {
-                        "knowledge_unit":  "r-tree-indexes",
-                        "id":  "data-storage-systems/indexes/r-tree-indexes/rules",
-                        "subdomain":  "indexes",
-                        "difficulty":  "intermediate",
-                        "summary":  "Rules for r-tree-indexes",
-                        "has_content":  true,
-                        "domain":  "data-storage-systems",
-                        "source_path":  "knowledge/data-storage-systems/indexes/r-tree-indexes/05-rules.md"
-                    },
-                    {
                         "knowledge_unit":  "rls-compatible-partial-indexes",
                         "id":  "data-storage-systems/indexes/rls-compatible-partial-indexes/rules",
                         "subdomain":  "indexes",
@@ -9261,6 +9251,16 @@
                         "has_content":  true,
                         "domain":  "data-storage-systems",
                         "source_path":  "knowledge/data-storage-systems/indexes/rls-compatible-partial-indexes/05-rules.md"
+                    },
+                    {
+                        "knowledge_unit":  "r-tree-indexes",
+                        "id":  "data-storage-systems/indexes/r-tree-indexes/rules",
+                        "subdomain":  "indexes",
+                        "difficulty":  "intermediate",
+                        "summary":  "Rules for r-tree-indexes",
+                        "has_content":  true,
+                        "domain":  "data-storage-systems",
+                        "source_path":  "knowledge/data-storage-systems/indexes/r-tree-indexes/05-rules.md"
                     },
                     {
                         "knowledge_unit":  "sargability-rule",
@@ -9283,16 +9283,6 @@
                         "source_path":  "knowledge/data-storage-systems/indexes/soft-delete-column-indexing/05-rules.md"
                     },
                     {
-                        "knowledge_unit":  "sp-gist-indexes",
-                        "id":  "data-storage-systems/indexes/sp-gist-indexes/rules",
-                        "subdomain":  "indexes",
-                        "difficulty":  "intermediate",
-                        "summary":  "Rules for sp-gist-indexes",
-                        "has_content":  true,
-                        "domain":  "data-storage-systems",
-                        "source_path":  "knowledge/data-storage-systems/indexes/sp-gist-indexes/05-rules.md"
-                    },
-                    {
                         "knowledge_unit":  "spatial-indexes",
                         "id":  "data-storage-systems/indexes/spatial-indexes/rules",
                         "subdomain":  "indexes",
@@ -9301,6 +9291,16 @@
                         "has_content":  true,
                         "domain":  "data-storage-systems",
                         "source_path":  "knowledge/data-storage-systems/indexes/spatial-indexes/05-rules.md"
+                    },
+                    {
+                        "knowledge_unit":  "sp-gist-indexes",
+                        "id":  "data-storage-systems/indexes/sp-gist-indexes/rules",
+                        "subdomain":  "indexes",
+                        "difficulty":  "intermediate",
+                        "summary":  "Rules for sp-gist-indexes",
+                        "has_content":  true,
+                        "domain":  "data-storage-systems",
+                        "source_path":  "knowledge/data-storage-systems/indexes/sp-gist-indexes/05-rules.md"
                     },
                     {
                         "knowledge_unit":  "billing-alignment",
@@ -10043,6 +10043,26 @@
                         "source_path":  "knowledge/data-storage-systems/partitioning/partition-index-design/05-rules.md"
                     },
                     {
+                        "knowledge_unit":  "partitioning-laravel-migrations",
+                        "id":  "data-storage-systems/partitioning/partitioning-laravel-migrations/rules",
+                        "subdomain":  "partitioning",
+                        "difficulty":  "intermediate",
+                        "summary":  "Rules for partitioning-laravel-migrations",
+                        "has_content":  true,
+                        "domain":  "data-storage-systems",
+                        "source_path":  "knowledge/data-storage-systems/partitioning/partitioning-laravel-migrations/05-rules.md"
+                    },
+                    {
+                        "knowledge_unit":  "partitioning-vs-sharding-framework",
+                        "id":  "data-storage-systems/partitioning/partitioning-vs-sharding-framework/rules",
+                        "subdomain":  "partitioning",
+                        "difficulty":  "intermediate",
+                        "summary":  "Rules for partitioning-vs-sharding-framework",
+                        "has_content":  true,
+                        "domain":  "data-storage-systems",
+                        "source_path":  "knowledge/data-storage-systems/partitioning/partitioning-vs-sharding-framework/05-rules.md"
+                    },
+                    {
                         "knowledge_unit":  "partition-level-backup-restore",
                         "id":  "data-storage-systems/partitioning/partition-level-backup-restore/rules",
                         "subdomain":  "partitioning",
@@ -10081,26 +10101,6 @@
                         "has_content":  true,
                         "domain":  "data-storage-systems",
                         "source_path":  "knowledge/data-storage-systems/partitioning/partition-switching-archiving/05-rules.md"
-                    },
-                    {
-                        "knowledge_unit":  "partitioning-laravel-migrations",
-                        "id":  "data-storage-systems/partitioning/partitioning-laravel-migrations/rules",
-                        "subdomain":  "partitioning",
-                        "difficulty":  "intermediate",
-                        "summary":  "Rules for partitioning-laravel-migrations",
-                        "has_content":  true,
-                        "domain":  "data-storage-systems",
-                        "source_path":  "knowledge/data-storage-systems/partitioning/partitioning-laravel-migrations/05-rules.md"
-                    },
-                    {
-                        "knowledge_unit":  "partitioning-vs-sharding-framework",
-                        "id":  "data-storage-systems/partitioning/partitioning-vs-sharding-framework/rules",
-                        "subdomain":  "partitioning",
-                        "difficulty":  "intermediate",
-                        "summary":  "Rules for partitioning-vs-sharding-framework",
-                        "has_content":  true,
-                        "domain":  "data-storage-systems",
-                        "source_path":  "knowledge/data-storage-systems/partitioning/partitioning-vs-sharding-framework/05-rules.md"
                     },
                     {
                         "knowledge_unit":  "postgresql-partitioning-features",
@@ -11423,6 +11423,16 @@
                         "source_path":  "knowledge/data-storage-systems/sharding/shard-groups/05-rules.md"
                     },
                     {
+                        "knowledge_unit":  "sharding-packages",
+                        "id":  "data-storage-systems/sharding/sharding-packages/rules",
+                        "subdomain":  "sharding",
+                        "difficulty":  "intermediate",
+                        "summary":  "Rules for sharding-packages",
+                        "has_content":  true,
+                        "domain":  "data-storage-systems",
+                        "source_path":  "knowledge/data-storage-systems/sharding/sharding-packages/05-rules.md"
+                    },
+                    {
                         "knowledge_unit":  "shard-key-selection-principles",
                         "id":  "data-storage-systems/sharding/shard-key-selection-principles/rules",
                         "subdomain":  "sharding",
@@ -11491,16 +11501,6 @@
                         "has_content":  true,
                         "domain":  "data-storage-systems",
                         "source_path":  "knowledge/data-storage-systems/sharding/shard-vs-partition-distinction/05-rules.md"
-                    },
-                    {
-                        "knowledge_unit":  "sharding-packages",
-                        "id":  "data-storage-systems/sharding/sharding-packages/rules",
-                        "subdomain":  "sharding",
-                        "difficulty":  "intermediate",
-                        "summary":  "Rules for sharding-packages",
-                        "has_content":  true,
-                        "domain":  "data-storage-systems",
-                        "source_path":  "knowledge/data-storage-systems/sharding/sharding-packages/05-rules.md"
                     },
                     {
                         "knowledge_unit":  "swoole-octane-coroutine-dispatch",
@@ -12133,6 +12133,36 @@
                         "source_path":  "knowledge/devops-infrastructure/observability-monitoring/observability-monitoring/05-rules.md"
                     },
                     {
+                        "knowledge_unit":  "bref-laravel",
+                        "id":  "devops-infrastructure/serverless-laravel/bref-laravel/rules",
+                        "subdomain":  "serverless-laravel",
+                        "difficulty":  "intermediate",
+                        "summary":  "Rules for bref-laravel",
+                        "has_content":  true,
+                        "domain":  "devops-infrastructure",
+                        "source_path":  "knowledge/devops-infrastructure/serverless-laravel/bref-laravel/05-rules.md"
+                    },
+                    {
+                        "knowledge_unit":  "laravel-cloud",
+                        "id":  "devops-infrastructure/serverless-laravel/laravel-cloud/rules",
+                        "subdomain":  "serverless-laravel",
+                        "difficulty":  "intermediate",
+                        "summary":  "Rules for laravel-cloud",
+                        "has_content":  true,
+                        "domain":  "devops-infrastructure",
+                        "source_path":  "knowledge/devops-infrastructure/serverless-laravel/laravel-cloud/05-rules.md"
+                    },
+                    {
+                        "knowledge_unit":  "laravel-vapor",
+                        "id":  "devops-infrastructure/serverless-laravel/laravel-vapor/rules",
+                        "subdomain":  "serverless-laravel",
+                        "difficulty":  "intermediate",
+                        "summary":  "Rules for laravel-vapor",
+                        "has_content":  true,
+                        "domain":  "devops-infrastructure",
+                        "source_path":  "knowledge/devops-infrastructure/serverless-laravel/laravel-vapor/05-rules.md"
+                    },
+                    {
                         "knowledge_unit":  "laravel-forge-provisioning",
                         "id":  "devops-infrastructure/server-provisioning/laravel-forge-provisioning/rules",
                         "subdomain":  "server-provisioning",
@@ -12171,36 +12201,6 @@
                         "has_content":  true,
                         "domain":  "devops-infrastructure",
                         "source_path":  "knowledge/devops-infrastructure/server-provisioning/server-hardening/05-rules.md"
-                    },
-                    {
-                        "knowledge_unit":  "bref-laravel",
-                        "id":  "devops-infrastructure/serverless-laravel/bref-laravel/rules",
-                        "subdomain":  "serverless-laravel",
-                        "difficulty":  "intermediate",
-                        "summary":  "Rules for bref-laravel",
-                        "has_content":  true,
-                        "domain":  "devops-infrastructure",
-                        "source_path":  "knowledge/devops-infrastructure/serverless-laravel/bref-laravel/05-rules.md"
-                    },
-                    {
-                        "knowledge_unit":  "laravel-cloud",
-                        "id":  "devops-infrastructure/serverless-laravel/laravel-cloud/rules",
-                        "subdomain":  "serverless-laravel",
-                        "difficulty":  "intermediate",
-                        "summary":  "Rules for laravel-cloud",
-                        "has_content":  true,
-                        "domain":  "devops-infrastructure",
-                        "source_path":  "knowledge/devops-infrastructure/serverless-laravel/laravel-cloud/05-rules.md"
-                    },
-                    {
-                        "knowledge_unit":  "laravel-vapor",
-                        "id":  "devops-infrastructure/serverless-laravel/laravel-vapor/rules",
-                        "subdomain":  "serverless-laravel",
-                        "difficulty":  "intermediate",
-                        "summary":  "Rules for laravel-vapor",
-                        "has_content":  true,
-                        "domain":  "devops-infrastructure",
-                        "source_path":  "knowledge/devops-infrastructure/serverless-laravel/laravel-vapor/05-rules.md"
                     },
                     {
                         "knowledge_unit":  "laravel-gates-policies",
@@ -14323,16 +14323,6 @@
                         "source_path":  "knowledge/laravel-eloquent-domain-modeling/attributes-and-casting/attribute-caching/05-rules.md"
                     },
                     {
-                        "knowledge_unit":  "cast-parameters",
-                        "id":  "laravel-eloquent-domain-modeling/attributes-and-casting/cast-parameters/rules",
-                        "subdomain":  "attributes-and-casting",
-                        "difficulty":  "intermediate",
-                        "summary":  "Rules for cast-parameters",
-                        "has_content":  true,
-                        "domain":  "laravel-eloquent-domain-modeling",
-                        "source_path":  "knowledge/laravel-eloquent-domain-modeling/attributes-and-casting/cast-parameters/05-rules.md"
-                    },
-                    {
                         "knowledge_unit":  "castable-interface",
                         "id":  "laravel-eloquent-domain-modeling/attributes-and-casting/castable-interface/rules",
                         "subdomain":  "attributes-and-casting",
@@ -14341,6 +14331,16 @@
                         "has_content":  true,
                         "domain":  "laravel-eloquent-domain-modeling",
                         "source_path":  "knowledge/laravel-eloquent-domain-modeling/attributes-and-casting/castable-interface/05-rules.md"
+                    },
+                    {
+                        "knowledge_unit":  "cast-parameters",
+                        "id":  "laravel-eloquent-domain-modeling/attributes-and-casting/cast-parameters/rules",
+                        "subdomain":  "attributes-and-casting",
+                        "difficulty":  "intermediate",
+                        "summary":  "Rules for cast-parameters",
+                        "has_content":  true,
+                        "domain":  "laravel-eloquent-domain-modeling",
+                        "source_path":  "knowledge/laravel-eloquent-domain-modeling/attributes-and-casting/cast-parameters/05-rules.md"
                     },
                     {
                         "knowledge_unit":  "casts-attributes-interface",
@@ -15363,16 +15363,6 @@
                         "source_path":  "knowledge/laravel-eloquent-domain-modeling/query-strategy/dynamic-scopes/05-rules.md"
                     },
                     {
-                        "knowledge_unit":  "global-scope-suppression",
-                        "id":  "laravel-eloquent-domain-modeling/query-strategy/global-scope-suppression/rules",
-                        "subdomain":  "query-strategy",
-                        "difficulty":  "intermediate",
-                        "summary":  "Rules for global-scope-suppression",
-                        "has_content":  true,
-                        "domain":  "laravel-eloquent-domain-modeling",
-                        "source_path":  "knowledge/laravel-eloquent-domain-modeling/query-strategy/global-scope-suppression/05-rules.md"
-                    },
-                    {
                         "knowledge_unit":  "global-scopes",
                         "id":  "laravel-eloquent-domain-modeling/query-strategy/global-scopes/rules",
                         "subdomain":  "query-strategy",
@@ -15381,6 +15371,16 @@
                         "has_content":  true,
                         "domain":  "laravel-eloquent-domain-modeling",
                         "source_path":  "knowledge/laravel-eloquent-domain-modeling/query-strategy/global-scopes/05-rules.md"
+                    },
+                    {
+                        "knowledge_unit":  "global-scope-suppression",
+                        "id":  "laravel-eloquent-domain-modeling/query-strategy/global-scope-suppression/rules",
+                        "subdomain":  "query-strategy",
+                        "difficulty":  "intermediate",
+                        "summary":  "Rules for global-scope-suppression",
+                        "has_content":  true,
+                        "domain":  "laravel-eloquent-domain-modeling",
+                        "source_path":  "knowledge/laravel-eloquent-domain-modeling/query-strategy/global-scope-suppression/05-rules.md"
                     },
                     {
                         "knowledge_unit":  "higher-order-messages",
@@ -15793,16 +15793,6 @@
                         "source_path":  "knowledge/laravel-eloquent-domain-modeling/serialization/resource-collection/05-rules.md"
                     },
                     {
-                        "knowledge_unit":  "resource-wrapping",
-                        "id":  "laravel-eloquent-domain-modeling/serialization/resource-wrapping/rules",
-                        "subdomain":  "serialization",
-                        "difficulty":  "intermediate",
-                        "summary":  "Rules for resource-wrapping",
-                        "has_content":  true,
-                        "domain":  "laravel-eloquent-domain-modeling",
-                        "source_path":  "knowledge/laravel-eloquent-domain-modeling/serialization/resource-wrapping/05-rules.md"
-                    },
-                    {
                         "knowledge_unit":  "resources-vs-dtos",
                         "id":  "laravel-eloquent-domain-modeling/serialization/resources-vs-dtos/rules",
                         "subdomain":  "serialization",
@@ -15811,6 +15801,16 @@
                         "has_content":  true,
                         "domain":  "laravel-eloquent-domain-modeling",
                         "source_path":  "knowledge/laravel-eloquent-domain-modeling/serialization/resources-vs-dtos/05-rules.md"
+                    },
+                    {
+                        "knowledge_unit":  "resource-wrapping",
+                        "id":  "laravel-eloquent-domain-modeling/serialization/resource-wrapping/rules",
+                        "subdomain":  "serialization",
+                        "difficulty":  "intermediate",
+                        "summary":  "Rules for resource-wrapping",
+                        "has_content":  true,
+                        "domain":  "laravel-eloquent-domain-modeling",
+                        "source_path":  "knowledge/laravel-eloquent-domain-modeling/serialization/resource-wrapping/05-rules.md"
                     },
                     {
                         "knowledge_unit":  "spatie-laravel-data",
@@ -16273,16 +16273,6 @@
                         "source_path":  "knowledge/laravel-execution-lifecycle/dependency-injection/aliasing-primitives/05-rules.md"
                     },
                     {
-                        "knowledge_unit":  "auto-resolution-strategy",
-                        "id":  "laravel-execution-lifecycle/dependency-injection/auto-resolution-strategy/rules",
-                        "subdomain":  "dependency-injection",
-                        "difficulty":  "intermediate",
-                        "summary":  "Rules for auto-resolution-strategy",
-                        "has_content":  true,
-                        "domain":  "laravel-execution-lifecycle",
-                        "source_path":  "knowledge/laravel-execution-lifecycle/dependency-injection/auto-resolution-strategy/05-rules.md"
-                    },
-                    {
                         "knowledge_unit":  "automatic-injection",
                         "id":  "laravel-execution-lifecycle/dependency-injection/automatic-injection/rules",
                         "subdomain":  "dependency-injection",
@@ -16291,6 +16281,16 @@
                         "has_content":  true,
                         "domain":  "laravel-execution-lifecycle",
                         "source_path":  "knowledge/laravel-execution-lifecycle/dependency-injection/automatic-injection/05-rules.md"
+                    },
+                    {
+                        "knowledge_unit":  "auto-resolution-strategy",
+                        "id":  "laravel-execution-lifecycle/dependency-injection/auto-resolution-strategy/rules",
+                        "subdomain":  "dependency-injection",
+                        "difficulty":  "intermediate",
+                        "summary":  "Rules for auto-resolution-strategy",
+                        "has_content":  true,
+                        "domain":  "laravel-execution-lifecycle",
+                        "source_path":  "knowledge/laravel-execution-lifecycle/dependency-injection/auto-resolution-strategy/05-rules.md"
                     },
                     {
                         "knowledge_unit":  "circular-dependency-resolution",
@@ -18303,16 +18303,6 @@
                         "source_path":  "knowledge/performance-runtime-engineering/memory-management-gc/string-memory-usage/05-rules.md"
                     },
                     {
-                        "knowledge_unit":  "weak-reference-api-usage",
-                        "id":  "performance-runtime-engineering/memory-management-gc/weak-reference-api-usage/rules",
-                        "subdomain":  "memory-management-gc",
-                        "difficulty":  "intermediate",
-                        "summary":  "Rules for weak-reference-api-usage",
-                        "has_content":  true,
-                        "domain":  "performance-runtime-engineering",
-                        "source_path":  "knowledge/performance-runtime-engineering/memory-management-gc/weak-reference-api-usage/05-rules.md"
-                    },
-                    {
                         "knowledge_unit":  "weakreference-api-usage",
                         "id":  "performance-runtime-engineering/memory-management-gc/weakreference-api-usage/rules",
                         "subdomain":  "memory-management-gc",
@@ -18321,6 +18311,16 @@
                         "has_content":  true,
                         "domain":  "performance-runtime-engineering",
                         "source_path":  "knowledge/performance-runtime-engineering/memory-management-gc/weakreference-api-usage/05-rules.md"
+                    },
+                    {
+                        "knowledge_unit":  "weak-reference-api-usage",
+                        "id":  "performance-runtime-engineering/memory-management-gc/weak-reference-api-usage/rules",
+                        "subdomain":  "memory-management-gc",
+                        "difficulty":  "intermediate",
+                        "summary":  "Rules for weak-reference-api-usage",
+                        "has_content":  true,
+                        "domain":  "performance-runtime-engineering",
+                        "source_path":  "knowledge/performance-runtime-engineering/memory-management-gc/weak-reference-api-usage/05-rules.md"
                     },
                     {
                         "knowledge_unit":  "zval-structure-reference-counting",
@@ -20653,16 +20653,6 @@
                         "source_path":  "knowledge/search-retrieval-systems/laravel-scout-foundation/full-reindex-vs-incremental/05-rules.md"
                     },
                     {
-                        "knowledge_unit":  "index-schema-design",
-                        "id":  "search-retrieval-systems/laravel-scout-foundation/index-schema-design/rules",
-                        "subdomain":  "laravel-scout-foundation",
-                        "difficulty":  "intermediate",
-                        "summary":  "Rules for index-schema-design",
-                        "has_content":  true,
-                        "domain":  "search-retrieval-systems",
-                        "source_path":  "knowledge/search-retrieval-systems/laravel-scout-foundation/index-schema-design/05-rules.md"
-                    },
-                    {
                         "knowledge_unit":  "indexing-strategies",
                         "id":  "search-retrieval-systems/laravel-scout-foundation/indexing-strategies/rules",
                         "subdomain":  "laravel-scout-foundation",
@@ -20671,6 +20661,16 @@
                         "has_content":  true,
                         "domain":  "search-retrieval-systems",
                         "source_path":  "knowledge/search-retrieval-systems/laravel-scout-foundation/indexing-strategies/05-rules.md"
+                    },
+                    {
+                        "knowledge_unit":  "index-schema-design",
+                        "id":  "search-retrieval-systems/laravel-scout-foundation/index-schema-design/rules",
+                        "subdomain":  "laravel-scout-foundation",
+                        "difficulty":  "intermediate",
+                        "summary":  "Rules for index-schema-design",
+                        "has_content":  true,
+                        "domain":  "search-retrieval-systems",
+                        "source_path":  "knowledge/search-retrieval-systems/laravel-scout-foundation/index-schema-design/05-rules.md"
                     },
                     {
                         "knowledge_unit":  "laravel-scout-searchable-trait",
@@ -22643,16 +22643,6 @@
                         "source_path":  "knowledge/testing-reliability-engineering/core-concepts/phpunit-configuration/05-rules.md"
                     },
                     {
-                        "knowledge_unit":  "test-suite-profiling",
-                        "id":  "testing-reliability-engineering/core-concepts/test-suite-profiling/rules",
-                        "subdomain":  "core-concepts",
-                        "difficulty":  "intermediate",
-                        "summary":  "Rules for test-suite-profiling",
-                        "has_content":  true,
-                        "domain":  "testing-reliability-engineering",
-                        "source_path":  "knowledge/testing-reliability-engineering/core-concepts/test-suite-profiling/05-rules.md"
-                    },
-                    {
                         "knowledge_unit":  "testing-environment-management",
                         "id":  "testing-reliability-engineering/core-concepts/testing-environment-management/rules",
                         "subdomain":  "core-concepts",
@@ -22661,6 +22651,16 @@
                         "has_content":  true,
                         "domain":  "testing-reliability-engineering",
                         "source_path":  "knowledge/testing-reliability-engineering/core-concepts/testing-environment-management/05-rules.md"
+                    },
+                    {
+                        "knowledge_unit":  "test-suite-profiling",
+                        "id":  "testing-reliability-engineering/core-concepts/test-suite-profiling/rules",
+                        "subdomain":  "core-concepts",
+                        "difficulty":  "intermediate",
+                        "summary":  "Rules for test-suite-profiling",
+                        "has_content":  true,
+                        "domain":  "testing-reliability-engineering",
+                        "source_path":  "knowledge/testing-reliability-engineering/core-concepts/test-suite-profiling/05-rules.md"
                     },
                     {
                         "knowledge_unit":  "database-assertions",
@@ -23173,16 +23173,6 @@
                         "source_path":  "knowledge/testing-reliability-engineering/unit-testing/null-driver-pattern/05-rules.md"
                     },
                     {
-                        "knowledge_unit":  "test-double-taxonomy",
-                        "id":  "testing-reliability-engineering/unit-testing/test-double-taxonomy/rules",
-                        "subdomain":  "unit-testing",
-                        "difficulty":  "intermediate",
-                        "summary":  "Rules for test-double-taxonomy",
-                        "has_content":  true,
-                        "domain":  "testing-reliability-engineering",
-                        "source_path":  "knowledge/testing-reliability-engineering/unit-testing/test-double-taxonomy/05-rules.md"
-                    },
-                    {
                         "knowledge_unit":  "test-doubles-mocks",
                         "id":  "testing-reliability-engineering/unit-testing/test-doubles-mocks/rules",
                         "subdomain":  "unit-testing",
@@ -23193,14 +23183,14 @@
                         "source_path":  "knowledge/testing-reliability-engineering/unit-testing/test-doubles-mocks/05-rules.md"
                     },
                     {
-                        "knowledge_unit":  "unit-test-structure",
-                        "id":  "testing-reliability-engineering/unit-testing/unit-test-structure/rules",
+                        "knowledge_unit":  "test-double-taxonomy",
+                        "id":  "testing-reliability-engineering/unit-testing/test-double-taxonomy/rules",
                         "subdomain":  "unit-testing",
                         "difficulty":  "intermediate",
-                        "summary":  "Rules for unit-test-structure",
+                        "summary":  "Rules for test-double-taxonomy",
                         "has_content":  true,
                         "domain":  "testing-reliability-engineering",
-                        "source_path":  "knowledge/testing-reliability-engineering/unit-testing/unit-test-structure/05-rules.md"
+                        "source_path":  "knowledge/testing-reliability-engineering/unit-testing/test-double-taxonomy/05-rules.md"
                     },
                     {
                         "knowledge_unit":  "unit-testing-patterns",
@@ -23211,6 +23201,16 @@
                         "has_content":  true,
                         "domain":  "testing-reliability-engineering",
                         "source_path":  "knowledge/testing-reliability-engineering/unit-testing/unit-testing-patterns/05-rules.md"
+                    },
+                    {
+                        "knowledge_unit":  "unit-test-structure",
+                        "id":  "testing-reliability-engineering/unit-testing/unit-test-structure/rules",
+                        "subdomain":  "unit-testing",
+                        "difficulty":  "intermediate",
+                        "summary":  "Rules for unit-test-structure",
+                        "has_content":  true,
+                        "domain":  "testing-reliability-engineering",
+                        "source_path":  "knowledge/testing-reliability-engineering/unit-testing/unit-test-structure/05-rules.md"
                     }
                 ],
     "total_entries":  2321

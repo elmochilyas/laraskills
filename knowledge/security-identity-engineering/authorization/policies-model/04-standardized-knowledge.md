@@ -75,6 +75,8 @@ Policies are classes that organize authorization logic around a specific Eloquen
 - **Server-Side Enforcement**: Policies are server-side only. Always pair with Blade `@can` for UI, but never rely on Blade alone.
 - **Model Not Found**: If a model is not found in route-model binding, the policy is not called — the 404 takes precedence.
 - **Guest Users**: By default, unauthenticated users fail all policies. Override with `before()` to allow guest-specific behavior.
+- **Registration ≠ Enforcement**: Creating a Policy class and registering it does NOT automatically protect routes. Every endpoint must explicitly call `$this->authorize()`, `$request->user()->can()`, `Gate::authorize()`, or `authorizeResource()`. This is the most common authorization gap.
+- **Authentication vs Authorization**: The `auth` middleware confirms identity but grants no permissions. A user can be authenticated (passed `auth` middleware) but unauthorized to perform a specific action. Both layers must be present on every protected route.
 
 ---
 
@@ -86,6 +88,8 @@ Policies are classes that organize authorization logic around a specific Eloquen
 | Putting business logic in policies | Policies unchecked | Policy becomes complex and hard to test | Delegate business logic to services/actions |
 | Forgetting restore/forceDelete methods | Only implementing CRUD | Soft-delete actions not authorized | Add restore/forceDelete for soft-deletable models |
 | Not handling guest users | Assuming authenticated user | Error on unauthenticated requests | Check user null or implement `before()` |
+| **Policy registered but not enforced** | Confusing registration with enforcement | Routes have zero authorization despite having a Policy | Add `$this->authorize()` / `$request->user()->can()` / `Gate::authorize()` to every endpoint |
+| **Confusing authN with authZ** | Assuming `auth` middleware authorizes | Authenticated users can access any action | Use `auth` middleware for authentication AND Policy/Gate checks for authorization |
 
 ---
 
@@ -166,6 +170,7 @@ public function publish(Post $post)
 - Policies are the standard for model authorization in Laravel. Check `app/Policies/` directory for existing policies.
 - Auto-discovery works by convention — if a policy is not being found, check naming convention or manual registration in `AuthServiceProvider`.
 - The most common gap: `restore` and `forceDelete` methods missing for soft-deletable models.
+- **Critical gap**: A policy can be correctly created and registered but never enforced at the endpoint level. Creating a Policy class and registering it does NOT automatically protect routes — you must explicitly call `$this->authorize()`, `$request->user()->can()`, `Gate::authorize()`, or `authorizeResource()` in every controller method that needs protection. Authentication (checking "who is this?") is not the same as authorization (checking "can this user do this action?"). Both are required.
 
 ---
 
@@ -179,3 +184,5 @@ public function publish(Post $post)
 - [ ] Auto-discovery working (or manual registration in AuthServiceProvider)
 - [ ] Guest users handled (nullable user parameter or `before()` method)
 - [ ] Policy methods return boolean (not thrown exceptions)
+- [ ] **Policy enforced at endpoint**: every controller method calls `$this->authorize()`, `$request->user()->can()`, `Gate::authorize()`, or `authorizeResource()` — registration alone is insufficient
+- [ ] **AuthN ≠ AuthZ**: authentication middleware checks "who is this?" but does NOT check "can they do this action?" — both must be present

@@ -6,7 +6,7 @@ Repository-wide checklist registry.
 |---|---|
 | Total Checklists | 2321 |
 | Domains | 21 |
-| Generated | 2026-06-09 00:41:19 |
+| Generated | 2026-06-10 09:55:53 |
 
 ---
 
@@ -1557,18 +1557,18 @@ Repository-wide checklist registry.
 - **infrastructure-monitoring-tools** -- knowledge/devops-infrastructure/observability-monitoring/infrastructure-monitoring-tools/09-checklists.md
 - **observability-monitoring** -- knowledge/devops-infrastructure/observability-monitoring/observability-monitoring/09-checklists.md
 
+**Serverless Laravel** -- 3 units
+
+- **bref-laravel** -- knowledge/devops-infrastructure/serverless-laravel/bref-laravel/09-checklists.md
+- **laravel-cloud** -- knowledge/devops-infrastructure/serverless-laravel/laravel-cloud/09-checklists.md
+- **laravel-vapor** -- knowledge/devops-infrastructure/serverless-laravel/laravel-vapor/09-checklists.md
+
 **Server Provisioning** -- 4 units
 
 - **laravel-forge-provisioning** -- knowledge/devops-infrastructure/server-provisioning/laravel-forge-provisioning/09-checklists.md
 - **ploi-server-management** -- knowledge/devops-infrastructure/server-provisioning/ploi-server-management/09-checklists.md
 - **provisioning-tools** -- knowledge/devops-infrastructure/server-provisioning/provisioning-tools/09-checklists.md
 - **server-hardening** -- knowledge/devops-infrastructure/server-provisioning/server-hardening/09-checklists.md
-
-**Serverless Laravel** -- 3 units
-
-- **bref-laravel** -- knowledge/devops-infrastructure/serverless-laravel/bref-laravel/09-checklists.md
-- **laravel-cloud** -- knowledge/devops-infrastructure/serverless-laravel/laravel-cloud/09-checklists.md
-- **laravel-vapor** -- knowledge/devops-infrastructure/serverless-laravel/laravel-vapor/09-checklists.md
 
 ### Governance & Compliance Engineering (40 checklists)
 

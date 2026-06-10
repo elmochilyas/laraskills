@@ -6,7 +6,7 @@ Repository-wide anti-pattern registry.
 |---|---|
 | Total Anti-Patterns | 2321 |
 | Domains | 21 |
-| Generated | 2026-06-09 00:41:19 |
+| Generated | 2026-06-10 09:55:53 |
 
 ---
 
@@ -1557,18 +1557,18 @@ Repository-wide anti-pattern registry.
 - **infrastructure-monitoring-tools** -- knowledge/devops-infrastructure/observability-monitoring/infrastructure-monitoring-tools/08-anti-patterns.md
 - **observability-monitoring** -- knowledge/devops-infrastructure/observability-monitoring/observability-monitoring/08-anti-patterns.md
 
+**Serverless Laravel** -- 3 units
+
+- **bref-laravel** -- knowledge/devops-infrastructure/serverless-laravel/bref-laravel/08-anti-patterns.md
+- **laravel-cloud** -- knowledge/devops-infrastructure/serverless-laravel/laravel-cloud/08-anti-patterns.md
+- **laravel-vapor** -- knowledge/devops-infrastructure/serverless-laravel/laravel-vapor/08-anti-patterns.md
+
 **Server Provisioning** -- 4 units
 
 - **laravel-forge-provisioning** -- knowledge/devops-infrastructure/server-provisioning/laravel-forge-provisioning/08-anti-patterns.md
 - **ploi-server-management** -- knowledge/devops-infrastructure/server-provisioning/ploi-server-management/08-anti-patterns.md
 - **provisioning-tools** -- knowledge/devops-infrastructure/server-provisioning/provisioning-tools/08-anti-patterns.md
 - **server-hardening** -- knowledge/devops-infrastructure/server-provisioning/server-hardening/08-anti-patterns.md
-
-**Serverless Laravel** -- 3 units
-
-- **bref-laravel** -- knowledge/devops-infrastructure/serverless-laravel/bref-laravel/08-anti-patterns.md
-- **laravel-cloud** -- knowledge/devops-infrastructure/serverless-laravel/laravel-cloud/08-anti-patterns.md
-- **laravel-vapor** -- knowledge/devops-infrastructure/serverless-laravel/laravel-vapor/08-anti-patterns.md
 
 ### Governance & Compliance Engineering (40 anti-patterns)
 

@@ -20,6 +20,7 @@
 | AP-PM-03 | Throwing Exceptions From Policies | Medium | Low | Low |
 | AP-PM-04 | Missing Soft-Delete Policy Methods | High | Medium | Low |
 | AP-PM-05 | One Monolithic Policy for All Models | Medium | Low | High |
+| AP-PM-06 | Registered But Not Enforced | Critical | Medium | Low |
 
 ---
 
@@ -28,6 +29,7 @@
 - **Guest-Unsafe Policies**: Not handling null authenticated user in Policy methods
 - **Policy Without Tests**: Authorization policies lacking both positive and negative tests
 - **Missing Policy Entirely**: No Policy class for a model, relying on ad-hoc authorization in controllers
+- **Registered-But-Unused Policy**: Policy class created and registered but never enforced at endpoint level, leaving routes unprotected despite seemingly having authorization
 
 ---
 
@@ -281,3 +283,63 @@ Create one dedicated Policy class per model. Use Gates for cross-model logic.
 ### Related Rules/Skills/Trees
 - Create One Policy Per Model With Standard CRUD Methods (05-rules.md)
 - Create Model Policies for Resource-Based Authorization (06-skills.md)
+
+---
+
+## 6. Registered But Not Enforced
+
+### Category
+Security · Framework Usage
+
+### Description
+Creating and registering a Policy class in `AuthServiceProvider` (or relying on auto-discovery) but never calling `$this->authorize()`, `$request->user()->can()`, or `Gate::authorize()` in the corresponding controller methods. The policy exists but has zero effect — routes remain unprotected.
+
+### Why It Happens
+Developers (and AI coding agents) often assume that creating a Policy class and registering it is sufficient to protect routes. The mental model is "Policy = authorization." In reality, Policy classes are just authorization *definitions* — they define *what* to check, but they do not trigger the check. An explicit enforcement call is required. This is particularly common with AI-generated code, where the agent creates a Policy but forgets to wire it into the controller.
+
+### Warning Signs
+- Policy class exists and is registered but controller methods have no `$this->authorize()` calls
+- Resource controller lacks `authorizeResource()` in constructor
+- Controller methods use `$request->user()` for user retrieval but never call `$request->user()->can()`
+- Controller has `auth` middleware but no authorization checks (authN present, authZ absent)
+- Adding a new route does not require adding an authorization check (too easy to miss)
+
+### Why Harmful
+This is a critical security gap because the code *appears* to have authorization (a Policy class exists) but routes are actually unprotected. Standard code review may see the Policy file and assume protection. Security audits may list the Policy as a control. But the routes have zero authorization — any authenticated user can access any action. The `auth` middleware only confirms identity; it grants no permissions.
+
+### Real-World Consequences
+- Route `POST /admin/products` is unprotected — any user can create products
+- Route `DELETE /posts/{post}` is unprotected — any user can delete any post
+- Security audit discovers `authorize()` calls missing despite Policy being registered
+- AI agent creates Policy but forgets `$this->authorize()` — code merges with zero authorization
+- Incident: user accesses admin panel because `auth` middleware passed but no `authorize()` check exists
+
+### Preferred Alternative
+Every controller method must explicitly call one of:
+- `$this->authorize('action', $model)` for resource-specific checks
+- `$this->authorize('action', Model::class)` for non-resource checks
+- `$this->authorizeResource(Model::class, 'parameter')` in constructor for resource controllers
+- `$request->user()->can('action', $model)` for inline checks
+- `Gate::authorize('action', $model)` for Gate-based checks
+
+### Refactoring Strategy
+1. List all controllers and their actions
+2. For each action, determine required authorization (view, create, update, delete, etc.)
+3. Add `$this->authorize()` or `$request->user()->can()` calls to every action
+4. For resource controllers, add `$this->authorizeResource()` to the constructor
+5. Write tests that verify authorized users get 200 and unauthorized users get 403
+6. Run a security review verifying that every route has both authN (middleware) and authZ (policy/Gate)
+
+### Detection Checklist
+- [ ] Does every controller method have an authorization check?
+- [ ] Is `authorizeResource()` used in every resource controller?
+- [ ] Are non-resource actions using `$this->authorize()` or `Gate::authorize()`?
+- [ ] Does every route have both `auth` middleware AND an authorization check?
+- [ ] Would removing the Policy class expose any routes that currently appear protected?
+- [ ] Are there integration tests that verify 403 responses for unauthorized access?
+
+### Related Rules/Skills/Trees
+- Enforce Policy at Every Endpoint (05-rules.md)
+- Create Model Policies for Resource-Based Authorization (06-skills.md)
+- Controller Authorization decision tree (07-decision-trees.md)
+- Verification checklist includes endpoint enforcement check (09-checklists.md)

@@ -6,7 +6,7 @@ Repository-wide skill registry. Rapid discovery of executable workflows.
 |---|---|
 | Total Skills | 2321 |
 | Domains | 21 |
-| Generated | 2026-06-09 00:41:19 |
+| Generated | 2026-06-10 09:55:53 |
 
 ---
 
@@ -1557,18 +1557,18 @@ Repository-wide skill registry. Rapid discovery of executable workflows.
 - **infrastructure-monitoring-tools** -- knowledge/devops-infrastructure/observability-monitoring/infrastructure-monitoring-tools/06-skills.md
 - **observability-monitoring** -- knowledge/devops-infrastructure/observability-monitoring/observability-monitoring/06-skills.md
 
+**Serverless Laravel** -- 3 units
+
+- **bref-laravel** -- knowledge/devops-infrastructure/serverless-laravel/bref-laravel/06-skills.md
+- **laravel-cloud** -- knowledge/devops-infrastructure/serverless-laravel/laravel-cloud/06-skills.md
+- **laravel-vapor** -- knowledge/devops-infrastructure/serverless-laravel/laravel-vapor/06-skills.md
+
 **Server Provisioning** -- 4 units
 
 - **laravel-forge-provisioning** -- knowledge/devops-infrastructure/server-provisioning/laravel-forge-provisioning/06-skills.md
 - **ploi-server-management** -- knowledge/devops-infrastructure/server-provisioning/ploi-server-management/06-skills.md
 - **provisioning-tools** -- knowledge/devops-infrastructure/server-provisioning/provisioning-tools/06-skills.md
 - **server-hardening** -- knowledge/devops-infrastructure/server-provisioning/server-hardening/06-skills.md
-
-**Serverless Laravel** -- 3 units
-
-- **bref-laravel** -- knowledge/devops-infrastructure/serverless-laravel/bref-laravel/06-skills.md
-- **laravel-cloud** -- knowledge/devops-infrastructure/serverless-laravel/laravel-cloud/06-skills.md
-- **laravel-vapor** -- knowledge/devops-infrastructure/serverless-laravel/laravel-vapor/06-skills.md
 
 ### Governance & Compliance Engineering (40 skills)
 

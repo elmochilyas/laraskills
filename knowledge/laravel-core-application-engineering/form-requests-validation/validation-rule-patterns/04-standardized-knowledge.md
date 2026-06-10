@@ -128,6 +128,15 @@ Rule::unique('users', 'email')
 // Expands to: items.0.name, items.1.name, etc.
 ```
 
+**Update-field pattern (`sometimes` + `required`):**
+```php
+'name' => ['sometimes', 'required', 'string', 'max:255'],
+// sometimes = the field may be omitted from the request
+// required  = if the field is included, it must not be empty
+```
+
+Use for update/PATCH endpoints where some fields are optional to send but must be non-empty when present. Do NOT add `sometimes` to every field — fields that must always be present should use `required` alone.
+
 **bail usage:**
 ```php
 'password' => ['bail', 'required', 'string', 'min:8', 'confirmed']

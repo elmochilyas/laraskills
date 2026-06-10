@@ -495,5 +495,13 @@
     "expectedSupportingDomains": ["ai-intelligence-systems", "data-storage-systems"],
     "forbiddenDomains": ["real-time-systems"],
     "expectedTopKus": ["search", "pgvector", "vector"]
+  },
+  {
+    "id": "bench-071",
+    "query": "Add authorization policies and enforce at endpoint level with authentication distinction",
+    "expectedPrimaryDomain": "security-identity-engineering",
+    "expectedSupportingDomains": ["laravel-core-application-engineering"],
+    "forbiddenDomains": ["ai-intelligence-systems"],
+    "expectedTopKus": ["polic", "authorization", "gate"]
   }
 ]

@@ -1233,16 +1233,6 @@
                         "source_path":  "knowledge/api-crud-system-engineering/api-authentication-authorization/policy-design-for-apis/08-anti-patterns.md"
                     },
                     {
-                        "knowledge_unit":  "rate-limit-headers",
-                        "id":  "api-crud-system-engineering/api-authentication-authorization/rate-limit-headers/anti-patterns",
-                        "subdomain":  "api-authentication-authorization",
-                        "difficulty":  "intermediate",
-                        "summary":  "Anti-Patterns for rate-limit-headers",
-                        "has_content":  true,
-                        "domain":  "api-crud-system-engineering",
-                        "source_path":  "knowledge/api-crud-system-engineering/api-authentication-authorization/rate-limit-headers/08-anti-patterns.md"
-                    },
-                    {
                         "knowledge_unit":  "rate-limiter-definition",
                         "id":  "api-crud-system-engineering/api-authentication-authorization/rate-limiter-definition/anti-patterns",
                         "subdomain":  "api-authentication-authorization",
@@ -1251,6 +1241,16 @@
                         "has_content":  true,
                         "domain":  "api-crud-system-engineering",
                         "source_path":  "knowledge/api-crud-system-engineering/api-authentication-authorization/rate-limiter-definition/08-anti-patterns.md"
+                    },
+                    {
+                        "knowledge_unit":  "rate-limit-headers",
+                        "id":  "api-crud-system-engineering/api-authentication-authorization/rate-limit-headers/anti-patterns",
+                        "subdomain":  "api-authentication-authorization",
+                        "difficulty":  "intermediate",
+                        "summary":  "Anti-Patterns for rate-limit-headers",
+                        "has_content":  true,
+                        "domain":  "api-crud-system-engineering",
+                        "source_path":  "knowledge/api-crud-system-engineering/api-authentication-authorization/rate-limit-headers/08-anti-patterns.md"
                     },
                     {
                         "knowledge_unit":  "rate-limiting-by-auth-tier",
@@ -2023,16 +2023,6 @@
                         "source_path":  "knowledge/api-crud-system-engineering/api-versioning/header-based-versioning/08-anti-patterns.md"
                     },
                     {
-                        "knowledge_unit":  "media-type-version-negotiation",
-                        "id":  "api-crud-system-engineering/api-versioning/media-type-version-negotiation/anti-patterns",
-                        "subdomain":  "api-versioning",
-                        "difficulty":  "intermediate",
-                        "summary":  "Anti-Patterns for media-type-version-negotiation",
-                        "has_content":  true,
-                        "domain":  "api-crud-system-engineering",
-                        "source_path":  "knowledge/api-crud-system-engineering/api-versioning/media-type-version-negotiation/08-anti-patterns.md"
-                    },
-                    {
                         "knowledge_unit":  "media-type-versioning",
                         "id":  "api-crud-system-engineering/api-versioning/media-type-versioning/anti-patterns",
                         "subdomain":  "api-versioning",
@@ -2041,6 +2031,16 @@
                         "has_content":  true,
                         "domain":  "api-crud-system-engineering",
                         "source_path":  "knowledge/api-crud-system-engineering/api-versioning/media-type-versioning/08-anti-patterns.md"
+                    },
+                    {
+                        "knowledge_unit":  "media-type-version-negotiation",
+                        "id":  "api-crud-system-engineering/api-versioning/media-type-version-negotiation/anti-patterns",
+                        "subdomain":  "api-versioning",
+                        "difficulty":  "intermediate",
+                        "summary":  "Anti-Patterns for media-type-version-negotiation",
+                        "has_content":  true,
+                        "domain":  "api-crud-system-engineering",
+                        "source_path":  "knowledge/api-crud-system-engineering/api-versioning/media-type-version-negotiation/08-anti-patterns.md"
                     },
                     {
                         "knowledge_unit":  "phased-deprecation-timeline",
@@ -2113,16 +2113,6 @@
                         "source_path":  "knowledge/api-crud-system-engineering/api-versioning/url-path-versioning/08-anti-patterns.md"
                     },
                     {
-                        "knowledge_unit":  "version-retirement-policy",
-                        "id":  "api-crud-system-engineering/api-versioning/version-retirement-policy/anti-patterns",
-                        "subdomain":  "api-versioning",
-                        "difficulty":  "intermediate",
-                        "summary":  "Anti-Patterns for version-retirement-policy",
-                        "has_content":  true,
-                        "domain":  "api-crud-system-engineering",
-                        "source_path":  "knowledge/api-crud-system-engineering/api-versioning/version-retirement-policy/08-anti-patterns.md"
-                    },
-                    {
                         "knowledge_unit":  "versioning-strategy-selection",
                         "id":  "api-crud-system-engineering/api-versioning/versioning-strategy-selection/anti-patterns",
                         "subdomain":  "api-versioning",
@@ -2131,6 +2121,16 @@
                         "has_content":  true,
                         "domain":  "api-crud-system-engineering",
                         "source_path":  "knowledge/api-crud-system-engineering/api-versioning/versioning-strategy-selection/08-anti-patterns.md"
+                    },
+                    {
+                        "knowledge_unit":  "version-retirement-policy",
+                        "id":  "api-crud-system-engineering/api-versioning/version-retirement-policy/anti-patterns",
+                        "subdomain":  "api-versioning",
+                        "difficulty":  "intermediate",
+                        "summary":  "Anti-Patterns for version-retirement-policy",
+                        "has_content":  true,
+                        "domain":  "api-crud-system-engineering",
+                        "source_path":  "knowledge/api-crud-system-engineering/api-versioning/version-retirement-policy/08-anti-patterns.md"
                     },
                     {
                         "knowledge_unit":  "when-to-create-new-version",
@@ -5813,6 +5813,16 @@
                         "source_path":  "knowledge/async-distributed-systems/job-batching-chaining/allow-failures-behavior/08-anti-patterns.md"
                     },
                     {
+                        "knowledge_unit":  "batchable-trait-cancellation",
+                        "id":  "async-distributed-systems/job-batching-chaining/batchable-trait-cancellation/anti-patterns",
+                        "subdomain":  "job-batching-chaining",
+                        "difficulty":  "intermediate",
+                        "summary":  "Anti-Patterns for batchable-trait-cancellation",
+                        "has_content":  true,
+                        "domain":  "async-distributed-systems",
+                        "source_path":  "knowledge/async-distributed-systems/job-batching-chaining/batchable-trait-cancellation/08-anti-patterns.md"
+                    },
+                    {
                         "knowledge_unit":  "batch-callbacks",
                         "id":  "async-distributed-systems/job-batching-chaining/batch-callbacks/anti-patterns",
                         "subdomain":  "job-batching-chaining",
@@ -5851,16 +5861,6 @@
                         "has_content":  true,
                         "domain":  "async-distributed-systems",
                         "source_path":  "knowledge/async-distributed-systems/job-batching-chaining/batch-state-tracking-locking/08-anti-patterns.md"
-                    },
-                    {
-                        "knowledge_unit":  "batchable-trait-cancellation",
-                        "id":  "async-distributed-systems/job-batching-chaining/batchable-trait-cancellation/anti-patterns",
-                        "subdomain":  "job-batching-chaining",
-                        "difficulty":  "intermediate",
-                        "summary":  "Anti-Patterns for batchable-trait-cancellation",
-                        "has_content":  true,
-                        "domain":  "async-distributed-systems",
-                        "source_path":  "knowledge/async-distributed-systems/job-batching-chaining/batchable-trait-cancellation/08-anti-patterns.md"
                     },
                     {
                         "knowledge_unit":  "bus-batch-architecture",
@@ -6093,6 +6093,16 @@
                         "source_path":  "knowledge/async-distributed-systems/queue-engineering/process-signals/08-anti-patterns.md"
                     },
                     {
+                        "knowledge_unit":  "queueable-mail-notifications-broadcast",
+                        "id":  "async-distributed-systems/queue-engineering/queueable-mail-notifications-broadcast/anti-patterns",
+                        "subdomain":  "queue-engineering",
+                        "difficulty":  "intermediate",
+                        "summary":  "Anti-Patterns for queueable-mail-notifications-broadcast",
+                        "has_content":  true,
+                        "domain":  "async-distributed-systems",
+                        "source_path":  "knowledge/async-distributed-systems/queue-engineering/queueable-mail-notifications-broadcast/08-anti-patterns.md"
+                    },
+                    {
                         "knowledge_unit":  "queue-connections-vs-queues",
                         "id":  "async-distributed-systems/queue-engineering/queue-connections-vs-queues/anti-patterns",
                         "subdomain":  "queue-engineering",
@@ -6131,16 +6141,6 @@
                         "has_content":  true,
                         "domain":  "async-distributed-systems",
                         "source_path":  "knowledge/async-distributed-systems/queue-engineering/queue-priority-multiple-queues/08-anti-patterns.md"
-                    },
-                    {
-                        "knowledge_unit":  "queueable-mail-notifications-broadcast",
-                        "id":  "async-distributed-systems/queue-engineering/queueable-mail-notifications-broadcast/anti-patterns",
-                        "subdomain":  "queue-engineering",
-                        "difficulty":  "intermediate",
-                        "summary":  "Anti-Patterns for queueable-mail-notifications-broadcast",
-                        "has_content":  true,
-                        "domain":  "async-distributed-systems",
-                        "source_path":  "knowledge/async-distributed-systems/queue-engineering/queueable-mail-notifications-broadcast/08-anti-patterns.md"
                     },
                     {
                         "knowledge_unit":  "rate-limited-job-middleware",
@@ -7973,16 +7973,6 @@
                         "source_path":  "knowledge/cost-resource-optimization/monitoring-observability-cost/cloudwatch-cost-analysis/08-anti-patterns.md"
                     },
                     {
-                        "knowledge_unit":  "data-retention-tiering",
-                        "id":  "cost-resource-optimization/monitoring-observability-cost/data-retention-tiering/anti-patterns",
-                        "subdomain":  "monitoring-observability-cost",
-                        "difficulty":  "intermediate",
-                        "summary":  "Anti-Patterns for data-retention-tiering",
-                        "has_content":  true,
-                        "domain":  "cost-resource-optimization",
-                        "source_path":  "knowledge/cost-resource-optimization/monitoring-observability-cost/data-retention-tiering/08-anti-patterns.md"
-                    },
-                    {
                         "knowledge_unit":  "datadog-enterprise-pricing",
                         "id":  "cost-resource-optimization/monitoring-observability-cost/datadog-enterprise-pricing/anti-patterns",
                         "subdomain":  "monitoring-observability-cost",
@@ -7991,6 +7981,16 @@
                         "has_content":  true,
                         "domain":  "cost-resource-optimization",
                         "source_path":  "knowledge/cost-resource-optimization/monitoring-observability-cost/datadog-enterprise-pricing/08-anti-patterns.md"
+                    },
+                    {
+                        "knowledge_unit":  "data-retention-tiering",
+                        "id":  "cost-resource-optimization/monitoring-observability-cost/data-retention-tiering/anti-patterns",
+                        "subdomain":  "monitoring-observability-cost",
+                        "difficulty":  "intermediate",
+                        "summary":  "Anti-Patterns for data-retention-tiering",
+                        "has_content":  true,
+                        "domain":  "cost-resource-optimization",
+                        "source_path":  "knowledge/cost-resource-optimization/monitoring-observability-cost/data-retention-tiering/08-anti-patterns.md"
                     },
                     {
                         "knowledge_unit":  "log-cost-optimization",
@@ -9003,16 +9003,6 @@
                         "source_path":  "knowledge/data-storage-systems/connections/transaction-pooling-limitations/08-anti-patterns.md"
                     },
                     {
-                        "knowledge_unit":  "b-tree-index-structure",
-                        "id":  "data-storage-systems/indexes/b-tree-index-structure/anti-patterns",
-                        "subdomain":  "indexes",
-                        "difficulty":  "intermediate",
-                        "summary":  "Anti-Patterns for b-tree-index-structure",
-                        "has_content":  true,
-                        "domain":  "data-storage-systems",
-                        "source_path":  "knowledge/data-storage-systems/indexes/b-tree-index-structure/08-anti-patterns.md"
-                    },
-                    {
                         "knowledge_unit":  "brin-indexes",
                         "id":  "data-storage-systems/indexes/brin-indexes/anti-patterns",
                         "subdomain":  "indexes",
@@ -9021,6 +9011,16 @@
                         "has_content":  true,
                         "domain":  "data-storage-systems",
                         "source_path":  "knowledge/data-storage-systems/indexes/brin-indexes/08-anti-patterns.md"
+                    },
+                    {
+                        "knowledge_unit":  "b-tree-index-structure",
+                        "id":  "data-storage-systems/indexes/b-tree-index-structure/anti-patterns",
+                        "subdomain":  "indexes",
+                        "difficulty":  "intermediate",
+                        "summary":  "Anti-Patterns for b-tree-index-structure",
+                        "has_content":  true,
+                        "domain":  "data-storage-systems",
+                        "source_path":  "knowledge/data-storage-systems/indexes/b-tree-index-structure/08-anti-patterns.md"
                     },
                     {
                         "knowledge_unit":  "composite-index-column-ordering",
@@ -9163,6 +9163,16 @@
                         "source_path":  "knowledge/data-storage-systems/indexes/index-alignment-with-query-patterns/08-anti-patterns.md"
                     },
                     {
+                        "knowledge_unit":  "indexing-foreign-key-columns",
+                        "id":  "data-storage-systems/indexes/indexing-foreign-key-columns/anti-patterns",
+                        "subdomain":  "indexes",
+                        "difficulty":  "intermediate",
+                        "summary":  "Anti-Patterns for indexing-foreign-key-columns",
+                        "has_content":  true,
+                        "domain":  "data-storage-systems",
+                        "source_path":  "knowledge/data-storage-systems/indexes/indexing-foreign-key-columns/08-anti-patterns.md"
+                    },
+                    {
                         "knowledge_unit":  "index-maintenance",
                         "id":  "data-storage-systems/indexes/index-maintenance/anti-patterns",
                         "subdomain":  "indexes",
@@ -9203,16 +9213,6 @@
                         "source_path":  "knowledge/data-storage-systems/indexes/index-usage-statistics/08-anti-patterns.md"
                     },
                     {
-                        "knowledge_unit":  "indexing-foreign-key-columns",
-                        "id":  "data-storage-systems/indexes/indexing-foreign-key-columns/anti-patterns",
-                        "subdomain":  "indexes",
-                        "difficulty":  "intermediate",
-                        "summary":  "Anti-Patterns for indexing-foreign-key-columns",
-                        "has_content":  true,
-                        "domain":  "data-storage-systems",
-                        "source_path":  "knowledge/data-storage-systems/indexes/indexing-foreign-key-columns/08-anti-patterns.md"
-                    },
-                    {
                         "knowledge_unit":  "nulls-not-distinct",
                         "id":  "data-storage-systems/indexes/nulls-not-distinct/anti-patterns",
                         "subdomain":  "indexes",
@@ -9243,16 +9243,6 @@
                         "source_path":  "knowledge/data-storage-systems/indexes/partial-indexes/08-anti-patterns.md"
                     },
                     {
-                        "knowledge_unit":  "r-tree-indexes",
-                        "id":  "data-storage-systems/indexes/r-tree-indexes/anti-patterns",
-                        "subdomain":  "indexes",
-                        "difficulty":  "intermediate",
-                        "summary":  "Anti-Patterns for r-tree-indexes",
-                        "has_content":  true,
-                        "domain":  "data-storage-systems",
-                        "source_path":  "knowledge/data-storage-systems/indexes/r-tree-indexes/08-anti-patterns.md"
-                    },
-                    {
                         "knowledge_unit":  "rls-compatible-partial-indexes",
                         "id":  "data-storage-systems/indexes/rls-compatible-partial-indexes/anti-patterns",
                         "subdomain":  "indexes",
@@ -9261,6 +9251,16 @@
                         "has_content":  true,
                         "domain":  "data-storage-systems",
                         "source_path":  "knowledge/data-storage-systems/indexes/rls-compatible-partial-indexes/08-anti-patterns.md"
+                    },
+                    {
+                        "knowledge_unit":  "r-tree-indexes",
+                        "id":  "data-storage-systems/indexes/r-tree-indexes/anti-patterns",
+                        "subdomain":  "indexes",
+                        "difficulty":  "intermediate",
+                        "summary":  "Anti-Patterns for r-tree-indexes",
+                        "has_content":  true,
+                        "domain":  "data-storage-systems",
+                        "source_path":  "knowledge/data-storage-systems/indexes/r-tree-indexes/08-anti-patterns.md"
                     },
                     {
                         "knowledge_unit":  "sargability-rule",
@@ -9283,16 +9283,6 @@
                         "source_path":  "knowledge/data-storage-systems/indexes/soft-delete-column-indexing/08-anti-patterns.md"
                     },
                     {
-                        "knowledge_unit":  "sp-gist-indexes",
-                        "id":  "data-storage-systems/indexes/sp-gist-indexes/anti-patterns",
-                        "subdomain":  "indexes",
-                        "difficulty":  "intermediate",
-                        "summary":  "Anti-Patterns for sp-gist-indexes",
-                        "has_content":  true,
-                        "domain":  "data-storage-systems",
-                        "source_path":  "knowledge/data-storage-systems/indexes/sp-gist-indexes/08-anti-patterns.md"
-                    },
-                    {
                         "knowledge_unit":  "spatial-indexes",
                         "id":  "data-storage-systems/indexes/spatial-indexes/anti-patterns",
                         "subdomain":  "indexes",
@@ -9301,6 +9291,16 @@
                         "has_content":  true,
                         "domain":  "data-storage-systems",
                         "source_path":  "knowledge/data-storage-systems/indexes/spatial-indexes/08-anti-patterns.md"
+                    },
+                    {
+                        "knowledge_unit":  "sp-gist-indexes",
+                        "id":  "data-storage-systems/indexes/sp-gist-indexes/anti-patterns",
+                        "subdomain":  "indexes",
+                        "difficulty":  "intermediate",
+                        "summary":  "Anti-Patterns for sp-gist-indexes",
+                        "has_content":  true,
+                        "domain":  "data-storage-systems",
+                        "source_path":  "knowledge/data-storage-systems/indexes/sp-gist-indexes/08-anti-patterns.md"
                     },
                     {
                         "knowledge_unit":  "billing-alignment",
@@ -10043,6 +10043,26 @@
                         "source_path":  "knowledge/data-storage-systems/partitioning/partition-index-design/08-anti-patterns.md"
                     },
                     {
+                        "knowledge_unit":  "partitioning-laravel-migrations",
+                        "id":  "data-storage-systems/partitioning/partitioning-laravel-migrations/anti-patterns",
+                        "subdomain":  "partitioning",
+                        "difficulty":  "intermediate",
+                        "summary":  "Anti-Patterns for partitioning-laravel-migrations",
+                        "has_content":  true,
+                        "domain":  "data-storage-systems",
+                        "source_path":  "knowledge/data-storage-systems/partitioning/partitioning-laravel-migrations/08-anti-patterns.md"
+                    },
+                    {
+                        "knowledge_unit":  "partitioning-vs-sharding-framework",
+                        "id":  "data-storage-systems/partitioning/partitioning-vs-sharding-framework/anti-patterns",
+                        "subdomain":  "partitioning",
+                        "difficulty":  "intermediate",
+                        "summary":  "Anti-Patterns for partitioning-vs-sharding-framework",
+                        "has_content":  true,
+                        "domain":  "data-storage-systems",
+                        "source_path":  "knowledge/data-storage-systems/partitioning/partitioning-vs-sharding-framework/08-anti-patterns.md"
+                    },
+                    {
                         "knowledge_unit":  "partition-level-backup-restore",
                         "id":  "data-storage-systems/partitioning/partition-level-backup-restore/anti-patterns",
                         "subdomain":  "partitioning",
@@ -10081,26 +10101,6 @@
                         "has_content":  true,
                         "domain":  "data-storage-systems",
                         "source_path":  "knowledge/data-storage-systems/partitioning/partition-switching-archiving/08-anti-patterns.md"
-                    },
-                    {
-                        "knowledge_unit":  "partitioning-laravel-migrations",
-                        "id":  "data-storage-systems/partitioning/partitioning-laravel-migrations/anti-patterns",
-                        "subdomain":  "partitioning",
-                        "difficulty":  "intermediate",
-                        "summary":  "Anti-Patterns for partitioning-laravel-migrations",
-                        "has_content":  true,
-                        "domain":  "data-storage-systems",
-                        "source_path":  "knowledge/data-storage-systems/partitioning/partitioning-laravel-migrations/08-anti-patterns.md"
-                    },
-                    {
-                        "knowledge_unit":  "partitioning-vs-sharding-framework",
-                        "id":  "data-storage-systems/partitioning/partitioning-vs-sharding-framework/anti-patterns",
-                        "subdomain":  "partitioning",
-                        "difficulty":  "intermediate",
-                        "summary":  "Anti-Patterns for partitioning-vs-sharding-framework",
-                        "has_content":  true,
-                        "domain":  "data-storage-systems",
-                        "source_path":  "knowledge/data-storage-systems/partitioning/partitioning-vs-sharding-framework/08-anti-patterns.md"
                     },
                     {
                         "knowledge_unit":  "postgresql-partitioning-features",
@@ -11423,6 +11423,16 @@
                         "source_path":  "knowledge/data-storage-systems/sharding/shard-groups/08-anti-patterns.md"
                     },
                     {
+                        "knowledge_unit":  "sharding-packages",
+                        "id":  "data-storage-systems/sharding/sharding-packages/anti-patterns",
+                        "subdomain":  "sharding",
+                        "difficulty":  "intermediate",
+                        "summary":  "Anti-Patterns for sharding-packages",
+                        "has_content":  true,
+                        "domain":  "data-storage-systems",
+                        "source_path":  "knowledge/data-storage-systems/sharding/sharding-packages/08-anti-patterns.md"
+                    },
+                    {
                         "knowledge_unit":  "shard-key-selection-principles",
                         "id":  "data-storage-systems/sharding/shard-key-selection-principles/anti-patterns",
                         "subdomain":  "sharding",
@@ -11491,16 +11501,6 @@
                         "has_content":  true,
                         "domain":  "data-storage-systems",
                         "source_path":  "knowledge/data-storage-systems/sharding/shard-vs-partition-distinction/08-anti-patterns.md"
-                    },
-                    {
-                        "knowledge_unit":  "sharding-packages",
-                        "id":  "data-storage-systems/sharding/sharding-packages/anti-patterns",
-                        "subdomain":  "sharding",
-                        "difficulty":  "intermediate",
-                        "summary":  "Anti-Patterns for sharding-packages",
-                        "has_content":  true,
-                        "domain":  "data-storage-systems",
-                        "source_path":  "knowledge/data-storage-systems/sharding/sharding-packages/08-anti-patterns.md"
                     },
                     {
                         "knowledge_unit":  "swoole-octane-coroutine-dispatch",
@@ -12133,6 +12133,36 @@
                         "source_path":  "knowledge/devops-infrastructure/observability-monitoring/observability-monitoring/08-anti-patterns.md"
                     },
                     {
+                        "knowledge_unit":  "bref-laravel",
+                        "id":  "devops-infrastructure/serverless-laravel/bref-laravel/anti-patterns",
+                        "subdomain":  "serverless-laravel",
+                        "difficulty":  "intermediate",
+                        "summary":  "Anti-Patterns for bref-laravel",
+                        "has_content":  true,
+                        "domain":  "devops-infrastructure",
+                        "source_path":  "knowledge/devops-infrastructure/serverless-laravel/bref-laravel/08-anti-patterns.md"
+                    },
+                    {
+                        "knowledge_unit":  "laravel-cloud",
+                        "id":  "devops-infrastructure/serverless-laravel/laravel-cloud/anti-patterns",
+                        "subdomain":  "serverless-laravel",
+                        "difficulty":  "intermediate",
+                        "summary":  "Anti-Patterns for laravel-cloud",
+                        "has_content":  true,
+                        "domain":  "devops-infrastructure",
+                        "source_path":  "knowledge/devops-infrastructure/serverless-laravel/laravel-cloud/08-anti-patterns.md"
+                    },
+                    {
+                        "knowledge_unit":  "laravel-vapor",
+                        "id":  "devops-infrastructure/serverless-laravel/laravel-vapor/anti-patterns",
+                        "subdomain":  "serverless-laravel",
+                        "difficulty":  "intermediate",
+                        "summary":  "Anti-Patterns for laravel-vapor",
+                        "has_content":  true,
+                        "domain":  "devops-infrastructure",
+                        "source_path":  "knowledge/devops-infrastructure/serverless-laravel/laravel-vapor/08-anti-patterns.md"
+                    },
+                    {
                         "knowledge_unit":  "laravel-forge-provisioning",
                         "id":  "devops-infrastructure/server-provisioning/laravel-forge-provisioning/anti-patterns",
                         "subdomain":  "server-provisioning",
@@ -12171,36 +12201,6 @@
                         "has_content":  true,
                         "domain":  "devops-infrastructure",
                         "source_path":  "knowledge/devops-infrastructure/server-provisioning/server-hardening/08-anti-patterns.md"
-                    },
-                    {
-                        "knowledge_unit":  "bref-laravel",
-                        "id":  "devops-infrastructure/serverless-laravel/bref-laravel/anti-patterns",
-                        "subdomain":  "serverless-laravel",
-                        "difficulty":  "intermediate",
-                        "summary":  "Anti-Patterns for bref-laravel",
-                        "has_content":  true,
-                        "domain":  "devops-infrastructure",
-                        "source_path":  "knowledge/devops-infrastructure/serverless-laravel/bref-laravel/08-anti-patterns.md"
-                    },
-                    {
-                        "knowledge_unit":  "laravel-cloud",
-                        "id":  "devops-infrastructure/serverless-laravel/laravel-cloud/anti-patterns",
-                        "subdomain":  "serverless-laravel",
-                        "difficulty":  "intermediate",
-                        "summary":  "Anti-Patterns for laravel-cloud",
-                        "has_content":  true,
-                        "domain":  "devops-infrastructure",
-                        "source_path":  "knowledge/devops-infrastructure/serverless-laravel/laravel-cloud/08-anti-patterns.md"
-                    },
-                    {
-                        "knowledge_unit":  "laravel-vapor",
-                        "id":  "devops-infrastructure/serverless-laravel/laravel-vapor/anti-patterns",
-                        "subdomain":  "serverless-laravel",
-                        "difficulty":  "intermediate",
-                        "summary":  "Anti-Patterns for laravel-vapor",
-                        "has_content":  true,
-                        "domain":  "devops-infrastructure",
-                        "source_path":  "knowledge/devops-infrastructure/serverless-laravel/laravel-vapor/08-anti-patterns.md"
                     },
                     {
                         "knowledge_unit":  "laravel-gates-policies",
@@ -14323,16 +14323,6 @@
                         "source_path":  "knowledge/laravel-eloquent-domain-modeling/attributes-and-casting/attribute-caching/08-anti-patterns.md"
                     },
                     {
-                        "knowledge_unit":  "cast-parameters",
-                        "id":  "laravel-eloquent-domain-modeling/attributes-and-casting/cast-parameters/anti-patterns",
-                        "subdomain":  "attributes-and-casting",
-                        "difficulty":  "intermediate",
-                        "summary":  "Anti-Patterns for cast-parameters",
-                        "has_content":  true,
-                        "domain":  "laravel-eloquent-domain-modeling",
-                        "source_path":  "knowledge/laravel-eloquent-domain-modeling/attributes-and-casting/cast-parameters/08-anti-patterns.md"
-                    },
-                    {
                         "knowledge_unit":  "castable-interface",
                         "id":  "laravel-eloquent-domain-modeling/attributes-and-casting/castable-interface/anti-patterns",
                         "subdomain":  "attributes-and-casting",
@@ -14341,6 +14331,16 @@
                         "has_content":  true,
                         "domain":  "laravel-eloquent-domain-modeling",
                         "source_path":  "knowledge/laravel-eloquent-domain-modeling/attributes-and-casting/castable-interface/08-anti-patterns.md"
+                    },
+                    {
+                        "knowledge_unit":  "cast-parameters",
+                        "id":  "laravel-eloquent-domain-modeling/attributes-and-casting/cast-parameters/anti-patterns",
+                        "subdomain":  "attributes-and-casting",
+                        "difficulty":  "intermediate",
+                        "summary":  "Anti-Patterns for cast-parameters",
+                        "has_content":  true,
+                        "domain":  "laravel-eloquent-domain-modeling",
+                        "source_path":  "knowledge/laravel-eloquent-domain-modeling/attributes-and-casting/cast-parameters/08-anti-patterns.md"
                     },
                     {
                         "knowledge_unit":  "casts-attributes-interface",
@@ -15363,16 +15363,6 @@
                         "source_path":  "knowledge/laravel-eloquent-domain-modeling/query-strategy/dynamic-scopes/08-anti-patterns.md"
                     },
                     {
-                        "knowledge_unit":  "global-scope-suppression",
-                        "id":  "laravel-eloquent-domain-modeling/query-strategy/global-scope-suppression/anti-patterns",
-                        "subdomain":  "query-strategy",
-                        "difficulty":  "intermediate",
-                        "summary":  "Anti-Patterns for global-scope-suppression",
-                        "has_content":  true,
-                        "domain":  "laravel-eloquent-domain-modeling",
-                        "source_path":  "knowledge/laravel-eloquent-domain-modeling/query-strategy/global-scope-suppression/08-anti-patterns.md"
-                    },
-                    {
                         "knowledge_unit":  "global-scopes",
                         "id":  "laravel-eloquent-domain-modeling/query-strategy/global-scopes/anti-patterns",
                         "subdomain":  "query-strategy",
@@ -15381,6 +15371,16 @@
                         "has_content":  true,
                         "domain":  "laravel-eloquent-domain-modeling",
                         "source_path":  "knowledge/laravel-eloquent-domain-modeling/query-strategy/global-scopes/08-anti-patterns.md"
+                    },
+                    {
+                        "knowledge_unit":  "global-scope-suppression",
+                        "id":  "laravel-eloquent-domain-modeling/query-strategy/global-scope-suppression/anti-patterns",
+                        "subdomain":  "query-strategy",
+                        "difficulty":  "intermediate",
+                        "summary":  "Anti-Patterns for global-scope-suppression",
+                        "has_content":  true,
+                        "domain":  "laravel-eloquent-domain-modeling",
+                        "source_path":  "knowledge/laravel-eloquent-domain-modeling/query-strategy/global-scope-suppression/08-anti-patterns.md"
                     },
                     {
                         "knowledge_unit":  "higher-order-messages",
@@ -15793,16 +15793,6 @@
                         "source_path":  "knowledge/laravel-eloquent-domain-modeling/serialization/resource-collection/08-anti-patterns.md"
                     },
                     {
-                        "knowledge_unit":  "resource-wrapping",
-                        "id":  "laravel-eloquent-domain-modeling/serialization/resource-wrapping/anti-patterns",
-                        "subdomain":  "serialization",
-                        "difficulty":  "intermediate",
-                        "summary":  "Anti-Patterns for resource-wrapping",
-                        "has_content":  true,
-                        "domain":  "laravel-eloquent-domain-modeling",
-                        "source_path":  "knowledge/laravel-eloquent-domain-modeling/serialization/resource-wrapping/08-anti-patterns.md"
-                    },
-                    {
                         "knowledge_unit":  "resources-vs-dtos",
                         "id":  "laravel-eloquent-domain-modeling/serialization/resources-vs-dtos/anti-patterns",
                         "subdomain":  "serialization",
@@ -15811,6 +15801,16 @@
                         "has_content":  true,
                         "domain":  "laravel-eloquent-domain-modeling",
                         "source_path":  "knowledge/laravel-eloquent-domain-modeling/serialization/resources-vs-dtos/08-anti-patterns.md"
+                    },
+                    {
+                        "knowledge_unit":  "resource-wrapping",
+                        "id":  "laravel-eloquent-domain-modeling/serialization/resource-wrapping/anti-patterns",
+                        "subdomain":  "serialization",
+                        "difficulty":  "intermediate",
+                        "summary":  "Anti-Patterns for resource-wrapping",
+                        "has_content":  true,
+                        "domain":  "laravel-eloquent-domain-modeling",
+                        "source_path":  "knowledge/laravel-eloquent-domain-modeling/serialization/resource-wrapping/08-anti-patterns.md"
                     },
                     {
                         "knowledge_unit":  "spatie-laravel-data",
@@ -16273,16 +16273,6 @@
                         "source_path":  "knowledge/laravel-execution-lifecycle/dependency-injection/aliasing-primitives/08-anti-patterns.md"
                     },
                     {
-                        "knowledge_unit":  "auto-resolution-strategy",
-                        "id":  "laravel-execution-lifecycle/dependency-injection/auto-resolution-strategy/anti-patterns",
-                        "subdomain":  "dependency-injection",
-                        "difficulty":  "intermediate",
-                        "summary":  "Anti-Patterns for auto-resolution-strategy",
-                        "has_content":  true,
-                        "domain":  "laravel-execution-lifecycle",
-                        "source_path":  "knowledge/laravel-execution-lifecycle/dependency-injection/auto-resolution-strategy/08-anti-patterns.md"
-                    },
-                    {
                         "knowledge_unit":  "automatic-injection",
                         "id":  "laravel-execution-lifecycle/dependency-injection/automatic-injection/anti-patterns",
                         "subdomain":  "dependency-injection",
@@ -16291,6 +16281,16 @@
                         "has_content":  true,
                         "domain":  "laravel-execution-lifecycle",
                         "source_path":  "knowledge/laravel-execution-lifecycle/dependency-injection/automatic-injection/08-anti-patterns.md"
+                    },
+                    {
+                        "knowledge_unit":  "auto-resolution-strategy",
+                        "id":  "laravel-execution-lifecycle/dependency-injection/auto-resolution-strategy/anti-patterns",
+                        "subdomain":  "dependency-injection",
+                        "difficulty":  "intermediate",
+                        "summary":  "Anti-Patterns for auto-resolution-strategy",
+                        "has_content":  true,
+                        "domain":  "laravel-execution-lifecycle",
+                        "source_path":  "knowledge/laravel-execution-lifecycle/dependency-injection/auto-resolution-strategy/08-anti-patterns.md"
                     },
                     {
                         "knowledge_unit":  "circular-dependency-resolution",
@@ -18303,16 +18303,6 @@
                         "source_path":  "knowledge/performance-runtime-engineering/memory-management-gc/string-memory-usage/08-anti-patterns.md"
                     },
                     {
-                        "knowledge_unit":  "weak-reference-api-usage",
-                        "id":  "performance-runtime-engineering/memory-management-gc/weak-reference-api-usage/anti-patterns",
-                        "subdomain":  "memory-management-gc",
-                        "difficulty":  "intermediate",
-                        "summary":  "Anti-Patterns for weak-reference-api-usage",
-                        "has_content":  true,
-                        "domain":  "performance-runtime-engineering",
-                        "source_path":  "knowledge/performance-runtime-engineering/memory-management-gc/weak-reference-api-usage/08-anti-patterns.md"
-                    },
-                    {
                         "knowledge_unit":  "weakreference-api-usage",
                         "id":  "performance-runtime-engineering/memory-management-gc/weakreference-api-usage/anti-patterns",
                         "subdomain":  "memory-management-gc",
@@ -18321,6 +18311,16 @@
                         "has_content":  true,
                         "domain":  "performance-runtime-engineering",
                         "source_path":  "knowledge/performance-runtime-engineering/memory-management-gc/weakreference-api-usage/08-anti-patterns.md"
+                    },
+                    {
+                        "knowledge_unit":  "weak-reference-api-usage",
+                        "id":  "performance-runtime-engineering/memory-management-gc/weak-reference-api-usage/anti-patterns",
+                        "subdomain":  "memory-management-gc",
+                        "difficulty":  "intermediate",
+                        "summary":  "Anti-Patterns for weak-reference-api-usage",
+                        "has_content":  true,
+                        "domain":  "performance-runtime-engineering",
+                        "source_path":  "knowledge/performance-runtime-engineering/memory-management-gc/weak-reference-api-usage/08-anti-patterns.md"
                     },
                     {
                         "knowledge_unit":  "zval-structure-reference-counting",
@@ -20653,16 +20653,6 @@
                         "source_path":  "knowledge/search-retrieval-systems/laravel-scout-foundation/full-reindex-vs-incremental/08-anti-patterns.md"
                     },
                     {
-                        "knowledge_unit":  "index-schema-design",
-                        "id":  "search-retrieval-systems/laravel-scout-foundation/index-schema-design/anti-patterns",
-                        "subdomain":  "laravel-scout-foundation",
-                        "difficulty":  "intermediate",
-                        "summary":  "Anti-Patterns for index-schema-design",
-                        "has_content":  true,
-                        "domain":  "search-retrieval-systems",
-                        "source_path":  "knowledge/search-retrieval-systems/laravel-scout-foundation/index-schema-design/08-anti-patterns.md"
-                    },
-                    {
                         "knowledge_unit":  "indexing-strategies",
                         "id":  "search-retrieval-systems/laravel-scout-foundation/indexing-strategies/anti-patterns",
                         "subdomain":  "laravel-scout-foundation",
@@ -20671,6 +20661,16 @@
                         "has_content":  true,
                         "domain":  "search-retrieval-systems",
                         "source_path":  "knowledge/search-retrieval-systems/laravel-scout-foundation/indexing-strategies/08-anti-patterns.md"
+                    },
+                    {
+                        "knowledge_unit":  "index-schema-design",
+                        "id":  "search-retrieval-systems/laravel-scout-foundation/index-schema-design/anti-patterns",
+                        "subdomain":  "laravel-scout-foundation",
+                        "difficulty":  "intermediate",
+                        "summary":  "Anti-Patterns for index-schema-design",
+                        "has_content":  true,
+                        "domain":  "search-retrieval-systems",
+                        "source_path":  "knowledge/search-retrieval-systems/laravel-scout-foundation/index-schema-design/08-anti-patterns.md"
                     },
                     {
                         "knowledge_unit":  "laravel-scout-searchable-trait",
@@ -22643,16 +22643,6 @@
                         "source_path":  "knowledge/testing-reliability-engineering/core-concepts/phpunit-configuration/08-anti-patterns.md"
                     },
                     {
-                        "knowledge_unit":  "test-suite-profiling",
-                        "id":  "testing-reliability-engineering/core-concepts/test-suite-profiling/anti-patterns",
-                        "subdomain":  "core-concepts",
-                        "difficulty":  "intermediate",
-                        "summary":  "Anti-Patterns for test-suite-profiling",
-                        "has_content":  true,
-                        "domain":  "testing-reliability-engineering",
-                        "source_path":  "knowledge/testing-reliability-engineering/core-concepts/test-suite-profiling/08-anti-patterns.md"
-                    },
-                    {
                         "knowledge_unit":  "testing-environment-management",
                         "id":  "testing-reliability-engineering/core-concepts/testing-environment-management/anti-patterns",
                         "subdomain":  "core-concepts",
@@ -22661,6 +22651,16 @@
                         "has_content":  true,
                         "domain":  "testing-reliability-engineering",
                         "source_path":  "knowledge/testing-reliability-engineering/core-concepts/testing-environment-management/08-anti-patterns.md"
+                    },
+                    {
+                        "knowledge_unit":  "test-suite-profiling",
+                        "id":  "testing-reliability-engineering/core-concepts/test-suite-profiling/anti-patterns",
+                        "subdomain":  "core-concepts",
+                        "difficulty":  "intermediate",
+                        "summary":  "Anti-Patterns for test-suite-profiling",
+                        "has_content":  true,
+                        "domain":  "testing-reliability-engineering",
+                        "source_path":  "knowledge/testing-reliability-engineering/core-concepts/test-suite-profiling/08-anti-patterns.md"
                     },
                     {
                         "knowledge_unit":  "database-assertions",
@@ -23173,16 +23173,6 @@
                         "source_path":  "knowledge/testing-reliability-engineering/unit-testing/null-driver-pattern/08-anti-patterns.md"
                     },
                     {
-                        "knowledge_unit":  "test-double-taxonomy",
-                        "id":  "testing-reliability-engineering/unit-testing/test-double-taxonomy/anti-patterns",
-                        "subdomain":  "unit-testing",
-                        "difficulty":  "intermediate",
-                        "summary":  "Anti-Patterns for test-double-taxonomy",
-                        "has_content":  true,
-                        "domain":  "testing-reliability-engineering",
-                        "source_path":  "knowledge/testing-reliability-engineering/unit-testing/test-double-taxonomy/08-anti-patterns.md"
-                    },
-                    {
                         "knowledge_unit":  "test-doubles-mocks",
                         "id":  "testing-reliability-engineering/unit-testing/test-doubles-mocks/anti-patterns",
                         "subdomain":  "unit-testing",
@@ -23193,14 +23183,14 @@
                         "source_path":  "knowledge/testing-reliability-engineering/unit-testing/test-doubles-mocks/08-anti-patterns.md"
                     },
                     {
-                        "knowledge_unit":  "unit-test-structure",
-                        "id":  "testing-reliability-engineering/unit-testing/unit-test-structure/anti-patterns",
+                        "knowledge_unit":  "test-double-taxonomy",
+                        "id":  "testing-reliability-engineering/unit-testing/test-double-taxonomy/anti-patterns",
                         "subdomain":  "unit-testing",
                         "difficulty":  "intermediate",
-                        "summary":  "Anti-Patterns for unit-test-structure",
+                        "summary":  "Anti-Patterns for test-double-taxonomy",
                         "has_content":  true,
                         "domain":  "testing-reliability-engineering",
-                        "source_path":  "knowledge/testing-reliability-engineering/unit-testing/unit-test-structure/08-anti-patterns.md"
+                        "source_path":  "knowledge/testing-reliability-engineering/unit-testing/test-double-taxonomy/08-anti-patterns.md"
                     },
                     {
                         "knowledge_unit":  "unit-testing-patterns",
@@ -23211,6 +23201,16 @@
                         "has_content":  true,
                         "domain":  "testing-reliability-engineering",
                         "source_path":  "knowledge/testing-reliability-engineering/unit-testing/unit-testing-patterns/08-anti-patterns.md"
+                    },
+                    {
+                        "knowledge_unit":  "unit-test-structure",
+                        "id":  "testing-reliability-engineering/unit-testing/unit-test-structure/anti-patterns",
+                        "subdomain":  "unit-testing",
+                        "difficulty":  "intermediate",
+                        "summary":  "Anti-Patterns for unit-test-structure",
+                        "has_content":  true,
+                        "domain":  "testing-reliability-engineering",
+                        "source_path":  "knowledge/testing-reliability-engineering/unit-testing/unit-test-structure/08-anti-patterns.md"
                     }
                 ],
     "total_entries":  2321

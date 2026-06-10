@@ -6,7 +6,7 @@ Repository-wide rule registry. Centralized discovery for AI agents.
 |---|---|
 | Total Rules | 2321 |
 | Domains | 21 |
-| Generated | 2026-06-09 00:41:19 |
+| Generated | 2026-06-10 09:55:53 |
 
 ---
 
@@ -1557,18 +1557,18 @@ Repository-wide rule registry. Centralized discovery for AI agents.
 - **infrastructure-monitoring-tools** -- knowledge/devops-infrastructure/observability-monitoring/infrastructure-monitoring-tools/05-rules.md
 - **observability-monitoring** -- knowledge/devops-infrastructure/observability-monitoring/observability-monitoring/05-rules.md
 
+**Serverless Laravel** -- 3 units
+
+- **bref-laravel** -- knowledge/devops-infrastructure/serverless-laravel/bref-laravel/05-rules.md
+- **laravel-cloud** -- knowledge/devops-infrastructure/serverless-laravel/laravel-cloud/05-rules.md
+- **laravel-vapor** -- knowledge/devops-infrastructure/serverless-laravel/laravel-vapor/05-rules.md
+
 **Server Provisioning** -- 4 units
 
 - **laravel-forge-provisioning** -- knowledge/devops-infrastructure/server-provisioning/laravel-forge-provisioning/05-rules.md
 - **ploi-server-management** -- knowledge/devops-infrastructure/server-provisioning/ploi-server-management/05-rules.md
 - **provisioning-tools** -- knowledge/devops-infrastructure/server-provisioning/provisioning-tools/05-rules.md
 - **server-hardening** -- knowledge/devops-infrastructure/server-provisioning/server-hardening/05-rules.md
-
-**Serverless Laravel** -- 3 units
-
-- **bref-laravel** -- knowledge/devops-infrastructure/serverless-laravel/bref-laravel/05-rules.md
-- **laravel-cloud** -- knowledge/devops-infrastructure/serverless-laravel/laravel-cloud/05-rules.md
-- **laravel-vapor** -- knowledge/devops-infrastructure/serverless-laravel/laravel-vapor/05-rules.md
 
 ### Governance & Compliance Engineering (40 rules)
 

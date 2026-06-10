@@ -6,7 +6,7 @@ Fast discovery of all Knowledge Units in the repository.
 |---|---|
 | Total KUs | 2321 |
 | Domains | 21 |
-| Generated | 2026-06-09 00:41:19 |
+| Generated | 2026-06-10 09:55:53 |
 
 ---
 
@@ -1789,6 +1789,14 @@ Fast discovery of all Knowledge Units in the repository.
 | 1 | infrastructure-monitoring-tools | `knowledge/devops-infrastructure/observability-monitoring/infrastructure-monitoring-tools` |
 | 2 | observability-monitoring | `knowledge/devops-infrastructure/observability-monitoring/observability-monitoring` |
 
+### Serverless Laravel
+
+| # | KU | Path |
+|---|---|------|
+| 1 | bref-laravel | `knowledge/devops-infrastructure/serverless-laravel/bref-laravel` |
+| 2 | laravel-cloud | `knowledge/devops-infrastructure/serverless-laravel/laravel-cloud` |
+| 3 | laravel-vapor | `knowledge/devops-infrastructure/serverless-laravel/laravel-vapor` |
+
 ### Server Provisioning
 
 | # | KU | Path |
@@ -1797,14 +1805,6 @@ Fast discovery of all Knowledge Units in the repository.
 | 2 | ploi-server-management | `knowledge/devops-infrastructure/server-provisioning/ploi-server-management` |
 | 3 | provisioning-tools | `knowledge/devops-infrastructure/server-provisioning/provisioning-tools` |
 | 4 | server-hardening | `knowledge/devops-infrastructure/server-provisioning/server-hardening` |
-
-### Serverless Laravel
-
-| # | KU | Path |
-|---|---|------|
-| 1 | bref-laravel | `knowledge/devops-infrastructure/serverless-laravel/bref-laravel` |
-| 2 | laravel-cloud | `knowledge/devops-infrastructure/serverless-laravel/laravel-cloud` |
-| 3 | laravel-vapor | `knowledge/devops-infrastructure/serverless-laravel/laravel-vapor` |
 
 ## Governance & Compliance Engineering
 
