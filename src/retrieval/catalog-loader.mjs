@@ -5,6 +5,7 @@ import {
   OPTIONAL_JSON_FILES,
   INTELLIGENCE_JSON_DIR,
 } from './config.mjs';
+import { loadConfig } from '../runtime/user-config.mjs';
 
 export function resolveEccRoot(root) {
   const candidates = [];
@@ -42,12 +43,19 @@ export function findEccRoot(cwd, explicitRoot, envRoot) {
   if (found) return found;
   found = resolveEccRoot(process.cwd());
   if (found) return found;
+  const config = loadConfig();
+  if (config) {
+    found = resolveEccRoot(config.eccRoot);
+    if (found) return found;
+  }
   throw new Error(
     'ECC intelligence files were not found.\n\n' +
     'Provide the full Laravel ECC repository path:\n\n' +
     `  npx laravel-ecc retrieve "your task" --ecc-root C:\\path\\to\\laravel-ecc\n\n` +
     'or set:\n\n' +
-    '  ECC_ROOT=C:\\path\\to\\laravel-ecc'
+    '  ECC_ROOT=C:\\path\\to\\laravel-ecc\n\n' +
+    'or run:\n\n' +
+    '  laravel-ecc setup --ecc-root C:\\path\\to\\laravel-ecc'
   );
 }
 

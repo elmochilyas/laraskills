@@ -13,6 +13,16 @@ import {
   retrieveAndFormat,
 } from '../src/retrieval/index.mjs';
 import { formatAsMarkdown, formatAsJson, formatKuDetail } from '../src/retrieval/formatter.mjs';
+import {
+  resolveEccRootWithPrecedence,
+  resolveEccRoot,
+  validateIntelligenceRoot,
+} from '../src/runtime/ecc-root-resolver.mjs';
+import {
+  getConfigPath,
+  loadConfig,
+  saveConfig,
+} from '../src/runtime/user-config.mjs';
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const ROOT = join(__dirname, '..');
@@ -172,20 +182,162 @@ function addComponent(target, component) {
   err(`Component not found: ${component}`);
 }
 
-function doctor(target) {
-  const state = readState(target);
-  if (state) {
-    log(`Package version: ${pkg.version}`);
-    log(`Installed version: ${state.version}`);
-    log(`Profile: ${state.profile}`);
-    log(`Installed at: ${state.installed_at}`);
-    log(`Components: ${(state.components || []).join(', ')}`);
-    log(`Tools detected: ${(state.tools || []).join(', ')}`);
-    if (state.version !== pkg.version) {
-      warn(`Version mismatch! Installed ${state.version}, package is ${pkg.version}. Run 'npx laravel-ecc update' to sync.`);
+function cmdSetup(setupArgs) {
+  const flags = parseFlags(setupArgs);
+  const explicitRoot = getExplicitEccRoot(flags);
+  const configPath = getConfigPath();
+
+  log('Laravel ECC setup');
+  console.log('');
+
+  let rootToSave = null;
+  let source = '';
+
+  if (explicitRoot) {
+    const resolved = resolveEccRoot(explicitRoot);
+    if (!resolved) {
+      err(
+        `Validation failed: ${explicitRoot} does not contain intelligence/json/knowledge-units.json.\n` +
+        `Provide the root of a full Laravel ECC checkout (not a subdirectory).`
+      );
     }
+    rootToSave = resolved;
+    source = 'cli-argument';
   } else {
-    log('Not installed. Run `npx laravel-ecc install` or `install.ps1` / `install.sh` to install.');
+    try {
+      const result = resolveEccRootWithPrecedence({ explicitRoot: null });
+      rootToSave = result.root;
+      source = result.source;
+      log(`ECC root discovered automatically (${source}): ${rootToSave}`);
+      console.log('');
+    } catch (e) {
+      log('No ECC root could be discovered automatically.');
+      log('Provide the full Laravel ECC checkout path:');
+      console.log(`  laravel-ecc setup --ecc-root "/path/to/laravel-ecc"`);
+      console.log('');
+      log('To clone the repository first:');
+      console.log(`  git clone https://github.com/elmochilyas/laravel-ecc.git`);
+      console.log(`  laravel-ecc setup --ecc-root "./laravel-ecc"`);
+      process.exit(1);
+    }
+  }
+
+  const intelligenceCheck = validateIntelligenceRoot(rootToSave);
+  const savedPath = saveConfig(rootToSave);
+
+  console.log('Laravel ECC setup complete.');
+  console.log('');
+  console.log(`Config file:  ${savedPath}`);
+  console.log(`ECC root:     ${rootToSave}`);
+  console.log(`Source:       ${source}`);
+  console.log(`Intelligence: ${intelligenceCheck.valid ? 'VALID' : 'INCOMPLETE'}`);
+  if (!intelligenceCheck.valid) {
+    console.log(`  Missing files: ${intelligenceCheck.missingFiles.join(', ')}`);
+  }
+  console.log('');
+  console.log('Next steps:');
+  console.log(`  laravel-ecc doctor              Verify configuration`);
+  console.log(`  laravel-ecc retrieve "<task>"    Get ECC context for a task`);
+  console.log(`  laravel-ecc search "<query>"     Search knowledge units`);
+  console.log(`  laravel-ecc validate             Validate intelligence layer`);
+  console.log('');
+}
+
+function cmdDoctor(doctorArgs) {
+  const flags = parseFlags(doctorArgs || []);
+  const configPath = getConfigPath();
+  const configExists = existsSync(configPath);
+  const envEccRoot = process.env.ECC_ROOT || 'not set';
+
+  console.log('Laravel ECC Doctor');
+  console.log('');
+  console.log(`Package version:       ${pkg.version}`);
+  console.log(`Node.js:               ${process.version}`);
+  console.log(`Platform:              ${process.platform}`);
+  console.log(`Config file:           ${configPath}`);
+  console.log(`Config exists:         ${configExists ? 'yes' : 'no'}`);
+
+  if (configExists) {
+    try {
+      const config = loadConfig();
+      console.log(`Config ECC root:       ${config.eccRoot}`);
+    } catch (e) {
+      console.log(`Config ECC root:       ERROR - ${e.message}`);
+    }
+  }
+
+  console.log(`ECC_ROOT env:          ${envEccRoot}`);
+
+  let resolvedRoot = null;
+  let resolutionSource = '';
+  let resolutionError = null;
+
+  try {
+    const result = resolveEccRootWithPrecedence({
+      explicitRoot: flags.eccroot || null,
+    });
+    resolvedRoot = result.root;
+    resolutionSource = result.source;
+    console.log(`Resolved ECC root:     ${resolvedRoot}`);
+    console.log(`Resolution source:     ${resolutionSource}`);
+  } catch (e) {
+    resolutionError = e.message;
+    console.log(`Resolved ECC root:     NOT FOUND`);
+    console.log(`Resolution source:     none`);
+  }
+
+  if (resolvedRoot) {
+    const jsonDir = join(resolvedRoot, 'intelligence', 'json');
+    const requiredFiles = [
+      'knowledge-units.json', 'dependencies.json', 'relationships.json',
+      'rules.json', 'skills.json', 'checklists.json', 'anti-patterns.json',
+      'decision-trees.json',
+    ];
+    let filesPass = true;
+    const fileResults = [];
+    for (const f of requiredFiles) {
+      const ok = existsSync(join(jsonDir, f));
+      fileResults.push({ file: f, ok });
+      if (!ok) filesPass = false;
+    }
+    console.log(`Intelligence files:    ${filesPass ? 'PASS' : 'FAIL'}`);
+    if (!filesPass) {
+      for (const fr of fileResults) {
+        if (!fr.ok) console.log(`  Missing: ${fr.file}`);
+      }
+    }
+
+    const intelligenceCheck = validateIntelligenceRoot(resolvedRoot);
+    console.log(`Intelligence validate: ${intelligenceCheck.valid ? 'PASS' : 'FAIL'}`);
+
+    const mcpPath = join(resolvedRoot, 'scripts', 'laravel-ecc-mcp.mjs');
+    console.log(`MCP adapter:           ${existsSync(mcpPath) ? 'PASS' : 'MISSING'}`);
+
+    const retrievalDir = join(resolvedRoot, 'src', 'retrieval');
+    console.log(`Retrieval readiness:   ${existsSync(retrievalDir) ? 'PASS' : 'MISSING'}`);
+  } else {
+    console.log(`Intelligence files:    FAIL`);
+    console.log(`Intelligence validate: FAIL`);
+    console.log(`MCP adapter:           FAIL`);
+    console.log(`Retrieval readiness:   FAIL`);
+  }
+
+  console.log('');
+
+  if (resolvedRoot && validateIntelligenceRoot(resolvedRoot).valid) {
+    console.log('Status: HEALTHY');
+    process.exit(0);
+  } else {
+    console.log('Status: ACTION REQUIRED');
+    if (resolutionError) {
+      console.log('');
+      console.log('Fix:');
+      console.log(`  laravel-ecc setup --ecc-root "/path/to/laravel-ecc"`);
+      console.log('');
+      console.log('To clone the full repository:');
+      console.log(`  git clone https://github.com/elmochilyas/laravel-ecc.git`);
+    }
+    process.exit(1);
   }
 }
 
@@ -341,6 +493,10 @@ function parseFlags(args) {
 
 function getEccRoot(flags) {
   return flags.eccroot || process.env.ECC_ROOT || null;
+}
+
+function getExplicitEccRoot(flags) {
+  return flags.eccroot || null;
 }
 
 function cmdRetrieve(retrieveArgs) {
@@ -562,64 +718,75 @@ function cmdValidate(validateArgs) {
 }
 
 function showHelp() {
-  console.log(`
-Laravel ECC v${pkg.version}
-
-Usage:
-  npx laravel-ecc install [--profile core|full|minimal]   Install Laravel ECC
-  npx laravel-ecc add <component>                          Add a component
-  npx laravel-ecc update                                   Update to latest version
-  npx laravel-ecc doctor                                   Check installation state
-
-  npx laravel-ecc retrieve "<query>" [options]             Retrieve ECC context bundle
-  npx laravel-ecc search "<query>" [options]               Search knowledge units
-  npx laravel-ecc get <ku-id> [options]                    Get knowledge unit details
-  npx laravel-ecc prerequisites <ku-id> [options]          Get prerequisites
-  npx laravel-ecc related <ku-id> [options]                Get related topics
-  npx laravel-ecc validate [options]                       Validate intelligence layer
-
-  npx laravel-ecc --help                                   Show this help
-
-Retrieval Options:
-  --mode compact|standard|deep              Context bundle mode (default: standard)
-  --format markdown|json                    Output format (default: markdown)
-  --ecc-root <path>                         Path to laravel-ecc repository root
-  --max-kus <number>                        Max knowledge units to include
-  --max-rules <number>                      Max rules to include
-  --max-skills <number>                     Max skills to include
-  --max-related <number>                    Max related topics (retrieve)
-  --max-prerequisites <number>              Max prerequisites (retrieve)
-  --prerequisite-depth <number>             Prerequisite graph depth (default: 1)
-  --related-depth <number>                  Related topic graph depth (default: 1)
-  --budget <number>                         Estimated token budget
-  --domain <domain-id>                      Filter by domain (search only)
-  --limit <number>                          Result limit (search/prerequisites/related)
-  --depth <number>                          Graph depth (prerequisites/related)
-  --include-content                         Include Markdown content (get only)
-
-Profiles:
-  minimal   Skills only (3 skills)
-  core      6 skills + rules + agents (default)
-  full      Everything + commands + harness configs
-
-Components:
-  laravel-patterns        Laravel 13 architecture patterns (Actions, DTOs, Eloquent, Queues)
-  laravel-tdd             Laravel 13 testing with Pest 4 (feature tests, fakes, architecture)
-  laravel-security        Laravel 13 security (mass assignment, XSS, CSRF, Gates, rate limiting)
-  laravel-core-internals  Laravel 13 core internals (Container, DI, Providers, Facades, Lifecycle, Contracts)
-  laravel-artisan         Artisan command generation agent
-  laravel-eloquent        Eloquent ORM optimization agent
-  laravel-database        Database engineering skill (SQL, indexing, PostgreSQL, vector search)
-  laravel-migration       Database migration design agent
-  laravel-container       Container, DI, provider, facade architecture agent
-
-Also install via install scripts:
-  ./install.ps1 --profile minimal|core|full   Windows
-  ./install.sh --profile minimal|core|full    macOS/Linux
-
-ECC_ROOT environment variable:
-  Set ECC_ROOT to the laravel-ecc repository path for retrieval commands.
-`);
+  const lines = [];
+  lines.push('');
+  lines.push(`Laravel ECC v${pkg.version}`);
+  lines.push('');
+  lines.push('The npm package contains the CLI and MCP adapter.');
+  lines.push('Retrieval requires access to a full Laravel ECC checkout.');
+  lines.push('Run `laravel-ecc setup` to configure it.');
+  lines.push('');
+  lines.push('Onboarding:');
+  lines.push('  laravel-ecc setup --ecc-root "<path>"   Configure ECC root');
+  lines.push('  laravel-ecc doctor                      Diagnose configuration');
+  lines.push('');
+  lines.push('Project installation:');
+  lines.push('  laravel-ecc install [--profile core|full|minimal]   Install Laravel ECC skills');
+  lines.push('  laravel-ecc add <component>                          Add a component');
+  lines.push('  laravel-ecc update                                   Update to latest version');
+  lines.push('');
+  lines.push('Retrieval commands:');
+  lines.push('  laravel-ecc retrieve "<query>" [options]             Retrieve ECC context bundle');
+  lines.push('  laravel-ecc search "<query>" [options]               Search knowledge units');
+  lines.push('  laravel-ecc get <ku-id> [options]                    Get knowledge unit details');
+  lines.push('  laravel-ecc prerequisites <ku-id> [options]          Get prerequisites');
+  lines.push('  laravel-ecc related <ku-id> [options]                Get related topics');
+  lines.push('  laravel-ecc validate [options]                       Validate intelligence layer');
+  lines.push('');
+  lines.push('Options:');
+  lines.push('  --help                                                Show this help');
+  lines.push('');
+  lines.push('Retrieval Options:');
+  lines.push('  --mode compact|standard|deep              Context bundle mode (default: standard)');
+  lines.push('  --format markdown|json                    Output format (default: markdown)');
+  lines.push('  --ecc-root <path>                         Path to laravel-ecc repository root');
+  lines.push('  --max-kus <number>                        Max knowledge units to include');
+  lines.push('  --max-rules <number>                      Max rules to include');
+  lines.push('  --max-skills <number>                     Max skills to include');
+  lines.push('  --max-related <number>                    Max related topics (retrieve)');
+  lines.push('  --max-prerequisites <number>              Max prerequisites (retrieve)');
+  lines.push('  --prerequisite-depth <number>             Prerequisite graph depth (default: 1)');
+  lines.push('  --related-depth <number>                  Related topic graph depth (default: 1)');
+  lines.push('  --budget <number>                         Estimated token budget');
+  lines.push('  --domain <domain-id>                      Filter by domain (search only)');
+  lines.push('  --limit <number>                          Result limit (search/prerequisites/related)');
+  lines.push('  --depth <number>                          Graph depth (prerequisites/related)');
+  lines.push('  --include-content                         Include Markdown content (get only)');
+  lines.push('');
+  lines.push('Profiles:');
+  lines.push('  minimal   Skills only (3 skills)');
+  lines.push('  core      6 skills + rules + agents (default)');
+  lines.push('  full      Everything + commands + harness configs');
+  lines.push('');
+  lines.push('Components:');
+  lines.push('  laravel-patterns        Laravel 13 architecture patterns (Actions, DTOs, Eloquent, Queues)');
+  lines.push('  laravel-tdd             Laravel 13 testing with Pest 4 (feature tests, fakes, architecture)');
+  lines.push('  laravel-security        Laravel 13 security (mass assignment, XSS, CSRF, Gates, rate limiting)');
+  lines.push('  laravel-core-internals  Laravel 13 core internals (Container, DI, Providers, Facades, Lifecycle, Contracts)');
+  lines.push('  laravel-artisan         Artisan command generation agent');
+  lines.push('  laravel-eloquent        Eloquent ORM optimization agent');
+  lines.push('  laravel-database        Database engineering skill (SQL, indexing, PostgreSQL, vector search)');
+  lines.push('  laravel-migration       Database migration design agent');
+  lines.push('  laravel-container       Container, DI, provider, facade architecture agent');
+  lines.push('');
+  lines.push('Also install via install scripts:');
+  lines.push('  ./install.ps1 --profile minimal|core|full   Windows');
+  lines.push('  ./install.sh --profile minimal|core|full    macOS/Linux');
+  lines.push('');
+  lines.push('ECC_ROOT environment variable:');
+  lines.push('  Set ECC_ROOT to the laravel-ecc repository path for retrieval commands.');
+  lines.push('');
+  console.log(lines.join('\n'));
 }
 
 const args = process.argv.slice(2);
@@ -630,8 +797,13 @@ if (args.length === 0 || args[0] === '--help' || args[0] === '-h') {
   process.exit(0);
 }
 
+if (args[0] === 'setup') {
+  cmdSetup(args.slice(1));
+  process.exit(0);
+}
+
 if (args[0] === 'doctor') {
-  doctor(target);
+  cmdDoctor(args.slice(1));
   process.exit(0);
 }
 
