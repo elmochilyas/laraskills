@@ -14,6 +14,7 @@
 3. New endpoint added without isolation test
 4. Wrong Decision Without Context Evaluation
 5. Production Blindness
+6. Policy-only tenant isolation without query-level scoping
 ---
 ## Repository-Wide Anti-Patterns
 The following cross-cutting anti-patterns are relevant to this KU:
@@ -161,6 +162,96 @@ Review architecture rules in 05-rules.md
 Apply the skills workflow from 06-skills.md
 ### Related Decision Trees
 5-11-cross-tenant-data-leak-prevention decision trees in 07-decision-trees.md
+---## Anti-Pattern 6: Policy-only tenant isolation without query-level scoping
+### Category
+Architecture | Security | Testing
+### Description
+Teams rely exclusively on Laravel Policies to enforce tenant isolation, assuming that if a Policy denies access, data is safe. This approach omits query-level scoping (global scopes, `where tenant_id = ?` in query builder). A Policy prevents an endpoint from returning forbidden data, but without query-level scoping, a buggy or missing Policy check can leak cross-tenant data before it is ever evaluated.
+### Why It Happens
+Policies are the idiomatic Laravel authorization layer and feel like "enough." Developers assume that if the Policy is correct, no further protection is needed. Query-level scoping is seen as duplication rather than defense in depth.
+### Warning Signs
+- No global `TenantScope` applied to tenant-scoped models
+- Queries use `Model::all()` or `Model::find()` without tenant filtering
+- Authorization relies solely on `$this->authorize()` in controllers
+- No `withoutGlobalScope()` calls to document intended bypasses
+- Policies contain `whereHas` or filtering logic that should be in the query
+- Raw SQL queries or query builder calls lack explicit `tenant_id` conditions
+### Why It Is Harmful
+Policies only gate access at the controller layer. They do not protect against:
+- **Direct query bypass**: PhpMyAdmin, raw SQL, another service with DB access
+- **Relationship lazy loading**: `$user->posts` loads all posts regardless of tenant
+- **Queued jobs**: A job that queries the model without going through the controller
+- **Batch operations**: Artisan commands, scheduled tasks, imports without Policy checks
+- **API Resource serialization**: Loading relationships may trigger cross-tenant reads
+### Real-World Consequences
+A controller with a missing `authorize()` call returns all tenants' data. A queued job processing millions of records leaks data silently for months before detection. A developer adds a new relationship and lazy-loads it in a resource, bypassing the Policy layer entirely.
+### Preferred Alternative
+Use defense-in-depth: query-level scoping as the primary isolation mechanism (global `TenantScope` or explicit `where tenant_id = ?`), with Policies as the secondary authorization layer. Every query must be scoped at the database level, not just at the controller level.
+### Refactoring Strategy
+1. Add `TenantScope` global scope to all tenant-scoped models
+2. Audit all existing queries for tenant filtering (use query log)
+3. Remove tenant-filtering logic from Policies — Policies should only check business rules, not enforce isolation
+4. Add `withoutGlobalScope()` as an explicit, audited escape hatch
+5. Write isolation tests that bypass the controller (direct model queries, queued jobs) to verify query-level scoping
+6. Add a CI check that verifies every tenant-scoped table query includes a tenant filter
+### Detection Checklist
+- [ ] Every tenant-scoped model has a global TenantScope or explicit tenant filter in every query path
+- [ ] Policies do not duplicate tenant filtering — they only enforce business-level authorization
+- [ ] Direct model queries (tinker, jobs, commands) also respect tenant isolation
+- [ ] Relationship lazy loading cannot bypass tenant isolation
+- [ ] All legitimate bypasses (`withoutGlobalScope`) are documented, limited, and audited
+### Related Rules
+1. Never Trust Tenant ID From Request
+2. Always Index Tenant ID As Leading Column
+3. Apply Global Scopes for Tenant Isolation
+4. Defense in Depth: Query Layer + Policy Layer
+### Related Skills
+Establish multi-layer tenant isolation: global scopes at the query layer, Policies at the authorization layer, and integration tests that verify both layers independently.
+### Related Decision Trees
+## Decision Context
+## Decision Criteria
+## Decision Tree
+## Decision Context
+## Decision Criteria
+## Decision Tree
+
+---## Anti-Pattern 7: Missing scoped route-model binding for tenant isolation
+### Category
+Architecture | Security
+### Description
+Applications use route-model binding to fetch resources by ID without verifying that the resource belongs to the current tenant. `Route::get('/organizations/{organization}/users/{user}', ...)` binds the `User` model by primary key alone, ignoring the parent `Organization` tenant context. An attacker can manipulate the `user` ID to access another tenant's user record.
+### Why It Happens
+Route-model binding is convenient and developers trust it implicitly. The `scopeBindings()` modifier is not well known. Without explicit scoping, Laravel binds the child model by its own primary key without checking the parent relationship.
+### Warning Signs
+- Nested route parameters (`{organization}/{user}`) without `->scopeBindings()`
+- Controller manually verifies parent-child relationship after binding
+- No integration test that swaps the child ID to a different tenant's record
+### Why It Is Harmful
+Without scoped bindings, a request to `/organizations/1/users/999` will resolve `User` 999 even if it belongs to organization 2, bypassing tenant isolation at the routing layer. The leak happens before any Policy can check it.
+### Real-World Consequences
+A user from Tenant A accesses Tenant B's records by changing a URL parameter. The relationship is never verified because route-model binding resolves the model by ID only.
+### Preferred Alternative
+Always use `->scopeBindings()` on nested resource routes for tenant-scoped models. This ensures the child model is resolved within the parent's relationship, providing automatic tenant isolation at the routing layer.
+### Refactoring Strategy
+1. Audit all nested routes for `->scopeBindings()` usage
+2. Apply `->scopeBindings()` to any nested route under a tenant parent
+3. For routes that cannot use scoped bindings (custom resolution logic), add an explicit `whereBelongsTo()` or `where('tenant_id', tenant()->id)` to the query
+4. Write integration tests that verify cross-tenant ID manipulation fails
+### Detection Checklist
+- [ ] Every nested tenant route uses `->scopeBindings()`
+- [ ] Routes without scoped bindings have explicit tenant verification
+- [ ] Integration tests confirm cross-tenant ID manipulation returns 404/403
+### Related Rules
+1. Always scope nested route-model bindings for tenant models
+2. Never trust user-provided IDs without tenant validation
+3. Apply defense in depth at routing, query, and authorization layers
+### Related Skills
+Use Laravel's `scopeBindings()` method on nested routes to automatically scope child model resolution to the parent relationship.
+### Related Decision Trees
+## Decision Context
+## Decision Criteria
+## Decision Tree
+
 ---## Anti-Pattern 5: Production Blindness
 ### Category
 Operations | Reliability | Performance

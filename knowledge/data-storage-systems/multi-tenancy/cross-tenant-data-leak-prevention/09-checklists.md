@@ -20,6 +20,9 @@
 - [ ] Assuming global scope covers all queries**: Raw queries, query builder without model, and relationship queries may bypass scopes. Test every data access path. prevented
 - [ ] Never Trust Tenant ID From Request followed
 - [ ] Always Index Tenant ID As Leading Column followed
+- [ ] Query-level scoping in place (global TenantScope or explicit `where tenant_id = ?`) — not just Policy-level
+- [ ] ScopeBindings() applied to all nested tenant routes
+- [ ] Cross-tenant leakage tests cover direct query paths, not just HTTP endpoints
 - [ ] Zero cross-tenant data leaks in production
 - [ ] Isolation tests cover 100% of endpoints
 - [ ] All scope bypasses are documented, justified, and limited
@@ -42,11 +45,15 @@
 - [ ] withoutGlobalScope gate applied
 - [ ] Never Trust Tenant ID From Request followed
 - [ ] Always Index Tenant ID As Leading Column followed
+- [ ] Global TenantScope (or equivalent) applied to all tenant-scoped models — not relying on Policies alone
+- [ ] Query-level tenant filtering verified via DB query log (every query includes `WHERE tenant_id = ?`)
+- [ ] Nested tenant routes use `->scopeBindings()` to prevent cross-tenant IDOR
 - [ ] Create two tenants with overlapping data (same IDs, similar names) completed
 - [ ] For every endpoint, attempt to access Tenant B's data while authenticated as Tenant A completed
 - [ ] Test parameter tampering: change `tenant_id`, `organization_id`, or similar in requests completed
 - [ ] Test header manipulation: change `X-Tenant-ID` or similar headers completed
 - [ ] Test direct IDOR: change resource IDs in URLs to access other tenants' resources completed
+- [ ] Cross-tenant leakage tests for non-HTTP paths (queued jobs, commands, direct model queries) completed
 
 ---
 

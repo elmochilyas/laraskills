@@ -47,6 +47,9 @@
 - [ ] Add a `tenant()` relationship method: `return $this->belongsTo(Tenant::class)` completed
 - [ ] Apply trait to all tenant-scoped models completed
 - [ ] For models with composite tenant keys, customize the scope closure completed
+- [ ] Nested tenant routes use `->scopeBindings()` to scope child model resolution to parent tenant completed
+- [ ] Cross-tenant leakage tests verify direct query paths (not just HTTP endpoints) completed
+- [ ] `withoutGlobalScope()` calls are documented, justified, and limited — no blanket escapes completed
 
 ---
 
