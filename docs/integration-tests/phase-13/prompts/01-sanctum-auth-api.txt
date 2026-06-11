@@ -1,0 +1,23 @@
+Implement a production-quality Laravel Sanctum authentication API.
+
+Requirements:
+- register
+- login
+- logout
+- authenticated /me endpoint
+- token-based authentication
+- dedicated Form Requests
+- API Resources where appropriate
+- secure password hashing
+- validation errors
+- invalid-credentials handling
+- unauthenticated behavior
+- authorization where applicable
+- feature tests
+- database assertions
+- thin controllers
+- no secrets committed
+
+Use Laravel conventions.
+Run tests.
+Return a concise implementation summary.

@@ -1,0 +1,18 @@
+Implement a queued order-confirmation email workflow in Laravel.
+
+Requirements:
+- Order model and migration
+- queued job or queued mailable boundary
+- retry strategy
+- backoff
+- timeout
+- failed-job handling or failure hook
+- idempotency protection so duplicate dispatch does not send duplicate emails
+- thin controller or service boundary
+- tests using Laravel fakes
+- database assertions
+- no live email sending
+
+Use Laravel conventions.
+Run tests.
+Return a concise implementation summary.

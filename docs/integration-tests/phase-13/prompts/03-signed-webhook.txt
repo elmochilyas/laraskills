@@ -1,0 +1,23 @@
+Implement a secure third-party payment webhook endpoint in Laravel.
+
+Requirements:
+- POST webhook endpoint
+- HMAC signature verification
+- timestamp tolerance
+- replay protection
+- idempotency using external event ID
+- validation
+- persistence of processed webhook events
+- queue downstream processing after verification
+- correct HTTP responses
+- tests for:
+  - valid webhook
+  - invalid signature
+  - expired timestamp
+  - replay attempt
+  - duplicate event ID
+- no real external API calls
+
+Use Laravel conventions.
+Run tests.
+Return a concise implementation summary.
