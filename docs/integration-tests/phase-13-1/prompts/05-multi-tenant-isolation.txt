@@ -1,0 +1,24 @@
+Implement tenant-isolated project management endpoints in Laravel.
+
+Requirements:
+- Tenant model
+- Project model belonging to a Tenant
+- authenticated user belongs to one Tenant
+- list, create, show, update, delete Project endpoints
+- tenant isolation for every query
+- prevent cross-tenant reads and writes
+- tenant-aware validation for unique project slug
+- policy or equivalent authorization enforcement
+- dedicated Form Requests
+- API Resources
+- feature tests proving no cross-tenant leakage
+- 403 or 404 behavior chosen intentionally and documented
+
+Use Laravel conventions.
+
+Before finishing:
+1. Run the relevant Laravel test suite.
+2. Run Laravel Pint.
+3. Fix Pint issues you introduced.
+4. Run Pint in validation mode again.
+5. Return the final test result, assertion count, Pint result, assumptions, and files changed.
