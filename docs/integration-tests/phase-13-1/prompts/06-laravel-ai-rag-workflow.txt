@@ -1,0 +1,31 @@
+Implement a testable Laravel AI-assisted document retrieval workflow skeleton.
+
+Requirements:
+- Document model
+- Chunk model
+- ingestion action that splits text into chunks
+- retrieval action that ranks relevant chunks
+- answer-generation boundary using Laravel AI SDK conventions where available
+- provider calls must be faked or abstracted in tests
+- no real API keys
+- no live provider calls
+- queue ingestion when appropriate
+- validation
+- thin controller
+- API Resource output
+- tests for:
+  - ingestion
+  - chunk persistence
+  - retrieval
+  - provider boundary
+  - no live network call
+- document assumptions clearly
+
+Use Laravel conventions.
+
+Before finishing:
+1. Run the relevant Laravel test suite.
+2. Run Laravel Pint.
+3. Fix Pint issues you introduced.
+4. Run Pint in validation mode again.
+5. Return the final test result, assertion count, Pint result, assumptions, and files changed.

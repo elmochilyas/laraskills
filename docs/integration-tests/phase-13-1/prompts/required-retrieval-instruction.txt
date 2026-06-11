@@ -1,0 +1,12 @@
+Laravel ECC MCP is available and must be used before implementation.
+
+Required workflow:
+1. Call retrieve_context_bundle for this task using standard mode.
+2. Call validate_ecc once.
+3. Review returned rules, anti-patterns, checklists, relevant KUs, prerequisites, and related topics.
+4. Use search_ecc when targeted clarification is useful.
+5. When calling get_knowledge_unit, always use the exact canonical id returned by search_ecc.
+6. Record every Laravel ECC MCP call in the final summary.
+7. Explain which retrieved guidance influenced implementation decisions.
+
+Do not begin implementation until steps 1 and 2 are complete.
