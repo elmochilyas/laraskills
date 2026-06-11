@@ -79,6 +79,7 @@
     "postinstall": "node -e \"console.log('\\n  laravel-ecc installed! Run `npx laravel-ecc setup` to configure ECC root.\\n  Retrieval commands: npx laravel-ecc retrieve/search/get/prerequisites/related/validate\\n  Diagnostics: npx laravel-ecc doctor\\n  MCP server: npx laravel-ecc-mcp\\n')\"",
     "test": "node --test tests/retrieval/*.test.mjs",
     "benchmark": "node tests/retrieval/run-benchmarks.mjs",
+    "benchmark:performance": "node tests/retrieval/run-performance-benchmarks.mjs",
     "mcp:start": "node scripts/laravel-ecc-mcp.mjs"
   },
   "engines": {

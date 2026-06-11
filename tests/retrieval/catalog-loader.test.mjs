@@ -2,11 +2,13 @@ import { describe, it, before } from 'node:test';
 import assert from 'node:assert';
 import { join, dirname } from 'node:path';
 import { fileURLToPath } from 'node:url';
+import { performance } from 'node:perf_hooks';
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const FIXTURES_DIR = join(__dirname, 'fixtures');
 
 import { loadCatalog, findEccRoot } from '../../src/retrieval/catalog-loader.mjs';
+import { clearCache } from '../../src/retrieval/cache-manager.mjs';
 
 const ECC_ROOT = join(__dirname, '..', '..');
 
@@ -96,5 +98,47 @@ describe('Catalog Loader', () => {
 
   it('should throw for missing explicit root', () => {
     assert.throws(() => findEccRoot(ECC_ROOT, '/nonexistent/path', null), /not found/i);
+  });
+
+  describe('Cache integration', () => {
+    before(() => clearCache());
+
+    it('should return cached catalog on second load (same reference)', () => {
+      clearCache();
+      const first = loadCatalog(ECC_ROOT);
+      const second = loadCatalog(ECC_ROOT);
+      assert.strictEqual(first, second);
+    });
+
+    it('should return new catalog object after clearCache', () => {
+      clearCache();
+      const first = loadCatalog(ECC_ROOT);
+      clearCache();
+      const second = loadCatalog(ECC_ROOT);
+      assert.notStrictEqual(first, second);
+      assert.strictEqual(first.knowledgeUnitsCount, second.knowledgeUnitsCount);
+    });
+
+    it('should load faster on cached invocation (performance regression guard)', () => {
+      clearCache();
+      const warmup = 3;
+      for (let i = 0; i < warmup; i++) {
+        clearCache();
+        loadCatalog(ECC_ROOT);
+      }
+
+      clearCache();
+      const coldStart = performance.now();
+      loadCatalog(ECC_ROOT);
+      const coldTime = performance.now() - coldStart;
+
+      const warmStart = performance.now();
+      loadCatalog(ECC_ROOT);
+      const warmTime = performance.now() - warmStart;
+
+      if (coldTime > 5) {
+        assert.ok(warmTime < coldTime, `Warm (${warmTime.toFixed(1)}ms) should be faster than cold (${coldTime.toFixed(1)}ms)`);
+      }
+    });
   });
 });

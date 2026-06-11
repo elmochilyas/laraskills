@@ -26,7 +26,7 @@ describe('CLI Integration Smoke Tests', () => {
 
   it('retrieve command should produce Markdown output', () => {
     assert.ok(typeof bundle === 'string');
-    assert.ok(bundle.includes('ECC Retrieval Bundle'));
+    assert.ok(bundle.includes('ECC Context Bundle'));
     assert.ok(bundle.includes('Build a REST API'));
   });
 
