@@ -96,13 +96,31 @@ describe('ECC Root Resolver — resolveEccRoot', () => {
 describe('ECC Root Resolver — resolveEccRootWithPrecedence', () => {
   const tmpDir = join(TMP, 'resolve-precedence');
   let validRoot;
+  let origConfigDir;
+  let origEccRoot;
 
   before(() => {
     cleanup();
     validRoot = createFakeCheckout(join(tmpDir, 'checkout'), true);
+    origConfigDir = process.env.LARAVEL_ECC_CONFIG_DIR;
+    origEccRoot = process.env.ECC_ROOT;
+    process.env.LARAVEL_ECC_CONFIG_DIR = join(TMP, 'resolve-precedence', 'isolated-config');
+    delete process.env.ECC_ROOT;
   });
 
-  after(() => cleanup());
+  after(() => {
+    cleanup();
+    if (origConfigDir !== undefined) {
+      process.env.LARAVEL_ECC_CONFIG_DIR = origConfigDir;
+    } else {
+      delete process.env.LARAVEL_ECC_CONFIG_DIR;
+    }
+    if (origEccRoot !== undefined) {
+      process.env.ECC_ROOT = origEccRoot;
+    } else {
+      delete process.env.ECC_ROOT;
+    }
+  });
 
   it('1st precedence: explicit CLI argument wins', () => {
     const result = resolveEccRootWithPrecedence({ explicitRoot: validRoot });
@@ -179,16 +197,32 @@ describe('ECC Root Resolver — validateIntelligenceRoot', () => {
 describe('ECC Root Resolver — error messages', () => {
   const voidDir = join(tmpdir(), 'laravel-ecc-test-void-' + Date.now());
   let prevCwd;
+  let origConfigDir;
+  let origEccRoot;
 
   before(() => {
     prevCwd = process.cwd();
     mkdirSync(voidDir, { recursive: true });
     process.chdir(voidDir);
+    origConfigDir = process.env.LARAVEL_ECC_CONFIG_DIR;
+    origEccRoot = process.env.ECC_ROOT;
+    process.env.LARAVEL_ECC_CONFIG_DIR = join(voidDir, 'config');
+    delete process.env.ECC_ROOT;
   });
 
   after(() => {
     process.chdir(prevCwd);
     try { rmSync(voidDir, { recursive: true, force: true }); } catch { }
+    if (origConfigDir !== undefined) {
+      process.env.LARAVEL_ECC_CONFIG_DIR = origConfigDir;
+    } else {
+      delete process.env.LARAVEL_ECC_CONFIG_DIR;
+    }
+    if (origEccRoot !== undefined) {
+      process.env.ECC_ROOT = origEccRoot;
+    } else {
+      delete process.env.ECC_ROOT;
+    }
   });
 
   it('throws actionable error when no root can be resolved', () => {
