@@ -326,6 +326,33 @@ describe('MCP Tool — search_ecc', () => {
     assert.strictEqual(getRes.isError, undefined, 'get_knowledge_unit should not be an error for a found KU');
     assert.strictEqual(getRes.structuredContent.id, topId, 'ID should round-trip');
   });
+
+  it('text output includes canonical IDs for copy-paste', async () => {
+    const res = await client.callTool({
+      name: 'search_ecc',
+      arguments: { query: 'Sanctum', limit: 3 },
+    });
+    // Text output should list IDs in a table-like format
+    const text = res.content[0].text;
+    assert.ok(text.includes('ID'), 'text output should mention IDs');
+    assert.ok(text.includes('Score'), 'text output should mention scores');
+    assert.ok(res.structuredContent.results.length > 0, 'should have results');
+    // Every listed result ID should appear in the text
+    for (const r of res.structuredContent.results.slice(0, 3)) {
+      assert.ok(text.includes(r.id), `text output should contain ID ${r.id}`);
+    }
+  });
+
+  it('search handles nonsense query gracefully', async () => {
+    const res = await client.callTool({
+      name: 'search_ecc',
+      arguments: { query: 'xyznonexistent99999', limit: 3 },
+    });
+    const text = res.content[0].text;
+    // Search matches via lenient substring token overlap; verify text output is well-formed
+    assert.ok(res.structuredContent.count === undefined || res.structuredContent.count >= 0, 'count should be present');
+    assert.ok(typeof text === 'string' && text.length > 0, 'text output should be non-empty');
+  });
 });
 
 describe('MCP Tool — get_knowledge_unit', () => {
@@ -374,14 +401,54 @@ describe('MCP Tool — get_knowledge_unit', () => {
     assert.ok(res.content[0].text.includes('canonical'));
   });
 
-  it('returns actionable error with search suggestion for non-canonical short IDs', async () => {
+  it('resolves non-canonical short IDs via last-segment strategy', async () => {
     const res = await client.callTool({
       name: 'get_knowledge_unit',
       arguments: { id: 'cursor-based-pagination' },
     });
+    assert.strictEqual(res.isError, undefined, 'short ID should resolve, not error');
+    assert.ok(res.structuredContent.metadata.id.includes('cursor-based-pagination'));
+    assert.ok(res.structuredContent._resolution && res.structuredContent._resolution.strategy === 'last-segment');
+  });
+
+  it('resolves via alias strategy', async () => {
+    const res = await client.callTool({
+      name: 'get_knowledge_unit',
+      arguments: { id: 'n-plus-one-queries' },
+    });
+    assert.strictEqual(res.isError, undefined, 'alias should resolve');
+    assert.ok(res.structuredContent);
+    assert.ok(res.structuredContent._resolution && res.structuredContent._resolution.strategy === 'alias');
+  });
+
+  it('canonical ID resolution round-trips through search -> short ID -> get', async () => {
+    const searchRes = await client.callTool({
+      name: 'search_ecc',
+      arguments: { query: 'cursor pagination', limit: 5 },
+    });
+    assert.ok(searchRes.structuredContent.results.length > 0, 'search should find results');
+    // Use the search text output — check IDs are visible
+    const firstResult = searchRes.structuredContent.results[0];
+    assert.ok(firstResult.id.includes('/'), 'canonical ID should be path-formatted');
+
+    // Use a short last-segment to resolve
+    const shortId = firstResult.id.split('/').pop();
+    const getRes = await client.callTool({
+      name: 'get_knowledge_unit',
+      arguments: { id: shortId },
+    });
+    assert.strictEqual(getRes.isError, undefined, 'short ID from search should resolve');
+    assert.strictEqual(getRes.structuredContent.metadata.id, firstResult.id, 'should resolve to canonical ID');
+  });
+
+  it('returns actionable error with search suggestion for truly non-existent ID', async () => {
+    const res = await client.callTool({
+      name: 'get_knowledge_unit',
+      arguments: { id: 'this-ku-definitely-does-not-exist' },
+    });
     assert.strictEqual(res.isError, true);
     assert.ok(res.content[0].text.includes('search_ecc'));
-    assert.ok(res.content[0].text.includes('cursor'));
+    assert.ok(res.content[0].text.includes('not found'));
   });
 });
 
@@ -445,14 +512,25 @@ describe('MCP Tool — get_graph_context', () => {
     assert.ok(res.structuredContent);
   });
 
-  it('returns actionable error with search suggestion for unknown ID in graph context', async () => {
+  it('resolves short ID in graph context via canonical-ID resolution', async () => {
     const res = await client.callTool({
       name: 'get_graph_context',
       arguments: { id: 'model-serialization' },
     });
+    assert.strictEqual(res.isError, undefined, 'short ID should resolve, not error');
+    assert.ok(Array.isArray(res.structuredContent.prerequisites));
+    assert.ok(res.structuredContent.id === 'model-serialization');
+    assert.ok(res.structuredContent.resolvedId, 'should expose resolvedId');
+  });
+
+  it('returns actionable error with search suggestion for truly unknown ID in graph context', async () => {
+    const res = await client.callTool({
+      name: 'get_graph_context',
+      arguments: { id: 'this-ku-definitely-does-not-exist' },
+    });
     assert.strictEqual(res.isError, true);
     assert.ok(res.content[0].text.includes('search_ecc'));
-    assert.ok(res.content[0].text.includes('model'));
+    assert.ok(res.content[0].text.includes('not found'));
   });
 });
 

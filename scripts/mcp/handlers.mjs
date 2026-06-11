@@ -57,10 +57,13 @@ function countCycles(catalog) {
 
 export function describeForAgents() {
   return [
-    'Laravel ECC retrieval MCP server. Use `retrieve_context_bundle` first for any non-trivial Laravel task.',
-    'Use `search_ecc` for exploratory discovery. Use `get_knowledge_unit` for deep inspection of one KU.',
-    'Use `get_graph_context` when prerequisites or related concepts matter. Use `validate_ecc` to confirm graph integrity.',
-    'Prefer `compact` or `standard` mode before `deep`. Avoid loading the entire repository.',
+    'Laravel ECC MCP server. Always use `retrieve_context_bundle` first for any non-trivial Laravel task.',
+    'Search with `search_ecc` to discover KUs by topic. Results include canonical IDs you can copy-paste directly into `get_knowledge_unit` and `get_graph_context`.',
+    'Deep-inspect with `get_knowledge_unit` -- also accepts short IDs (last path segment) and aliases for convenience.',
+    'Explore dependencies with `get_graph_context` -- prerequisites and related topics in one call.',
+    'Check integrity with `validate_ecc`.',
+    'Budget: prefer `compact` or `standard` mode before `deep`. Avoid loading the entire repository.',
+    'Convergence: if a bundle does not answer the question, iterate by narrowing the task or switching to a different domain.',
   ].join(' ');
 }
 
@@ -101,12 +104,20 @@ export function buildRetrieveBundleResult(rawArgs, ctx) {
     },
   };
 
+  const budgetLabel = { compact: '~2K', standard: '~6K', deep: '~15K' }[bundle.mode] || '~6K';
   const text = [
     `ECC context bundle for: ${bundle.query}`,
-    `Mode: ${bundle.mode} | Estimated tokens: ${bundle.estimatedTokens}`,
+    `Mode: ${bundle.mode} (${budgetLabel} tokens) | Estimated tokens: ${bundle.estimatedTokens}`,
+    `Domains: ${structured.selectedDomains.map((d) => d.name).join(', ') || 'auto-detected'}`,
     `Knowledge units: ${structured.knowledgeUnits.length} | Rules: ${structured.rules.length} | Skills: ${structured.skills.length}`,
     `Prerequisites: ${structured.prerequisites.length} | Related topics: ${structured.relatedTopics.length}`,
     structured.warnings.length > 0 ? `Warnings: ${structured.warnings.length}` : 'No warnings.',
+    '',
+    'Convergence guidance:',
+    '  - If this bundle answers the question, proceed with implementation.',
+    '  - If not, narrow the task description or switch to a different domain.',
+    '  - Use search_ecc to discover additional KUs, then get_knowledge_unit for deep inspection.',
+    '  - Use get_graph_context to explore prerequisites or related topics for any KU in the bundle.',
   ].join('\n');
 
   return { text, structured };
@@ -134,9 +145,25 @@ export function buildSearchResult(rawArgs, ctx) {
     })),
   };
 
-  const text = structured.count === 0
-    ? `No matches for "${args.query}".`
-    : `Found ${structured.count} knowledge units for "${args.query}". Top: ${structured.results[0].name} (score ${structured.results[0].score}).`;
+  const text = (() => {
+    if (structured.count === 0) return `No matches for "${args.query}".`;
+
+    const top = structured.results.slice(0, 5);
+    const lines = [
+      `Found ${structured.count} KUs for "${args.query}".`,
+      'Results (use the ID column with get_knowledge_unit / get_graph_context):',
+      '  # | ID (canonical) | Name | Score',
+      '  ---+---',
+    ];
+    for (let i = 0; i < top.length; i++) {
+      const r = top[i];
+      lines.push(`  ${i + 1}. | ${r.id} | ${r.name} | ${r.score}`);
+    }
+    if (structured.count > 5) {
+      lines.push(`  ... and ${structured.count - 5} more. Use a more specific query to narrow.`);
+    }
+    return lines.join('\n');
+  })();
 
   return { text, structured };
 }
@@ -170,6 +197,7 @@ export function buildKnowledgeUnitResult(rawArgs, ctx) {
   }
 
   const md = result.metadata || {};
+  const resolution = result._resolution;
   const artifactSummaries = args.artifact_types.map((t) => {
     if (t === 'knowledge') {
       return {
@@ -205,35 +233,53 @@ export function buildKnowledgeUnitResult(rawArgs, ctx) {
     artifact_summaries: artifactSummaries,
     content: args.include_content ? result.detail : undefined,
     detail: result.detail,
+    _resolution: resolution ? { strategy: resolution.strategy, resolved_id: resolution.id } : undefined,
   };
 
-  const text = `Knowledge unit: ${structured.metadata.knowledge_unit || structured.metadata.id}\nDomain: ${structured.metadata.domain} | Subdomain: ${structured.metadata.subdomain}\nArtifacts: ${artifactSummaries.filter((a) => a.available).map((a) => a.artifact_type).join(', ') || 'none'}`;
+  const parts = [`Knowledge unit: ${structured.metadata.knowledge_unit || structured.metadata.id}`];
+  parts.push(`Canonical ID: ${md.id || args.id}`);
+  parts.push(`Domain: ${structured.metadata.domain} | Subdomain: ${structured.metadata.subdomain}`);
+  if (resolution) {
+    parts.push(`(ID resolved via "${resolution.strategy}" strategy — provided input was: "${args.id}")`);
+  }
+  parts.push(`Artifacts: ${artifactSummaries.filter((a) => a.available).map((a) => a.artifact_type).join(', ') || 'none'}`);
+  const text = parts.join('\n');
 
   return { text, structured };
 }
 
 export function buildGraphContextResult(rawArgs, ctx) {
   const args = graphContextInputSchema.parse(rawArgs || {});
-  const prereqs = getPrerequisites(args.id, {
+  const prereqResult = getPrerequisites(args.id, {
     eccRoot: ctx.eccRoot,
     depth: args.prerequisite_depth,
     limit: args.max_prerequisites,
   });
-  const related = getRelatedTopics(args.id, {
+  const relatedResult = getRelatedTopics(args.id, {
     eccRoot: ctx.eccRoot,
     depth: args.related_depth,
     limit: args.max_related,
   });
 
+  const prereqs = prereqResult || [];
+  const related = relatedResult || [];
+  const prereqRes = prereqResult._resolution;
+  const relatedRes = relatedResult._resolution;
+  const resolution = prereqRes || relatedRes;
+
   if (prereqs.length === 0 && related.length === 0) {
     const catalog = loadCatalog(ctx.eccRoot);
-    if (!catalog.knowledgeUnits.has(args.id)) {
+    const resolvedId = resolution ? resolution.id : args.id;
+    if (!catalog.knowledgeUnits.has(resolvedId)) {
       return { notFound: true };
     }
   }
 
+  const effectiveId = resolution ? resolution.id : args.id;
+
   const structured = {
     id: args.id,
+    resolvedId: effectiveId !== args.id ? effectiveId : undefined,
     prerequisites: prereqs.map((p) => ({
       id: p.id,
       sourceKuId: p.sourceKuId,
@@ -252,7 +298,12 @@ export function buildGraphContextResult(rawArgs, ctx) {
     truncated: prereqs.length >= args.max_prerequisites || related.length >= args.max_related,
   };
 
-  const text = `Graph context for: ${args.id}\nPrerequisites: ${prereqs.length} (depth ${args.prerequisite_depth}) | Related: ${related.length} (depth ${args.related_depth})`;
+  const parts = [`Graph context for: ${effectiveId}`];
+  if (resolution) {
+    parts.push(`(ID resolved via "${resolution.strategy}" strategy — provided input was: "${args.id}")`);
+  }
+  parts.push(`Prerequisites: ${prereqs.length} (depth ${args.prerequisite_depth}) | Related: ${related.length} (depth ${args.related_depth})`);
+  const text = parts.join('\n');
 
   return { text, structured };
 }

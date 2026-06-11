@@ -4,7 +4,29 @@ Optimal retrieval strategy for AI agents.
 
 ---
 
-## Fast Path (Known Task)
+## MCP Path (Preferred — Agent with MCP Server)
+
+Use the MCP server tools when available. They return structured, ranked results faster than manual file scanning.
+
+**Default workflow (every task):**
+1. Call `retrieve_context_bundle` with the task description (start with `compact` or `standard` mode)
+2. If the bundle answers the question, proceed with implementation using the returned KUs, rules, and skills
+3. If not, iterate: narrow the task description, switch domains, or use `search_ecc` to discover additional KUs
+4. For deep inspection of a single KU, use `get_knowledge_unit` (accepts full canonical IDs, short last-segment IDs, and aliases)
+5. For prerequisites or related topics, use `get_graph_context` to expand in one call
+
+**Budgeting:**
+- `compact` (~2K tokens) — quick routing, narrow scope
+- `standard` (~6K tokens) — balanced, good for most tasks
+- `deep` (~15K+ tokens) — full research; only use when `standard` is insufficient
+
+**Canonical-ID convenience:** `get_knowledge_unit` and `get_graph_context` now accept short IDs (e.g., `resource-controller-methods` instead of the full `api-crud-system-engineering/resource-controllers/resource-controller-methods`). Use `search_ecc` to discover KUs — its text output lists full canonical IDs for every result.
+
+**Convergence:** If a bundle does not sufficiently answer the question, narrow the task description (add domain-specific terms), try a different domain via the `domain` parameter, or use `search_ecc` for exploratory discovery. Avoid repeatedly calling `deep` mode — iterate by narrowing scope instead.
+
+---
+
+## Fast Path (Known Task — Manual without MCP)
 
 1. Consult agent/agent-routing-map.md -- identify domain
 2. Open agent/domain-selection-guide.md -- find subdomain

@@ -2,10 +2,10 @@ import { z } from 'zod';
 
 export const retrieveContextInputSchema = z.object({
   task: z.string().min(1).max(2000).describe(
-    'Natural-language Laravel engineering task description.',
+    'Natural-language Laravel engineering task description. Be specific: include domain area (e.g., "multi-tenant authentication with Sanctum") rather than vague phrases.',
   ),
   mode: z.enum(['compact', 'standard', 'deep']).default('standard').describe(
-    'Bundle size: compact (quick routing), standard (default), or deep (full research).',
+    'Bundle size: compact (~1-2K tokens, quick routing), standard (~6K tokens, default, balanced), or deep (~15K+ tokens, full research). Prefer compact or standard first. Only use deep when standard is insufficient.',
   ),
   max_kus: z.number().int().min(1).max(50).default(10).describe(
     'Maximum number of knowledge units to include in the bundle.',
@@ -23,31 +23,35 @@ export const retrieveContextInputSchema = z.object({
     'Maximum number of prerequisites to include.',
   ),
   prerequisite_depth: z.number().int().min(0).max(5).default(1).describe(
-    'Graph expansion depth for prerequisite lookup.',
+    'Graph expansion depth for prerequisite lookup. Depth 1 is usually sufficient; depth 2+ expands widely and may exceed budget.',
   ),
   related_depth: z.number().int().min(0).max(5).default(1).describe(
-    'Graph expansion depth for related-topic lookup.',
+    'Graph expansion depth for related-topic lookup. Depth 1 is usually sufficient; depth 2+ expands widely and may exceed budget.',
   ),
   budget: z.number().int().min(256).max(200000).default(6000).describe(
-    'Estimated token budget for the returned bundle.',
+    'Estimated token budget for the returned bundle. compact=2000, standard=6000, deep=15000. Increase only if the task genuinely spans multiple domains.',
   ),
   domain: z.string().min(1).max(200).optional().describe(
-    'Optional domain filter (e.g. "security-identity-engineering").',
+    'Optional domain filter to narrow results to a specific area (e.g. "security-identity-engineering", "laravel-core-application-engineering", "testing-reliability-engineering"). Use agent/domain-routing-index.md to find the right domain.',
   ),
 });
 
 export const searchInputSchema = z.object({
-  query: z.string().min(1).max(500).describe('Search query string.'),
+  query: z.string().min(1).max(500).describe(
+    'Search query string. Use keywords related to the Laravel topic (e.g., "multi-tenant scoping", "sanctum token", "cursor pagination"). Results include full canonical IDs that can be copied into get_knowledge_unit or get_graph_context.',
+  ),
   limit: z.number().int().min(1).max(100).default(10).describe(
     'Maximum number of results to return.',
   ),
   domain: z.string().min(1).max(200).optional().describe(
-    'Optional domain filter.',
+    'Optional domain filter to narrow results.',
   ),
 });
 
 export const knowledgeUnitInputSchema = z.object({
-  id: z.string().min(1).max(500).describe('Canonical knowledge unit ID.'),
+  id: z.string().min(1).max(500).describe(
+    'Knowledge unit ID. Accepts the full canonical ID (e.g., "api-crud-system-engineering/resource-controllers/resource-controller-methods"), a short last-segment ID (e.g., "resource-controller-methods"), or an alias. Use search_ecc to discover IDs.',
+  ),
   include_content: z.boolean().default(false).describe(
     'Whether to include bounded Markdown content for the KU.',
   ),
@@ -73,12 +77,14 @@ export const knowledgeUnitInputSchema = z.object({
 });
 
 export const graphContextInputSchema = z.object({
-  id: z.string().min(1).max(500).describe('Canonical knowledge unit ID.'),
+  id: z.string().min(1).max(500).describe(
+    'Knowledge unit ID. Accepts the full canonical ID, short last-segment ID, or alias (same flexible resolution as get_knowledge_unit). Use search_ecc to discover IDs.',
+  ),
   prerequisite_depth: z.number().int().min(0).max(5).default(1).describe(
-    'Prerequisite expansion depth.',
+    'Prerequisite expansion depth. Depth 1 gives direct prerequisites. Depth 2+ follows transitive dependencies.',
   ),
   related_depth: z.number().int().min(0).max(5).default(1).describe(
-    'Related-topic expansion depth.',
+    'Related-topic expansion depth. Depth 1 gives direct related topics. Depth 2+ follows transitive relationships.',
   ),
   max_prerequisites: z.number().int().min(0).max(100).default(10).describe(
     'Maximum number of prerequisites to return.',
@@ -206,10 +212,15 @@ export const knowledgeUnitOutputSchema = z.object({
   })),
   content: z.string().optional(),
   detail: z.string().optional(),
+  _resolution: z.object({
+    strategy: z.string(),
+    resolved_id: z.string(),
+  }).optional(),
 });
 
 export const graphContextOutputSchema = z.object({
   id: z.string(),
+  resolvedId: z.string().optional(),
   prerequisites: z.array(graphNodeSchema),
   relatedTopics: z.array(graphNodeSchema),
   totalPrerequisitesFound: z.number().optional(),

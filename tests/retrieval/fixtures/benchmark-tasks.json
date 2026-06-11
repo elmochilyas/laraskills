@@ -503,5 +503,14 @@
     "expectedSupportingDomains": ["laravel-core-application-engineering"],
     "forbiddenDomains": ["ai-intelligence-systems"],
     "expectedTopKus": ["polic", "authorization", "gate"]
+  },
+  {
+    "id": "bench-072",
+    "query": "Design multi-tenant CRUD with query-level scoping, scoped route-model binding, and cross-tenant leakage tests",
+    "expectedPrimaryDomain": "data-storage-systems",
+    "expectedSupportingDomains": ["security-identity-engineering", "laravel-eloquent-domain-modeling"],
+    "forbiddenDomains": ["real-time-systems", "ai-intelligence-systems"],
+    "expectedKus": ["cross-tenant-data-leak-prevention", "tenant-aware-middleware", "eloquent-global-scopes"],
+    "expectedRules": ["tenant isolation", "global scope"]
   }
 ]
