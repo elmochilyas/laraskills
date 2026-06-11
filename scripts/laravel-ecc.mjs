@@ -488,6 +488,8 @@ function parseFlags(args) {
       }
     }
   }
+  if (flags.json && !flags.format) flags.format = 'json';
+  if (flags.markdown && !flags.format) flags.format = 'markdown';
   return flags;
 }
 
@@ -555,14 +557,21 @@ function cmdSearch(searchArgs) {
       }))}, null, 2));
     } else {
       const lines = [`# Search Results: ${query}`, '', `Found ${results.length} matching knowledge units`, ''];
+      let seq = 0;
       for (const r of results.slice(0, 30)) {
-        lines.push(`## ${r.ku?.knowledge_unit || r.id} (score: ${r.score})`);
-        lines.push(`- **ID:** \`${r.id}\``);
-        lines.push(`- **Domain:** ${r.ku?.domain || ''}`);
-        lines.push(`- **Subdomain:** ${r.ku?.subdomain || ''}`);
-        lines.push(`- **Difficulty:** ${r.ku?.difficulty || 'unknown'}`);
+        seq++;
+        lines.push(`### ${seq}. ${r.ku?.knowledge_unit || r.id}`);
+        lines.push('');
+        lines.push(`| Property | Value |`);
+        lines.push(`|----------|-------|`);
+        lines.push(`| **ID** | \`${r.id}\` |`);
+        lines.push(`| **Score** | ${r.score} |`);
+        lines.push(`| **Domain** | ${r.ku?.domain || '-'} |`);
+        lines.push(`| **Subdomain** | ${r.ku?.subdomain || '-'} |`);
+        lines.push(`| **Difficulty** | ${r.ku?.difficulty || 'unknown'} |`);
         if (r.breakdown && r.breakdown.length > 0) {
-          lines.push(`- **Top signal:** ${r.breakdown[0].signal} (+${r.breakdown[0].value})`);
+          const topSignal = r.breakdown[0];
+          lines.push(`| **Top signal** | ${topSignal.signal} (+${topSignal.value}) |`);
         }
         lines.push('');
       }

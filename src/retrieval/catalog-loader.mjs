@@ -6,6 +6,7 @@ import {
   INTELLIGENCE_JSON_DIR,
 } from './config.mjs';
 import { loadConfig } from '../runtime/user-config.mjs';
+import { getCachedCatalog, setCachedCatalog } from './cache-manager.mjs';
 
 export function resolveEccRoot(root) {
   const candidates = [];
@@ -80,6 +81,9 @@ function getTopLevelKey(parsed, expectedKeys) {
 }
 
 export function loadCatalog(eccRoot) {
+  const cached = getCachedCatalog(eccRoot);
+  if (cached) return cached;
+
   const jsonDir = join(eccRoot, INTELLIGENCE_JSON_DIR);
 
   const result = {
@@ -174,5 +178,6 @@ export function loadCatalog(eccRoot) {
   result.aliasesCount = result.aliases.length;
   result.externalConceptsCount = result.externalConcepts.length;
 
+  setCachedCatalog(eccRoot, result);
   return result;
 }

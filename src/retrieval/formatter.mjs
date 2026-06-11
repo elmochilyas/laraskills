@@ -96,10 +96,11 @@ function formatListSection(title, items, idField, reasonField) {
 export function formatAsMarkdown(bundle) {
   const lines = [];
 
-  lines.push(`# ECC Retrieval Bundle`);
+  lines.push(`# ECC Context Bundle`);
   lines.push('');
   lines.push(`**Query:** ${bundle.query}`);
-  lines.push(`**Mode:** ${bundle.mode}`);
+  const budgetLabel = { compact: '~2K', standard: '~6K', deep: '~15K+' }[bundle.mode] || '~6K';
+  lines.push(`**Mode:** ${bundle.mode} (${budgetLabel} tokens)`);
   lines.push(`**Estimated tokens:** ${bundle.estimatedTokens}`);
   lines.push('');
 
