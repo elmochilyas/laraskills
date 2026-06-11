@@ -1,0 +1,15 @@
+Implement an API endpoint listing posts with their authors and comments, then ensure it avoids N+1 queries.
+
+Requirements:
+- Post, User, and Comment relationships
+- API endpoint returning posts with author and comments
+- eager loading or an equivalent Laravel optimization
+- API Resource output
+- cursor or paginated response
+- feature tests
+- query-count regression test or equivalent evidence that N+1 is avoided
+- explain the optimization
+
+Use Laravel conventions.
+Run tests.
+Return a concise implementation summary.
