@@ -80,7 +80,11 @@
     "test": "node --test tests/retrieval/*.test.mjs",
     "benchmark": "node tests/retrieval/run-benchmarks.mjs",
     "benchmark:performance": "node tests/retrieval/run-performance-benchmarks.mjs",
-    "mcp:start": "node scripts/laravel-ecc-mcp.mjs"
+    "mcp:start": "node scripts/laravel-ecc-mcp.mjs",
+    "verify:clean-clone": "node scripts/verify-clean-clone.mjs",
+    "verify:packed-install": "node scripts/verify-packed-install.mjs",
+    "verify:mcp": "node scripts/verify-mcp-smoke.mjs",
+    "test:cache-smoke": "node --test tests/phase-15/cache-smoke.mjs"
   },
   "engines": {
     "node": ">=18"
