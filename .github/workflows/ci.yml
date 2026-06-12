@@ -2,9 +2,8 @@ name: CI
 
 on:
   push:
-    branches: [main, 'feat/**', 'release/**']
-  pull_request:
     branches: [main]
+  pull_request:
 
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
@@ -12,7 +11,6 @@ concurrency:
 
 env:
   CI: true
-  NODE_OPTIONS: --experimental-vm-modules
 
 jobs:
   test-matrix:
@@ -49,8 +47,21 @@ jobs:
         with:
           node-version: 20
           cache: npm
+      - name: Ensure PowerShell Core (pwsh) is available
+        if: runner.os != 'Windows'
+        shell: bash
+        run: |
+          if ! command -v pwsh &>/dev/null; then
+            echo "Installing PowerShell Core..."
+            if [ "$RUNNER_OS" = "Linux" ]; then
+              sudo snap install powershell --classic
+            elif [ "$RUNNER_OS" = "macOS" ]; then
+              brew install --cask powershell
+            fi
+          fi
+          pwsh --version
       - run: npm ci
-      - run: npm run verify:clean-clone
+      - run: npm run verify:clean-clone -- --require-pwsh
 
   packed-install:
     name: packed-install (${{ matrix.os }})

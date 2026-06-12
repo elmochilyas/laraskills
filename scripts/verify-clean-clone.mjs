@@ -11,6 +11,7 @@ const ROOT = join(__dirname, '..');
 const require = createRequire(import.meta.url);
 const pkg = JSON.parse(require.resolve('../package.json') ? '{}' : '{}');
 
+const REQUIRE_PWSH = process.argv.includes('--require-pwsh');
 const TMP_PREFIX = 'laravel-ecc-clean-clone-verify-';
 const INJECT_TIMEOUT = 600_000; // 600 seconds for dependency edge injection (slow PowerShell)
 
@@ -25,13 +26,44 @@ function run(cmd, opts = {}) {
   });
 }
 
+function pwshCmd() {
+  // On Windows use built-in powershell; on Unix try pwsh (PowerShell Core)
+  if (process.platform === 'win32') return 'powershell -ExecutionPolicy Bypass';
+  try {
+    execSync('which pwsh', { stdio: 'ignore' });
+    return 'pwsh -ExecutionPolicy Bypass';
+  } catch {
+    if (REQUIRE_PWSH) {
+      fail(
+        'PowerShell Core (pwsh) is required but not found on this system.\n' +
+        '  Install: https://github.com/PowerShell/PowerShell\n' +
+        '  Ubuntu: sudo snap install powershell --classic\n' +
+        '  macOS:  brew install --cask powershell\n' +
+        '  Or use the CI workflow which auto-installs pwsh on Linux/macOS runners.\n' +
+        '  To run locally without pwsh, omit --require-pwsh to allow skipping PowerShell steps.'
+      );
+    }
+    return null;
+  }
+}
+
+function pwshExec(scriptPath, opts = {}) {
+  const shell = pwshCmd();
+  if (!shell) {
+    console.log(`  SKIP: No PowerShell available on ${process.platform} — cannot run ${scriptPath}`);
+    return false;
+  }
+  run(`${shell} -File "${scriptPath}"`, opts);
+  return true;
+}
+
 function runInject(injectScript, tmpRepo, passNum) {
   const label = `dependency edge injection (pass ${passNum}/2)`;
   const timeLabel = `  injection timing pass ${passNum}`;
   console.log(`\n  --- ${label} ---`);
   console.time(timeLabel);
   try {
-    run(`powershell -ExecutionPolicy Bypass -File "${injectScript}"`, { cwd: tmpRepo, timeout: INJECT_TIMEOUT });
+    pwshExec(injectScript, { cwd: tmpRepo, timeout: INJECT_TIMEOUT });
     console.timeEnd(timeLabel);
     pass(`${label} completed`);
   } catch (err) {
@@ -115,7 +147,7 @@ async function main() {
     const injectScript = join(tmpRepo, 'tools', 'generation', 'inject-dependency-edges.ps1');
     if (rebuildScript) {
       if (rebuildScript.endsWith('.ps1')) {
-        run(`powershell -ExecutionPolicy Bypass -File "${rebuildScript}"`, { cwd: tmpRepo, timeout: 300000 });
+        pwshExec(rebuildScript, { cwd: tmpRepo, timeout: 300000 });
       } else {
         run(`node "${rebuildScript}"`, { cwd: tmpRepo });
       }
@@ -156,7 +188,7 @@ async function main() {
     console.log('\n--- Step 6: Second intelligence rebuild ---');
     if (rebuildScript) {
       if (rebuildScript.endsWith('.ps1')) {
-        run(`powershell -ExecutionPolicy Bypass -File "${rebuildScript}"`, { cwd: tmpRepo, timeout: 300000 });
+        pwshExec(rebuildScript, { cwd: tmpRepo, timeout: 300000 });
       } else {
         run(`node "${rebuildScript}"`, { cwd: tmpRepo });
       }

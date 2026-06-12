@@ -151,9 +151,11 @@ async function main() {
     run(`npm install "${tarballPath}"`, { cwd: installDir, silent: true, env: testEnv });
     pass('Tarball installed in isolated project');
 
+    const ECC_CLI = join(installDir, 'node_modules', 'laravel-ecc', 'scripts', 'laravel-ecc.mjs');
+
     // 6. Verify CLI --help
     console.log('\n--- Step 6: CLI --help ---');
-    const helpOutput = run('npx --yes laravel-ecc --help', { cwd: installDir, silent: true, env: testEnv });
+    const helpOutput = run(`node "${ECC_CLI}" --help`, { cwd: installDir, silent: true, env: testEnv });
     if (helpOutput.includes('Laravel ECC') && helpOutput.includes('setup')) {
       pass('CLI --help works');
     } else {
@@ -162,7 +164,7 @@ async function main() {
 
     // 7. Verify doctor before setup
     console.log('\n--- Step 7: Doctor before setup ---');
-    const doctorOutput = run('npx --yes laravel-ecc doctor', { cwd: installDir, silent: true, allowNonZero: true, env: testEnv });
+    const doctorOutput = run(`node "${ECC_CLI}" doctor`, { cwd: installDir, silent: true, allowNonZero: true, env: testEnv });
     if (doctorOutput.includes('ACTION REQUIRED') || doctorOutput.includes('NOT FOUND')) {
       pass('Doctor reports actionable guidance before setup');
     } else {
@@ -182,7 +184,7 @@ async function main() {
       writeFileSync(join(jsonDir, f), JSON.stringify(f.endsWith('.json') && (f === 'aliases.json' ? { aliases: [] } : f === 'external-concepts.json' ? { concepts: [] } : f === 'dependencies.json' ? { edges: [], knowledge_units: [] } : f === 'relationships.json' ? { edges: [] } : emptyJson)));
     }
 
-    run(`npx --yes laravel-ecc setup --ecc-root "${eccRootDir}"`, { cwd: installDir, silent: true, env: testEnv });
+    run(`node "${ECC_CLI}" setup --ecc-root "${eccRootDir}"`, { cwd: installDir, silent: true, env: testEnv });
     pass('Setup configured ECC root');
 
     // 9. Verify doctor reports HEALTHY
@@ -197,7 +199,7 @@ async function main() {
         }
       }
     }
-    const doctorAfter = run(`npx --yes laravel-ecc doctor --ecc-root "${eccRootDir}"`, { cwd: installDir, silent: true, env: testEnv });
+    const doctorAfter = run(`node "${ECC_CLI}" doctor --ecc-root "${eccRootDir}"`, { cwd: installDir, silent: true, env: testEnv });
     if (doctorAfter.includes('HEALTHY')) {
       pass('Doctor reports HEALTHY after setup');
     } else {
@@ -206,7 +208,7 @@ async function main() {
 
     // 10. Run validate
     console.log('\n--- Step 10: Validate ---');
-    const validateOutput = run(`npx --yes laravel-ecc validate --ecc-root "${eccRootDir}"`, { cwd: installDir, silent: true, env: testEnv });
+    const validateOutput = run(`node "${ECC_CLI}" validate --ecc-root "${eccRootDir}"`, { cwd: installDir, silent: true, env: testEnv });
     if (validateOutput.includes('VALID') || validateOutput.includes('No issues')) {
       pass('Validate passed');
     } else {
@@ -215,7 +217,7 @@ async function main() {
 
     // 11. Run CLI search table output
     console.log('\n--- Step 11: CLI search (table) ---');
-    const searchOutput = run(`npx --yes laravel-ecc search "eloquent" --ecc-root "${eccRootDir}"`, { cwd: installDir, silent: true, env: testEnv });
+    const searchOutput = run(`node "${ECC_CLI}" search "eloquent" --ecc-root "${eccRootDir}"`, { cwd: installDir, silent: true, env: testEnv });
     if (searchOutput.includes('Search Results') || searchOutput.includes('eloquent')) {
       pass('CLI search table output works');
     } else {
@@ -224,7 +226,7 @@ async function main() {
 
     // 12. Run CLI search --json
     console.log('\n--- Step 12: CLI search --json ---');
-    const searchJson = run(`npx --yes laravel-ecc search "tenant" --format json --ecc-root "${eccRootDir}"`, { cwd: installDir, silent: true, env: testEnv });
+    const searchJson = run(`node "${ECC_CLI}" search "tenant" --format json --ecc-root "${eccRootDir}"`, { cwd: installDir, silent: true, env: testEnv });
     const searchParsed = JSON.parse(searchJson);
     if (searchParsed.query && Array.isArray(searchParsed.results)) {
       pass('CLI search --json output parses correctly');
@@ -234,7 +236,7 @@ async function main() {
 
     // 13. Run CLI retrieve
     console.log('\n--- Step 13: CLI retrieve ---');
-    const retrieveOutput = run(`npx --yes laravel-ecc retrieve "Build a REST API" --mode compact --ecc-root "${eccRootDir}"`, { cwd: installDir, silent: true, env: testEnv });
+    const retrieveOutput = run(`node "${ECC_CLI}" retrieve "Build a REST API" --mode compact --ecc-root "${eccRootDir}"`, { cwd: installDir, silent: true, env: testEnv });
     if (retrieveOutput.includes('ECC Context Bundle') || retrieveOutput.includes('knowledgeUnits') || retrieveOutput.includes('selectedDomains')) {
       pass('CLI retrieve works');
     } else {
