@@ -18,7 +18,13 @@ function Normalize-Mojibake {
     return $Text
 }
 
-$root = (Resolve-Path (Join-Path $PSScriptRoot "..\..")).Path
+$scriptParent = Split-Path $PSScriptRoot -Parent
+$root = Split-Path $scriptParent -Parent
+$root = $root -replace '\\', '/'
+
+$knowledgeDir = "$root/knowledge"
+$intelJsonDir = "$root/intelligence/json"
+$intelIndexDir = "$root/intelligence/indexes"
 
 # Phase timing
 $scriptStart = Get-Date
@@ -34,7 +40,7 @@ function Write-PhaseTiming {
 
 # Phase 1: Build KU name-to-ID mapping
 $phaseNow = Get-Date; Write-PhaseTiming -Phase "Phase 1" -Message "Building KU mapping..."
-$kuDirs = Get-ChildItem "$root\knowledge" -Recurse -Directory | Where-Object { $_.Name -ne '_templates' }
+$kuDirs = Get-ChildItem $knowledgeDir -Recurse -Directory | Where-Object { $_.Name -ne '_templates' }
 $kuDirs = $kuDirs | Where-Object { Test-Path (Join-Path $_.FullName "02-knowledge-unit.md") }
 
 $kuMap = @{}
@@ -43,7 +49,7 @@ $idToDomain = @{}
 $idToSubdomain = @{}
 
 foreach ($d in $kuDirs) {
-    $id = ($d.FullName.Replace("$root\knowledge\", "") -replace '\\', '/')
+    $id = ($d.FullName -replace '\\', '/').Replace("$knowledgeDir/", "")
     $domain = $d.Parent.Parent.Name
     $subdomain = $d.Parent.Name
     $raw = Get-Content (Join-Path $d.FullName "02-knowledge-unit.md") -Raw -Encoding UTF8 -ErrorAction SilentlyContinue
@@ -69,7 +75,7 @@ $counter = 0
 foreach ($d in $kuDirs) {
     $counter++
     if ($counter % 500 -eq 0) { Write-Host "  Progress: $counter / $($kuDirs.Count)" }
-    $id = ($d.FullName.Replace("$root\knowledge\", "") -replace '\\', '/')
+    $id = ($d.FullName -replace '\\', '/').Replace("$knowledgeDir/", "")
     $fourFile = Join-Path $d.FullName "04-standardized-knowledge.md"
     if (-not (Test-Path $fourFile)) { continue }
     $fourContent = Get-Content $fourFile -Encoding UTF8 -ErrorAction SilentlyContinue
@@ -232,7 +238,7 @@ Write-PhaseTiming -Phase "Phase 4" -Message "Relationship edges: $($relEdges.Cou
 
 # Phase 5: Inject edges into dependencies.json
 $phaseNow = Get-Date; Write-PhaseTiming -Phase "Phase 5" -Message "Updating dependencies.json..."
-$depPath = "$root\intelligence\json\dependencies.json"
+$depPath = "$intelJsonDir/dependencies.json"
 $depRaw = Get-Content $depPath -Raw -Encoding UTF8
 if ($depRaw[0] -eq 0xFEFF) { $depRaw = $depRaw.Substring(1) }
 $depObj = $depRaw | ConvertFrom-Json
@@ -251,7 +257,7 @@ $relOutput = @{
 }
 $relContent = $relOutput | ConvertTo-Json -Depth 10
 $relContent = Normalize-Mojibake $relContent
-Write-Utf8File -Path "$root\intelligence\json\relationships.json" -Value $relContent
+Write-Utf8File -Path "$intelJsonDir/relationships.json" -Value $relContent
 Write-PhaseTiming -Phase "Phase 6" -Message "relationships.json created with $($relEdges.Count) edges"
 
 # Phase 7: Detect circular dependencies
@@ -281,7 +287,7 @@ if ($cycleCount -gt 0) { $i=1; foreach ($c in $cycleSet.Values) { Write-Host "  
 
 # Phase 7b: Alias resolution pass
 $phaseNow = Get-Date; Write-PhaseTiming -Phase "Phase 7b" -Message "Resolving aliases..."
-$aliasPath = "$root\intelligence\json\aliases.json"
+$aliasPath = "$intelJsonDir/aliases.json"
 $aliasResolved = 0
 if (Test-Path $aliasPath) {
     $aliasRaw = Get-Content $aliasPath -Raw -Encoding UTF8
@@ -352,7 +358,7 @@ if ($cycleCount3 -gt 0) { $i=1; foreach ($c in $cycleSet3.Values) { Write-Host "
 
 # Phase 7e: Update dependency-index.md with real data
 $phaseNow = Get-Date; Write-PhaseTiming -Phase "Phase 7e" -Message "Regenerating dependency-index.md..."
-$depIndexPath = "$root\intelligence\indexes\dependency-index.md"
+$depIndexPath = "$intelIndexDir/dependency-index.md"
 
 # Foundation KUs (most-depended-upon or highest in domain hierarchy)
 $foundationTopics = @{
@@ -379,7 +385,7 @@ foreach ($e in $edges) {
 $crossDomain = $edges | Where-Object { $_.source -and $_.target -and ($_.source -split '/')[0] -ne ($_.target -split '/')[0] }
 
 # Isolated KUs
-$allIDs = $kuDirs | ForEach-Object { ($_.FullName.Replace("$root\knowledge\", "") -replace '\\', '/') }
+$allIDs = $kuDirs | ForEach-Object { ($_.FullName -replace '\\', '/').Replace("$knowledgeDir/", "") }
 $idsWithDeps = @{}
 foreach ($e in $edges) { $idsWithDeps[$e.source] = $true; $idsWithDeps[$e.target] = $true }
 $isolated = $allIDs | Where-Object { -not $idsWithDeps.ContainsKey($_) }
@@ -507,6 +513,6 @@ Write-Host "Dependency edges: $($edges.Count)"
 Write-Host "Relationship edges: $($relEdges.Count)"
 Write-Host "Unmatched: $($unmatched.Count)"
 Write-Host "dependencies.json: $((Get-Item $depPath).Length) bytes"
-Write-Host "relationships.json: $((Get-Item "$root\intelligence\json\relationships.json").Length) bytes"
+Write-Host "relationships.json: $((Get-Item "$intelJsonDir/relationships.json").Length) bytes"
 Write-Host "dependency-index.md: $((Get-Item $depIndexPath).Length) bytes"
 Write-Host "Total isolated KUs: $($isolated.Count)"

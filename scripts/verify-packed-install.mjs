@@ -227,11 +227,17 @@ async function main() {
     // 12. Run CLI search --json
     console.log('\n--- Step 12: CLI search --json ---');
     const searchJson = run(`node "${ECC_CLI}" search "tenant" --format json --ecc-root "${eccRootDir}"`, { cwd: installDir, silent: true, env: testEnv });
-    const searchParsed = JSON.parse(searchJson);
+    let searchParsed;
+    try {
+      searchParsed = JSON.parse(searchJson);
+    } catch (parseErr) {
+      fail(`search --json parse failed: length=${searchJson.length}, repr=${JSON.stringify(searchJson.slice(0, 500))}`);
+      return;
+    }
     if (searchParsed.query && Array.isArray(searchParsed.results)) {
       pass('CLI search --json output parses correctly');
     } else {
-      fail('CLI search --json output unexpected shape');
+      fail(`CLI search --json output unexpected shape: ${JSON.stringify(searchParsed)}`);
     }
 
     // 13. Run CLI retrieve

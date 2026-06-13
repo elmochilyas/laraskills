@@ -1,6 +1,6 @@
 param(
-    [string]$KnowledgeRoot = (Resolve-Path (Join-Path $PSScriptRoot "..\knowledge")).Path,
-    [string]$IntelligenceRoot = (Resolve-Path (Join-Path $PSScriptRoot "..\intelligence")).Path
+    [string]$KnowledgeRoot = (Join-Path (Split-Path $PSScriptRoot -Parent) "knowledge"),
+    [string]$IntelligenceRoot = (Join-Path (Split-Path $PSScriptRoot -Parent) "intelligence")
 )
 
 function Write-Utf8File {
@@ -60,7 +60,7 @@ foreach ($dir in $kuDirs) {
     if ($i % 100 -eq 0) { Write-Host "  Processing KU $i / $totalKUs..." -ForegroundColor DarkGray }
 
     $relPath = $dir.FullName.Substring($KnowledgeRoot.Length + 1)
-    $parts = $relPath -split '\\'
+    $parts = $relPath -split [regex]::Escape([IO.Path]::DirectorySeparatorChar)
 
     $domain = $parts[0]
     $subdomain = $parts[1]
