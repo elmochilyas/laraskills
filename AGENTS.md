@@ -1,8 +1,8 @@
-# Laravel ECC — Agent Instructions
+# LaraSkills — Agent Instructions
 
 Laravel 13 AI-ready skills, rules, agents, and CLI harness configs for OpenCode, Claude Code, Cursor, Gemini CLI, Codex CLI, Copilot, and more.
 
-**Version:** 1.0.0-beta.14
+**Version:** 1.0.0-beta.15
 
 ## Core Principles
 
@@ -108,7 +108,7 @@ AI agents should use both layers: the operating layer for behavioral instruction
 agents/          — 12 Laravel-specific agent definitions
 skills/          — 12 deep Laravel 13 skills
 rules/           — 41 always-follow guidelines (common + php + web + laravel)
-commands/        — 7 Laravel/ECC console command references
+commands/        — 7 Laravel/LaraSkills console command references
 hooks/           — Git/agent hook automations
 mcp-configs/     — MCP server configurations
 knowledge/       — 21 engineering domains, 2,321 knowledge units
@@ -123,9 +123,9 @@ update.sh        — Unix update script (syncs to latest package version)
 
 ---
 
-## ECC Knowledge Architecture
+## LaraSkills Knowledge Architecture
 
-The ECC repository now includes a complete generated knowledge base spanning 21 domains of Laravel engineering.
+The LaraSkills repository now includes a complete generated knowledge base spanning 21 domains of Laravel engineering.
 
 ### Knowledge Layer Structure
 
@@ -211,23 +211,23 @@ Indexes are navigation layers. Knowledge-unit files are deep sources. Avoid scan
 Before scanning the entire knowledge layer, use the deterministic retrieval CLI:
 
 ```bash
-npx laravel-ecc retrieve "your task"    # Get the minimal useful context bundle
-npx laravel-ecc search "keywords"       # Find matching knowledge units
-npx laravel-ecc get <ku-id>             # Inspect a specific knowledge unit
-npx laravel-ecc validate                # Check intelligence layer integrity
+npx laraskills retrieve "your task"    # Get the minimal useful context bundle
+npx laraskills search "keywords"       # Find matching knowledge units
+npx laraskills get <ku-id>             # Inspect a specific knowledge unit
+npx laraskills validate                # Check intelligence layer integrity
 ```
 
 The retrieval CLI produces deterministic, explainable output with ranked knowledge units, applicable rules, skills, decision trees, anti-patterns, checklists, prerequisites, and related topics. It is faster and more targeted than manual file scanning.
 
 **Preferred workflow:**
-1. Run `npx laravel-ecc retrieve "your task" --mode compact` for quick routing
+1. Run `npx laraskills retrieve "your task" --mode compact` for quick routing
 2. Use the returned KUs as starting points for deeper reading
-3. Run `npx laravel-ecc retrieve "your task" --mode standard` for full context
-4. Use `npx laravel-ecc get <ku-id>` to inspect specific KUs in detail
+3. Run `npx laraskills retrieve "your task" --mode standard` for full context
+4. Use `npx laraskills get <ku-id>` to inspect specific KUs in detail
 
 ## Retrieval MCP Server (Phase 11.2)
 
-When a coding agent is connected to the local `laravel-ecc-mcp` MCP server, prefer the MCP tools over the CLI — they return identical results and are discoverable by the agent:
+When a coding agent is connected to the local `laraskills-mcp` MCP server, prefer the MCP tools over the CLI — they return identical results and are discoverable by the agent:
 
 1. `retrieve_context_bundle` — get the smallest useful context for the current task.
 2. `search_ecc` — exploratory search across KUs.
@@ -249,7 +249,7 @@ intelligence/json/
 ├── decision-trees.json       — 2,321 decision tree definitions
 ├── anti-patterns.json        — 2,321 anti-pattern definitions
 ├── checklists.json           — 2,321 checklist definitions
-├── dependencies.json         — 429 dependency edges
+├── dependencies.json         — 427 dependency edges
 ├── relationships.json        — 3,513 relationship edges
 ├── aliases.json              — 120 alias mappings
 └── external-concepts.json    — 26 external concept references

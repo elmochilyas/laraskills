@@ -7,7 +7,7 @@ import { fileURLToPath } from 'node:url';
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const ROOT = join(__dirname, '..');
-const MCP_SCRIPT = join(ROOT, 'scripts', 'laravel-ecc-mcp.mjs');
+const MCP_SCRIPT = join(ROOT, 'scripts', 'laraskills-mcp.mjs');
 
 function msg(m) {
   return JSON.stringify(m) + '\n';
@@ -25,7 +25,7 @@ function pass(msg) {
 async function main() {
   console.log('=== MCP Smoke Verification ===\n');
   console.log(`MCP server: ${MCP_SCRIPT}`);
-  console.log(`ECC root:   ${ROOT}\n`);
+  console.log(`LaraSkills root: ${ROOT}\n`);
 
   if (!existsSync(MCP_SCRIPT)) fail(`MCP script not found: ${MCP_SCRIPT}`);
 
@@ -47,7 +47,7 @@ async function main() {
       input: calls.join(''),
       encoding: 'utf-8',
       timeout: 60000,
-      env: { ...process.env, ECC_ROOT: ROOT },
+      env: { ...process.env, LARASKILLS_ROOT: ROOT },
     });
 
     const lines = output.trim().split('\n').filter(l => l.trim());

@@ -1,8 +1,8 @@
 # MCP Troubleshooting
 
-## "OpenCode cannot connect to laravel-ecc"
+## "OpenCode cannot connect to laraskills"
 
-**Symptom:** `opencode mcp list` shows `laravel-ecc    failed`.
+**Symptom:** `opencode mcp list` shows `laraskills    failed`.
 
 **Cause:** The server exited before completing the MCP `initialize` handshake, or stderr contains a fatal error.
 
@@ -10,32 +10,32 @@
 
 1. Run the server manually to see the error:
    ```powershell
-   node scripts\laravel-ecc-mcp.mjs
+   node scripts\laraskills-mcp.mjs
    ```
 2. Confirm the path to the script is absolute (no relative paths inside `opencode.json`).
-3. Confirm the `ECC_ROOT` environment variable points to a directory that contains `intelligence/json/knowledge-units.json`.
+3. Confirm the `LARASKILLS_ROOT` environment variable points to a directory that contains `intelligence/json/knowledge-units.json`.
 
-## "ECC intelligence files were not found"
+## "LaraSkills intelligence files were not found"
 
-**Symptom:** Every tool call returns `isError: true` with the message starting `ECC intelligence files were not found.`
+**Symptom:** Every tool call returns `isError: true` with the message starting `LaraSkills intelligence files were not found.`
 
-**Cause:** The server could not resolve a directory that contains `intelligence/json/` using (in order): `--ecc-root` flag, `ECC_ROOT` env var, current working directory, or parent-directory discovery.
+**Cause:** The server could not resolve a directory that contains `intelligence/json/` using (in order): `--laraskills-root` flag, `LARASKILLS_ROOT` env var, current working directory, or parent-directory discovery.
 
 **Fix:**
 
-- Set `ECC_ROOT` to the laravel-ecc repo path in your OpenCode `mcp.laravel-ecc.environment` block.
-- Or pass `--ecc-root` explicitly in the `command` array.
-- Or `cd` into the laravel-ecc repo before running OpenCode.
+- Set `LARASKILLS_ROOT` to the laraskills repo path in your OpenCode `mcp.laraskills.environment` block.
+- Or pass `--laraskills-root` explicitly in the `command` array.
+- Or `cd` into the laraskills repo before running OpenCode.
 
 Example actionable error text:
 
 ```
-ECC intelligence files were not found.
-Explicit --ecc-root path failed: C:\bad\path
-Set ECC_ROOT to the full Laravel ECC repository path:
-  ECC_ROOT=C:\path\to\laravel-ecc
+LaraSkills intelligence files were not found.
+Explicit --laraskills-root path failed: C:\bad\path
+Set LARASKILLS_ROOT to the full LaraSkills repository path:
+  LARASKILLS_ROOT=C:\path\to\laraskills
 or start the MCP server with:
-  node scripts/laravel-ecc-mcp.mjs --ecc-root C:\path\to\laravel-ecc
+  node scripts/laraskills-mcp.mjs --laraskills-root C:\path\to\laraskills
 ```
 
 ## "MCP server starts but every tool returns an error"
@@ -44,7 +44,7 @@ or start the MCP server with:
 
 **Cause:** Same as above — the server started, but `findEccRoot` failed at startup. The server intentionally stays up so agents can see the actionable error inline.
 
-**Fix:** Same as above — set `ECC_ROOT` or `--ecc-root`.
+**Fix:** Same as above — set `LARASKILLS_ROOT` or `--laraskills-root`.
 
 ## "Tool returns isError: 'Knowledge unit not found: ...'"
 
@@ -56,19 +56,19 @@ or start the MCP server with:
 
 ## "Timeout when OpenCode connects"
 
-**Symptom:** OpenCode reports a timeout when launching the laravel-ecc MCP server.
+**Symptom:** OpenCode reports a timeout when launching the laraskills MCP server.
 
 **Cause:** The default 5000 ms is not enough for first-startup catalog load on Windows.
 
 **Fix:** Set `timeout: 10000` (or higher) in the MCP config:
 
 ```jsonc
-"laravel-ecc": {
+"laraskills": {
   "type": "local",
-  "command": ["node", "C:\\path\\to\\laravel-ecc\\scripts\\laravel-ecc-mcp.mjs"],
+  "command": ["node", "C:\\path\\to\\laraskills\\scripts\\laraskills-mcp.mjs"],
   "enabled": true,
   "timeout": 10000,
-  "environment": { "ECC_ROOT": "C:\\path\\to\\laravel-ecc" }
+  "environment": { "LARASKILLS_ROOT": "C:\\path\\to\\laraskills" }
 }
 ```
 
@@ -78,18 +78,18 @@ or start the MCP server with:
 
 **Cause:** Some custom startup code wrote to `stdout` (the protocol channel).
 
-**Fix:** This should not happen with the shipped `scripts/laravel-ecc-mcp.mjs` — the stdio-cleanliness test enforces it. If you fork the server, never use `console.log`; use `console.error` or `process.stderr.write` instead.
+**Fix:** This should not happen with the shipped `scripts/laraskills-mcp.mjs` — the stdio-cleanliness test enforces it. If you fork the server, never use `console.log`; use `console.error` or `process.stderr.write` instead.
 
 ## "Module not found" when starting the server
 
 **Symptom:** `Error: Cannot find module '@modelcontextprotocol/sdk/server/mcp.js'`.
 
-**Cause:** The npm dependencies are not installed in the laravel-ecc checkout.
+**Cause:** The npm dependencies are not installed in the laraskills checkout.
 
 **Fix:**
 
 ```powershell
-cd C:\path\to\laravel-ecc
+cd C:\path\to\laraskills
 npm install
 ```
 
@@ -100,7 +100,7 @@ npm install
 **Fix:**
 
 - Run OpenCode in a shell that has execute permission for `node` (PowerShell 5.1+ works).
-- Avoid mounting the laravel-ecc repo under a OneDrive-synced folder that locks files.
+- Avoid mounting the laraskills repo under a OneDrive-synced folder that locks files.
 - Confirm that the path in `opencode.json` does not contain a trailing backslash inside the JSON string (use `\\` escaping).
 
 ## Tests fail with "EADDRINUSE" or process-leak warnings
@@ -118,9 +118,9 @@ node --test tests/retrieval/mcp.test.mjs
 If MCP integration is not available, use the CLI directly:
 
 ```bash
-npx laravel-ecc retrieve "Build a CRUD API" --mode compact
-npx laravel-ecc search "Sanctum" --limit 5
-npx laravel-ecc validate
+npx laraskills retrieve "Build a CRUD API" --mode compact
+npx laraskills search "Sanctum" --limit 5
+npx laraskills validate
 ```
 
 CLI and MCP semantics are identical — they call the same core functions.

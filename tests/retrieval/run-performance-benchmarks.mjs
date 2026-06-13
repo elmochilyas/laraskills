@@ -11,7 +11,7 @@ import {
 import { clearCache } from '../../src/retrieval/cache-manager.mjs';
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
-const ECC_ROOT = join(__dirname, '..', '..');
+const LARASKILLS_ROOT = join(__dirname, '..', '..');
 
 const TASKS = [
   'Build a CRUD REST API for products with policies and pagination',
@@ -38,7 +38,7 @@ async function run() {
     timestamp: new Date().toISOString(),
     nodeVersion: process.version,
     platform: process.platform,
-    eccRoot: ECC_ROOT,
+    eccRoot: LARASKILLS_ROOT,
     measures: {},
   };
 
@@ -87,23 +87,23 @@ async function run() {
 
   for (const task of TASKS) {
     await measure(`retrieve (compact): ${task.slice(0, 40)}`, () => {
-      retrieveContext(task, { eccRoot: ECC_ROOT, mode: 'compact' });
+      retrieveContext(task, { eccRoot: LARASKILLS_ROOT, mode: 'compact' });
     });
   }
 
   for (const task of TASKS) {
     await measure(`search: ${task.slice(0, 40)}`, () => {
-      searchKnowledge(task, { eccRoot: ECC_ROOT, limit: 5 });
+      searchKnowledge(task, { eccRoot: LARASKILLS_ROOT, limit: 5 });
     });
   }
 
   await measure('validate', () => {
-    validateIntelligence({ eccRoot: ECC_ROOT });
+    validateIntelligence({ eccRoot: LARASKILLS_ROOT });
   });
 
   await measure('get_knowledge_unit', () => {
     getKnowledgeUnit('api-crud-system-engineering/resource-controllers/resource-controller-methods', {
-      eccRoot: ECC_ROOT,
+      eccRoot: LARASKILLS_ROOT,
     });
   });
 

@@ -2,11 +2,10 @@ import { describe, it, before, after } from 'node:test';
 import assert from 'node:assert';
 import { join, dirname } from 'node:path';
 import { fileURLToPath } from 'node:url';
-import { existsSync, mkdirSync, writeFileSync, rmSync } from 'node:fs';
+import { mkdirSync, writeFileSync, rmSync } from 'node:fs';
 import { tmpdir } from 'node:os';
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
-const REPO_ROOT = join(__dirname, '..', '..');
 const TMP = join(__dirname, 'fixtures', 'tmp-resolver-test');
 
 import {
@@ -29,8 +28,8 @@ function createFakeCheckout(base, valid = true) {
       'anti-patterns.json',
       'decision-trees.json',
     ];
-    for (const f of files) {
-      writeFileSync(join(jsonDir, f), JSON.stringify({ entries: [] }));
+    for (const file of files) {
+      writeFileSync(join(jsonDir, file), JSON.stringify({ entries: [] }));
     }
   }
   return base;
@@ -40,7 +39,18 @@ function cleanup() {
   try { rmSync(TMP, { recursive: true, force: true }); } catch { }
 }
 
-describe('ECC Root Resolver — resolveEccRoot', () => {
+function clearRootEnvironment() {
+  delete process.env.LARASKILLS_CONFIG_DIR;
+  delete process.env.LARAVEL_ECC_CONFIG_DIR;
+  delete process.env.LARASKILLS_ROOT;
+  delete process.env.ECC_ROOT;
+}
+
+function normalizePath(value) {
+  return value.replace(/\\/g, '/');
+}
+
+describe('LaraSkills Root Resolver - resolveEccRoot', () => {
   const tmpDir = join(TMP, 'resolve-basic');
   let validRoot;
 
@@ -65,16 +75,14 @@ describe('ECC Root Resolver — resolveEccRoot', () => {
   });
 
   it('returns null for non-existent path', () => {
-    const result = resolveEccRoot('C:\\nonexistent\\path');
-    assert.strictEqual(result, null);
+    assert.strictEqual(resolveEccRoot('C:\\nonexistent\\path'), null);
   });
 
   it('returns null for path without intelligence/json/', () => {
-    const testDir = join(tmpdir(), 'laravel-ecc-test-empty-' + Date.now());
+    const testDir = join(tmpdir(), 'laraskills-test-empty-' + Date.now());
     mkdirSync(testDir, { recursive: true });
     try {
-      const result = resolveEccRoot(testDir);
-      assert.strictEqual(result, null);
+      assert.strictEqual(resolveEccRoot(testDir), null);
     } finally {
       rmSync(testDir, { recursive: true, force: true });
     }
@@ -87,85 +95,98 @@ describe('ECC Root Resolver — resolveEccRoot', () => {
   });
 
   it('normalizes backslashes to forward slashes', () => {
-    const bsPath = validRoot.replace(/\//g, '\\');
-    const result = resolveEccRoot(bsPath);
-    assert.ok(result);
+    assert.ok(resolveEccRoot(validRoot.replace(/\//g, '\\')));
   });
 });
 
-describe('ECC Root Resolver — resolveEccRootWithPrecedence', () => {
+describe('LaraSkills Root Resolver - precedence', () => {
   const tmpDir = join(TMP, 'resolve-precedence');
-  let validRoot;
-  let origConfigDir;
-  let origEccRoot;
+  let preferredRoot;
+  let legacyRoot;
 
   before(() => {
     cleanup();
-    validRoot = createFakeCheckout(join(tmpDir, 'checkout'), true);
-    origConfigDir = process.env.LARAVEL_ECC_CONFIG_DIR;
-    origEccRoot = process.env.ECC_ROOT;
-    process.env.LARAVEL_ECC_CONFIG_DIR = join(TMP, 'resolve-precedence', 'isolated-config');
-    delete process.env.ECC_ROOT;
+    clearRootEnvironment();
+    preferredRoot = createFakeCheckout(join(tmpDir, 'preferred-checkout'), true);
+    legacyRoot = createFakeCheckout(join(tmpDir, 'legacy-checkout'), true);
+    process.env.LARASKILLS_CONFIG_DIR = join(tmpDir, 'preferred-config');
+    process.env.LARAVEL_ECC_CONFIG_DIR = join(tmpDir, 'legacy-config');
   });
 
   after(() => {
+    clearRootEnvironment();
     cleanup();
-    if (origConfigDir !== undefined) {
-      process.env.LARAVEL_ECC_CONFIG_DIR = origConfigDir;
-    } else {
-      delete process.env.LARAVEL_ECC_CONFIG_DIR;
-    }
-    if (origEccRoot !== undefined) {
-      process.env.ECC_ROOT = origEccRoot;
-    } else {
-      delete process.env.ECC_ROOT;
-    }
   });
 
-  it('1st precedence: explicit CLI argument wins', () => {
-    const result = resolveEccRootWithPrecedence({ explicitRoot: validRoot });
-    assert.strictEqual(result.source, 'cli-argument');
-    assert.ok(result.valid);
-    assert.ok(result.root);
-  });
-
-  it('explicit root fails clearly for missing path', () => {
-    assert.throws(
-      () => resolveEccRootWithPrecedence({ explicitRoot: '/nonexistent/ecc/path' }),
-      /ECC root not found at specified path/,
-    );
-  });
-
-  it('2nd precedence: ECC_ROOT environment variable', () => {
-    const result = resolveEccRootWithPrecedence({ envRoot: validRoot });
-    assert.strictEqual(result.source, 'environment');
+  it('1st precedence: --laraskills-root wins over --ecc-root', () => {
+    const result = resolveEccRootWithPrecedence({
+      explicitLaraskillsRoot: preferredRoot,
+      explicitEccRoot: legacyRoot,
+    });
+    assert.strictEqual(result.source, 'laraskills-cli');
+    assert.strictEqual(normalizePath(result.root), normalizePath(preferredRoot));
+    assert.strictEqual(result.legacyFallback, false);
     assert.ok(result.valid);
   });
 
-  it('ECC_ROOT environment fails clearly for invalid path', () => {
+  it('2nd precedence: --ecc-root remains a reported legacy alias', () => {
+    const result = resolveEccRootWithPrecedence({ explicitEccRoot: legacyRoot });
+    assert.strictEqual(result.source, 'legacy-ecc-cli');
+    assert.strictEqual(normalizePath(result.root), normalizePath(legacyRoot));
+    assert.strictEqual(result.legacyFallback, true);
+    assert.match(result.legacyReason, /--ecc-root/);
+  });
+
+  it('preferred explicit root fails clearly for a missing path', () => {
     assert.throws(
-      () => resolveEccRootWithPrecedence({ envRoot: '/invalid/ecc/env/root' }),
-      /ECC root not found at ECC_ROOT/,
+      () => resolveEccRootWithPrecedence({
+        explicitLaraskillsRoot: '/nonexistent/laraskills/path',
+      }),
+      /LaraSkills root not found at --laraskills-root/,
     );
   });
 
-  it('4th precedence: cwd discovery works inside repo', () => {
-    const result = resolveEccRootWithPrecedence({});
+  it('3rd precedence: LARASKILLS_ROOT wins over ECC_ROOT', () => {
+    const result = resolveEccRootWithPrecedence({
+      envLaraskillsRoot: preferredRoot,
+      envEccRoot: legacyRoot,
+    });
+    assert.strictEqual(result.source, 'laraskills-environment');
+    assert.strictEqual(normalizePath(result.root), normalizePath(preferredRoot));
+    assert.strictEqual(result.legacyFallback, false);
+  });
+
+  it('4th precedence: ECC_ROOT remains a reported legacy fallback', () => {
+    const result = resolveEccRootWithPrecedence({ envEccRoot: legacyRoot });
+    assert.strictEqual(result.source, 'legacy-ecc-environment');
+    assert.strictEqual(normalizePath(result.root), normalizePath(legacyRoot));
+    assert.strictEqual(result.legacyFallback, true);
+    assert.match(result.legacyReason, /ECC_ROOT/);
+  });
+
+  it('8th precedence: cwd discovery works inside the repository', () => {
+    const result = resolveEccRootWithPrecedence({
+      envLaraskillsRoot: null,
+      envEccRoot: null,
+    });
     assert.strictEqual(result.source, 'cwd-discovery');
     assert.ok(result.valid);
     assert.ok(result.root);
   });
 
-  it('resolution result has correct shape', () => {
-    const result = resolveEccRootWithPrecedence({ explicitRoot: validRoot });
-    assert.ok(typeof result.root === 'string');
-    assert.ok(['cli-argument', 'environment', 'user-config', 'cwd-discovery'].includes(result.source));
+  it('resolution result includes compatibility metadata', () => {
+    const result = resolveEccRootWithPrecedence({
+      explicitLaraskillsRoot: preferredRoot,
+    });
+    assert.strictEqual(typeof result.root, 'string');
+    assert.strictEqual(result.source, 'laraskills-cli');
     assert.strictEqual(typeof result.valid, 'boolean');
-    assert.ok(Array.isArray(result.missingIntelligenceFiles || []));
+    assert.strictEqual(typeof result.legacyFallback, 'boolean');
+    assert.ok(Array.isArray(result.missingIntelligenceFiles));
   });
 });
 
-describe('ECC Root Resolver — validateIntelligenceRoot', () => {
+describe('LaraSkills Root Resolver - validateIntelligenceRoot', () => {
   const tmpDir = join(TMP, 'validate');
   let validRoot;
   let incompleteRoot;
@@ -181,58 +202,46 @@ describe('ECC Root Resolver — validateIntelligenceRoot', () => {
 
   after(() => cleanup());
 
-  it('returns valid for complete checkout', () => {
+  it('returns valid for a complete checkout', () => {
     const result = validateIntelligenceRoot(validRoot);
     assert.strictEqual(result.valid, true);
     assert.strictEqual(result.missingFiles.length, 0);
   });
 
-  it('returns invalid for incomplete checkout', () => {
+  it('returns invalid for an incomplete checkout', () => {
     const result = validateIntelligenceRoot(incompleteRoot);
     assert.strictEqual(result.valid, false);
     assert.ok(result.missingFiles.length > 0);
   });
 });
 
-describe('ECC Root Resolver — error messages', () => {
-  const voidDir = join(tmpdir(), 'laravel-ecc-test-void-' + Date.now());
-  let prevCwd;
-  let origConfigDir;
-  let origEccRoot;
+describe('LaraSkills Root Resolver - error messages', () => {
+  const voidDir = join(tmpdir(), 'laraskills-test-void-' + Date.now());
+  let previousCwd;
 
   before(() => {
-    prevCwd = process.cwd();
+    previousCwd = process.cwd();
     mkdirSync(voidDir, { recursive: true });
     process.chdir(voidDir);
-    origConfigDir = process.env.LARAVEL_ECC_CONFIG_DIR;
-    origEccRoot = process.env.ECC_ROOT;
-    process.env.LARAVEL_ECC_CONFIG_DIR = join(voidDir, 'config');
-    delete process.env.ECC_ROOT;
+    clearRootEnvironment();
+    process.env.LARASKILLS_CONFIG_DIR = join(voidDir, 'config');
+    process.env.LARAVEL_ECC_CONFIG_DIR = join(voidDir, 'legacy-config');
   });
 
   after(() => {
-    process.chdir(prevCwd);
+    process.chdir(previousCwd);
+    clearRootEnvironment();
     try { rmSync(voidDir, { recursive: true, force: true }); } catch { }
-    if (origConfigDir !== undefined) {
-      process.env.LARAVEL_ECC_CONFIG_DIR = origConfigDir;
-    } else {
-      delete process.env.LARAVEL_ECC_CONFIG_DIR;
-    }
-    if (origEccRoot !== undefined) {
-      process.env.ECC_ROOT = origEccRoot;
-    } else {
-      delete process.env.ECC_ROOT;
-    }
   });
 
-  it('throws actionable error when no root can be resolved', () => {
+  it('throws actionable guidance when no root can be resolved', () => {
     assert.throws(
       () => resolveEccRootWithPrecedence({}),
-      /ECC intelligence files were not found/,
+      /LaraSkills intelligence files were not found/,
     );
     assert.throws(
       () => resolveEccRootWithPrecedence({}),
-      /laravel-ecc setup/,
+      /laraskills setup/,
     );
   });
 });

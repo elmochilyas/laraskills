@@ -1,12 +1,12 @@
 #!/usr/bin/env pwsh
-# update.ps1 — Laravel ECC Updater for Windows
+# update.ps1 — LaraSkills Updater for Windows
 #
 # Usage:
 #   .\update.ps1                           # Update everything (same profile as install)
 #   .\update.ps1 --dry-run                 # Preview changes without applying
 #   .\update.ps1 --version                 # Show current and latest versions
 #
-# This script updates your Laravel ECC installation to the latest
+# This script updates your LaraSkills installation to the latest
 # version. It preserves your installation profile (minimal/core/full)
 # and syncs all components: skills, rules, agents, hooks, MCP configs.
 
@@ -15,13 +15,13 @@ $ErrorActionPreference = 'Stop'
 
 $scriptDir = Split-Path -Parent $PSCommandPath
 
-function Write-Status   { param([string]$Message, [string]$Color = 'Green')  Write-Host "[Laravel ECC] $Message" -ForegroundColor $Color }
-function Write-Warn     { param([string]$Message)                             Write-Host "[Laravel ECC] WARNING: $Message" -ForegroundColor Yellow }
-function Write-Error    { param([string]$Message)                             Write-Host "[Laravel ECC] ERROR: $Message" -ForegroundColor Red }
+function Write-Status   { param([string]$Message, [string]$Color = 'Green')  Write-Host "[LaraSkills] $Message" -ForegroundColor $Color }
+function Write-Warn     { param([string]$Message)                             Write-Host "[LaraSkills] WARNING: $Message" -ForegroundColor Yellow }
+function Write-Error    { param([string]$Message)                             Write-Host "[LaraSkills] ERROR: $Message" -ForegroundColor Red }
 
 # Resolve target project directory (current directory or specified)
 $targetDir = Get-Location
-$stateFile = Join-Path -Path $targetDir -ChildPath '.laravel-ecc-state.json'
+$stateFile = Join-Path -Path $targetDir -ChildPath '.laraskills-state.json'
 $dryRun = $false
 $showVersion = $false
 
@@ -36,7 +36,7 @@ foreach ($arg in $args) {
 # Check installation state
 if (-not (Test-Path $stateFile)) {
     Write-Error "No installation found in $targetDir"
-    Write-Status "Run .\install.ps1 first, or use npx laravel-ecc install" -Color Yellow
+    Write-Status "Run .\install.ps1 first, or use npx laraskills install" -Color Yellow
     exit 1
 }
 
@@ -59,7 +59,7 @@ if ($showVersion) {
     exit 0
 }
 
-Write-Status "Laravel ECC Updater v$newVersion"
+Write-Status "LaraSkills Updater v$newVersion"
 Write-Status "Target: $targetDir"
 Write-Status "Installed: v$localVersion"
 Write-Status "Latest:    v$newVersion"

@@ -31,7 +31,7 @@ jobs:
       - run: npm ci
       - run: npm test
       - run: npm run benchmark
-      - run: node ./scripts/laravel-ecc.mjs validate
+      - run: node ./scripts/laraskills.mjs validate
 
   reproducibility:
     name: clean-clone (${{ matrix.os }})

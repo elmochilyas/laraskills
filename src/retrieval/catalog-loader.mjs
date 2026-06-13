@@ -33,30 +33,37 @@ export function findEccRoot(cwd, explicitRoot, envRoot) {
   if (explicitRoot) {
     const found = resolveEccRoot(explicitRoot);
     if (found) return found;
-    throw new Error(`ECC root not found at specified path: ${explicitRoot}`);
+    throw new Error(`LaraSkills root not found at specified path: ${explicitRoot}`);
   }
-  if (envRoot) {
-    const found = resolveEccRoot(envRoot);
+  const preferredEnvRoot = envRoot !== undefined ? envRoot : process.env.LARASKILLS_ROOT;
+  if (preferredEnvRoot) {
+    const found = resolveEccRoot(preferredEnvRoot);
     if (found) return found;
-    throw new Error(`ECC root not found at ECC_ROOT: ${envRoot}`);
+    throw new Error(`LaraSkills root not found at LARASKILLS_ROOT: ${preferredEnvRoot}`);
+  }
+  const legacyEnvRoot = process.env.ECC_ROOT;
+  if (legacyEnvRoot) {
+    const found = resolveEccRoot(legacyEnvRoot);
+    if (found) return found;
+    throw new Error(`LaraSkills root not found at legacy ECC_ROOT: ${legacyEnvRoot}`);
+  }
+  const config = loadConfig();
+  if (config) {
+    const found = resolveEccRoot(config.laraskillsRoot);
+    if (found) return found;
   }
   let found = resolveEccRoot(cwd);
   if (found) return found;
   found = resolveEccRoot(process.cwd());
   if (found) return found;
-  const config = loadConfig();
-  if (config) {
-    found = resolveEccRoot(config.eccRoot);
-    if (found) return found;
-  }
   throw new Error(
-    'ECC intelligence files were not found.\n\n' +
-    'Provide the full Laravel ECC repository path:\n\n' +
-    `  npx laravel-ecc retrieve "your task" --ecc-root C:\\path\\to\\laravel-ecc\n\n` +
+    'LaraSkills intelligence files were not found.\n\n' +
+    'Provide the full LaraSkills repository path:\n\n' +
+    `  npx laraskills retrieve "your task" --laraskills-root C:\\path\\to\\laraskills\n\n` +
     'or set:\n\n' +
-    '  ECC_ROOT=C:\\path\\to\\laravel-ecc\n\n' +
+    '  LARASKILLS_ROOT=C:\\path\\to\\laraskills\n\n' +
     'or run:\n\n' +
-    '  laravel-ecc setup --ecc-root C:\\path\\to\\laravel-ecc'
+    '  laraskills setup --laraskills-root C:\\path\\to\\laraskills'
   );
 }
 

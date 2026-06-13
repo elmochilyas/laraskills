@@ -15,12 +15,12 @@ import {
 import { formatAsMarkdown, formatAsJson, formatKuDetail } from '../src/retrieval/formatter.mjs';
 import {
   resolveEccRootWithPrecedence,
-  resolveEccRoot,
   validateIntelligenceRoot,
 } from '../src/runtime/ecc-root-resolver.mjs';
 import {
   getConfigPath,
-  loadConfig,
+  getLegacyConfigPath,
+  loadConfigWithSource,
   saveConfig,
 } from '../src/runtime/user-config.mjs';
 
@@ -34,9 +34,9 @@ const VALID_COMPONENTS = [
   'laravel-artisan', 'laravel-eloquent', 'laravel-migration', 'laravel-container',
 ];
 
-function log(msg) { console.log(`[Laravel ECC] ${msg}`); }
-function warn(msg) { console.warn(`[Laravel ECC] WARNING: ${msg}`); }
-function err(msg) { console.error(`[Laravel ECC] ERROR: ${msg}`); process.exit(1); }
+function log(msg) { console.log(`[LaraSkills] ${msg}`); }
+function warn(msg) { console.warn(`[LaraSkills] WARNING: ${msg}`); }
+function err(msg) { console.error(`[LaraSkills] ERROR: ${msg}`); process.exit(1); }
 function logRet(msg) { console.log(msg); }
 
 function detectTools(target) {
@@ -57,13 +57,21 @@ function detectTools(target) {
 }
 
 function readState(target) {
-  const stateFile = join(target, '.laravel-ecc-state.json');
-  if (!existsSync(stateFile)) return null;
-  return JSON.parse(readFileSync(stateFile, 'utf-8'));
+  const stateFile = join(target, '.laraskills-state.json');
+  if (existsSync(stateFile)) {
+    return JSON.parse(readFileSync(stateFile, 'utf-8'));
+  }
+  const legacyStateFile = join(target, '.laravel-ecc-state.json');
+  if (!existsSync(legacyStateFile)) return null;
+  return {
+    ...JSON.parse(readFileSync(legacyStateFile, 'utf-8')),
+    legacyStateFile,
+  };
 }
 
 function writeState(target, state) {
-  writeFileSync(join(target, '.laravel-ecc-state.json'), JSON.stringify(state, null, 2));
+  const { legacyStateFile, ...persistedState } = state;
+  writeFileSync(join(target, '.laraskills-state.json'), JSON.stringify(persistedState, null, 2));
 }
 
 function copyRules(target) {
@@ -184,106 +192,113 @@ function addComponent(target, component) {
 
 function cmdSetup(setupArgs) {
   const flags = parseFlags(setupArgs);
-  const explicitRoot = getExplicitEccRoot(flags);
-  const configPath = getConfigPath();
 
-  log('Laravel ECC setup');
+  log('LaraSkills setup');
   console.log('');
 
-  let rootToSave = null;
-  let source = '';
-
-  if (explicitRoot) {
-    const resolved = resolveEccRoot(explicitRoot);
-    if (!resolved) {
-      err(
-        `Validation failed: ${explicitRoot} does not contain intelligence/json/knowledge-units.json.\n` +
-        `Provide the root of a full Laravel ECC checkout (not a subdirectory).`
-      );
-    }
-    rootToSave = resolved;
-    source = 'cli-argument';
-  } else {
-    try {
-      const result = resolveEccRootWithPrecedence({ explicitRoot: null });
-      rootToSave = result.root;
-      source = result.source;
-      log(`ECC root discovered automatically (${source}): ${rootToSave}`);
-      console.log('');
-    } catch (e) {
-      log('No ECC root could be discovered automatically.');
-      log('Provide the full Laravel ECC checkout path:');
-      console.log(`  laravel-ecc setup --ecc-root "/path/to/laravel-ecc"`);
-      console.log('');
-      log('To clone the repository first:');
-      console.log(`  git clone https://github.com/elmochilyas/laravel-ecc.git`);
-      console.log(`  laravel-ecc setup --ecc-root "./laravel-ecc"`);
-      process.exit(1);
-    }
+  let result;
+  try {
+    result = resolveEccRootWithPrecedence({
+      explicitLaraskillsRoot: flags.laraskillsroot || null,
+      explicitEccRoot: flags.eccroot || null,
+    });
+  } catch (error) {
+    console.error(error.message);
+    console.log('');
+    log('Provide the full LaraSkills checkout path:');
+    console.log(`  laraskills setup --laraskills-root "/path/to/laraskills"`);
+    console.log('');
+    log('To clone the repository first:');
+    console.log(`  git clone https://github.com/elmochilyas/laraskills.git`);
+    console.log(`  laraskills setup --laraskills-root "./laraskills"`);
+    process.exit(1);
   }
 
-  const intelligenceCheck = validateIntelligenceRoot(rootToSave);
-  const savedPath = saveConfig(rootToSave);
+  if (result.legacyFallback) {
+    warn(`Using compatibility fallback: ${result.legacyReason}. Migrate to --laraskills-root or LARASKILLS_ROOT.`);
+  }
 
-  console.log('Laravel ECC setup complete.');
+  const intelligenceCheck = validateIntelligenceRoot(result.root);
+  const savedPath = saveConfig(result.root);
+
+  console.log('LaraSkills setup complete.');
   console.log('');
-  console.log(`Config file:  ${savedPath}`);
-  console.log(`ECC root:     ${rootToSave}`);
-  console.log(`Source:       ${source}`);
-  console.log(`Intelligence: ${intelligenceCheck.valid ? 'VALID' : 'INCOMPLETE'}`);
+  console.log(`Config file:      ${savedPath}`);
+  console.log(`LaraSkills root:  ${result.root}`);
+  console.log(`Source:           ${result.source}`);
+  console.log(`Intelligence:     ${intelligenceCheck.valid ? 'VALID' : 'INCOMPLETE'}`);
   if (!intelligenceCheck.valid) {
     console.log(`  Missing files: ${intelligenceCheck.missingFiles.join(', ')}`);
   }
   console.log('');
   console.log('Next steps:');
-  console.log(`  laravel-ecc doctor              Verify configuration`);
-  console.log(`  laravel-ecc retrieve "<task>"    Get ECC context for a task`);
-  console.log(`  laravel-ecc search "<query>"     Search knowledge units`);
-  console.log(`  laravel-ecc validate             Validate intelligence layer`);
+  console.log(`  laraskills doctor              Verify configuration`);
+  console.log(`  laraskills retrieve "<task>"   Get context for a task`);
+  console.log(`  laraskills search "<query>"    Search knowledge units`);
+  console.log(`  laraskills validate            Validate intelligence layer`);
   console.log('');
 }
 
 function cmdDoctor(doctorArgs) {
   const flags = parseFlags(doctorArgs || []);
   const configPath = getConfigPath();
+  const legacyConfigPath = getLegacyConfigPath();
   const configExists = existsSync(configPath);
+  const legacyConfigExists = existsSync(legacyConfigPath);
+  const envLaraskillsRoot = process.env.LARASKILLS_ROOT || 'not set';
   const envEccRoot = process.env.ECC_ROOT || 'not set';
 
-  console.log('Laravel ECC Doctor');
+  console.log('LaraSkills Doctor');
   console.log('');
   console.log(`Package version:       ${pkg.version}`);
   console.log(`Node.js:               ${process.version}`);
   console.log(`Platform:              ${process.platform}`);
   console.log(`Config file:           ${configPath}`);
   console.log(`Config exists:         ${configExists ? 'yes' : 'no'}`);
+  console.log(`Legacy config file:    ${legacyConfigPath}`);
+  console.log(`Legacy config exists:  ${legacyConfigExists ? 'yes' : 'no'}`);
 
-  if (configExists) {
+  if (configExists || legacyConfigExists) {
     try {
-      const config = loadConfig();
-      console.log(`Config ECC root:       ${config.eccRoot}`);
-    } catch (e) {
-      console.log(`Config ECC root:       ERROR - ${e.message}`);
+      const loaded = loadConfigWithSource();
+      console.log(`Config root:           ${loaded.config.laraskillsRoot}`);
+      console.log(`Config source:         ${loaded.source}`);
+      if (loaded.legacy) {
+        console.log(`Compatibility notice:  ${loaded.legacyReasons.join(', ')}`);
+      }
+    } catch (error) {
+      console.log(`Config root:           ERROR - ${error.message}`);
     }
   }
 
+  console.log(`LARASKILLS_ROOT env:   ${envLaraskillsRoot}`);
   console.log(`ECC_ROOT env:          ${envEccRoot}`);
 
   let resolvedRoot = null;
   let resolutionSource = '';
+  let compatibilityNotice = null;
   let resolutionError = null;
 
   try {
     const result = resolveEccRootWithPrecedence({
-      explicitRoot: flags.eccroot || null,
+      explicitLaraskillsRoot: flags.laraskillsroot || null,
+      explicitEccRoot: flags.eccroot || null,
     });
     resolvedRoot = result.root;
     resolutionSource = result.source;
-    console.log(`Resolved ECC root:     ${resolvedRoot}`);
+    compatibilityNotice = result.legacyFallback ? result.legacyReason : null;
+    console.log(`Resolved root:         ${resolvedRoot}`);
     console.log(`Resolution source:     ${resolutionSource}`);
+    console.log(`Legacy fallback:       ${compatibilityNotice ? 'yes' : 'no'}`);
+    if (compatibilityNotice) {
+      console.log(`Compatibility notice:  ${compatibilityNotice}`);
+      console.log(`Migration action:      use --laraskills-root, LARASKILLS_ROOT, or the new LaraSkills config`);
+    }
   } catch (e) {
     resolutionError = e.message;
-    console.log(`Resolved ECC root:     NOT FOUND`);
+    console.log(`Resolved root:         NOT FOUND`);
     console.log(`Resolution source:     none`);
+    console.log(`Legacy fallback:       no`);
   }
 
   if (resolvedRoot) {
@@ -310,7 +325,7 @@ function cmdDoctor(doctorArgs) {
     const intelligenceCheck = validateIntelligenceRoot(resolvedRoot);
     console.log(`Intelligence validate: ${intelligenceCheck.valid ? 'PASS' : 'FAIL'}`);
 
-    const mcpPath = join(resolvedRoot, 'scripts', 'laravel-ecc-mcp.mjs');
+    const mcpPath = join(resolvedRoot, 'scripts', 'laraskills-mcp.mjs');
     console.log(`MCP adapter:           ${existsSync(mcpPath) ? 'PASS' : 'MISSING'}`);
 
     const retrievalDir = join(resolvedRoot, 'src', 'retrieval');
@@ -332,10 +347,10 @@ function cmdDoctor(doctorArgs) {
     if (resolutionError) {
       console.log('');
       console.log('Fix:');
-      console.log(`  laravel-ecc setup --ecc-root "/path/to/laravel-ecc"`);
+      console.log(`  laraskills setup --laraskills-root "/path/to/laraskills"`);
       console.log('');
       console.log('To clone the full repository:');
-      console.log(`  git clone https://github.com/elmochilyas/laravel-ecc.git`);
+      console.log(`  git clone https://github.com/elmochilyas/laraskills.git`);
     }
     process.exit(1);
   }
@@ -343,7 +358,7 @@ function cmdDoctor(doctorArgs) {
 
 function install(target, profile) {
   const detected = detectTools(target);
-  log(`Laravel ECC v${pkg.version}`);
+  log(`LaraSkills v${pkg.version}`);
   log(`Target: ${target}`);
   log(`Profile: ${profile}`);
   log(`Detected tools: ${detected.join(', ')}`);
@@ -403,10 +418,13 @@ function install(target, profile) {
 function doUpdate(target) {
   const state = readState(target);
   if (!state) {
-    err('Not installed. Run `npx laravel-ecc install` first.');
+    err('Not installed. Run `npx laraskills install` first.');
   }
 
-  log(`Laravel ECC v${pkg.version}`);
+  if (state.legacyStateFile) {
+    warn(`Migrating legacy state file ${state.legacyStateFile} to .laraskills-state.json.`);
+  }
+  log(`LaraSkills v${pkg.version}`);
   log(`Updating from v${state.version} to v${pkg.version}`);
   log(`Target: ${target}`);
   log(`Profile: ${state.profile}`);
@@ -493,17 +511,17 @@ function parseFlags(args) {
   return flags;
 }
 
-function getEccRoot(flags) {
-  return flags.eccroot || process.env.ECC_ROOT || null;
-}
-
-function getExplicitEccRoot(flags) {
-  return flags.eccroot || null;
+function getLaraskillsRoot(flags) {
+  return flags.laraskillsroot
+    || flags.eccroot
+    || process.env.LARASKILLS_ROOT
+    || process.env.ECC_ROOT
+    || null;
 }
 
 function cmdRetrieve(retrieveArgs) {
   if (retrieveArgs.length === 0) {
-    err('Usage: npx laravel-ecc retrieve "<query>" [options]\n\nOptions:\n  --mode compact|standard|deep\n  --format markdown|json\n  --ecc-root <path>\n  --max-kus <number>\n  --max-rules <number>\n  --max-skills <number>\n  --max-related <number>\n  --max-prerequisites <number>\n  --prerequisite-depth <number>\n  --related-depth <number>\n  --budget <number>\n  --domain <domain-id>');
+    err('Usage: npx laraskills retrieve "<query>" [options]\n\nOptions:\n  --mode compact|standard|deep\n  --format markdown|json\n  --laraskills-root <path>\n  --ecc-root <path> (deprecated alias)\n  --max-kus <number>\n  --max-rules <number>\n  --max-skills <number>\n  --max-related <number>\n  --max-prerequisites <number>\n  --prerequisite-depth <number>\n  --related-depth <number>\n  --budget <number>\n  --domain <domain-id>');
   }
 
   const query = retrieveArgs[0];
@@ -513,7 +531,7 @@ function cmdRetrieve(retrieveArgs) {
     const result = retrieveAndFormat(query, {
       mode: flags.mode || 'standard',
       format: flags.format || 'markdown',
-      explicitEccRoot: getEccRoot(flags),
+      explicitEccRoot: getLaraskillsRoot(flags),
       maxKus: flags.maxkus ? parseInt(flags.maxkus, 10) : undefined,
       maxRules: flags.maxrules ? parseInt(flags.maxrules, 10) : undefined,
       maxSkills: flags.maxskills ? parseInt(flags.maxskills, 10) : undefined,
@@ -532,7 +550,7 @@ function cmdRetrieve(retrieveArgs) {
 
 function cmdSearch(searchArgs) {
   if (searchArgs.length === 0) {
-    err('Usage: npx laravel-ecc search "<query>" [options]\n\nOptions:\n  --format markdown|json\n  --limit <number>\n  --domain <domain-id>\n  --ecc-root <path>');
+    err('Usage: npx laraskills search "<query>" [options]\n\nOptions:\n  --format markdown|json\n  --limit <number>\n  --domain <domain-id>\n  --laraskills-root <path>\n  --ecc-root <path> (deprecated alias)');
   }
 
   const query = searchArgs[0];
@@ -543,7 +561,7 @@ function cmdSearch(searchArgs) {
     const results = searchKnowledge(query, {
       limit: flags.limit ? parseInt(flags.limit, 10) : 20,
       domain: flags.domain || undefined,
-      explicitEccRoot: getEccRoot(flags),
+      explicitEccRoot: getLaraskillsRoot(flags),
     });
 
     if (format === 'json') {
@@ -584,7 +602,7 @@ function cmdSearch(searchArgs) {
 
 function cmdGet(getArgs) {
   if (getArgs.length === 0) {
-    err('Usage: npx laravel-ecc get <knowledge-unit-id> [options]\n\nOptions:\n  --include-content\n  --format markdown|json\n  --ecc-root <path>');
+    err('Usage: npx laraskills get <knowledge-unit-id> [options]\n\nOptions:\n  --include-content\n  --format markdown|json\n  --laraskills-root <path>\n  --ecc-root <path> (deprecated alias)');
   }
 
   const kuId = getArgs[0];
@@ -594,7 +612,7 @@ function cmdGet(getArgs) {
   try {
     const result = getKnowledgeUnit(kuId, {
       includeContent: !!flags.includecontent,
-      explicitEccRoot: getEccRoot(flags),
+      explicitEccRoot: getLaraskillsRoot(flags),
     });
 
     if (!result) {
@@ -613,7 +631,7 @@ function cmdGet(getArgs) {
 
 function cmdPrerequisites(preArgs) {
   if (preArgs.length === 0) {
-    err('Usage: npx laravel-ecc prerequisites <knowledge-unit-id> [options]\n\nOptions:\n  --depth <number>\n  --format markdown|json\n  --ecc-root <path>');
+    err('Usage: npx laraskills prerequisites <knowledge-unit-id> [options]\n\nOptions:\n  --depth <number>\n  --format markdown|json\n  --laraskills-root <path>\n  --ecc-root <path> (deprecated alias)');
   }
 
   const kuId = preArgs[0];
@@ -624,7 +642,7 @@ function cmdPrerequisites(preArgs) {
     const results = getPrerequisites(kuId, {
       depth: flags.depth ? parseInt(flags.depth, 10) : 1,
       limit: flags.limit ? parseInt(flags.limit, 10) : 20,
-      explicitEccRoot: getEccRoot(flags),
+      explicitEccRoot: getLaraskillsRoot(flags),
     });
 
     if (format === 'json') {
@@ -650,7 +668,7 @@ function cmdPrerequisites(preArgs) {
 
 function cmdRelated(relArgs) {
   if (relArgs.length === 0) {
-    err('Usage: npx laravel-ecc related <knowledge-unit-id> [options]\n\nOptions:\n  --depth <number>\n  --limit <number>\n  --format markdown|json\n  --ecc-root <path>');
+    err('Usage: npx laraskills related <knowledge-unit-id> [options]\n\nOptions:\n  --depth <number>\n  --limit <number>\n  --format markdown|json\n  --laraskills-root <path>\n  --ecc-root <path> (deprecated alias)');
   }
 
   const kuId = relArgs[0];
@@ -661,7 +679,7 @@ function cmdRelated(relArgs) {
     const results = getRelatedTopics(kuId, {
       depth: flags.depth ? parseInt(flags.depth, 10) : 1,
       limit: flags.limit ? parseInt(flags.limit, 10) : 20,
-      explicitEccRoot: getEccRoot(flags),
+      explicitEccRoot: getLaraskillsRoot(flags),
     });
 
     if (format === 'json') {
@@ -690,13 +708,13 @@ function cmdValidate(validateArgs) {
 
   try {
     const results = validateIntelligence({
-      explicitEccRoot: getEccRoot(flags),
+      explicitEccRoot: getLaraskillsRoot(flags),
     });
 
     if (flags.format === 'json') {
       logRet(JSON.stringify(results, null, 2));
     } else {
-      const lines = [`# ECC Intelligence Validation`, ''];
+      const lines = [`# LaraSkills Intelligence Validation`, ''];
       lines.push(`**Status:** ${results.valid ? '✓ VALID' : '✗ ISSUES FOUND'}`);
       lines.push(`**Knowledge Units:** ${results.knowledgeUnitCount}`);
       lines.push(`**Dependency Edges:** ${results.dependencyEdgeCount}`);
@@ -729,28 +747,28 @@ function cmdValidate(validateArgs) {
 function showHelp() {
   const lines = [];
   lines.push('');
-  lines.push(`Laravel ECC v${pkg.version}`);
+  lines.push(`LaraSkills v${pkg.version}`);
   lines.push('');
   lines.push('The npm package contains the CLI and MCP adapter.');
-  lines.push('Retrieval requires access to a full Laravel ECC checkout.');
-  lines.push('Run `laravel-ecc setup` to configure it.');
+  lines.push('Retrieval requires access to a full LaraSkills checkout.');
+  lines.push('Run `laraskills setup` to configure it.');
   lines.push('');
   lines.push('Onboarding:');
-  lines.push('  laravel-ecc setup --ecc-root "<path>"   Configure ECC root');
-  lines.push('  laravel-ecc doctor                      Diagnose configuration');
+  lines.push('  laraskills setup --laraskills-root "<path>"   Configure LaraSkills root');
+  lines.push('  laraskills doctor                             Diagnose configuration');
   lines.push('');
   lines.push('Project installation:');
-  lines.push('  laravel-ecc install [--profile core|full|minimal]   Install Laravel ECC skills');
-  lines.push('  laravel-ecc add <component>                          Add a component');
-  lines.push('  laravel-ecc update                                   Update to latest version');
+  lines.push('  laraskills install [--profile core|full|minimal]   Install LaraSkills');
+  lines.push('  laraskills add <component>                          Add a component');
+  lines.push('  laraskills update                                   Update to latest version');
   lines.push('');
   lines.push('Retrieval commands:');
-  lines.push('  laravel-ecc retrieve "<query>" [options]             Retrieve ECC context bundle');
-  lines.push('  laravel-ecc search "<query>" [options]               Search knowledge units');
-  lines.push('  laravel-ecc get <ku-id> [options]                    Get knowledge unit details');
-  lines.push('  laravel-ecc prerequisites <ku-id> [options]          Get prerequisites');
-  lines.push('  laravel-ecc related <ku-id> [options]                Get related topics');
-  lines.push('  laravel-ecc validate [options]                       Validate intelligence layer');
+  lines.push('  laraskills retrieve "<query>" [options]             Retrieve a context bundle');
+  lines.push('  laraskills search "<query>" [options]               Search knowledge units');
+  lines.push('  laraskills get <ku-id> [options]                    Get knowledge unit details');
+  lines.push('  laraskills prerequisites <ku-id> [options]          Get prerequisites');
+  lines.push('  laraskills related <ku-id> [options]                Get related topics');
+  lines.push('  laraskills validate [options]                       Validate intelligence layer');
   lines.push('');
   lines.push('Options:');
   lines.push('  --help                                                Show this help');
@@ -758,7 +776,8 @@ function showHelp() {
   lines.push('Retrieval Options:');
   lines.push('  --mode compact|standard|deep              Context bundle mode (default: standard)');
   lines.push('  --format markdown|json                    Output format (default: markdown)');
-  lines.push('  --ecc-root <path>                         Path to laravel-ecc repository root');
+  lines.push('  --laraskills-root <path>                  Path to LaraSkills repository root');
+  lines.push('  --ecc-root <path>                         Deprecated compatibility alias');
   lines.push('  --max-kus <number>                        Max knowledge units to include');
   lines.push('  --max-rules <number>                      Max rules to include');
   lines.push('  --max-skills <number>                     Max skills to include');
@@ -792,8 +811,9 @@ function showHelp() {
   lines.push('  ./install.ps1 --profile minimal|core|full   Windows');
   lines.push('  ./install.sh --profile minimal|core|full    macOS/Linux');
   lines.push('');
-  lines.push('ECC_ROOT environment variable:');
-  lines.push('  Set ECC_ROOT to the laravel-ecc repository path for retrieval commands.');
+  lines.push('Root environment variables:');
+  lines.push('  LARASKILLS_ROOT is preferred.');
+  lines.push('  ECC_ROOT remains a temporary compatibility fallback.');
   lines.push('');
   console.log(lines.join('\n'));
 }
@@ -813,7 +833,7 @@ if (args.length === 0 || args[0] === '--help' || args[0] === '-h') {
 } else if (args[0] === 'add') {
   const component = args[1];
   if (!component) {
-    err('Usage: npx laravel-ecc add <component>');
+    err('Usage: npx laraskills add <component>');
   }
   addComponent(target, component);
 } else if (args[0] === 'update') {

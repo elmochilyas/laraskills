@@ -49,41 +49,55 @@ function readPackageVersion() {
   }
 }
 
-function parseEccRootArg(argv) {
+function parseRootArgs(argv) {
+  let explicitLaraskillsRoot = null;
+  let explicitEccRoot = null;
   for (let i = 0; i < argv.length; i++) {
     const arg = argv[i];
+    if (arg === '--laraskills-root') {
+      const value = argv[i + 1];
+      if (value && !value.startsWith('--')) explicitLaraskillsRoot = value;
+    }
+    if (arg.startsWith('--laraskills-root=')) {
+      explicitLaraskillsRoot = arg.slice('--laraskills-root='.length);
+    }
     if (arg === '--ecc-root') {
       const value = argv[i + 1];
-      if (!value || value.startsWith('--')) return null;
-      return value;
+      if (value && !value.startsWith('--')) explicitEccRoot = value;
     }
     if (arg.startsWith('--ecc-root=')) {
-      return arg.slice('--ecc-root='.length);
+      explicitEccRoot = arg.slice('--ecc-root='.length);
     }
   }
-  return null;
+  return { explicitLaraskillsRoot, explicitEccRoot };
 }
 
 function resolveRootState() {
-  const explicitEccRoot = parseEccRootArg(process.argv.slice(2));
+  const { explicitLaraskillsRoot, explicitEccRoot } = parseRootArgs(process.argv.slice(2));
   try {
     const result = resolveEccRootWithPrecedence({
-      explicitRoot: explicitEccRoot,
-      envRoot: process.env.ECC_ROOT,
+      explicitLaraskillsRoot,
+      explicitEccRoot,
     });
     return {
       ok: true,
       root: result.root,
       source: result.source,
       valid: result.valid,
+      legacyFallback: result.legacyFallback,
+      legacyReason: result.legacyReason,
+      explicitLaraskillsRoot,
       explicitEccRoot,
+      envLaraskillsRoot: process.env.LARASKILLS_ROOT || null,
       envEccRoot: process.env.ECC_ROOT || null,
     };
   } catch (err) {
     return {
       ok: false,
       error: err.message,
+      explicitLaraskillsRoot,
       explicitEccRoot,
+      envLaraskillsRoot: process.env.LARASKILLS_ROOT || null,
       envEccRoot: process.env.ECC_ROOT || null,
     };
   }
@@ -98,11 +112,11 @@ const READ_ONLY_ANNOTATIONS = {
 
 function errToStderr(prefix, err) {
   const message = err && err.message ? err.message : String(err);
-  process.stderr.write(`[laravel-ecc-mcp] ${prefix}: ${message}\n`);
+  process.stderr.write(`[laraskills-mcp] ${prefix}: ${message}\n`);
 }
 
 function logInfo(message) {
-  process.stderr.write(`[laravel-ecc-mcp] ${message}\n`);
+  process.stderr.write(`[laraskills-mcp] ${message}\n`);
 }
 
 function makeToolErrorResult(message) {
@@ -124,14 +138,17 @@ async function main() {
   const state = resolveRootState();
 
   if (!state.ok) {
-    logInfo(`ECC_ROOT resolution failed. ${state.error}`);
+    logInfo(`LaraSkills root resolution failed. ${state.error}`);
   } else {
-    logInfo(`ECC root resolved at ${state.root}`);
+    logInfo(`LaraSkills root resolved at ${state.root} (${state.source})`);
+    if (state.legacyFallback) {
+      logInfo(`compatibility fallback active: ${state.legacyReason}`);
+    }
   }
 
   const server = new McpServer(
     {
-      name: 'laravel-ecc',
+      name: 'laraskills',
       version,
     },
     {
@@ -154,10 +171,10 @@ async function main() {
   server.registerTool(
     'retrieve_context_bundle',
     {
-      title: 'Retrieve ECC context bundle',
+      title: 'Retrieve LaraSkills context bundle',
       description:
-        'Return the smallest useful Laravel ECC context bundle for a Laravel engineering task. ' +
-        'Delegates directly to the existing retrieval core (same semantics as `npx laravel-ecc retrieve`).',
+        'Return the smallest useful LaraSkills context bundle for a Laravel engineering task. ' +
+        'Delegates directly to the existing retrieval core (same semantics as `npx laraskills retrieve`).',
       inputSchema: retrieveContextInputSchema,
       outputSchema: bundleOutputSchema,
       annotations: READ_ONLY_ANNOTATIONS,
@@ -174,11 +191,11 @@ async function main() {
   server.registerTool(
     'search_ecc',
     {
-      title: 'Search ECC knowledge units',
+      title: 'Search LaraSkills knowledge units',
       description:
-        'Search the Laravel ECC knowledge unit catalog. ' +
+        'Search the LaraSkills knowledge unit catalog. ' +
         'Returns ranked KUs with scores, ranking signals, and source paths. ' +
-        'Delegates to the existing retrieval core (same semantics as `npx laravel-ecc search`).',
+        'Delegates to the existing retrieval core (same semantics as `npx laraskills search`).',
       inputSchema: searchInputSchema,
       outputSchema: searchResultListSchema,
       annotations: READ_ONLY_ANNOTATIONS,
@@ -199,7 +216,7 @@ async function main() {
       description:
         'Inspect a single canonical knowledge unit by ID. ' +
         'Supports bounded Markdown content inclusion and artifact-type filtering. ' +
-        'Delegates to the existing retrieval core (same semantics as `npx laravel-ecc get`).',
+        'Delegates to the existing retrieval core (same semantics as `npx laraskills get`).',
       inputSchema: knowledgeUnitInputSchema,
       outputSchema: knowledgeUnitOutputSchema,
       annotations: READ_ONLY_ANNOTATIONS,
@@ -225,7 +242,7 @@ async function main() {
       description:
         'Return prerequisites and related topics for a single knowledge unit in one call. ' +
         'Cycle-safe; respects depth and max limits. ' +
-        'Delegates to the existing retrieval core (same semantics as `npx laravel-ecc prerequisites` + `npx laravel-ecc related`).',
+        'Delegates to the existing retrieval core (same semantics as `npx laraskills prerequisites` + `npx laraskills related`).',
       inputSchema: graphContextInputSchema,
       outputSchema: graphContextOutputSchema,
       annotations: READ_ONLY_ANNOTATIONS,
@@ -247,11 +264,11 @@ async function main() {
   server.registerTool(
     'validate_ecc',
     {
-      title: 'Validate ECC intelligence layer',
+      title: 'Validate LaraSkills intelligence layer',
       description:
-        'Validate the structural integrity of the ECC intelligence layer. ' +
+        'Validate the structural integrity of the LaraSkills intelligence layer. ' +
         'Returns KU count, edge counts, cycle count, self-loop count, dangling-edge count, and an overall status. ' +
-        'Delegates to the existing retrieval core (same semantics as `npx laravel-ecc validate`).',
+        'Delegates to the existing retrieval core (same semantics as `npx laraskills validate`).',
       inputSchema: validateInputSchema,
       outputSchema: validationOutputSchema,
       annotations: READ_ONLY_ANNOTATIONS,

@@ -7,20 +7,20 @@ import { StdioClientTransport } from '@modelcontextprotocol/sdk/client/stdio.js'
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const REPO_ROOT = join(__dirname, '..', '..');
-const SERVER_PATH = join(REPO_ROOT, 'scripts', 'laravel-ecc-mcp.mjs');
+const SERVER_PATH = join(REPO_ROOT, 'scripts', 'laraskills-mcp.mjs');
 
 function makeTransport(extraEnv = {}) {
   return new StdioClientTransport({
     command: process.execPath,
     args: [SERVER_PATH],
-    env: { ...process.env, ECC_ROOT: REPO_ROOT, ...extraEnv },
+    env: { ...process.env, LARASKILLS_ROOT: REPO_ROOT, ...extraEnv },
   });
 }
 
 async function makeClient(extraEnv = {}) {
   const transport = makeTransport(extraEnv);
   const client = new Client(
-    { name: 'laravel-ecc-mcp-test', version: '0.0.1' },
+    { name: 'laraskills-mcp-test', version: '0.0.1' },
     { capabilities: {} },
   );
   await client.connect(transport);
@@ -42,7 +42,7 @@ describe('MCP Server — Startup', () => {
   it('responds to initialize and lists server info', async () => {
     const info = client.getServerVersion();
     assert.ok(info);
-    assert.strictEqual(info.name, 'laravel-ecc');
+    assert.strictEqual(info.name, 'laraskills');
     assert.ok(typeof info.version === 'string' && info.version.length > 0);
   });
 
@@ -58,7 +58,7 @@ describe('MCP Server — stdio cleanliness', () => {
     const { spawn } = await import('node:child_process');
     const child = spawn(process.execPath, [SERVER_PATH], {
       stdio: ['pipe', 'pipe', 'pipe'],
-      env: { ...process.env, ECC_ROOT: REPO_ROOT },
+      env: { ...process.env, LARASKILLS_ROOT: REPO_ROOT },
     });
     let stdout = '';
     let stderr = '';
@@ -67,7 +67,7 @@ describe('MCP Server — stdio cleanliness', () => {
     await Promise.race([
       new Promise((resolve) => {
         const check = () => {
-          if (stderr.includes('laravel-ecc-mcp')) resolve(true);
+          if (stderr.includes('laraskills-mcp')) resolve(true);
           else setTimeout(check, 50);
         };
         check();
@@ -79,7 +79,7 @@ describe('MCP Server — stdio cleanliness', () => {
     child.kill('SIGTERM');
     await new Promise((r) => child.once('exit', r));
     assert.strictEqual(stdout, '', `Expected empty stdout, got: ${stdout.slice(0, 200)}`);
-    assert.ok(stderr.includes('laravel-ecc-mcp'), 'Expected diagnostic banner on stderr');
+    assert.ok(stderr.includes('laraskills-mcp'), 'Expected diagnostic banner on stderr');
   });
 });
 
@@ -88,7 +88,7 @@ describe('MCP Server — Shutdown handling', () => {
     const { spawn } = await import('node:child_process');
     const child = spawn(process.execPath, [SERVER_PATH], {
       stdio: ['pipe', 'pipe', 'pipe'],
-      env: { ...process.env, ECC_ROOT: REPO_ROOT },
+      env: { ...process.env, LARASKILLS_ROOT: REPO_ROOT },
     });
     let stdout = '';
     child.stdout.on('data', (d) => { stdout += d.toString('utf-8'); });
@@ -105,7 +105,7 @@ describe('MCP Server — Shutdown handling', () => {
     const { spawn } = await import('node:child_process');
     const child = spawn(process.execPath, [SERVER_PATH], {
       stdio: ['pipe', 'pipe', 'pipe'],
-      env: { ...process.env, ECC_ROOT: REPO_ROOT },
+      env: { ...process.env, LARASKILLS_ROOT: REPO_ROOT },
     });
     await new Promise((r) => setTimeout(r, 800));
     child.kill('SIGINT');
@@ -579,9 +579,9 @@ describe('MCP Tool — validate_ecc', () => {
   });
 });
 
-describe('MCP Server — ECC_ROOT resolution', () => {
-  it('honours ECC_ROOT environment variable', async () => {
-    const { client, transport } = await makeClient({ ECC_ROOT: REPO_ROOT });
+describe('MCP Server - LaraSkills root resolution', () => {
+  it('honours LARASKILLS_ROOT environment variable', async () => {
+    const { client } = await makeClient({ LARASKILLS_ROOT: REPO_ROOT });
     try {
       const res = await client.callTool({ name: 'validate_ecc', arguments: {} });
       assert.strictEqual(res.structuredContent.valid, true);
@@ -590,11 +590,37 @@ describe('MCP Server — ECC_ROOT resolution', () => {
     }
   });
 
-  it('honours --ecc-root CLI flag', async () => {
+  it('honours --laraskills-root CLI flag', async () => {
+    const transport = new StdioClientTransport({
+      command: process.execPath,
+      args: [SERVER_PATH, '--laraskills-root', REPO_ROOT],
+      env: { ...process.env },
+    });
+    const client = new Client({ name: 't', version: '0' }, { capabilities: {} });
+    await client.connect(transport);
+    try {
+      const res = await client.callTool({ name: 'validate_ecc', arguments: {} });
+      assert.strictEqual(res.structuredContent.valid, true);
+    } finally {
+      await client.close();
+    }
+  });
+
+  it('temporarily honours the legacy ECC_ROOT environment variable', async () => {
+    const { client } = await makeClient({ LARASKILLS_ROOT: '', ECC_ROOT: REPO_ROOT });
+    try {
+      const res = await client.callTool({ name: 'validate_ecc', arguments: {} });
+      assert.strictEqual(res.structuredContent.valid, true);
+    } finally {
+      await client.close();
+    }
+  });
+
+  it('temporarily honours the deprecated --ecc-root CLI alias', async () => {
     const transport = new StdioClientTransport({
       command: process.execPath,
       args: [SERVER_PATH, '--ecc-root', REPO_ROOT],
-      env: { ...process.env },
+      env: { ...process.env, LARASKILLS_ROOT: '', ECC_ROOT: '' },
     });
     const client = new Client({ name: 't', version: '0' }, { capabilities: {} });
     await client.connect(transport);
@@ -609,17 +635,17 @@ describe('MCP Server — ECC_ROOT resolution', () => {
   it('returns actionable isError when intelligence files cannot be resolved', async () => {
     const transport = new StdioClientTransport({
       command: process.execPath,
-      args: [SERVER_PATH, '--ecc-root', 'C:\\nonexistent\\ecc\\path\\that\\does\\not\\exist\\at\\all'],
-      env: { ...process.env, ECC_ROOT: '' },
+      args: [SERVER_PATH, '--laraskills-root', 'C:\\nonexistent\\laraskills\\path\\that\\does\\not\\exist\\at\\all'],
+      env: { ...process.env, LARASKILLS_ROOT: '', ECC_ROOT: '' },
     });
     const client = new Client({ name: 't', version: '0' }, { capabilities: {} });
     await client.connect(transport);
     try {
       const res = await client.callTool({ name: 'validate_ecc', arguments: {} });
       assert.strictEqual(res.isError, true);
-      assert.ok(res.content[0].text.includes('ECC intelligence files were not found'));
-      assert.ok(res.content[0].text.includes('ECC_ROOT'));
-      assert.ok(res.content[0].text.includes('--ecc-root'));
+      assert.ok(res.content[0].text.includes('LaraSkills intelligence files were not found'));
+      assert.ok(res.content[0].text.includes('LARASKILLS_ROOT'));
+      assert.ok(res.content[0].text.includes('--laraskills-root'));
     } finally {
       await client.close();
     }

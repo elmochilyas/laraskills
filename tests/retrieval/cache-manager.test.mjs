@@ -12,7 +12,7 @@ import {
 } from '../../src/retrieval/cache-manager.mjs';
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
-const ECC_ROOT = join(__dirname, '..', '..');
+const LARASKILLS_ROOT = join(__dirname, '..', '..');
 
 describe('Cache Manager', () => {
   before(() => {
@@ -26,47 +26,47 @@ describe('Cache Manager', () => {
 
   it('should store and return cached catalog', () => {
     clearCache();
-    const catalog = loadCatalog(ECC_ROOT);
-    const cached = getCachedCatalog(ECC_ROOT);
+    const catalog = loadCatalog(LARASKILLS_ROOT);
+    const cached = getCachedCatalog(LARASKILLS_ROOT);
     assert.ok(cached);
     assert.strictEqual(cached.knowledgeUnitsCount, catalog.knowledgeUnitsCount);
   });
 
   it('should return same object reference on repeated loads', () => {
     clearCache();
-    const first = loadCatalog(ECC_ROOT);
-    const second = loadCatalog(ECC_ROOT);
+    const first = loadCatalog(LARASKILLS_ROOT);
+    const second = loadCatalog(LARASKILLS_ROOT);
     assert.strictEqual(first, second);
   });
 
   it('should clear all cached data', () => {
     clearCache();
-    loadCatalog(ECC_ROOT);
-    assert.ok(getCachedCatalog(ECC_ROOT));
+    loadCatalog(LARASKILLS_ROOT);
+    assert.ok(getCachedCatalog(LARASKILLS_ROOT));
     clearCache();
-    assert.strictEqual(getCachedCatalog(ECC_ROOT), null);
+    assert.strictEqual(getCachedCatalog(LARASKILLS_ROOT), null);
   });
 
   it('should invalidate specific ECC root', () => {
     clearCache();
-    loadCatalog(ECC_ROOT);
-    assert.ok(getCachedCatalog(ECC_ROOT));
-    invalidateEccRoot(ECC_ROOT);
-    assert.strictEqual(getCachedCatalog(ECC_ROOT), null);
+    loadCatalog(LARASKILLS_ROOT);
+    assert.ok(getCachedCatalog(LARASKILLS_ROOT));
+    invalidateEccRoot(LARASKILLS_ROOT);
+    assert.strictEqual(getCachedCatalog(LARASKILLS_ROOT), null);
   });
 
   it('should not share cache between different ECC roots', () => {
     clearCache();
-    loadCatalog(ECC_ROOT);
+    loadCatalog(LARASKILLS_ROOT);
     const cachedOther = getCachedCatalog('/other/fake/root');
     assert.strictEqual(cachedOther, null);
   });
 
   it('should recompute after cache clear', () => {
     clearCache();
-    const first = loadCatalog(ECC_ROOT);
+    const first = loadCatalog(LARASKILLS_ROOT);
     clearCache();
-    const second = loadCatalog(ECC_ROOT);
+    const second = loadCatalog(LARASKILLS_ROOT);
     assert.notStrictEqual(first, second);
     assert.strictEqual(first.knowledgeUnitsCount, second.knowledgeUnitsCount);
   });

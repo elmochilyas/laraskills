@@ -2,37 +2,37 @@
 
 ## Overview
 
-The retrieval CLI provides deterministic, explainable access to the Laravel ECC knowledge system. It is designed for both AI coding agents and human developers.
+The retrieval CLI provides deterministic, explainable access to the LaraSkills knowledge system. It is designed for both AI coding agents and human developers.
 
 ## Prerequisites
 
 - Node.js >= 18
-- The Laravel ECC repository cloned locally (for intelligence JSON files)
+- The LaraSkills repository cloned locally (for intelligence JSON files)
 
 ## Installation
 
-The retrieval commands are part of the `laravel-ecc` package. The npm package does not include intelligence files.
+The retrieval commands are part of the `laraskills` package. The npm package does not include intelligence files.
 
 ### Usage from GitHub Clone
 
 ```bash
 # Clone the repository
-git clone https://github.com/elmochilyas/laravel-ecc.git
-cd laravel-ecc
+git clone https://github.com/elmochilyas/laraskills.git
+cd laraskills
 
 # Run retrieval commands from the repo root
-npx laravel-ecc retrieve "your task"
+npx laraskills retrieve "your task"
 ```
 
 ### Usage from Any Directory
 
 ```bash
 # Point to the cloned repo
-npx laravel-ecc retrieve "your task" --ecc-root C:\path\to\laravel-ecc
+npx laraskills retrieve "your task" --laraskills-root C:\path\to\laraskills
 
 # Or set environment variable
-set ECC_ROOT=C:\path\to\laravel-ecc
-npx laravel-ecc retrieve "your task"
+set LARASKILLS_ROOT=C:\path\to\laraskills
+npx laraskills retrieve "your task"
 ```
 
 ## Commands
@@ -42,13 +42,13 @@ npx laravel-ecc retrieve "your task"
 Get a full ECC context bundle for a task.
 
 ```bash
-npx laravel-ecc retrieve "Build a multi-tenant REST API using Sanctum and queued notifications"
+npx laraskills retrieve "Build a multi-tenant REST API using Sanctum and queued notifications"
 
-npx laravel-ecc retrieve "Optimize an N+1 query" --mode compact
+npx laraskills retrieve "Optimize an N+1 query" --mode compact
 
-npx laravel-ecc retrieve "Add vector search with PostgreSQL" --format json
+npx laraskills retrieve "Add vector search with PostgreSQL" --format json
 
-npx laravel-ecc retrieve "Fix slow database queries" --mode deep --max-kus 15
+npx laraskills retrieve "Fix slow database queries" --mode deep --max-kus 15
 ```
 
 **Options:**
@@ -57,7 +57,7 @@ npx laravel-ecc retrieve "Fix slow database queries" --mode deep --max-kus 15
 |---|---|---|
 | `--mode` | `standard` | Bundle size: `compact`, `standard`, or `deep` |
 | `--format` | `markdown` | Output format: `markdown` or `json` |
-| `--ecc-root <path>` | (auto) | Path to laravel-ecc repository |
+| `--laraskills-root <path>` | (auto) | Path to laraskills repository |
 | `--max-kus <n>` | 10 | Max knowledge units |
 | `--max-rules <n>` | 5 | Max rules |
 | `--max-skills <n>` | 5 | Max skills |
@@ -72,11 +72,11 @@ npx laravel-ecc retrieve "Fix slow database queries" --mode deep --max-kus 15
 Search for knowledge units.
 
 ```bash
-npx laravel-ecc search "Policies versus Gates"
+npx laraskills search "Policies versus Gates"
 
-npx laravel-ecc search "Sanctum tenant authentication" --limit 20
+npx laraskills search "Sanctum tenant authentication" --limit 20
 
-npx laravel-ecc search "database indexing" --domain data-storage-systems --format json
+npx laraskills search "database indexing" --domain data-storage-systems --format json
 ```
 
 ### `get`
@@ -84,11 +84,11 @@ npx laravel-ecc search "database indexing" --domain data-storage-systems --forma
 Inspect a specific knowledge unit.
 
 ```bash
-npx laravel-ecc get security-identity-engineering/authentication/sanctum-spa-authentication
+npx laraskills get security-identity-engineering/authentication/sanctum-spa-authentication
 
-npx laravel-ecc get data-storage-systems/indexes/composite-indexes --include-content
+npx laraskills get data-storage-systems/indexes/composite-indexes --include-content
 
-npx laravel-ecc get ai-intelligence-systems/rag-retrieval-augmented-generation/rag-architecture-fundamentals --format json
+npx laraskills get ai-intelligence-systems/rag-retrieval-augmented-generation/rag-architecture-fundamentals --format json
 ```
 
 ### `prerequisites`
@@ -96,9 +96,9 @@ npx laravel-ecc get ai-intelligence-systems/rag-retrieval-augmented-generation/r
 Show prerequisite chain for a knowledge unit.
 
 ```bash
-npx laravel-ecc prerequisites data-storage-systems/sharding/hash-based-sharding
+npx laraskills prerequisites data-storage-systems/sharding/hash-based-sharding
 
-npx laravel-ecc prerequisites data-storage-systems/indexes/composite-indexes --depth 2
+npx laraskills prerequisites data-storage-systems/indexes/composite-indexes --depth 2
 ```
 
 ### `related`
@@ -106,9 +106,9 @@ npx laravel-ecc prerequisites data-storage-systems/indexes/composite-indexes --d
 Show related topics for a knowledge unit.
 
 ```bash
-npx laravel-ecc related ai-intelligence-systems/rag-retrieval-augmented-generation/rag-pipeline
+npx laraskills related ai-intelligence-systems/rag-retrieval-augmented-generation/rag-pipeline
 
-npx laravel-ecc related security-identity-engineering/authentication/sanctum-spa-authentication --limit 20
+npx laraskills related security-identity-engineering/authentication/sanctum-spa-authentication --limit 20
 ```
 
 ### `validate`
@@ -116,9 +116,9 @@ npx laravel-ecc related security-identity-engineering/authentication/sanctum-spa
 Validate the intelligence layer's structural integrity.
 
 ```bash
-npx laravel-ecc validate
+npx laraskills validate
 
-npx laravel-ecc validate --format json
+npx laraskills validate --format json
 ```
 
 ## Retrieval Modes

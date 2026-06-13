@@ -4,7 +4,7 @@ import { join, dirname } from 'node:path';
 import { fileURLToPath } from 'node:url';
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
-const ECC_ROOT = join(__dirname, '..', '..');
+const LARASKILLS_ROOT = join(__dirname, '..', '..');
 
 import { loadCatalog } from '../../src/retrieval/catalog-loader.mjs';
 import { normalizeQuery } from '../../src/retrieval/query-normalizer.mjs';
@@ -27,7 +27,7 @@ describe('Context Bundler', () => {
   const query = 'Build a REST API with Sanctum authentication';
 
   before(() => {
-    catalog = loadCatalog(ECC_ROOT);
+    catalog = loadCatalog(LARASKILLS_ROOT);
     const normalized = normalizeQuery(query);
     analysis = analyzeQuery(normalized);
     aliasResult = resolveAliases(catalog.aliases, normalized.tokens);

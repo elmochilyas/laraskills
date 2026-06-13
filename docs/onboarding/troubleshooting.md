@@ -1,56 +1,56 @@
 # Troubleshooting
 
-## ECC Root Not Found
+## LaraSkills Root Not Found
 
-**Symptom:** `laravel-ecc doctor` shows "Resolved ECC root: NOT FOUND"
+**Symptom:** `laraskills doctor` shows "Resolved LaraSkills root: NOT FOUND"
 
 **Fix:**
 ```bash
-laravel-ecc setup --ecc-root "/path/to/laravel-ecc"
+laraskills setup --laraskills-root "/path/to/laraskills"
 ```
 
-The path must point to the root of a full Laravel ECC checkout containing `intelligence/json/knowledge-units.json`.
+The path must point to the root of a full LaraSkills checkout containing `intelligence/json/knowledge-units.json`.
 
-## ECC_ROOT Invalid
+## LARASKILLS_ROOT Invalid
 
-**Symptom:** Settings like `ECC_ROOT=C:\path\to\laravel-ecc` but retrieval fails.
+**Symptom:** Settings like `LARASKILLS_ROOT=C:\path\to\laraskills` but retrieval fails.
 
 **Fix:** Verify the path contains `intelligence/json/knowledge-units.json`:
 
 ```bash
-dir "$env:ECC_ROOT\intelligence\json\knowledge-units.json"
+dir "$env:LARASKILLS_ROOT\intelligence\json\knowledge-units.json"
 ```
 
 If the file is missing, you need the full repository:
 ```bash
-git clone https://github.com/elmochilyas/laravel-ecc.git
+git clone https://github.com/elmochilyas/laraskills.git
 ```
 
 ## Persisted Config Malformed
 
-**Symptom:** `laravel-ecc doctor` shows "Config ECC root: ERROR"
+**Symptom:** `laraskills doctor` shows "Config LaraSkills root: ERROR"
 
 **Fix:** Delete the config file and rerun setup:
 
 ```bash
 # Windows
-del %APPDATA%\laravel-ecc\config.json
+del %APPDATA%\laraskills\config.json
 
 # Linux/macOS
-rm ~/.config/laravel-ecc/config.json
+rm ~/.config/laraskills/config.json
 
 # Rerun setup
-laravel-ecc setup --ecc-root "/path/to/laravel-ecc"
+laraskills setup --laraskills-root "/path/to/laraskills"
 ```
 
 ## Intelligence Files Missing
 
-**Symptom:** `laravel-ecc doctor` shows "Intelligence files: FAIL"
+**Symptom:** `laraskills doctor` shows "Intelligence files: FAIL"
 
-**Fix:** The configured ECC root is missing required files. Re-run:
+**Fix:** The configured LaraSkills root is missing required files. Re-run:
 
 ```bash
-laravel-ecc setup --ecc-root "/path/to/complete/laravel-ecc-checkout"
+laraskills setup --laraskills-root "/path/to/complete/laraskills-checkout"
 ```
 
 Required files: `knowledge-units.json`, `dependencies.json`, `relationships.json`, `rules.json`, `skills.json`, `checklists.json`, `anti-patterns.json`, `decision-trees.json` in `intelligence/json/`.
@@ -59,29 +59,29 @@ Required files: `knowledge-units.json`, `dependencies.json`, `relationships.json
 
 **Symptom:** MCP server starts but every tool returns an error about missing intelligence files.
 
-**Fix:** Set `ECC_ROOT` in the MCP environment block:
+**Fix:** Set `LARASKILLS_ROOT` in the MCP environment block:
 
 ```jsonc
 "environment": {
-  "ECC_ROOT": "/path/to/laravel-ecc"
+  "LARASKILLS_ROOT": "/path/to/laraskills"
 }
 ```
 
-Or run `laravel-ecc setup` first so the persisted configuration is available.
+Or run `laraskills setup` first so the persisted configuration is available.
 
 ## npm Package Installed but Retrieval Unavailable
 
-**Symptom:** `laravel-ecc retrieve` fails with "ECC intelligence files were not found".
+**Symptom:** `laraskills retrieve` fails with "LaraSkills intelligence files were not found".
 
 **Explanation:** The npm package is intentionally lightweight. It does not include the knowledge layer. Retrieval requires access to a full GitHub checkout.
 
 **Fix:**
 ```bash
 # Configure your checkout path
-laravel-ecc setup --ecc-root "/path/to/laravel-ecc"
+laraskills setup --laraskills-root "/path/to/laraskills"
 
 # Or set environment variable
-export ECC_ROOT=/path/to/laravel-ecc
+export LARASKILLS_ROOT=/path/to/laraskills
 ```
 
 ## Windows Path Quoting
@@ -90,8 +90,8 @@ When using MCP configuration on Windows, escape backslashes:
 
 ```jsonc
 {
-  "command": ["node", "C:\\path\\to\\laravel-ecc\\scripts\\laravel-ecc-mcp.mjs"],
-  "environment": { "ECC_ROOT": "C:\\path\\to\\laravel-ecc" }
+  "command": ["node", "C:\\path\\to\\laraskills\\scripts\\laraskills-mcp.mjs"],
+  "environment": { "LARASKILLS_ROOT": "C:\\path\\to\\laraskills" }
 }
 ```
 
@@ -101,15 +101,15 @@ No special escaping needed:
 
 ```jsonc
 {
-  "command": ["node", "/path/to/laravel-ecc/scripts/laravel-ecc-mcp.mjs"],
-  "environment": { "ECC_ROOT": "/path/to/laravel-ecc" }
+  "command": ["node", "/path/to/laraskills/scripts/laraskills-mcp.mjs"],
+  "environment": { "LARASKILLS_ROOT": "/path/to/laraskills" }
 }
 ```
 
 ## How to Rerun Setup
 
 ```bash
-laravel-ecc setup --ecc-root "/new/path/to/laravel-ecc"
+laraskills setup --laraskills-root "/new/path/to/laraskills"
 ```
 
 This overwrites the previous configuration.
@@ -117,7 +117,7 @@ This overwrites the previous configuration.
 ## How to Run Doctor
 
 ```bash
-laravel-ecc doctor
+laraskills doctor
 ```
 
 This checks the full configuration and reports the resolution source and status.
@@ -127,13 +127,13 @@ This checks the full configuration and reports the resolution source and status.
 To clone the full repository with all intelligence files:
 
 ```bash
-git clone https://github.com/elmochilyas/laravel-ecc.git
-cd laravel-ecc
+git clone https://github.com/elmochilyas/laraskills.git
+cd laraskills
 npm install
 ```
 
 Then configure:
 
 ```bash
-laravel-ecc setup --ecc-root "./laravel-ecc"
+laraskills setup --laraskills-root "./laraskills"
 ```

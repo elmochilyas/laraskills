@@ -17,7 +17,7 @@ All tools return `{ content: [{ type: 'text', text: '...' }], structuredContent:
 
 ## 1. `retrieve_context_bundle`
 
-Return the smallest useful Laravel ECC context bundle for a task.
+Return the smallest useful LaraSkills context bundle for a task.
 
 ### Input
 
@@ -60,7 +60,7 @@ Return the smallest useful Laravel ECC context bundle for a task.
 ### Errors
 
 - Invalid input: Zod validation error returned by SDK.
-- Missing intelligence: `isError: true` with the actionable `ECC intelligence files were not found` message.
+- Missing intelligence: `isError: true` with the actionable `LaraSkills intelligence files were not found` message.
 
 ---
 
@@ -179,7 +179,7 @@ Return prerequisites and related topics for a knowledge unit in a single call.
 
 ## 5. `validate_ecc`
 
-Validate the structural integrity of the ECC intelligence layer.
+Validate the structural integrity of the LaraSkills intelligence layer.
 
 ### Input
 

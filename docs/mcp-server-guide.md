@@ -1,8 +1,8 @@
-# Laravel ECC MCP Server Guide
+# LaraSkills MCP Server Guide
 
 ## What it is
 
-A **local stdio MCP server** that exposes the existing deterministic Laravel ECC retrieval core (`src/retrieval/index.mjs`) to MCP-capable coding agents (OpenCode, Claude Code, Cursor, etc.).
+A **local stdio MCP server** that exposes the existing deterministic LaraSkills retrieval core (`src/retrieval/index.mjs`) to MCP-capable coding agents (OpenCode, Claude Code, Cursor, etc.).
 
 It is a **thin adapter** — it does not re-implement retrieval, ranking, or graph expansion. It only:
 
@@ -23,7 +23,7 @@ It is a **thin adapter** — it does not re-implement retrieval, ranking, or gra
              │ stdio JSON-RPC
              ▼
 ┌─────────────────────────┐
-│ scripts/laravel-ecc-mcp │
+│ scripts/laraskills-mcp │
 │  - McpServer            │
 │  - StdioServerTransport │
 │  - 5 read-only tools    │
@@ -44,7 +44,7 @@ It is a **thin adapter** — it does not re-implement retrieval, ranking, or gra
              ▼
 ┌─────────────────────────┐
 │ intelligence/json/*.json│
-│ (resolved via ECC_ROOT) │
+│ (resolved via LARASKILLS_ROOT) │
 └─────────────────────────┘
 ```
 
@@ -57,19 +57,19 @@ The npm package remains lightweight:
 | `skills/`, `rules/`, `agents/`, `commands/`, `hooks/`, `mcp-configs/` | `knowledge/` (2,321 KUs × 6 files) |
 | 12 harness config directories | `intelligence/` (JSON + indexes) |
 | `src/` (existing retrieval core) | `agent/`, `meta/`, `tools/`, `docs/`, `tests/` |
-| `scripts/laravel-ecc.mjs` (CLI) | |
-| `scripts/laravel-ecc-mcp.mjs` (NEW — MCP entry) | |
+| `scripts/laraskills.mjs` (CLI) | |
+| `scripts/laraskills-mcp.mjs` (NEW — MCP entry) | |
 | `scripts/mcp/schemas.mjs` (NEW — shared Zod schemas) | |
 | `scripts/mcp/handlers.mjs` (NEW — tool handlers) | |
 
-The MCP server depends on the same `intelligence/json/` files the CLI uses, resolved externally through `ECC_ROOT` or `--ecc-root`. It does **not** bundle any knowledge files.
+The MCP server depends on the same `intelligence/json/` files the CLI uses, resolved externally through `LARASKILLS_ROOT` or `--laraskills-root`. It does **not** bundle any knowledge files.
 
-## External `ECC_ROOT`
+## External `LARASKILLS_ROOT`
 
 Resolution order (delegated to `findEccRoot` in `src/retrieval/catalog-loader.mjs`):
 
-1. `--ecc-root <path>` CLI flag
-2. `ECC_ROOT` environment variable
+1. `--laraskills-root <path>` CLI flag
+2. `LARASKILLS_ROOT` environment variable
 3. Current working directory
 4. Parent-directory discovery (walks up the tree)
 5. Package-relative fallback
@@ -106,9 +106,9 @@ The server never writes debug logs, startup banners, or any non-protocol data to
 ### Direct invocation
 
 ```powershell
-node scripts/laravel-ecc-mcp.mjs
+node scripts/laraskills-mcp.mjs
 # or with an explicit root
-node scripts/laravel-ecc-mcp.mjs --ecc-root C:\path\to\laravel-ecc
+node scripts/laraskills-mcp.mjs --laraskills-root C:\path\to\laraskills
 ```
 
 ### Via the npm binary
@@ -116,9 +116,9 @@ node scripts/laravel-ecc-mcp.mjs --ecc-root C:\path\to\laravel-ecc
 After `npm link` or global install:
 
 ```bash
-laravel-ecc-mcp
+laraskills-mcp
 # or
-laravel-ecc-mcp --ecc-root /path/to/laravel-ecc
+laraskills-mcp --laraskills-root /path/to/laraskills
 ```
 
 ### Via npm script
@@ -132,15 +132,15 @@ npm run mcp:start
 The Inspector is the official interactive tool for testing an MCP server.
 
 ```powershell
-# 1. Inside the laravel-ecc repo (auto-discovers intelligence)
-npx @modelcontextprotocol/inspector node .\scripts\laravel-ecc-mcp.mjs
+# 1. Inside the laraskills repo (auto-discovers intelligence)
+npx @modelcontextprotocol/inspector node .\scripts\laraskills-mcp.mjs
 
-# 2. With an explicit ECC root
-$env:ECC_ROOT="C:\path\to\laravel-ecc"
-npx @modelcontextprotocol/inspector node .\scripts\laravel-ecc-mcp.mjs
+# 2. With an explicit LaraSkills root
+$env:LARASKILLS_ROOT="C:\path\to\laraskills"
+npx @modelcontextprotocol/inspector node .\scripts\laraskills-mcp.mjs
 
-# 3. With an explicit --ecc-root flag
-npx @modelcontextprotocol/inspector node .\scripts\laravel-ecc-mcp.mjs --ecc-root C:\path\to\laravel-ecc
+# 3. With an explicit --laraskills-root flag
+npx @modelcontextprotocol/inspector node .\scripts\laraskills-mcp.mjs --laraskills-root C:\path\to\laraskills
 ```
 
 Inside the Inspector UI:
@@ -153,19 +153,19 @@ Inside the Inspector UI:
    - a `structuredContent` payload that matches the tool's `outputSchema`;
    - bounded size (no full repository dumps).
 5. Test the error path: call `get_knowledge_unit` with a bogus ID and confirm the `isError: true` response.
-6. Test the missing-root path: call the server with `--ecc-root` pointing at a non-existent directory and confirm every tool returns the actionable `ECC intelligence files were not found` error.
+6. Test the missing-root path: call the server with `--laraskills-root` pointing at a non-existent directory and confirm every tool returns the actionable `LaraSkills intelligence files were not found` error.
 
 ## CLI fallback
 
 If MCP integration is unavailable, the existing CLI provides identical semantics:
 
 ```bash
-npx laravel-ecc retrieve "Build a CRUD REST API for products with policies and pagination" --mode compact
-npx laravel-ecc search "Sanctum" --limit 5
-npx laravel-ecc get security-identity-engineering/authentication/passport-vs-sanctum
-npx laravel-ecc prerequisites data-storage-systems/indexes/b-tree-index-structure --depth 1
-npx laravel-ecc related data-storage-systems/indexes/b-tree-index-structure --limit 10
-npx laravel-ecc validate
+npx laraskills retrieve "Build a CRUD REST API for products with policies and pagination" --mode compact
+npx laraskills search "Sanctum" --limit 5
+npx laraskills get security-identity-engineering/authentication/passport-vs-sanctum
+npx laraskills prerequisites data-storage-systems/indexes/b-tree-index-structure --depth 1
+npx laraskills related data-storage-systems/indexes/b-tree-index-structure --limit 10
+npx laraskills validate
 ```
 
 See `docs/retrieval-cli-guide.md` for the full CLI reference.

@@ -23,7 +23,7 @@
 ## Repository Tree
 
 ```
-laravel-ecc/
+laraskills/
 ├── knowledge/                          (21 domains, 2,321 KUs)
 ├── intelligence/
 │   ├── indexes/                        (7 files)
