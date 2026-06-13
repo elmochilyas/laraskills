@@ -1,4 +1,6 @@
-$root = (Resolve-Path (Join-Path $PSScriptRoot "..\..")).Path
+$scriptParent = Split-Path $PSScriptRoot -Parent
+$root = Split-Path $scriptParent -Parent
+$root = $root -replace '\\', '/'
 
 $paths = @(
     "api-crud-system-engineering/input-validation-architecture/form-request-customization-points"
@@ -49,12 +51,12 @@ $paths = @(
 Write-Host "Generating 02-knowledge-unit.md for 43 non-canonical KUs..."
 
 foreach ($relPath in $paths) {
-    $kuDir = "$root\knowledge\$relPath"
+    $kuDir = "$root/knowledge/$relPath"
     $kuName = Split-Path $relPath -Leaf
     $subdomain = (Split-Path (Split-Path $relPath -Parent) -Leaf)
     $domain = (Split-Path $relPath -Parent | Split-Path -Parent | Split-Path -Leaf)
     
-    $fourFile = "$kuDir\04-standardized-knowledge.md"
+    $fourFile = "$kuDir/04-standardized-knowledge.md"
     if (-not (Test-Path $fourFile)) {
         Write-Host "SKIP: $relPath (no 04 file)"
         continue
@@ -123,7 +125,7 @@ $overview
 
 "@
     
-    Set-Content -Path "$kuDir\02-knowledge-unit.md" -Value $twoFile
+    Set-Content -Path "$kuDir/02-knowledge-unit.md" -Value $twoFile
     Write-Host "CREATED: $relPath/02-knowledge-unit.md"
 }
 

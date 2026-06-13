@@ -3,6 +3,9 @@ function Write-Utf8File {
     [System.IO.File]::WriteAllText($Path, $Value, (New-Object System.Text.UTF8Encoding $false))
 }
 
+[System.Threading.Thread]::CurrentThread.CurrentCulture = [System.Globalization.CultureInfo]::InvariantCulture
+[System.Threading.Thread]::CurrentThread.CurrentUICulture = [System.Globalization.CultureInfo]::InvariantCulture
+
 # Normalize common UTF-8 mojibake sequences to proper Unicode characters
 function Normalize-Mojibake {
     param([string]$Text)
@@ -18,20 +21,38 @@ function Normalize-Mojibake {
     return $Text
 }
 
-$root = (Resolve-Path (Join-Path $PSScriptRoot "..\..")).Path
+$scriptParent = Split-Path $PSScriptRoot -Parent
+$root = Split-Path $scriptParent -Parent
+$root = $root -replace '\\', '/'
+
+$knowledgeDir = "$root/knowledge"
+$intelJsonDir = "$root/intelligence/json"
+$intelIndexDir = "$root/intelligence/indexes"
+
+# Phase timing
+$scriptStart = Get-Date
+$lastPhase = $scriptStart
+function Write-PhaseTiming {
+    param([string]$Phase, [string]$Message)
+    $now = Get-Date
+    $phaseSec = ($now - $scriptStart).TotalSeconds
+    $stepSec = ($now - $lastPhase).TotalSeconds
+    Write-Host "[t=${phaseSec}s / +${stepSec}s] $Phase`: $Message"
+    $script:lastPhase = $now
+}
 
 # Phase 1: Build KU name-to-ID mapping
-Write-Host "Phase 1: Building KU mapping..."
-$kuDirs = Get-ChildItem "$root\knowledge" -Recurse -Directory | Where-Object { $_.Name -ne '_templates' }
+$phaseNow = Get-Date; Write-PhaseTiming -Phase "Phase 1" -Message "Building KU mapping..."
+$kuDirs = Get-ChildItem $knowledgeDir -Recurse -Directory | Where-Object { $_.Name -ne '_templates' }
 $kuDirs = $kuDirs | Where-Object { Test-Path (Join-Path $_.FullName "02-knowledge-unit.md") }
 
-$kuMap = @{}
+$kuCandidates = @{}
 $idToName = @{}
 $idToDomain = @{}
 $idToSubdomain = @{}
 
 foreach ($d in $kuDirs) {
-    $id = ($d.FullName.Replace("$root\knowledge\", "") -replace '\\', '/')
+    $id = ($d.FullName -replace '\\', '/').Replace("$knowledgeDir/", "")
     $domain = $d.Parent.Parent.Name
     $subdomain = $d.Parent.Name
     $raw = Get-Content (Join-Path $d.FullName "02-knowledge-unit.md") -Raw -Encoding UTF8 -ErrorAction SilentlyContinue
@@ -40,15 +61,26 @@ foreach ($d in $kuDirs) {
     if (-not $name -and $raw -match '^#\s+Knowledge Unit:\s*(.+)$') { $name = $matches[1].Trim() }
     if (-not $name -and $raw -match '^#\s+(.+?)$') { $name = ($matches[1].Trim() -replace '\s*[-–—]\s*Standardized Knowledge$','') }
     if (-not $name) { $name = $d.Name -replace '-',' ' }
-    $kuMap[$name.ToLower().Trim()] = $id
+    $nameKey = $name.ToLower().Trim()
+    if (-not $kuCandidates.ContainsKey($nameKey)) { $kuCandidates[$nameKey] = @() }
+    $kuCandidates[$nameKey] += $id
     $idToName[$id] = $name
     $idToDomain[$id] = $domain
     $idToSubdomain[$id] = $subdomain
 }
-Write-Host "  Mapped $($kuMap.Count) KUs"
+$sortedKuKeys = [string[]]@($kuCandidates.Keys)
+[Array]::Sort($sortedKuKeys, [System.StringComparer]::Ordinal)
+$kuMap = @{}
+foreach ($key in $sortedKuKeys) {
+    $ids = [string[]]@($kuCandidates[$key])
+    [Array]::Sort($ids, [System.StringComparer]::Ordinal)
+    # Preserve the legacy overwrite winner without depending on filesystem traversal order.
+    $kuMap[$key] = $ids[$ids.Count - 1]
+}
+Write-PhaseTiming -Phase "Phase 1" -Message "Mapped $($idToName.Count) KUs across $($kuCandidates.Count) unique titles"
 
 # Phase 2: Scan 04 files for Dependencies and Related KUs
-Write-Host "Phase 2: Scanning 04 files..."
+$phaseNow = Get-Date; Write-PhaseTiming -Phase "Phase 2" -Message "Scanning 04 files..."
 $explicitDeps = @{}
 $explicitRelated = @{}
 $counter = 0
@@ -56,11 +88,14 @@ $counter = 0
 foreach ($d in $kuDirs) {
     $counter++
     if ($counter % 500 -eq 0) { Write-Host "  Progress: $counter / $($kuDirs.Count)" }
-    $id = ($d.FullName.Replace("$root\knowledge\", "") -replace '\\', '/')
+    $id = ($d.FullName -replace '\\', '/').Replace("$knowledgeDir/", "")
     $fourFile = Join-Path $d.FullName "04-standardized-knowledge.md"
     if (-not (Test-Path $fourFile)) { continue }
-    $fourContent = Get-Content $fourFile -TotalCount 60 -Encoding UTF8 -ErrorAction SilentlyContinue
+    $fourContent = Get-Content $fourFile -Encoding UTF8 -ErrorAction SilentlyContinue
+    if (-not $fourContent) { continue }
     
+    # Single pass: parse metadata table + related KUs section
+    $inSection = $false; $sectionItems = @()
     foreach ($line in $fourContent) {
         if ($line -match '^\|\s*Dependenc(?:y|ies)\s*\|\s*(.+?)\s*\|') {
             $val = $matches[1].Trim()
@@ -70,19 +105,14 @@ foreach ($d in $kuDirs) {
             $val = $matches[1].Trim()
             if ($val -ne '' -and $val -notmatch '^(None|none|N/A)$') { $explicitRelated[$id] = ($val -split '[,|]') | ForEach-Object { Normalize-Mojibake $_.Trim() } }
         }
-    }
-    
-    # Check for ## Related KUs section
-    $full = Get-Content $fourFile -Encoding UTF8 -ErrorAction SilentlyContinue
-    $inSection = $false; $sectionItems = @()
-    foreach ($line in $full) {
+
+        # Check for ## Related KUs section (same pass)
         if ($line -match '^##\s+Related\s+(?:KU|KUs|Topics?)') { $inSection = $true; continue }
         if ($inSection -and $line -match '^##\s') { break }
         if ($inSection -and $line -match '^\s*[-*]\s+(.+)$') {
             $item = $matches[1] -replace '^\*\*(Advanced|Cross-Domain|Related):\*\*\s*', ''
             $item = $item -replace '^(Advanced|Cross-Domain|Related|See also):\s*', ''
             $item = $item.Trim()
-            # Remove leading hyphen or colon remnants
             $item = $item -replace '^[-–—]\s*', ''
             $item = Normalize-Mojibake $item
             if ($item -ne '' -and $item.Length -gt 2) { $sectionItems += $item }
@@ -93,16 +123,16 @@ foreach ($d in $kuDirs) {
         $explicitRelated[$id] += $sectionItems
     }
 }
-Write-Host "  KUs with deps: $($explicitDeps.Count), with related: $($explicitRelated.Count)"
+Write-PhaseTiming -Phase "Phase 2" -Message "KUs with deps: $($explicitDeps.Count), with related: $($explicitRelated.Count)"
 
 # Phase 3: Build dependency edges
-Write-Host "Phase 3: Building dependency edges..."
+$phaseNow = Get-Date; Write-PhaseTiming -Phase "Phase 3" -Message "Building dependency edges..."
 $edges = @(); $seenEdges = @{}
 $unmatched = @()
 
 # Build normalized name lookup for deterministic matching
 $normalizedNameMap = @{}
-foreach ($kn in ($kuMap.Keys | Sort-Object)) {
+foreach ($kn in $sortedKuKeys) {
     $normalized = $kn -replace '[^a-z0-9]+', ' ' -replace '\s+', ' ' -replace '^\s+|\s+$', ''
     if (-not $normalizedNameMap.ContainsKey($normalized)) { $normalizedNameMap[$normalized] = @() }
     $normalizedNameMap[$normalized] += $kuMap[$kn]
@@ -118,7 +148,7 @@ foreach ($kuId in ($explicitDeps.Keys | Sort-Object)) {
             $targetId = $depLower
             if ($targetId -ne $kuId) {
                 $ek = "$targetId->$kuId"
-                if (-not $seenEdges.ContainsKey($ek)) { $seenEdges[$ek] = $true; $edges += @{id=$ek; source=$targetId; target=$kuId; type="prerequisite"; strength="required"; reason="Explicit dep by ID"; evidence_paths=@("knowledge/$kuId/04-standardized-knowledge.md")} }
+                if (-not $seenEdges.ContainsKey($ek)) { $seenEdges[$ek] = $true; $edges += [ordered]@{id=$ek; source=$targetId; target=$kuId; type="prerequisite"; strength="required"; reason="Explicit dep by ID"; evidence_paths=@("knowledge/$kuId/04-standardized-knowledge.md")} }
             }
             $matched = $true
         }
@@ -128,7 +158,7 @@ foreach ($kuId in ($explicitDeps.Keys | Sort-Object)) {
             $targetId = $kuMap[$depLower]
             if ($targetId -ne $kuId) {
                 $ek = "$targetId->$kuId"
-                if (-not $seenEdges.ContainsKey($ek)) { $seenEdges[$ek] = $true; $edges += @{id=$ek; source=$targetId; target=$kuId; type="prerequisite"; strength="required"; reason="Explicit dep"; evidence_paths=@("knowledge/$kuId/04-standardized-knowledge.md")} }
+                if (-not $seenEdges.ContainsKey($ek)) { $seenEdges[$ek] = $true; $edges += [ordered]@{id=$ek; source=$targetId; target=$kuId; type="prerequisite"; strength="required"; reason="Explicit dep"; evidence_paths=@("knowledge/$kuId/04-standardized-knowledge.md")} }
             }
             $matched = $true
         }
@@ -141,7 +171,7 @@ foreach ($kuId in ($explicitDeps.Keys | Sort-Object)) {
                 $targetId = $normalizedNameMap[$normalized][0]
                 if ($targetId -ne $kuId) {
                     $ek = "$targetId->$kuId"
-                    if (-not $seenEdges.ContainsKey($ek)) { $seenEdges[$ek] = $true; $edges += @{id=$ek; source=$targetId; target=$kuId; type="prerequisite"; strength="recommended"; reason="Dep: '$dep'"; evidence_paths=@("knowledge/$kuId/04-standardized-knowledge.md")} }
+                    if (-not $seenEdges.ContainsKey($ek)) { $seenEdges[$ek] = $true; $edges += [ordered]@{id=$ek; source=$targetId; target=$kuId; type="prerequisite"; strength="recommended"; reason="Dep: '$dep'"; evidence_paths=@("knowledge/$kuId/04-standardized-knowledge.md")} }
                 }
                 $matched = $true
             }
@@ -149,14 +179,15 @@ foreach ($kuId in ($explicitDeps.Keys | Sort-Object)) {
         
         # Resolution order 5: Fuzzy substring match with sorted keys (deterministic)
         if (-not $matched) {
-            foreach ($kn in ($kuMap.Keys | Sort-Object)) {
-                if ($kn -match [regex]::Escape($depLower) -or $depLower -match [regex]::Escape($kn)) {
+            foreach ($kn in $sortedKuKeys) {
+                if ($kn.Contains($depLower) -or $depLower.Contains($kn)) {
                     $targetId = $kuMap[$kn]
                     if ($targetId -ne $kuId) {
                         $ek = "$targetId->$kuId"
-                        if (-not $seenEdges.ContainsKey($ek)) { $seenEdges[$ek] = $true; $edges += @{id=$ek; source=$targetId; target=$kuId; type="prerequisite"; strength="recommended"; reason="Dep: '$dep'"; evidence_paths=@("knowledge/$kuId/04-standardized-knowledge.md")} }
+                        if (-not $seenEdges.ContainsKey($ek)) { $seenEdges[$ek] = $true; $edges += [ordered]@{id=$ek; source=$targetId; target=$kuId; type="prerequisite"; strength="recommended"; reason="Dep: '$dep'"; evidence_paths=@("knowledge/$kuId/04-standardized-knowledge.md")} }
                     }
-                    $matched = $true; break
+                    $matched = $true
+                    break
                 }
             }
         }
@@ -167,11 +198,11 @@ foreach ($kuId in ($explicitDeps.Keys | Sort-Object)) {
 
 # Sort edges deterministically
 $edges = $edges | Sort-Object source, target, type, strength
-Write-Host "  Dependency edges: $($edges.Count), Unmatched: $($unmatched.Count)"
+Write-PhaseTiming -Phase "Phase 3" -Message "Dependency edges: $($edges.Count), Unmatched: $($unmatched.Count)"
 $unmatched | Select-Object -First 10 | ForEach-Object { Write-Host "    $_" }
 
 # Phase 4: Build relationship edges
-Write-Host "Phase 4: Building relationship edges..."
+$phaseNow = Get-Date; Write-PhaseTiming -Phase "Phase 4" -Message "Building relationship edges..."
 $relEdges = @(); $seenRels = @{}
 
 foreach ($kuId in ($explicitRelated.Keys | Sort-Object)) {
@@ -183,7 +214,7 @@ foreach ($kuId in ($explicitRelated.Keys | Sort-Object)) {
             $targetId = $kuMap[$relLower]
             if ($targetId -ne $kuId) {
                 $rk = "$kuId<->$targetId"
-                if (-not $seenRels.ContainsKey($rk)) { $seenRels[$rk]=$true; $seenRels["$targetId<->$kuId"]=$true; $relEdges += @{id="$kuId<->$targetId"; source=$kuId; target=$targetId; type="related-topic"; reason="Related KU"; evidence_paths=@("knowledge/$kuId/04-standardized-knowledge.md")} }
+                if (-not $seenRels.ContainsKey($rk)) { $seenRels[$rk]=$true; $seenRels["$targetId<->$kuId"]=$true; $relEdges += [ordered]@{id="$kuId<->$targetId"; source=$kuId; target=$targetId; type="related-topic"; reason="Related KU"; evidence_paths=@("knowledge/$kuId/04-standardized-knowledge.md")} }
             }
             $matched = $true
         }
@@ -195,7 +226,7 @@ foreach ($kuId in ($explicitRelated.Keys | Sort-Object)) {
                 $targetId = $normalizedNameMap[$normalized][0]
                 if ($targetId -ne $kuId) {
                     $rk = "$kuId<->$targetId"
-                    if (-not $seenRels.ContainsKey($rk)) { $seenRels[$rk]=$true; $seenRels["$targetId<->$kuId"]=$true; $relEdges += @{id="$kuId<->$targetId"; source=$kuId; target=$targetId; type="related-topic"; reason="Related: '$rel'"; evidence_paths=@("knowledge/$kuId/04-standardized-knowledge.md")} }
+                    if (-not $seenRels.ContainsKey($rk)) { $seenRels[$rk]=$true; $seenRels["$targetId<->$kuId"]=$true; $relEdges += [ordered]@{id="$kuId<->$targetId"; source=$kuId; target=$targetId; type="related-topic"; reason="Related: '$rel'"; evidence_paths=@("knowledge/$kuId/04-standardized-knowledge.md")} }
                 }
                 $matched = $true
             }
@@ -203,25 +234,26 @@ foreach ($kuId in ($explicitRelated.Keys | Sort-Object)) {
         
         # Resolution order 3: Fuzzy substring match with sorted keys (deterministic)
         if (-not $matched) {
-            foreach ($kn in ($kuMap.Keys | Sort-Object)) {
-                if ($kn -match [regex]::Escape($relLower) -or $relLower -match [regex]::Escape($kn)) {
+            foreach ($kn in $sortedKuKeys) {
+                if ($kn.Contains($relLower) -or $relLower.Contains($kn)) {
                     $targetId = $kuMap[$kn]
                     if ($targetId -ne $kuId) {
                         $rk = "$kuId<->$targetId"
-                        if (-not $seenRels.ContainsKey($rk)) { $seenRels[$rk]=$true; $seenRels["$targetId<->$kuId"]=$true; $relEdges += @{id="$kuId<->$targetId"; source=$kuId; target=$targetId; type="related-topic"; reason="Related: '$rel'"; evidence_paths=@("knowledge/$kuId/04-standardized-knowledge.md")} }
+                        if (-not $seenRels.ContainsKey($rk)) { $seenRels[$rk]=$true; $seenRels["$targetId<->$kuId"]=$true; $relEdges += [ordered]@{id="$kuId<->$targetId"; source=$kuId; target=$targetId; type="related-topic"; reason="Related: '$rel'"; evidence_paths=@("knowledge/$kuId/04-standardized-knowledge.md")} }
                     }
-                    $matched = $true; break
+                    $matched = $true
+                    break
                 }
             }
         }
     }
 }
 $relEdges = $relEdges | Sort-Object source, target, type, id
-Write-Host "  Relationship edges: $($relEdges.Count)"
+Write-PhaseTiming -Phase "Phase 4" -Message "Relationship edges: $($relEdges.Count)"
 
 # Phase 5: Inject edges into dependencies.json
-Write-Host "`nPhase 5: Updating dependencies.json..."
-$depPath = "$root\intelligence\json\dependencies.json"
+$phaseNow = Get-Date; Write-PhaseTiming -Phase "Phase 5" -Message "Updating dependencies.json..."
+$depPath = "$intelJsonDir/dependencies.json"
 $depRaw = Get-Content $depPath -Raw -Encoding UTF8
 if ($depRaw[0] -eq 0xFEFF) { $depRaw = $depRaw.Substring(1) }
 $depObj = $depRaw | ConvertFrom-Json
@@ -231,20 +263,20 @@ $depObj.edges = $edges
 $newDepJson = $depObj | ConvertTo-Json -Depth 10
 $newDepJson = Normalize-Mojibake $newDepJson
 Write-Utf8File -Path $depPath -Value $newDepJson
-Write-Host "  dependencies.json updated with $($edges.Count) edges"
+Write-PhaseTiming -Phase "Phase 5" -Message "dependencies.json updated with $($edges.Count) edges"
 
 # Phase 6: Create relationships.json
-Write-Host "`nPhase 6: Creating relationships.json..."
-$relOutput = @{
+$phaseNow = Get-Date; Write-PhaseTiming -Phase "Phase 6" -Message "Creating relationships.json..."
+$relOutput = [ordered]@{
     edges = $relEdges
 }
 $relContent = $relOutput | ConvertTo-Json -Depth 10
 $relContent = Normalize-Mojibake $relContent
-Write-Utf8File -Path "$root\intelligence\json\relationships.json" -Value $relContent
-Write-Host "  relationships.json created with $($relEdges.Count) edges"
+Write-Utf8File -Path "$intelJsonDir/relationships.json" -Value $relContent
+Write-PhaseTiming -Phase "Phase 6" -Message "relationships.json created with $($relEdges.Count) edges"
 
 # Phase 7: Detect circular dependencies
-Write-Host "`nPhase 7: Detecting circular dependencies..."
+$phaseNow = Get-Date; Write-PhaseTiming -Phase "Phase 7" -Message "Detecting circular dependencies..."
 $graph = @{}
 foreach ($e in $edges) {
     if (-not $graph.ContainsKey($e.source)) { $graph[$e.source] = @() }
@@ -265,12 +297,12 @@ function Check-Cycle {
 }
 foreach ($n in $graph.Keys) { if (-not $visited.ContainsKey($n)) { Check-Cycle -node $n -path @() } }
 $cycleCount = $cycleSet.Count
-Write-Host "  Cycles detected: $cycleCount"
+Write-PhaseTiming -Phase "Phase 7" -Message "Cycles detected: $cycleCount"
 if ($cycleCount -gt 0) { $i=1; foreach ($c in $cycleSet.Values) { Write-Host "  Cycle $i : $($c -join ' -> ')"; $i++ } }
 
 # Phase 7b: Alias resolution pass
-Write-Host "`nPhase 7b: Resolving aliases..."
-$aliasPath = "$root\intelligence\json\aliases.json"
+$phaseNow = Get-Date; Write-PhaseTiming -Phase "Phase 7b" -Message "Resolving aliases..."
+$aliasPath = "$intelJsonDir/aliases.json"
 $aliasResolved = 0
 if (Test-Path $aliasPath) {
     $aliasRaw = Get-Content $aliasPath -Raw -Encoding UTF8
@@ -292,7 +324,7 @@ if (Test-Path $aliasPath) {
                 $ek = "$targetId->$sourceId"
                 if (-not $seenEdges.ContainsKey($ek)) {
                     $seenEdges[$ek] = $true
-                    $edges += @{id=$ek; source=$targetId; target=$sourceId; type="prerequisite"; strength="recommended"; reason="Alias: '$ref'"; evidence_paths=@("knowledge/$sourceId/04-standardized-knowledge.md")}
+                    $edges += [ordered]@{id=$ek; source=$targetId; target=$sourceId; type="prerequisite"; strength="recommended"; reason="Alias: '$ref'"; evidence_paths=@("knowledge/$sourceId/04-standardized-knowledge.md")}
                     $aliasResolved++
                     $resolved = $true
                 }
@@ -301,22 +333,21 @@ if (Test-Path $aliasPath) {
         if (-not $resolved) { $remainingUnmatched += $u }
     }
     $unmatched = $remainingUnmatched
-    Write-Host "  Alias resolutions: $aliasResolved"
-    Write-Host "  Remaining unmatched: $($unmatched.Count)"
+    Write-PhaseTiming -Phase "Phase 7b" -Message "Alias resolutions: $aliasResolved, Remaining unmatched: $($unmatched.Count)"
 }
 
 # Phase 7c: Update dependencies.json with alias-resolved edges
-Write-Host "`nPhase 7c: Updating dependencies.json after alias resolution..."
+$phaseNow = Get-Date; Write-PhaseTiming -Phase "Phase 7c" -Message "Updating dependencies.json after alias resolution..."
 $depRaw2 = Get-Content $depPath -Raw -Encoding UTF8
 if ($depRaw2[0] -eq 0xFEFF) { $depRaw2 = $depRaw2.Substring(1) }
 $depObj2 = $depRaw2 | ConvertFrom-Json
 $depObj2.edges = $edges
 $newDepJson2 = $depObj2 | ConvertTo-Json -Depth 10
 Write-Utf8File -Path $depPath -Value $newDepJson2
-Write-Host "  dependencies.json updated with $($edges.Count) edges"
+Write-PhaseTiming -Phase "Phase 7c" -Message "dependencies.json updated with $($edges.Count) edges"
 
 # Phase 7d: Detect circular dependencies on final graph (including alias edges)
-Write-Host "`nPhase 7d: Detecting circular dependencies on final graph..."
+$phaseNow = Get-Date; Write-PhaseTiming -Phase "Phase 7d" -Message "Detecting circular dependencies on final graph..."
 $graph3 = @{}
 foreach ($e in $edges) {
     if (-not $graph3.ContainsKey($e.source)) { $graph3[$e.source] = @() }
@@ -337,12 +368,12 @@ function Check-Cycle3 {
 }
 foreach ($n in $graph3.Keys) { if (-not $visited3.ContainsKey($n)) { Check-Cycle3 -node $n -path @() } }
 $cycleCount3 = $cycleSet3.Count
-Write-Host "  Cycles detected in final graph: $cycleCount3"
+Write-PhaseTiming -Phase "Phase 7d" -Message "Cycles detected in final graph: $cycleCount3"
 if ($cycleCount3 -gt 0) { $i=1; foreach ($c in $cycleSet3.Values) { Write-Host "  Cycle $i : $($c -join ' -> ')"; $i++ } }
 
 # Phase 7e: Update dependency-index.md with real data
-Write-Host "`nPhase 7e: Regenerating dependency-index.md..."
-$depIndexPath = "$root\intelligence\indexes\dependency-index.md"
+$phaseNow = Get-Date; Write-PhaseTiming -Phase "Phase 7e" -Message "Regenerating dependency-index.md..."
+$depIndexPath = "$intelIndexDir/dependency-index.md"
 
 # Foundation KUs (most-depended-upon or highest in domain hierarchy)
 $foundationTopics = @{
@@ -369,7 +400,7 @@ foreach ($e in $edges) {
 $crossDomain = $edges | Where-Object { $_.source -and $_.target -and ($_.source -split '/')[0] -ne ($_.target -split '/')[0] }
 
 # Isolated KUs
-$allIDs = $kuDirs | ForEach-Object { ($_.FullName.Replace("$root\knowledge\", "") -replace '\\', '/') }
+$allIDs = $kuDirs | ForEach-Object { ($_.FullName -replace '\\', '/').Replace("$knowledgeDir/", "") }
 $idsWithDeps = @{}
 foreach ($e in $edges) { $idsWithDeps[$e.source] = $true; $idsWithDeps[$e.target] = $true }
 $isolated = $allIDs | Where-Object { -not $idsWithDeps.ContainsKey($_) }
@@ -487,10 +518,16 @@ $aliasResolved alias references were resolved to canonical KU IDs during this ge
 "@
 
 Write-Utf8File -Path $depIndexPath -Value $index
-Write-Host "  dependency-index.md regenerated ($((Get-Item $depIndexPath).Length) bytes)"
+$totalSec = ((Get-Date) - $scriptStart).TotalSeconds
+Write-PhaseTiming -Phase "Phase 7e" -Message "dependency-index.md regenerated ($((Get-Item $depIndexPath).Length) bytes)"
 
 Write-Host "`n=== COMPLETE ==="
-Write-Host "dependencies.json: $((Get-Item $depPath).Length) bytes, $($edges.Count) edges"
-Write-Host "relationships.json: $((Get-Item "$root\intelligence\json\relationships.json").Length) bytes, $($relEdges.Count) edges"
+Write-Host "Total runtime: $($totalSec.ToString('0.0')) seconds"
+Write-Host "Mapped KUs: $($idToName.Count)"
+Write-Host "Dependency edges: $($edges.Count)"
+Write-Host "Relationship edges: $($relEdges.Count)"
+Write-Host "Unmatched: $($unmatched.Count)"
+Write-Host "dependencies.json: $((Get-Item $depPath).Length) bytes"
+Write-Host "relationships.json: $((Get-Item "$intelJsonDir/relationships.json").Length) bytes"
 Write-Host "dependency-index.md: $((Get-Item $depIndexPath).Length) bytes"
 Write-Host "Total isolated KUs: $($isolated.Count)"

@@ -18,10 +18,10 @@ This Knowledge Unit is atomic - it covers a single, well-bounded concept with in
 ### 2.3 Eager loading (with, load, loadMissing, nested dot notation)
 - **Purpose:** Eager loading solves the N+1 query problem by loading related models in a single query. Laravel provides `with()` (query-time), `load()` (collection-time), and `loadMissing()` (conditional) with dot notation for nested relationships.
 - **Difficulty:** Foundation
-- **Dependencies:** 2.4 Lazy loading prevention, 2.5 Constrained eager loading, 2.14 N+1 detection
+- **Dependencies:** None
 
 ## Dependency Graph
-**Depends on:** "2.4 Lazy loading prevention", "2.5 Constrained eager loading", "2.14 N+1 detection"
+**Depends on:** None
 
 **Depended on by:** More advanced KUs in Eloquent ORM & Query Builder and other subdomains that reference this concept.
 

@@ -1,7 +1,10 @@
 param(
-    [string]$KnowledgeRoot = (Resolve-Path (Join-Path $PSScriptRoot "..\knowledge")).Path,
-    [string]$IntelligenceRoot = (Resolve-Path (Join-Path $PSScriptRoot "..\intelligence")).Path
+    [string]$KnowledgeRoot = (Join-Path (Split-Path $PSScriptRoot -Parent) "knowledge"),
+    [string]$IntelligenceRoot = (Join-Path (Split-Path $PSScriptRoot -Parent) "intelligence")
 )
+
+[System.Threading.Thread]::CurrentThread.CurrentCulture = [System.Globalization.CultureInfo]::InvariantCulture
+[System.Threading.Thread]::CurrentThread.CurrentUICulture = [System.Globalization.CultureInfo]::InvariantCulture
 
 function Write-Utf8File {
     param([string]$Path, [string]$Value)
@@ -60,7 +63,7 @@ foreach ($dir in $kuDirs) {
     if ($i % 100 -eq 0) { Write-Host "  Processing KU $i / $totalKUs..." -ForegroundColor DarkGray }
 
     $relPath = $dir.FullName.Substring($KnowledgeRoot.Length + 1)
-    $parts = $relPath -split '\\'
+    $parts = $relPath -split [regex]::Escape([IO.Path]::DirectorySeparatorChar)
 
     $domain = $parts[0]
     $subdomain = $parts[1]
@@ -119,9 +122,9 @@ $timestamp = "2026-06-04T00:00:00Z"
 
 # 3a: knowledge-units.json
 Write-Host "Generating knowledge-units.json..." -ForegroundColor Cyan
-$kuJson = @{
+$kuJson = [ordered]@{
     knowledge_units = $kuData | ForEach-Object {
-        @{
+        [ordered]@{
             id                 = "$($_.domain)/$($_.subdomain)/$($_.ku_name)"
             directory          = $_.ku_path
             domain             = $_.domain
@@ -153,7 +156,7 @@ foreach ($at in $artifactTypes) {
     Write-Host "Generating $($at.key).json..." -ForegroundColor Cyan
     $entries = $kuData | ForEach-Object {
         $sourceFile = "knowledge/$($_.domain)/$($_.subdomain)/$($_.ku_name)/$($at.file)"
-        @{
+        [ordered]@{
             id              = "$($_.domain)/$($_.subdomain)/$($_.ku_name)/$($at.key)"
             domain          = $_.domain
             subdomain       = $_.subdomain
@@ -164,7 +167,7 @@ foreach ($at in $artifactTypes) {
             has_content     = $true
         }
     }
-    $atJson = @{
+    $atJson = [ordered]@{
         artifact_type  = $at.key
         generated_at   = $timestamp
         total_entries  = $entries.Count
@@ -178,7 +181,7 @@ foreach ($at in $artifactTypes) {
 # 3g: dependencies.json
 Write-Host "Generating dependencies.json..." -ForegroundColor Cyan
 $nodes = $kuData | ForEach-Object {
-    @{
+    [ordered]@{
         id              = "$($_.domain)/$($_.subdomain)/$($_.ku_name)"
         domain          = $_.domain
         subdomain       = $_.subdomain
@@ -186,7 +189,7 @@ $nodes = $kuData | ForEach-Object {
         directory       = $_.ku_path
     }
 }
-$depJson = @{
+$depJson = [ordered]@{
     knowledge_units = $nodes
     edges = @()
 }
