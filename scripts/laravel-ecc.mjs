@@ -326,7 +326,7 @@ function cmdDoctor(doctorArgs) {
 
   if (resolvedRoot && validateIntelligenceRoot(resolvedRoot).valid) {
     console.log('Status: HEALTHY');
-    process.exit(0);
+    return;
   } else {
     console.log('Status: ACTION REQUIRED');
     if (resolutionError) {
@@ -803,67 +803,33 @@ const target = process.cwd();
 
 if (args.length === 0 || args[0] === '--help' || args[0] === '-h') {
   showHelp();
-  process.exit(0);
-}
-
-if (args[0] === 'setup') {
+} else if (args[0] === 'setup') {
   cmdSetup(args.slice(1));
-  process.exit(0);
-}
-
-if (args[0] === 'doctor') {
+} else if (args[0] === 'doctor') {
   cmdDoctor(args.slice(1));
-  process.exit(0);
-}
-
-if (args[0] === 'install') {
+} else if (args[0] === 'install') {
   const profile = args[1] === '--profile' ? args[2] || 'core' : 'core';
   install(target, profile);
-  process.exit(0);
-}
-
-if (args[0] === 'add') {
+} else if (args[0] === 'add') {
   const component = args[1];
   if (!component) {
     err('Usage: npx laravel-ecc add <component>');
   }
   addComponent(target, component);
-  process.exit(0);
-}
-
-if (args[0] === 'update') {
+} else if (args[0] === 'update') {
   doUpdate(target);
-  process.exit(0);
-}
-
-if (args[0] === 'retrieve') {
+} else if (args[0] === 'retrieve') {
   cmdRetrieve(args.slice(1));
-  process.exit(0);
-}
-
-if (args[0] === 'search') {
+} else if (args[0] === 'search') {
   cmdSearch(args.slice(1));
-  process.exit(0);
-}
-
-if (args[0] === 'get') {
+} else if (args[0] === 'get') {
   cmdGet(args.slice(1));
-  process.exit(0);
-}
-
-if (args[0] === 'prerequisites') {
+} else if (args[0] === 'prerequisites') {
   cmdPrerequisites(args.slice(1));
-  process.exit(0);
-}
-
-if (args[0] === 'related') {
+} else if (args[0] === 'related') {
   cmdRelated(args.slice(1));
-  process.exit(0);
-}
-
-if (args[0] === 'validate') {
+} else if (args[0] === 'validate') {
   cmdValidate(args.slice(1));
-  process.exit(0);
+} else {
+  err(`Unknown command: ${args[0]}. Use --help to see usage.`);
 }
-
-err(`Unknown command: ${args[0]}. Use --help to see usage.`);

@@ -10,7 +10,7 @@
 | Knowledge Unit Title | Query Builder Methods |
 | Difficulty Level | Foundation |
 | Classification | I |
-| Dependencies | 2.11 Where clause types | 2.13 Joins | 4.16 Offset pagination deep-page problems |
+| Dependencies | None |
 | Last Updated | 2026-06-02 |
 
 ## Overview

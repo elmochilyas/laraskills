@@ -557,9 +557,9 @@ describe('MCP Tool — validate_ecc', () => {
     assert.strictEqual(res.structuredContent.knowledgeUnitCount, 2321);
   });
 
-  it('reports 429 dependency edges', async () => {
+  it('reports 427 dependency edges', async () => {
     const res = await client.callTool({ name: 'validate_ecc', arguments: {} });
-    assert.strictEqual(res.structuredContent.dependencyEdgeCount, 429);
+    assert.strictEqual(res.structuredContent.dependencyEdgeCount, 427);
   });
 
   it('reports 3513 relationship edges', async () => {

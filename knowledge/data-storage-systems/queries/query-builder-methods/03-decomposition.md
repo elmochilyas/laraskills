@@ -18,10 +18,10 @@ This Knowledge Unit is atomic - it covers a single, well-bounded concept with in
 ### 2.10 Query builder methods (select, where, join, groupBy, having, orderBy, limit, offset)
 - **Purpose:** Laravel's query builder provides a fluent interface for constructing SQL queries. The core methods — select, where, join, groupBy, having, orderBy, limit, offset — map directly to SQL clauses.
 - **Difficulty:** Foundation
-- **Dependencies:** 2.11 Where clause types, 2.13 Joins, 4.16 Offset pagination deep-page problems
+- **Dependencies:** None
 
 ## Dependency Graph
-**Depends on:** "2.11 Where clause types", "2.13 Joins", "4.16 Offset pagination deep-page problems"
+**Depends on:** None
 
 **Depended on by:** More advanced KUs in Eloquent ORM & Query Builder and other subdomains that reference this concept.
 

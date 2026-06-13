@@ -10,7 +10,7 @@
 | Knowledge Unit Title | Eager Loading |
 | Difficulty Level | Foundation |
 | Classification | I |
-| Dependencies | 2.5 Constrained eager loading | 2.14 N+1 detection |
+| Dependencies | None |
 | Last Updated | 2026-06-02 |
 
 ## Overview

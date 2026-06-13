@@ -3,6 +3,9 @@ function Write-Utf8File {
     [System.IO.File]::WriteAllText($Path, $Value, (New-Object System.Text.UTF8Encoding $false))
 }
 
+[System.Threading.Thread]::CurrentThread.CurrentCulture = [System.Globalization.CultureInfo]::InvariantCulture
+[System.Threading.Thread]::CurrentThread.CurrentUICulture = [System.Globalization.CultureInfo]::InvariantCulture
+
 # Normalize common UTF-8 mojibake sequences to proper Unicode characters
 function Normalize-Mojibake {
     param([string]$Text)
@@ -43,7 +46,7 @@ $phaseNow = Get-Date; Write-PhaseTiming -Phase "Phase 1" -Message "Building KU m
 $kuDirs = Get-ChildItem $knowledgeDir -Recurse -Directory | Where-Object { $_.Name -ne '_templates' }
 $kuDirs = $kuDirs | Where-Object { Test-Path (Join-Path $_.FullName "02-knowledge-unit.md") }
 
-$kuMap = @{}
+$kuCandidates = @{}
 $idToName = @{}
 $idToDomain = @{}
 $idToSubdomain = @{}
@@ -58,13 +61,23 @@ foreach ($d in $kuDirs) {
     if (-not $name -and $raw -match '^#\s+Knowledge Unit:\s*(.+)$') { $name = $matches[1].Trim() }
     if (-not $name -and $raw -match '^#\s+(.+?)$') { $name = ($matches[1].Trim() -replace '\s*[-–—]\s*Standardized Knowledge$','') }
     if (-not $name) { $name = $d.Name -replace '-',' ' }
-    $kuMap[$name.ToLower().Trim()] = $id
+    $nameKey = $name.ToLower().Trim()
+    if (-not $kuCandidates.ContainsKey($nameKey)) { $kuCandidates[$nameKey] = @() }
+    $kuCandidates[$nameKey] += $id
     $idToName[$id] = $name
     $idToDomain[$id] = $domain
     $idToSubdomain[$id] = $subdomain
 }
-$sortedKuKeys = $kuMap.Keys | Sort-Object
-Write-PhaseTiming -Phase "Phase 1" -Message "Mapped $($kuMap.Count) KUs"
+$sortedKuKeys = [string[]]@($kuCandidates.Keys)
+[Array]::Sort($sortedKuKeys, [System.StringComparer]::Ordinal)
+$kuMap = @{}
+foreach ($key in $sortedKuKeys) {
+    $ids = [string[]]@($kuCandidates[$key])
+    [Array]::Sort($ids, [System.StringComparer]::Ordinal)
+    # Preserve the legacy overwrite winner without depending on filesystem traversal order.
+    $kuMap[$key] = $ids[$ids.Count - 1]
+}
+Write-PhaseTiming -Phase "Phase 1" -Message "Mapped $($idToName.Count) KUs across $($kuCandidates.Count) unique titles"
 
 # Phase 2: Scan 04 files for Dependencies and Related KUs
 $phaseNow = Get-Date; Write-PhaseTiming -Phase "Phase 2" -Message "Scanning 04 files..."
@@ -135,7 +148,7 @@ foreach ($kuId in ($explicitDeps.Keys | Sort-Object)) {
             $targetId = $depLower
             if ($targetId -ne $kuId) {
                 $ek = "$targetId->$kuId"
-                if (-not $seenEdges.ContainsKey($ek)) { $seenEdges[$ek] = $true; $edges += @{id=$ek; source=$targetId; target=$kuId; type="prerequisite"; strength="required"; reason="Explicit dep by ID"; evidence_paths=@("knowledge/$kuId/04-standardized-knowledge.md")} }
+                if (-not $seenEdges.ContainsKey($ek)) { $seenEdges[$ek] = $true; $edges += [ordered]@{id=$ek; source=$targetId; target=$kuId; type="prerequisite"; strength="required"; reason="Explicit dep by ID"; evidence_paths=@("knowledge/$kuId/04-standardized-knowledge.md")} }
             }
             $matched = $true
         }
@@ -145,7 +158,7 @@ foreach ($kuId in ($explicitDeps.Keys | Sort-Object)) {
             $targetId = $kuMap[$depLower]
             if ($targetId -ne $kuId) {
                 $ek = "$targetId->$kuId"
-                if (-not $seenEdges.ContainsKey($ek)) { $seenEdges[$ek] = $true; $edges += @{id=$ek; source=$targetId; target=$kuId; type="prerequisite"; strength="required"; reason="Explicit dep"; evidence_paths=@("knowledge/$kuId/04-standardized-knowledge.md")} }
+                if (-not $seenEdges.ContainsKey($ek)) { $seenEdges[$ek] = $true; $edges += [ordered]@{id=$ek; source=$targetId; target=$kuId; type="prerequisite"; strength="required"; reason="Explicit dep"; evidence_paths=@("knowledge/$kuId/04-standardized-knowledge.md")} }
             }
             $matched = $true
         }
@@ -158,7 +171,7 @@ foreach ($kuId in ($explicitDeps.Keys | Sort-Object)) {
                 $targetId = $normalizedNameMap[$normalized][0]
                 if ($targetId -ne $kuId) {
                     $ek = "$targetId->$kuId"
-                    if (-not $seenEdges.ContainsKey($ek)) { $seenEdges[$ek] = $true; $edges += @{id=$ek; source=$targetId; target=$kuId; type="prerequisite"; strength="recommended"; reason="Dep: '$dep'"; evidence_paths=@("knowledge/$kuId/04-standardized-knowledge.md")} }
+                    if (-not $seenEdges.ContainsKey($ek)) { $seenEdges[$ek] = $true; $edges += [ordered]@{id=$ek; source=$targetId; target=$kuId; type="prerequisite"; strength="recommended"; reason="Dep: '$dep'"; evidence_paths=@("knowledge/$kuId/04-standardized-knowledge.md")} }
                 }
                 $matched = $true
             }
@@ -171,9 +184,10 @@ foreach ($kuId in ($explicitDeps.Keys | Sort-Object)) {
                     $targetId = $kuMap[$kn]
                     if ($targetId -ne $kuId) {
                         $ek = "$targetId->$kuId"
-                        if (-not $seenEdges.ContainsKey($ek)) { $seenEdges[$ek] = $true; $edges += @{id=$ek; source=$targetId; target=$kuId; type="prerequisite"; strength="recommended"; reason="Dep: '$dep'"; evidence_paths=@("knowledge/$kuId/04-standardized-knowledge.md")} }
+                        if (-not $seenEdges.ContainsKey($ek)) { $seenEdges[$ek] = $true; $edges += [ordered]@{id=$ek; source=$targetId; target=$kuId; type="prerequisite"; strength="recommended"; reason="Dep: '$dep'"; evidence_paths=@("knowledge/$kuId/04-standardized-knowledge.md")} }
                     }
-                    $matched = $true; break
+                    $matched = $true
+                    break
                 }
             }
         }
@@ -200,7 +214,7 @@ foreach ($kuId in ($explicitRelated.Keys | Sort-Object)) {
             $targetId = $kuMap[$relLower]
             if ($targetId -ne $kuId) {
                 $rk = "$kuId<->$targetId"
-                if (-not $seenRels.ContainsKey($rk)) { $seenRels[$rk]=$true; $seenRels["$targetId<->$kuId"]=$true; $relEdges += @{id="$kuId<->$targetId"; source=$kuId; target=$targetId; type="related-topic"; reason="Related KU"; evidence_paths=@("knowledge/$kuId/04-standardized-knowledge.md")} }
+                if (-not $seenRels.ContainsKey($rk)) { $seenRels[$rk]=$true; $seenRels["$targetId<->$kuId"]=$true; $relEdges += [ordered]@{id="$kuId<->$targetId"; source=$kuId; target=$targetId; type="related-topic"; reason="Related KU"; evidence_paths=@("knowledge/$kuId/04-standardized-knowledge.md")} }
             }
             $matched = $true
         }
@@ -212,7 +226,7 @@ foreach ($kuId in ($explicitRelated.Keys | Sort-Object)) {
                 $targetId = $normalizedNameMap[$normalized][0]
                 if ($targetId -ne $kuId) {
                     $rk = "$kuId<->$targetId"
-                    if (-not $seenRels.ContainsKey($rk)) { $seenRels[$rk]=$true; $seenRels["$targetId<->$kuId"]=$true; $relEdges += @{id="$kuId<->$targetId"; source=$kuId; target=$targetId; type="related-topic"; reason="Related: '$rel'"; evidence_paths=@("knowledge/$kuId/04-standardized-knowledge.md")} }
+                    if (-not $seenRels.ContainsKey($rk)) { $seenRels[$rk]=$true; $seenRels["$targetId<->$kuId"]=$true; $relEdges += [ordered]@{id="$kuId<->$targetId"; source=$kuId; target=$targetId; type="related-topic"; reason="Related: '$rel'"; evidence_paths=@("knowledge/$kuId/04-standardized-knowledge.md")} }
                 }
                 $matched = $true
             }
@@ -225,9 +239,10 @@ foreach ($kuId in ($explicitRelated.Keys | Sort-Object)) {
                     $targetId = $kuMap[$kn]
                     if ($targetId -ne $kuId) {
                         $rk = "$kuId<->$targetId"
-                        if (-not $seenRels.ContainsKey($rk)) { $seenRels[$rk]=$true; $seenRels["$targetId<->$kuId"]=$true; $relEdges += @{id="$kuId<->$targetId"; source=$kuId; target=$targetId; type="related-topic"; reason="Related: '$rel'"; evidence_paths=@("knowledge/$kuId/04-standardized-knowledge.md")} }
+                        if (-not $seenRels.ContainsKey($rk)) { $seenRels[$rk]=$true; $seenRels["$targetId<->$kuId"]=$true; $relEdges += [ordered]@{id="$kuId<->$targetId"; source=$kuId; target=$targetId; type="related-topic"; reason="Related: '$rel'"; evidence_paths=@("knowledge/$kuId/04-standardized-knowledge.md")} }
                     }
-                    $matched = $true; break
+                    $matched = $true
+                    break
                 }
             }
         }
@@ -252,7 +267,7 @@ Write-PhaseTiming -Phase "Phase 5" -Message "dependencies.json updated with $($e
 
 # Phase 6: Create relationships.json
 $phaseNow = Get-Date; Write-PhaseTiming -Phase "Phase 6" -Message "Creating relationships.json..."
-$relOutput = @{
+$relOutput = [ordered]@{
     edges = $relEdges
 }
 $relContent = $relOutput | ConvertTo-Json -Depth 10
@@ -309,7 +324,7 @@ if (Test-Path $aliasPath) {
                 $ek = "$targetId->$sourceId"
                 if (-not $seenEdges.ContainsKey($ek)) {
                     $seenEdges[$ek] = $true
-                    $edges += @{id=$ek; source=$targetId; target=$sourceId; type="prerequisite"; strength="recommended"; reason="Alias: '$ref'"; evidence_paths=@("knowledge/$sourceId/04-standardized-knowledge.md")}
+                    $edges += [ordered]@{id=$ek; source=$targetId; target=$sourceId; type="prerequisite"; strength="recommended"; reason="Alias: '$ref'"; evidence_paths=@("knowledge/$sourceId/04-standardized-knowledge.md")}
                     $aliasResolved++
                     $resolved = $true
                 }
@@ -508,7 +523,7 @@ Write-PhaseTiming -Phase "Phase 7e" -Message "dependency-index.md regenerated ($
 
 Write-Host "`n=== COMPLETE ==="
 Write-Host "Total runtime: $($totalSec.ToString('0.0')) seconds"
-Write-Host "Mapped KUs: $($kuMap.Count)"
+Write-Host "Mapped KUs: $($idToName.Count)"
 Write-Host "Dependency edges: $($edges.Count)"
 Write-Host "Relationship edges: $($relEdges.Count)"
 Write-Host "Unmatched: $($unmatched.Count)"
