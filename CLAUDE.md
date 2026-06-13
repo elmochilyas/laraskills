@@ -1,12 +1,12 @@
 # CLAUDE.md
 
-This file provides guidance to Claude Code when working with Laravel 13 projects using Laravel ECC.
+This file provides guidance to Claude Code when working with Laravel 13 projects using LaraSkills.
 
 For full agent operating instructions, see [`AGENTS.md`](AGENTS.md).
 
 ## Project Overview
 
-Laravel ECC provides a Laravel-focused AI coding-agent operating layer and engineering knowledge system with skills, rules, agents, knowledge units, and CLI harness configs.
+LaraSkills provides a Laravel-focused AI coding-agent operating layer and engineering knowledge system with skills, rules, agents, knowledge units, and CLI harness configs.
 
 ### Operating Layer (curated)
 - `agents/` — 12 agent definitions for Laravel specializations

@@ -57,7 +57,7 @@ function countCycles(catalog) {
 
 export function describeForAgents() {
   return [
-    'Laravel ECC MCP server. Always use `retrieve_context_bundle` first for any non-trivial Laravel task.',
+    'LaraSkills MCP server. Always use `retrieve_context_bundle` first for any non-trivial Laravel task.',
     'Search with `search_ecc` to discover KUs by topic. Results include canonical IDs you can copy-paste directly into `get_knowledge_unit` and `get_graph_context`.',
     'Deep-inspect with `get_knowledge_unit` -- also accepts short IDs (last path segment) and aliases for convenience.',
     'Explore dependencies with `get_graph_context` -- prerequisites and related topics in one call.',
@@ -329,8 +329,8 @@ export function buildValidationResult(rawArgs, ctx) {
   };
 
   const text = structured.valid
-    ? `ECC intelligence is VALID. ${structured.knowledgeUnitCount} KUs, ${structured.dependencyEdgeCount} dep edges, ${structured.relationshipEdgeCount} rel edges, 0 cycles, 0 self-loops, 0 dangling.`
-    : `ECC intelligence has ${structured.issues.length} issue(s). Top issue: ${structured.issues[0] || 'unknown'}`;
+    ? `LaraSkills intelligence is VALID. ${structured.knowledgeUnitCount} KUs, ${structured.dependencyEdgeCount} dep edges, ${structured.relationshipEdgeCount} rel edges, 0 cycles, 0 self-loops, 0 dangling.`
+    : `LaraSkills intelligence has ${structured.issues.length} issue(s). Top issue: ${structured.issues[0] || 'unknown'}`;
 
   return { text, structured };
 }
@@ -343,30 +343,36 @@ export function buildErrorResult(message) {
 }
 
 export function buildRootErrorResult(state) {
-  const hint = state.explicitEccRoot
-    ? `Explicit --ecc-root path failed: ${state.explicitEccRoot}`
-    : state.envEccRoot
-      ? `ECC_ROOT path failed: ${state.envEccRoot}`
-      : 'No ECC_ROOT and no --ecc-root provided, and the current working directory does not contain intelligence/json/.';
+  const hint = state.explicitLaraskillsRoot
+    ? `Explicit --laraskills-root path failed: ${state.explicitLaraskillsRoot}`
+    : state.explicitEccRoot
+      ? `Deprecated --ecc-root path failed: ${state.explicitEccRoot}`
+      : state.envLaraskillsRoot
+        ? `LARASKILLS_ROOT path failed: ${state.envLaraskillsRoot}`
+        : state.envEccRoot
+          ? `Legacy ECC_ROOT path failed: ${state.envEccRoot}`
+          : 'No configured LaraSkills root was found, and the current working directory does not contain intelligence/json/.';
   const message = [
-    'ECC intelligence files were not found.',
+    'LaraSkills intelligence files were not found.',
     hint,
     '',
     'The npm package contains the CLI and MCP adapter.',
-    'Retrieval requires access to a full Laravel ECC checkout.',
+    'Retrieval requires access to a full LaraSkills checkout.',
     '',
     'Options:',
     '  Run the built-in setup command:',
-    '    laravel-ecc setup --ecc-root /path/to/laravel-ecc',
+    '    laraskills setup --laraskills-root /path/to/laraskills',
     '',
-    '  Set the ECC_ROOT environment variable:',
-    '    ECC_ROOT=/path/to/laravel-ecc',
+    '  Set the preferred environment variable:',
+    '    LARASKILLS_ROOT=/path/to/laraskills',
     '',
-    '  Or pass --ecc-root to the MCP server:',
-    '    node scripts/laravel-ecc-mcp.mjs --ecc-root /path/to/laravel-ecc',
+    '  Or pass --laraskills-root to the MCP server:',
+    '    node scripts/laraskills-mcp.mjs --laraskills-root /path/to/laraskills',
     '',
     '  Run doctor for diagnostics:',
-    '    laravel-ecc doctor',
+    '    laraskills doctor',
+    '',
+    'Temporary compatibility fallbacks: --ecc-root, ECC_ROOT, and the old config directory.',
   ].join('\n');
   return {
     isError: true,

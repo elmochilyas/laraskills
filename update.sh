@@ -1,12 +1,12 @@
 #!/usr/bin/env bash
-# update.sh — Laravel ECC Updater for Unix (macOS/Linux)
+# update.sh — LaraSkills Updater for Unix (macOS/Linux)
 #
 # Usage:
 #   ./update.sh                           # Update everything (same profile as install)
 #   ./update.sh --dry-run                 # Preview changes without applying
 #   ./update.sh --version                 # Show current and latest versions
 #
-# This script updates your Laravel ECC installation to the latest
+# This script updates your LaraSkills installation to the latest
 # version. It preserves your installation profile (minimal/core/full)
 # and syncs all components: skills, rules, agents, hooks, MCP configs.
 
@@ -14,13 +14,13 @@ set -euo pipefail
 
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 TARGET_DIR="${TARGET_DIR:-$(pwd)}"
-STATE_FILE="$TARGET_DIR/.laravel-ecc-state.json"
+STATE_FILE="$TARGET_DIR/.laraskills-state.json"
 DRY_RUN=false
 SHOW_VERSION=false
 
-log()  { echo -e "\033[32m[Laravel ECC]\033[0m $1"; }
-warn() { echo -e "\033[33m[Laravel ECC] WARNING:\033[0m $1"; }
-err()  { echo -e "\033[31m[Laravel ECC] ERROR:\033[0m $1" >&2; }
+log()  { echo -e "\033[32m[LaraSkills]\033[0m $1"; }
+warn() { echo -e "\033[33m[LaraSkills] WARNING:\033[0m $1"; }
+err()  { echo -e "\033[31m[LaraSkills] ERROR:\033[0m $1" >&2; }
 
 while [[ $# -gt 0 ]]; do
     case "$1" in
@@ -34,7 +34,7 @@ done
 # Check installation state
 if [ ! -f "$STATE_FILE" ]; then
     err "No installation found in $TARGET_DIR"
-    log "Run install.sh first, or use npx laravel-ecc install"
+    log "Run install.sh first, or use npx laraskills install"
     exit 1
 fi
 
@@ -55,7 +55,7 @@ if [ "$SHOW_VERSION" = true ]; then
     exit 0
 fi
 
-log "Laravel ECC Updater v$NEW_VERSION"
+log "LaraSkills Updater v$NEW_VERSION"
 log "Target: $TARGET_DIR"
 log "Installed: v$LOCAL_VERSION"
 log "Latest:    v$NEW_VERSION"

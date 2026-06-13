@@ -1,4 +1,4 @@
-# Laravel ECC
+# LaraSkills
 
 **Laravel 13 AI-ready skills, rules, agents, and CLI harness configs** for OpenCode, Claude Code, Cursor, Gemini CLI, Codex CLI, Copilot, VS Code, Zed, Trae, Qwen, CodeBuddy, and Kiro.
 
@@ -6,12 +6,18 @@ A Laravel-focused AI coding-agent **operating layer** and **engineering knowledg
 
 Builds on the [ECC](https://github.com/affaan-m/ECC) ecosystem with Laravel 13-specific depth.
 
+> **Migration notice:** Laravel ECC has been renamed to **LaraSkills**. Use the
+> `laraskills` npm package, `laraskills` CLI, and `laraskills-mcp` server.
+> Temporary `laravel-ecc` and `laravel-ecc-mcp` binary aliases remain available
+> for migration. See
+> [`docs/migrations/laravel-ecc-to-laraskills.md`](docs/migrations/laravel-ecc-to-laraskills.md).
+
 ```bash
 # Install from GitHub
-npx skills add elmochilyas/laravel-ecc
+npx skills add elmochilyas/laraskills
 
 # Install from npm
-npx laravel-ecc@beta add laravel-patterns
+npx laraskills@beta add laravel-patterns
 ```
 
 ## Repository Architecture
@@ -24,7 +30,7 @@ The curated layer teaches AI coding agents how to behave and operate inside Lara
 agents/       — 12 Laravel-specific agent definitions
 skills/       — 12 deep Laravel 13 skills
 rules/        — 41 always-follow guidelines (4 categories)
-commands/     — 7 Laravel/ECC console command references
+commands/     — 7 Laravel/LaraSkills console command references
 hooks/        — Git/agent hook automations
 mcp-configs/  — MCP server configurations
 ```
@@ -60,12 +66,12 @@ tools/         — Rebuild and generation scripts
 | Canonical Knowledge Units | 2,321 |
 | JSON Intelligence Files | 10 |
 | Markdown Indexes | 7 |
-| Dependency Edges | 429 |
+| Dependency Edges | 427 |
 | Relationship Edges | 3,513 |
 | Circular Dependencies | 0 (verified by automated DFS on every generation) |
 | Agent Navigation Files | 5 |
 
-## How AI Agents Should Use ECC
+## How AI Agents Should Use LaraSkills
 
 ```
 Task
@@ -99,30 +105,30 @@ Reference files:
 
 ```bash
 # Full installation to current project
-npx laravel-ecc@beta install
+npx laraskills@beta install
 
 # Install with a different profile
-npx laravel-ecc@beta install --profile minimal    # Skills only
-npx laravel-ecc@beta install --profile full       # Everything
+npx laraskills@beta install --profile minimal    # Skills only
+npx laraskills@beta install --profile full       # Everything
 
 # Add a single component to an existing project
-npx laravel-ecc@beta add laravel-patterns
+npx laraskills@beta add laravel-patterns
 
 # Check installation state
-npx laravel-ecc@beta doctor
+npx laraskills@beta doctor
 ```
 
 ### Install from GitHub
 
 ```bash
 # All skills via Vercel Skills CLI
-npx skills add elmochilyas/laravel-ecc
+npx skills add elmochilyas/laraskills
 
 # Or via GitHub CLI
-gh skill install elmochilyas/laravel-ecc
+gh skill install elmochilyas/laraskills
 
 # Install a single skill
-npx skills add elmochilyas/laravel-ecc --skill laravel-patterns
+npx skills add elmochilyas/laraskills --skill laravel-patterns
 ```
 
 ### Install Scripts
@@ -145,7 +151,7 @@ npx skills add elmochilyas/laravel-ecc --skill laravel-patterns
 
 ```bash
 # Via npm (recommended)
-npx laravel-ecc@beta update
+npx laraskills@beta update
 
 # Via install scripts
 ./update.ps1                      # Windows
@@ -156,37 +162,38 @@ npx laravel-ecc@beta update
 ./update.sh --dry-run             # macOS/Linux
 
 # Check version
-npx laravel-ecc@beta doctor
+npx laraskills@beta doctor
 ./update.ps1 --version            # Windows
 ./update.sh --version             # macOS/Linux
 ```
 
-The update script reads your existing installation state (`.laravel-ecc-state.json`) and syncs all components to the latest package version while preserving your installation profile.
+The update script reads `.laraskills-state.json` and syncs all components to
+the latest package version while preserving your installation profile. The CLI
+can migrate the old state filename during the compatibility window.
 
 ## Quick Setup
 
-The npm package is intentionally lightweight — it contains the CLI, MCP adapter, and operating layer. Retrieval requires access to a full Laravel ECC checkout:
+The npm package is intentionally lightweight — it contains the CLI, MCP adapter, and operating layer. Retrieval requires access to a full LaraSkills checkout:
 
 ```bash
 # Configure access to a full checkout
-npx laravel-ecc setup --ecc-root "/path/to/laravel-ecc"
+npx laraskills setup --laraskills-root "/path/to/laraskills"
 
 # Verify configuration
-npx laravel-ecc doctor
+npx laraskills doctor
 ```
 
 See `docs/onboarding/npm-setup.md` for detailed instructions.
 
 ## Distribution
 
-The npm package (`laravel-ecc`) includes:
+The npm package (`laraskills`) includes:
 - Curated **operating layer**: skills, rules, agents, commands, hooks, MCP configs
 - CLI harness configurations for 12 AI coding tools
 - Install and update scripts
-- **Shared runtime modules**: ECC root resolver, user configuration
-- **Intelligence layer metadata**: JSON intelligence files (10), markdown indexes (7), alias mappings (aliases.json), external concept registry (external-concepts.json)
+- **Shared runtime modules**: LaraSkills root resolver and user configuration
 
-The full **knowledge intelligence layer** (knowledge/, intelligence/, agent/, meta/, tools/) is available from the [GitHub repository](https://github.com/elmochilyas/laravel-ecc) but is not included in the npm package to keep it lightweight.
+The full **knowledge intelligence layer** (knowledge/, intelligence/, agent/, meta/, tools/) is available from the [GitHub repository](https://github.com/elmochilyas/laraskills) but is not included in the npm package to keep it lightweight.
 
 ## Laravel 13
 
@@ -257,47 +264,47 @@ Authentication & authorization: Sanctum, Passport, OAuth2, OIDC, JWT, Policies, 
 
 ## Deterministic Retrieval CLI (Phase 11)
 
-The ECC retrieval CLI provides deterministic, explainable access to the knowledge intelligence layer:
+The LaraSkills retrieval CLI provides deterministic, explainable access to the knowledge intelligence layer:
 
 ```bash
 # Retrieve a context bundle for a task
-npx laravel-ecc retrieve "Build a multi-tenant REST API using Sanctum and queued notifications"
+npx laraskills retrieve "Build a multi-tenant REST API using Sanctum and queued notifications"
 
 # Compact mode for quick routing
-npx laravel-ecc retrieve "Optimize an N+1 query" --mode compact
+npx laraskills retrieve "Optimize an N+1 query" --mode compact
 
 # Search for knowledge units
-npx laravel-ecc search "Policies versus Gates"
+npx laraskills search "Policies versus Gates"
 
 # Get knowledge unit details
-npx laravel-ecc get security-identity-engineering/authentication/sanctum-spa-authentication
+npx laraskills get security-identity-engineering/authentication/sanctum-spa-authentication
 
 # Validate intelligence layer integrity
-npx laravel-ecc validate
+npx laraskills validate
 ```
 
 **Modes:** `compact` (quick routing), `standard` (default), `deep` (detailed research)
 
 **Output:** `markdown` (human-readable) or `json` (machine-readable, MCP-ready)
 
-**Root discovery:** `--ecc-root <path>` or `ECC_ROOT` environment variable
+**Root discovery:** `--laraskills-root <path>` or `LARASKILLS_ROOT` environment variable
 
 For full documentation, see `docs/retrieval-cli-guide.md`.
 
 ## Local MCP Server (Phase 11.2)
 
-A thin local stdio MCP server (`laravel-ecc-mcp`) exposes the same retrieval core to MCP-capable agents (OpenCode, Claude Code, Cursor, etc.). It is a **read-only, deterministic adapter** — no duplicate ranking logic, no graph changes.
+A thin local stdio MCP server (`laraskills-mcp`) exposes the same retrieval core to MCP-capable agents (OpenCode, Claude Code, Cursor, etc.). It is a **read-only, deterministic adapter** — no duplicate ranking logic, no graph changes.
 
 ```jsonc
 // .opencode/opencode.json (or examples/opencode-mcp.local.jsonc)
 {
   "mcp": {
-    "laravel-ecc": {
+    "laraskills": {
       "type": "local",
-      "command": ["node", "C:\\path\\to\\laravel-ecc\\scripts\\laravel-ecc-mcp.mjs"],
+      "command": ["node", "C:\\path\\to\\laraskills\\scripts\\laraskills-mcp.mjs"],
       "enabled": true,
       "timeout": 10000,
-      "environment": { "ECC_ROOT": "C:\\path\\to\\laravel-ecc" }
+      "environment": { "LARASKILLS_ROOT": "C:\\path\\to\\laraskills" }
     }
   }
 }

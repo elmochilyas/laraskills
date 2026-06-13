@@ -12,7 +12,7 @@ const require = createRequire(import.meta.url);
 const pkg = JSON.parse(require.resolve('../package.json') ? '{}' : '{}');
 
 const REQUIRE_PWSH = process.argv.includes('--require-pwsh');
-const TMP_PREFIX = 'laravel-ecc-clean-clone-verify-';
+const TMP_PREFIX = 'laraskills-clean-clone-verify-';
 const INJECT_TIMEOUT = 600_000; // 600 seconds for dependency edge injection (slow PowerShell)
 
 function run(cmd, opts = {}) {
@@ -163,7 +163,7 @@ async function main() {
 
     // 4. Validate intelligence
     console.log('\n--- Step 4: Validate intelligence ---');
-    const validateOutput = run('node ./scripts/laravel-ecc.mjs validate', { cwd: tmpRepo, silent: true });
+    const validateOutput = run('node ./scripts/laraskills.mjs validate', { cwd: tmpRepo, silent: true });
     if (validateOutput.includes('VALID') || validateOutput.includes('No issues found')) {
       pass('Intelligence validation passed');
     } else {

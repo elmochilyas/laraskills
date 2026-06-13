@@ -8,7 +8,7 @@ import { fileURLToPath } from 'node:url';
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const ROOT = join(__dirname, '..');
 
-const TMP_PREFIX = 'laravel-ecc-packed-verify-';
+const TMP_PREFIX = 'laraskills-packed-verify-';
 
 function run(cmd, opts = {}) {
   const env = opts.env || process.env;
@@ -26,6 +26,11 @@ function run(cmd, opts = {}) {
     if (opts.allowNonZero && e.stdout) return e.stdout;
     throw e;
   }
+}
+
+function getInstalledBin(installDir, name) {
+  const filename = process.platform === 'win32' ? `${name}.cmd` : name;
+  return join(installDir, 'node_modules', '.bin', filename);
 }
 
 function createTempDir() {
@@ -77,14 +82,22 @@ async function main() {
 
   const tmpDir = createTempDir();
   const installDir = join(tmpDir, 'install-dir');
-  const eccRootDir = join(tmpDir, 'ecc-root');
+  const laraskillsRootDir = join(tmpDir, 'laraskills-root');
 
   console.log(`Temp dir: ${tmpDir}\n`);
 
-  // Isolate config from host machine
-  const isolatedConfigDir = join(tmpDir, 'ecc-config');
+  // Isolate config from host machine — never read real user config
+  const isolatedConfigDir = join(tmpDir, 'laraskills-config');
+  const isolatedLegacyConfigDir = join(tmpDir, 'laravel-ecc-legacy-config');
   mkdirSync(isolatedConfigDir, { recursive: true });
-  const testEnv = { ...process.env, LARAVEL_ECC_CONFIG_DIR: isolatedConfigDir };
+  mkdirSync(isolatedLegacyConfigDir, { recursive: true });
+  const testEnv = {
+    ...process.env,
+    LARASKILLS_CONFIG_DIR: isolatedConfigDir,
+    LARAVEL_ECC_CONFIG_DIR: isolatedLegacyConfigDir,
+    LARASKILLS_ROOT: '',
+    ECC_ROOT: '',
+  };
 
   try {
     // 1. npm pack
@@ -111,8 +124,8 @@ async function main() {
     const requiredFiles = [
       'package/package.json',
       'package/README.md',
-      'package/scripts/laravel-ecc.mjs',
-      'package/scripts/laravel-ecc-mcp.mjs',
+      'package/scripts/laraskills.mjs',
+      'package/scripts/laraskills-mcp.mjs',
       'package/scripts/mcp/handlers.mjs',
       'package/scripts/mcp/schemas.mjs',
       'package/src/retrieval/cache-manager.mjs',
@@ -151,20 +164,48 @@ async function main() {
     run(`npm install "${tarballPath}"`, { cwd: installDir, silent: true, env: testEnv });
     pass('Tarball installed in isolated project');
 
-    const ECC_CLI = join(installDir, 'node_modules', 'laravel-ecc', 'scripts', 'laravel-ecc.mjs');
+    const packageDir = join(installDir, 'node_modules', 'laraskills');
+    const laraskillsCli = join(packageDir, 'scripts', 'laraskills.mjs');
+    const laraskillsMcp = join(packageDir, 'scripts', 'laraskills-mcp.mjs');
+
+    const installedPackage = JSON.parse(readFileSync(join(packageDir, 'package.json'), 'utf-8'));
+    if (installedPackage.name !== 'laraskills') fail(`Installed package name is ${installedPackage.name}`);
+    const expectedBins = {
+      laraskills: 'scripts/laraskills.mjs',
+      'laraskills-mcp': 'scripts/laraskills-mcp.mjs',
+      'laravel-ecc': 'scripts/laraskills.mjs',
+      'laravel-ecc-mcp': 'scripts/laraskills-mcp.mjs',
+    };
+    for (const [name, target] of Object.entries(expectedBins)) {
+      if (installedPackage.bin?.[name] !== target) {
+        fail(`Bin ${name} should target ${target}`);
+      }
+    }
+    pass('Package name and all preferred/legacy bins are correct');
 
     // 6. Verify CLI --help
     console.log('\n--- Step 6: CLI --help ---');
-    const helpOutput = run(`node "${ECC_CLI}" --help`, { cwd: installDir, silent: true, env: testEnv });
-    if (helpOutput.includes('Laravel ECC') && helpOutput.includes('setup')) {
+    const helpOutput = run(`node "${laraskillsCli}" --help`, { cwd: installDir, silent: true, env: testEnv });
+    if (helpOutput.includes('LaraSkills') && helpOutput.includes('setup')) {
       pass('CLI --help works');
     } else {
       fail('CLI --help output unexpected');
     }
+    for (const binName of ['laraskills', 'laravel-ecc']) {
+      const binPath = getInstalledBin(installDir, binName);
+      if (!existsSync(binPath)) fail(`Installed bin missing: ${binName}`);
+      const output = run(`"${binPath}" --help`, {
+        cwd: installDir,
+        silent: true,
+        env: testEnv,
+      });
+      if (!output.includes('LaraSkills')) fail(`Installed bin failed: ${binName}`);
+    }
+    pass('Preferred and legacy CLI aliases execute');
 
     // 7. Verify doctor before setup
     console.log('\n--- Step 7: Doctor before setup ---');
-    const doctorOutput = run(`node "${ECC_CLI}" doctor`, { cwd: installDir, silent: true, allowNonZero: true, env: testEnv });
+    const doctorOutput = run(`node "${laraskillsCli}" doctor`, { cwd: installDir, silent: true, allowNonZero: true, env: testEnv });
     if (doctorOutput.includes('ACTION REQUIRED') || doctorOutput.includes('NOT FOUND')) {
       pass('Doctor reports actionable guidance before setup');
     } else {
@@ -172,20 +213,20 @@ async function main() {
     }
 
     // 8. Configure isolated user-config directory
-    console.log('\n--- Step 8: Setup ECC root ---');
-    mkdirSync(eccRootDir, { recursive: true });
-    writeFileSync(join(eccRootDir, 'package.json'), JSON.stringify({ name: 'ecc-root-stub', version: '0.0.0' }, null, 2));
+    console.log('\n--- Step 8: Setup LaraSkills root ---');
+    mkdirSync(laraskillsRootDir, { recursive: true });
+    writeFileSync(join(laraskillsRootDir, 'package.json'), JSON.stringify({ name: 'laraskills-root-stub', version: '0.0.0' }, null, 2));
 
     // Create a minimal intelligence structure for doctor to pass
-    const jsonDir = join(eccRootDir, 'intelligence', 'json');
+    const jsonDir = join(laraskillsRootDir, 'intelligence', 'json');
     mkdirSync(jsonDir, { recursive: true });
     const emptyJson = { knowledge_units: [], generated_at: new Date().toISOString(), total_entries: 0 };
     for (const f of ['knowledge-units.json', 'dependencies.json', 'relationships.json', 'rules.json', 'skills.json', 'checklists.json', 'anti-patterns.json', 'decision-trees.json', 'aliases.json', 'external-concepts.json']) {
       writeFileSync(join(jsonDir, f), JSON.stringify(f.endsWith('.json') && (f === 'aliases.json' ? { aliases: [] } : f === 'external-concepts.json' ? { concepts: [] } : f === 'dependencies.json' ? { edges: [], knowledge_units: [] } : f === 'relationships.json' ? { edges: [] } : emptyJson)));
     }
 
-    run(`node "${ECC_CLI}" setup --ecc-root "${eccRootDir}"`, { cwd: installDir, silent: true, env: testEnv });
-    pass('Setup configured ECC root');
+    run(`node "${laraskillsCli}" setup --laraskills-root "${laraskillsRootDir}"`, { cwd: installDir, silent: true, env: testEnv });
+    pass('Setup configured LaraSkills root');
 
     // 9. Verify doctor reports HEALTHY
     console.log('\n--- Step 9: Doctor after setup ---');
@@ -199,7 +240,7 @@ async function main() {
         }
       }
     }
-    const doctorAfter = run(`node "${ECC_CLI}" doctor --ecc-root "${eccRootDir}"`, { cwd: installDir, silent: true, env: testEnv });
+    const doctorAfter = run(`node "${laraskillsCli}" doctor --laraskills-root "${laraskillsRootDir}"`, { cwd: installDir, silent: true, env: testEnv });
     if (doctorAfter.includes('HEALTHY')) {
       pass('Doctor reports HEALTHY after setup');
     } else {
@@ -208,7 +249,7 @@ async function main() {
 
     // 10. Run validate
     console.log('\n--- Step 10: Validate ---');
-    const validateOutput = run(`node "${ECC_CLI}" validate --ecc-root "${eccRootDir}"`, { cwd: installDir, silent: true, env: testEnv });
+    const validateOutput = run(`node "${laraskillsCli}" validate --laraskills-root "${laraskillsRootDir}"`, { cwd: installDir, silent: true, env: testEnv });
     if (validateOutput.includes('VALID') || validateOutput.includes('No issues')) {
       pass('Validate passed');
     } else {
@@ -217,7 +258,7 @@ async function main() {
 
     // 11. Run CLI search table output
     console.log('\n--- Step 11: CLI search (table) ---');
-    const searchOutput = run(`node "${ECC_CLI}" search "eloquent" --ecc-root "${eccRootDir}"`, { cwd: installDir, silent: true, env: testEnv });
+    const searchOutput = run(`node "${laraskillsCli}" search "eloquent" --laraskills-root "${laraskillsRootDir}"`, { cwd: installDir, silent: true, env: testEnv });
     if (searchOutput.includes('Search Results') || searchOutput.includes('eloquent')) {
       pass('CLI search table output works');
     } else {
@@ -226,7 +267,7 @@ async function main() {
 
     // 12. Run CLI search --json
     console.log('\n--- Step 12: CLI search --json ---');
-    const searchJson = run(`node "${ECC_CLI}" search "tenant" --format json --ecc-root "${eccRootDir}"`, { cwd: installDir, silent: true, env: testEnv });
+    const searchJson = run(`node "${laraskillsCli}" search "tenant" --format json --laraskills-root "${laraskillsRootDir}"`, { cwd: installDir, silent: true, env: testEnv });
     let searchParsed;
     try {
       searchParsed = JSON.parse(searchJson);
@@ -242,8 +283,8 @@ async function main() {
 
     // 13. Run CLI retrieve
     console.log('\n--- Step 13: CLI retrieve ---');
-    const retrieveOutput = run(`node "${ECC_CLI}" retrieve "Build a REST API" --mode compact --ecc-root "${eccRootDir}"`, { cwd: installDir, silent: true, env: testEnv });
-    if (retrieveOutput.includes('ECC Context Bundle') || retrieveOutput.includes('knowledgeUnits') || retrieveOutput.includes('selectedDomains')) {
+    const retrieveOutput = run(`node "${laraskillsCli}" retrieve "Build a REST API" --mode compact --laraskills-root "${laraskillsRootDir}"`, { cwd: installDir, silent: true, env: testEnv });
+    if (retrieveOutput.includes('LaraSkills Context Bundle') || retrieveOutput.includes('knowledgeUnits') || retrieveOutput.includes('selectedDomains')) {
       pass('CLI retrieve works');
     } else {
       fail('CLI retrieve output unexpected');
@@ -251,7 +292,7 @@ async function main() {
 
     // 14. Verify MCP tools/list
     console.log('\n--- Step 14: MCP tools/list ---');
-    const mcpOutput = JSON.parse(run(`node "${join(installDir, 'node_modules', 'laravel-ecc', 'scripts', 'laravel-ecc-mcp.mjs')}" --ecc-root "${eccRootDir}"`, {
+    const mcpOutput = JSON.parse(run(`node "${laraskillsMcp}" --laraskills-root "${laraskillsRootDir}"`, {
       cwd: installDir,
       silent: true,
       input: JSON.stringify({ jsonrpc: '2.0', id: 1, method: 'tools/list', params: {} }) + '\n',
@@ -266,10 +307,24 @@ async function main() {
     } else {
       fail(`MCP tools/list missing: ${missingTools.join(', ')}`);
     }
+    for (const binName of ['laraskills-mcp', 'laravel-ecc-mcp']) {
+      const binPath = getInstalledBin(installDir, binName);
+      if (!existsSync(binPath)) fail(`Installed MCP bin missing: ${binName}`);
+      const output = run(`"${binPath}" --laraskills-root "${laraskillsRootDir}"`, {
+        cwd: installDir,
+        silent: true,
+        input: JSON.stringify({ jsonrpc: '2.0', id: 1, method: 'tools/list', params: {} }) + '\n',
+        timeout: 30000,
+        env: testEnv,
+      });
+      const response = JSON.parse(output.trim().split('\n').filter(Boolean).pop());
+      if (!Array.isArray(response.result?.tools)) fail(`Installed MCP bin failed: ${binName}`);
+    }
+    pass('Preferred and legacy MCP aliases execute');
 
     // 15. Verify MCP validate_ecc
     console.log('\n--- Step 15: MCP validate_ecc ---');
-    const mcpValidate = JSON.parse(run(`node "${join(installDir, 'node_modules', 'laravel-ecc', 'scripts', 'laravel-ecc-mcp.mjs')}" --ecc-root "${eccRootDir}"`, {
+    const mcpValidate = JSON.parse(run(`node "${laraskillsMcp}" --laraskills-root "${laraskillsRootDir}"`, {
       cwd: installDir,
       silent: true,
       input: JSON.stringify({ jsonrpc: '2.0', id: 2, method: 'tools/call', params: { name: 'validate_ecc', arguments: {} } }) + '\n',
@@ -286,7 +341,7 @@ async function main() {
     console.log('\n=== PACKED-INSTALL VERIFIED ===');
   } finally {
     console.log('\n--- Cleanup ---');
-    cleanup(tmpDir, join(ROOT, 'laravel-ecc-*.tgz'));
+    cleanup(tmpDir, join(ROOT, 'laraskills-*.tgz'));
     pass('Temporary files cleaned');
   }
 }

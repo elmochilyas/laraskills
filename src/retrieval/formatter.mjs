@@ -96,7 +96,7 @@ function formatListSection(title, items, idField, reasonField) {
 export function formatAsMarkdown(bundle) {
   const lines = [];
 
-  lines.push(`# ECC Context Bundle`);
+  lines.push(`# LaraSkills Context Bundle`);
   lines.push('');
   lines.push(`**Query:** ${bundle.query}`);
   const budgetLabel = { compact: '~2K', standard: '~6K', deep: '~15K+' }[bundle.mode] || '~6K';

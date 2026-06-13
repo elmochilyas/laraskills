@@ -4,7 +4,7 @@ import { join, dirname } from 'node:path';
 import { fileURLToPath } from 'node:url';
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
-const ECC_ROOT = join(__dirname, '..', '..');
+const LARASKILLS_ROOT = join(__dirname, '..', '..');
 
 import { loadCatalog } from '../../src/retrieval/catalog-loader.mjs';
 import { expandGraph } from '../../src/retrieval/graph-expander.mjs';
@@ -13,7 +13,7 @@ describe('Graph Expander', () => {
   let catalog;
 
   before(() => {
-    catalog = loadCatalog(ECC_ROOT);
+    catalog = loadCatalog(LARASKILLS_ROOT);
   });
 
   it('should return prerequisites for a KU', () => {

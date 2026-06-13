@@ -1,6 +1,10 @@
 import { existsSync } from 'node:fs';
 import { join } from 'node:path';
-import { loadConfig, getConfigPath } from './user-config.mjs';
+import {
+  loadConfigWithSource,
+  getConfigPath,
+  getLegacyConfigPath,
+} from './user-config.mjs';
 
 const INTELLIGENCE_JSON_DIR = 'intelligence/json';
 
@@ -16,6 +20,7 @@ const REQUIRED_INTELLIGENCE_FILES = [
 ];
 
 export function resolveEccRoot(root) {
+  if (typeof root !== 'string') return null;
   const candidates = [];
   let normalized = root.replace(/\\/g, '/');
   if (normalized.endsWith('/')) normalized = normalized.slice(0, -1);
@@ -47,99 +52,125 @@ function validateIntelligenceFiles(root) {
   return missing;
 }
 
+function buildResult(root, source, legacyFallback = false, legacyReason = null) {
+  const missing = validateIntelligenceFiles(root);
+  return {
+    root,
+    source,
+    valid: missing.length === 0,
+    missingIntelligenceFiles: missing,
+    legacyFallback,
+    legacyReason,
+  };
+}
+
+function resolveRequiredRoot(root, label, source, legacyFallback, legacyReason) {
+  const resolved = resolveEccRoot(root);
+  if (resolved) {
+    return buildResult(resolved, source, legacyFallback, legacyReason);
+  }
+  throw new Error(
+    `LaraSkills root not found at ${label}: ${root}\n` +
+    `The path must contain intelligence/json/knowledge-units.json.\n` +
+    `Fix: clone the full repository and point to its root:\n` +
+    `  git clone https://github.com/elmochilyas/laraskills.git\n` +
+    `  laraskills setup --laraskills-root /path/to/laraskills`
+  );
+}
+
 export function resolveConfigRoot() {
-  const config = loadConfig();
-  if (!config) return null;
-  const resolved = resolveEccRoot(config.eccRoot);
-  return resolved || null;
+  const loaded = loadConfigWithSource();
+  if (!loaded) return null;
+  const resolved = resolveEccRoot(loaded.config.laraskillsRoot);
+  if (!resolved) return null;
+  return buildResult(
+    resolved,
+    loaded.source === 'legacy-config' ? 'legacy-laravel-ecc-user-config' : 'laraskills-user-config',
+    loaded.legacy,
+    loaded.legacy ? loaded.legacyReasons.join(', ') : null,
+  );
 }
 
 export function resolveEccRootWithPrecedence({
+  explicitLaraskillsRoot,
+  explicitEccRoot,
+  envLaraskillsRoot,
+  envEccRoot,
   explicitRoot,
   envRoot,
 } = {}) {
-  const envEccRoot = envRoot !== undefined ? envRoot : process.env.ECC_ROOT;
+  const preferredCliRoot = explicitLaraskillsRoot ?? explicitRoot ?? null;
+  const legacyCliRoot = explicitEccRoot ?? null;
+  const preferredEnvRoot = envLaraskillsRoot !== undefined
+    ? envLaraskillsRoot
+    : (envRoot !== undefined ? envRoot : process.env.LARASKILLS_ROOT);
+  const legacyEnvRoot = envEccRoot !== undefined ? envEccRoot : process.env.ECC_ROOT;
 
-  if (explicitRoot) {
-    const resolved = resolveEccRoot(explicitRoot);
-    if (resolved) {
-      const missing = validateIntelligenceFiles(resolved);
-      return {
-        root: resolved,
-        source: 'cli-argument',
-        valid: missing.length === 0,
-        missingIntelligenceFiles: missing,
-      };
-    }
-    throw new Error(
-      `ECC root not found at specified path: ${explicitRoot}\n` +
-      `The path must contain intelligence/json/knowledge-units.json.\n` +
-      `Fix: clone the full repository and point to its root:\n` +
-      `  git clone https://github.com/elmochilyas/laravel-ecc.git\n` +
-      `  laravel-ecc setup --ecc-root /path/to/laravel-ecc`
+  if (preferredCliRoot) {
+    return resolveRequiredRoot(
+      preferredCliRoot,
+      '--laraskills-root',
+      'laraskills-cli',
+      false,
+      null,
     );
   }
 
-  if (envEccRoot) {
-    const resolved = resolveEccRoot(envEccRoot);
-    if (resolved) {
-      const missing = validateIntelligenceFiles(resolved);
-      return {
-        root: resolved,
-        source: 'environment',
-        valid: missing.length === 0,
-        missingIntelligenceFiles: missing,
-      };
-    }
-    throw new Error(
-      `ECC root not found at ECC_ROOT: ${envEccRoot}\n` +
-      `The ECC_ROOT environment variable points to a path that does not contain intelligence/json/.\n` +
-      `Fix: set ECC_ROOT to the full Laravel ECC repository root, or run:\n` +
-      `  laravel-ecc setup --ecc-root /path/to/laravel-ecc`
+  if (legacyCliRoot) {
+    return resolveRequiredRoot(
+      legacyCliRoot,
+      '--ecc-root',
+      'legacy-ecc-cli',
+      true,
+      'deprecated --ecc-root CLI alias',
     );
   }
 
-  {
-    const configRoot = resolveConfigRoot();
-    if (configRoot) {
-      const missing = validateIntelligenceFiles(configRoot);
-      return {
-        root: configRoot,
-        source: 'user-config',
-        valid: missing.length === 0,
-        missingIntelligenceFiles: missing,
-      };
-    }
+  if (preferredEnvRoot) {
+    return resolveRequiredRoot(
+      preferredEnvRoot,
+      'LARASKILLS_ROOT',
+      'laraskills-environment',
+      false,
+      null,
+    );
   }
 
-  {
-    const cwdRoot = resolveEccRoot(process.cwd());
-    if (cwdRoot) {
-      const missing = validateIntelligenceFiles(cwdRoot);
-      return {
-        root: cwdRoot,
-        source: 'cwd-discovery',
-        valid: missing.length === 0,
-        missingIntelligenceFiles: missing,
-      };
-    }
+  if (legacyEnvRoot) {
+    return resolveRequiredRoot(
+      legacyEnvRoot,
+      'ECC_ROOT',
+      'legacy-ecc-environment',
+      true,
+      'legacy ECC_ROOT environment variable',
+    );
+  }
+
+  const configResult = resolveConfigRoot();
+  if (configResult) return configResult;
+
+  const cwdRoot = resolveEccRoot(process.cwd());
+  if (cwdRoot) {
+    return buildResult(cwdRoot, 'cwd-discovery');
   }
 
   const configPath = getConfigPath();
+  const legacyConfigPath = getLegacyConfigPath();
   const hint = existsSync(configPath)
-    ? `Config file exists but does not contain a valid ECC root:\n  ${configPath}\nFix: run \`laravel-ecc setup --ecc-root /path/to/laravel-ecc\` to update it.`
-    : `No configuration file found at:\n  ${configPath}\nFix: run \`laravel-ecc setup --ecc-root /path/to/laravel-ecc\` to configure it.`;
+    ? `Config file exists but does not contain a valid LaraSkills root:\n  ${configPath}`
+    : `No LaraSkills configuration file found at:\n  ${configPath}`;
 
   throw new Error(
-    `ECC intelligence files were not found.\n\n` +
+    `LaraSkills intelligence files were not found.\n\n` +
     `The npm package contains the CLI and MCP adapter.\n` +
-    `Retrieval requires access to a full Laravel ECC checkout.\n\n` +
-    hint + '\n\n' +
-    `You can also set the ECC_ROOT environment variable:\n` +
-    `  ECC_ROOT=/path/to/laravel-ecc\n` +
-    `or run from inside a cloned laravel-ecc repository.\n\n` +
+    `Retrieval requires access to a full LaraSkills checkout.\n\n` +
+    hint + '\n' +
+    `Legacy config fallback checked at:\n  ${legacyConfigPath}\n\n` +
+    `Fix: run \`laraskills setup --laraskills-root /path/to/laraskills\`.\n\n` +
+    `You can also set the LARASKILLS_ROOT environment variable:\n` +
+    `  LARASKILLS_ROOT=/path/to/laraskills\n\n` +
     `To clone the full repository:\n` +
-    `  git clone https://github.com/elmochilyas/laravel-ecc.git`
+    `  git clone https://github.com/elmochilyas/laraskills.git`
   );
 }
 

@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# install.sh — Laravel ECC Installer for Unix (macOS/Linux)
+# install.sh — LaraSkills Installer for Unix (macOS/Linux)
 #
 # Usage:
 #   ./install.sh                           # Install core profile
@@ -13,11 +13,11 @@ set -euo pipefail
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 TARGET_DIR="${TARGET_DIR:-$(pwd)}"
 PROFILE="${PROFILE:-core}"
-STATE_FILE="$TARGET_DIR/.laravel-ecc-state.json"
+STATE_FILE="$TARGET_DIR/.laraskills-state.json"
 
-log()  { echo -e "\033[32m[Laravel ECC]\033[0m $1"; }
-warn() { echo -e "\033[33m[Laravel ECC]\033[0m $1"; }
-err()  { echo -e "\033[31m[Laravel ECC] ERROR:\033[0m $1" >&2; }
+log()  { echo -e "\033[32m[LaraSkills]\033[0m $1"; }
+warn() { echo -e "\033[33m[LaraSkills]\033[0m $1"; }
+err()  { echo -e "\033[31m[LaraSkills] ERROR:\033[0m $1" >&2; }
 
 detect_tools() {
     local tools=()
@@ -38,7 +38,7 @@ while [[ $# -gt 0 ]]; do
     esac
 done
 
-echo "Laravel ECC v1.0.0-beta.14"
+echo "LaraSkills v1.0.0-beta.15"
 echo "Target: $TARGET_DIR"
 echo "Profile: $PROFILE"
 
@@ -71,7 +71,7 @@ if [ -n "${COMPONENT:-}" ]; then
     exit 0
 fi
 
-log "Installing Laravel ECC..."
+log "Installing LaraSkills..."
 
 # Skills
 mkdir -p "$TARGET_DIR/skills"
@@ -97,7 +97,7 @@ done
 if [ "$PROFILE" = "full" ]; then
     # Full profile: ecc-clone agents (optional, requires cloned repository)
     # NOTE: ../ecc-clone/agents is a non-existent sibling directory — this path will silently fail unless the
-    # full ECC repository (not just laravel-ecc) is cloned alongside. Consider removing this dead branch.
+    # full LaraSkills repository (not just laraskills) is cloned alongside. Consider removing this dead branch.
     ECC_AGENTS="$SCRIPT_DIR/../ecc-clone/agents"
     if [ -d "$ECC_AGENTS" ]; then
         cp "$ECC_AGENTS"/*.md "$TARGET_DIR/agents/" 2>/dev/null || true
@@ -112,7 +112,7 @@ fi
 # Save state
 cat > "$STATE_FILE" <<EOF
 {
-  "version": "1.0.0-beta.14",
+  "version": "1.0.0-beta.15",
   "target": "$TARGET_DIR",
   "installed_at": "$(date -u +%Y-%m-%dT%H:%M:%SZ)",
   "profile": "$PROFILE",

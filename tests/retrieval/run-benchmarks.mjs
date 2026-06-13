@@ -3,7 +3,7 @@ import { join, dirname } from 'node:path';
 import { fileURLToPath } from 'node:url';
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
-const ECC_ROOT = join(__dirname, '..', '..');
+const LARASKILLS_ROOT = join(__dirname, '..', '..');
 
 import { retrieveContext } from '../../src/retrieval/index.mjs';
 
@@ -30,7 +30,7 @@ console.log(`Running ${tasks.length} benchmark tasks...\n`);
 for (const task of tasks) {
   qExecStart = Date.now();
   try {
-    const result = retrieveContext(task.query, { eccRoot: ECC_ROOT, mode: 'compact' });
+    const result = retrieveContext(task.query, { eccRoot: LARASKILLS_ROOT, mode: 'compact' });
     const bundle = result.bundle;
 
     let taskFailed = false;

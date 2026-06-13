@@ -1,14 +1,14 @@
 {
-  "name": "laravel-ecc",
-  "version": "1.0.0-beta.14",
-  "description": "Laravel 13 ECC — AI-ready Laravel skills, rules, agents, and CLI harness configs for OpenCode, Claude Code, Cursor, Gemini, Codex, Copilot, and more",
+  "name": "laraskills",
+  "version": "1.0.0-beta.15",
+  "description": "LaraSkills - AI-ready Laravel 13 skills, rules, agents, retrieval CLI, and MCP integration",
   "publishConfig": {
     "access": "public"
   },
   "keywords": [
     "laravel",
     "laravel13",
-    "ecc",
+    "laraskills",
     "php",
     "pest",
     "tdd",
@@ -29,20 +29,22 @@
     "knowledge"
   ],
   "author": {
-    "name": "Laravel ECC Contributors"
+    "name": "LaraSkills Contributors"
   },
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/elmochilyas/laravel-ecc.git"
+    "url": "git+https://github.com/elmochilyas/laraskills.git"
   },
   "bugs": {
-    "url": "https://github.com/elmochilyas/laravel-ecc/issues"
+    "url": "https://github.com/elmochilyas/laraskills/issues"
   },
-  "homepage": "https://github.com/elmochilyas/laravel-ecc#readme",
+  "homepage": "https://github.com/elmochilyas/laraskills#readme",
   "bin": {
-    "laravel-ecc": "scripts/laravel-ecc.mjs",
-    "laravel-ecc-mcp": "scripts/laravel-ecc-mcp.mjs"
+    "laraskills": "scripts/laraskills.mjs",
+    "laraskills-mcp": "scripts/laraskills-mcp.mjs",
+    "laravel-ecc": "scripts/laraskills.mjs",
+    "laravel-ecc-mcp": "scripts/laraskills-mcp.mjs"
   },
   "files": [
     "skills/",
@@ -64,8 +66,8 @@
     ".kiro/",
     ".github/",
     "src/",
-    "scripts/laravel-ecc.mjs",
-    "scripts/laravel-ecc-mcp.mjs",
+    "scripts/laraskills.mjs",
+    "scripts/laraskills-mcp.mjs",
     "scripts/mcp/",
     "install.ps1",
     "install.sh",
@@ -76,11 +78,11 @@
     "VERSION"
   ],
   "scripts": {
-    "postinstall": "node -e \"console.log('\\n  laravel-ecc installed! Run [npx laravel-ecc setup] to configure ECC root.\\n  Retrieval commands: npx laravel-ecc retrieve/search/get/prerequisites/related/validate\\n  Diagnostics: npx laravel-ecc doctor\\n  MCP server: npx laravel-ecc-mcp\\n')\"",
+    "postinstall": "node -e \"console.log('\\n  laraskills installed! Run [npx laraskills setup] to configure the LaraSkills root.\\n  Retrieval commands: npx laraskills retrieve/search/get/prerequisites/related/validate\\n  Diagnostics: npx laraskills doctor\\n  MCP server: npx laraskills-mcp\\n')\"",
     "test": "node --test",
     "benchmark": "node tests/retrieval/run-benchmarks.mjs",
     "benchmark:performance": "node tests/retrieval/run-performance-benchmarks.mjs",
-    "mcp:start": "node scripts/laravel-ecc-mcp.mjs",
+    "mcp:start": "node scripts/laraskills-mcp.mjs",
     "verify:clean-clone": "node scripts/verify-clean-clone.mjs",
     "verify:packed-install": "node scripts/verify-packed-install.mjs",
     "verify:mcp": "node scripts/verify-mcp-smoke.mjs",

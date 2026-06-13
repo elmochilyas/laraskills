@@ -5,7 +5,7 @@ import { join, dirname } from 'node:path';
 import { fileURLToPath } from 'node:url';
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
-const ECC_ROOT = join(__dirname, '..', '..');
+const LARASKILLS_ROOT = join(__dirname, '..', '..');
 
 const JSON_FILES = [
   'knowledge-units.json',
@@ -23,7 +23,7 @@ const JSON_FILES = [
 describe('JSON Intelligence Encoding', () => {
   for (const file of JSON_FILES) {
     it(`${file} should be valid UTF-8 without mojibake`, () => {
-      const filePath = join(ECC_ROOT, 'intelligence', 'json', file);
+      const filePath = join(LARASKILLS_ROOT, 'intelligence', 'json', file);
       if (!existsSync(filePath)) return;
 
       const content = readFileSync(filePath, 'utf-8');
@@ -47,7 +47,7 @@ describe('JSON Intelligence Encoding', () => {
   }
 
   it('relationships.json should use actual em-dashes', () => {
-    const filePath = join(ECC_ROOT, 'intelligence', 'json', 'relationships.json');
+    const filePath = join(LARASKILLS_ROOT, 'intelligence', 'json', 'relationships.json');
     const content = readFileSync(filePath, 'utf-8');
 
     // Should have proper em-dashes (U+2014), not the mojibake sequence

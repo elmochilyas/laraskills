@@ -5,7 +5,7 @@ import { fileURLToPath } from 'node:url';
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const ROOT = resolve(join(__dirname, '..', '..'));
-const TMP_PREFIX = 'laravel-ecc-isolation-smoke-';
+const TMP_PREFIX = 'laraskills-isolation-smoke-';
 
 function createTempDir() {
   const base = process.env.RUNNER_TEMP || process.env.TMPDIR || process.env.TMP || '/tmp';

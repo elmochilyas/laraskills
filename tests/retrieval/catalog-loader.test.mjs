@@ -10,13 +10,13 @@ const FIXTURES_DIR = join(__dirname, 'fixtures');
 import { loadCatalog, findEccRoot } from '../../src/retrieval/catalog-loader.mjs';
 import { clearCache } from '../../src/retrieval/cache-manager.mjs';
 
-const ECC_ROOT = join(__dirname, '..', '..');
+const LARASKILLS_ROOT = join(__dirname, '..', '..');
 
 describe('Catalog Loader', () => {
   let catalog;
 
   before(() => {
-    catalog = loadCatalog(ECC_ROOT);
+    catalog = loadCatalog(LARASKILLS_ROOT);
   });
 
   it('should load knowledge units', () => {
@@ -89,15 +89,15 @@ describe('Catalog Loader', () => {
     assert.strictEqual(duplicates.length, 0, `Duplicate KU ids: ${duplicates.join(', ')}`);
   });
 
-  it('should resolve ECC root from current directory', () => {
-    const root = findEccRoot(ECC_ROOT, null, null);
+  it('should resolve LaraSkills root from current directory', () => {
+    const root = findEccRoot(LARASKILLS_ROOT, null, null);
     const normalizedRoot = root.replace(/\\/g, '/');
-    const normalizedEcc = ECC_ROOT.replace(/\\/g, '/');
-    assert.strictEqual(normalizedRoot, normalizedEcc);
+    const normalizedLaraskills = LARASKILLS_ROOT.replace(/\\/g, '/');
+    assert.strictEqual(normalizedRoot, normalizedLaraskills);
   });
 
   it('should throw for missing explicit root', () => {
-    assert.throws(() => findEccRoot(ECC_ROOT, '/nonexistent/path', null), /not found/i);
+    assert.throws(() => findEccRoot(LARASKILLS_ROOT, '/nonexistent/path', null), /not found/i);
   });
 
   describe('Cache integration', () => {
@@ -105,16 +105,16 @@ describe('Catalog Loader', () => {
 
     it('should return cached catalog on second load (same reference)', () => {
       clearCache();
-      const first = loadCatalog(ECC_ROOT);
-      const second = loadCatalog(ECC_ROOT);
+      const first = loadCatalog(LARASKILLS_ROOT);
+      const second = loadCatalog(LARASKILLS_ROOT);
       assert.strictEqual(first, second);
     });
 
     it('should return new catalog object after clearCache', () => {
       clearCache();
-      const first = loadCatalog(ECC_ROOT);
+      const first = loadCatalog(LARASKILLS_ROOT);
       clearCache();
-      const second = loadCatalog(ECC_ROOT);
+      const second = loadCatalog(LARASKILLS_ROOT);
       assert.notStrictEqual(first, second);
       assert.strictEqual(first.knowledgeUnitsCount, second.knowledgeUnitsCount);
     });
@@ -124,16 +124,16 @@ describe('Catalog Loader', () => {
       const warmup = 3;
       for (let i = 0; i < warmup; i++) {
         clearCache();
-        loadCatalog(ECC_ROOT);
+        loadCatalog(LARASKILLS_ROOT);
       }
 
       clearCache();
       const coldStart = performance.now();
-      loadCatalog(ECC_ROOT);
+      loadCatalog(LARASKILLS_ROOT);
       const coldTime = performance.now() - coldStart;
 
       const warmStart = performance.now();
-      loadCatalog(ECC_ROOT);
+      loadCatalog(LARASKILLS_ROOT);
       const warmTime = performance.now() - warmStart;
 
       if (coldTime > 5) {

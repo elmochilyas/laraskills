@@ -16,8 +16,12 @@ import { generateExplanation } from './explainer.mjs';
 import { DEFAULTS } from './config.mjs';
 
 export function retrieveContext(rawQuery, options = {}) {
-  const eccRoot = options.eccRoot || process.env.ECC_ROOT || process.cwd();
-  const actualRoot = findEccRoot(eccRoot, options.explicitEccRoot, options.eccRootEnv);
+  const eccRoot = options.laraskillsRoot || options.eccRoot || process.cwd();
+  const actualRoot = findEccRoot(
+    eccRoot,
+    options.explicitLaraskillsRoot || options.explicitEccRoot,
+    options.laraskillsRootEnv,
+  );
   const catalog = loadCatalog(actualRoot);
 
   const mergedOptions = { ...DEFAULTS, ...options };
@@ -99,8 +103,12 @@ export function resolveCanonicalId(catalog, input) {
 }
 
 export function searchKnowledge(rawQuery, options = {}) {
-  const eccRoot = options.eccRoot || process.env.ECC_ROOT || process.cwd();
-  const actualRoot = findEccRoot(eccRoot, options.explicitEccRoot, options.eccRootEnv);
+  const eccRoot = options.laraskillsRoot || options.eccRoot || process.cwd();
+  const actualRoot = findEccRoot(
+    eccRoot,
+    options.explicitLaraskillsRoot || options.explicitEccRoot,
+    options.laraskillsRootEnv,
+  );
   const catalog = loadCatalog(actualRoot);
 
   const normalized = normalizeQuery(rawQuery);
@@ -122,8 +130,12 @@ export function searchKnowledge(rawQuery, options = {}) {
 }
 
 export function getKnowledgeUnit(id, options = {}) {
-  const eccRoot = options.eccRoot || process.env.ECC_ROOT || process.cwd();
-  const actualRoot = findEccRoot(eccRoot, options.explicitEccRoot, options.eccRootEnv);
+  const eccRoot = options.laraskillsRoot || options.eccRoot || process.cwd();
+  const actualRoot = findEccRoot(
+    eccRoot,
+    options.explicitLaraskillsRoot || options.explicitEccRoot,
+    options.laraskillsRootEnv,
+  );
   const catalog = loadCatalog(actualRoot);
 
   let ku = catalog.knowledgeUnits.get(id);
@@ -147,8 +159,12 @@ export function getKnowledgeUnit(id, options = {}) {
 }
 
 export function getPrerequisites(id, options = {}) {
-  const eccRoot = options.eccRoot || process.env.ECC_ROOT || process.cwd();
-  const actualRoot = findEccRoot(eccRoot, options.explicitEccRoot, options.eccRootEnv);
+  const eccRoot = options.laraskillsRoot || options.eccRoot || process.cwd();
+  const actualRoot = findEccRoot(
+    eccRoot,
+    options.explicitLaraskillsRoot || options.explicitEccRoot,
+    options.laraskillsRootEnv,
+  );
   const catalog = loadCatalog(actualRoot);
 
   const resolved = resolveCanonicalId(catalog, id);
@@ -167,8 +183,12 @@ export function getPrerequisites(id, options = {}) {
 }
 
 export function getRelatedTopics(id, options = {}) {
-  const eccRoot = options.eccRoot || process.env.ECC_ROOT || process.cwd();
-  const actualRoot = findEccRoot(eccRoot, options.explicitEccRoot, options.eccRootEnv);
+  const eccRoot = options.laraskillsRoot || options.eccRoot || process.cwd();
+  const actualRoot = findEccRoot(
+    eccRoot,
+    options.explicitLaraskillsRoot || options.explicitEccRoot,
+    options.laraskillsRootEnv,
+  );
   const catalog = loadCatalog(actualRoot);
 
   const resolved = resolveCanonicalId(catalog, id);
@@ -187,8 +207,12 @@ export function getRelatedTopics(id, options = {}) {
 }
 
 export function validateIntelligence(options = {}) {
-  const eccRoot = options.eccRoot || process.env.ECC_ROOT || process.cwd();
-  const actualRoot = findEccRoot(eccRoot, options.explicitEccRoot, options.eccRootEnv);
+  const eccRoot = options.laraskillsRoot || options.eccRoot || process.cwd();
+  const actualRoot = findEccRoot(
+    eccRoot,
+    options.explicitLaraskillsRoot || options.explicitEccRoot,
+    options.laraskillsRootEnv,
+  );
   const catalog = loadCatalog(actualRoot);
 
   const issues = [];

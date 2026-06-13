@@ -1,8 +1,8 @@
-# OpenCode MCP Setup for Laravel ECC
+# OpenCode MCP Setup for LaraSkills
 
 ## Quick start
 
-The Laravel ECC MCP server is a **local stdio** server. OpenCode spawns it as a child process; no HTTP, no remote endpoint, no auth.
+The LaraSkills MCP server is a **local stdio** server. OpenCode spawns it as a child process; no HTTP, no remote endpoint, no auth.
 
 Two ready-to-use configuration snippets are checked in under `examples/`:
 
@@ -19,16 +19,16 @@ Copy the contents of `examples/opencode-mcp.local.jsonc` into your project's `op
 {
   "$schema": "https://opencode.ai/config.json",
   "mcp": {
-    "laravel-ecc": {
+    "laraskills": {
       "type": "local",
       "command": [
         "node",
-        "C:\\path\\to\\laravel-ecc\\scripts\\laravel-ecc-mcp.mjs"
+        "C:\\path\\to\\laraskills\\scripts\\laraskills-mcp.mjs"
       ],
       "enabled": true,
       "timeout": 10000,
       "environment": {
-        "ECC_ROOT": "C:\\path\\to\\laravel-ecc"
+        "LARASKILLS_ROOT": "C:\\path\\to\\laraskills"
       }
     }
   }
@@ -40,12 +40,12 @@ Adjust the absolute paths to match your checkout. The server will not start befo
 ## Option B — npm link (no absolute paths)
 
 ```powershell
-# In the laravel-ecc checkout
+# In the laraskills checkout
 npm link
 
 # Verify the binaries are on PATH
-laravel-ecc --version
-laravel-ecc-mcp --version
+laraskills --version
+laraskills-mcp --version
 ```
 
 Then in `opencode.json`:
@@ -54,15 +54,15 @@ Then in `opencode.json`:
 {
   "$schema": "https://opencode.ai/config.json",
   "mcp": {
-    "laravel-ecc": {
+    "laraskills": {
       "type": "local",
       "command": [
-        "laravel-ecc-mcp"
+        "laraskills-mcp"
       ],
       "enabled": true,
       "timeout": 10000,
       "environment": {
-        "ECC_ROOT": "C:\\path\\to\\laravel-ecc"
+        "LARASKILLS_ROOT": "C:\\path\\to\\laraskills"
       }
     }
   }
@@ -74,13 +74,13 @@ Then in `opencode.json`:
 ```powershell
 opencode mcp add
 opencode mcp list
-opencode mcp remove laravel-ecc
+opencode mcp remove laraskills
 ```
 
 `opencode mcp list` should show:
 
 ```
-laravel-ecc    connected    [tools: 5]
+laraskills    connected    [tools: 5]
 ```
 
 If the server shows as `failed`, see `docs/mcp-troubleshooting.md`.
@@ -90,25 +90,25 @@ If the server shows as `failed`, see `docs/mcp-troubleshooting.md`.
 After OpenCode is configured, send a prompt to your primary agent:
 
 ```
-Use the laravel-ecc MCP server to retrieve context for:
+Use the laraskills MCP server to retrieve context for:
 Build a CRUD REST API for products with policies and pagination.
 ```
 
 OpenCode should automatically:
 
-1. Discover the `laravel-ecc` MCP server.
+1. Discover the `laraskills` MCP server.
 2. Call `retrieve_context_bundle` (mode = `standard` by default).
 3. Optionally follow up with `get_knowledge_unit` on the top-ranked KUs.
 4. Optionally call `get_graph_context` for the most relevant KU.
 5. Optionally call `validate_ecc` to confirm graph integrity if the user asks.
 
-You should never need to type `npx laravel-ecc retrieve ...` manually. If your agent does, the MCP server is not connected — see troubleshooting.
+You should never need to type `npx laraskills retrieve ...` manually. If your agent does, the MCP server is not connected — see troubleshooting.
 
 ## Permission
 
-If you set `permission.mcp_*` to `"ask"` (as in the default `laravel-ecc/.opencode/opencode.json`), OpenCode will prompt for approval on the first MCP call per session. Approve once per session.
+If you set `permission.mcp_*` to `"ask"` (as in the default `laraskills/.opencode/opencode.json`), OpenCode will prompt for approval on the first MCP call per session. Approve once per session.
 
-To allow the laravel-ecc MCP server without prompts:
+To allow the laraskills MCP server without prompts:
 
 ```jsonc
 {
@@ -120,4 +120,4 @@ To allow the laravel-ecc MCP server without prompts:
 
 ## Where the snippet lives
 
-The official `laravel-ecc` repository ships the snippets in `examples/`. They are **not** included in the npm package (the package is for skills/rules/agents/MCP server code, not example configs).
+The official `laraskills` repository ships the snippets in `examples/`. They are **not** included in the npm package (the package is for skills/rules/agents/MCP server code, not example configs).
