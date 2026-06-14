@@ -1,7 +1,7 @@
 {
   "name": "laraskills",
   "version": "1.0.0-beta.15",
-  "description": "LaraSkills - AI-ready Laravel 13 skills, rules, agents, retrieval CLI, and MCP integration",
+  "description": "AI-ready Laravel 13 skills, rules, agents, deterministic retrieval CLI, and MCP server",
   "publishConfig": {
     "access": "public"
   },
@@ -64,7 +64,7 @@
     ".qwen/",
     ".codebuddy/",
     ".kiro/",
-    ".github/",
+    ".github/copilot-instructions.md",
     "src/",
     "scripts/laraskills.mjs",
     "scripts/laraskills-mcp.mjs",
@@ -73,12 +73,14 @@
     "install.sh",
     "update.ps1",
     "update.sh",
+    "README.md",
+    "LICENSE",
     "AGENTS.md",
     "CLAUDE.md",
     "VERSION"
   ],
   "scripts": {
-    "postinstall": "node -e \"console.log('\\n  laraskills installed! Run [npx laraskills setup] to configure the LaraSkills root.\\n  Retrieval commands: npx laraskills retrieve/search/get/prerequisites/related/validate\\n  Diagnostics: npx laraskills doctor\\n  MCP server: npx laraskills-mcp\\n')\"",
+    "postinstall": "node -e \"console.log('\\n  laraskills installed.\\n  Project setup: npx laraskills install --profile core\\n  Retrieval setup: npx laraskills setup --laraskills-root <path>\\n  Diagnostics: npx laraskills doctor\\n  MCP server: npx laraskills-mcp\\n')\"",
     "test": "node --test",
     "benchmark": "node tests/retrieval/run-benchmarks.mjs",
     "benchmark:performance": "node tests/retrieval/run-performance-benchmarks.mjs",

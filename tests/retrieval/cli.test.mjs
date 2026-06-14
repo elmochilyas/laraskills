@@ -2,7 +2,8 @@ import { describe, it, before } from 'node:test';
 import assert from 'node:assert';
 import { join, dirname } from 'node:path';
 import { fileURLToPath } from 'node:url';
-import { existsSync } from 'node:fs';
+import { existsSync, mkdtempSync, rmSync } from 'node:fs';
+import { tmpdir } from 'node:os';
 import { execFileSync } from 'node:child_process';
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
@@ -104,6 +105,27 @@ describe('CLI Integration Smoke Tests', () => {
 
     assert.ok(output.includes('## Standardized Knowledge'));
     assert.ok(output.includes('Policies are classes that organize authorization logic'));
+  });
+
+  it('core commands should show subcommand help without executing', () => {
+    const cliPath = join(LARASKILLS_ROOT, 'scripts', 'laraskills.mjs');
+    const target = mkdtempSync(join(tmpdir(), 'laraskills-help-'));
+    const commands = ['install', 'doctor', 'validate', 'retrieve', 'search', 'get'];
+
+    try {
+      for (const command of commands) {
+        const output = execFileSync(process.execPath, [cliPath, command, '--help'], {
+          cwd: target,
+          encoding: 'utf8',
+        });
+
+        assert.ok(output.includes(`Usage: laraskills ${command}`));
+      }
+
+      assert.strictEqual(existsSync(join(target, '.laraskills-state.json')), false);
+    } finally {
+      rmSync(target, { recursive: true, force: true });
+    }
   });
 
   it('get command should return null for unknown KU', () => {

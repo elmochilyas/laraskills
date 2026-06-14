@@ -124,6 +124,7 @@ async function main() {
     const requiredFiles = [
       'package/package.json',
       'package/README.md',
+      'package/LICENSE',
       'package/scripts/laraskills.mjs',
       'package/scripts/laraskills-mcp.mjs',
       'package/scripts/mcp/handlers.mjs',
@@ -138,6 +139,11 @@ async function main() {
       if (!tarballList.includes(f)) fail(`Required file missing from tarball: ${f}`);
     }
     pass(`All ${requiredFiles.length} required files present`);
+
+    if (tarballList.includes('package/.github/workflows/ci.yml')) {
+      fail('Repository CI workflow should not be published in the npm package');
+    }
+    pass('Repository-only CI workflow excluded from package');
 
     // 4. Verify heavy layers excluded
     console.log('\n--- Step 4: Verify heavy layers excluded ---');
