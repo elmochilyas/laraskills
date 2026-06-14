@@ -1,5 +1,11 @@
 # LaraSkills
 
+[![npm version](https://img.shields.io/npm/v/laraskills)](https://www.npmjs.com/package/laraskills)
+[![Node.js](https://img.shields.io/badge/node-%3E%3D18-brightgreen)](https://nodejs.org)
+[![License](https://img.shields.io/badge/license-MIT-blue)](LICENSE)
+[![PHP](https://img.shields.io/badge/PHP-%3E%3D8.3-777bb4)](https://php.net)
+[![Laravel](https://img.shields.io/badge/Laravel-%3E%3D13-red)](https://laravel.com)
+
 Laravel 13 skills, rules, agents, retrieval tooling, and MCP integration for AI-assisted development.
 
 LaraSkills gives coding agents two complementary layers:
@@ -9,7 +15,16 @@ LaraSkills gives coding agents two complementary layers:
 
 The project targets Laravel 13, PHP 8.3+, and Pest 4. It supports OpenCode, Claude Code, Cursor, Gemini CLI, Codex CLI, GitHub Copilot, VS Code, Zed, Trae, Qwen, CodeBuddy, and Kiro.
 
-> **Beta status:** The current package version is `1.0.0-beta.16`. Install the `beta` npm tag until a stable release is announced.
+## Why LaraSkills?
+
+AI coding agents are powerful, but without Laravel-specific guardrails they generate generic, insecure, or outdated code. LaraSkills solves this with two layers:
+
+1. **Operating layer** — Drop-in skills, rules, agents, and hooks that train your AI tool on Laravel 13 conventions, security best practices, and architecture patterns. Install it in any Laravel project with one command.
+2. **Knowledge intelligence layer** — 2,321 curated knowledge units across 21 engineering domains. When an agent needs to "design a multi-tenant API" or "optimize an Eloquent N+1," it retrieves expert-level guidance with rules, decision trees, anti-patterns, and checklists — not generic web results.
+
+The result: AI that writes Laravel code that looks like it was written by an experienced Laravel engineer.
+
+> **Beta status:** `1.0.0-beta.16` — the package is in active development. Core functionality is stable and validated in real Laravel projects (see [validation evidence](#validation-evidence)).
 
 ## Requirements
 
@@ -26,8 +41,10 @@ The npm package stays lightweight and does not bundle the large `knowledge/` or 
 Install LaraSkills as a development dependency in your Laravel project:
 
 ```bash
-npm install --save-dev laraskills@beta
+npm install --save-dev laraskills
 ```
+
+> During the beta period, you may also use `npm install --save-dev laraskills@beta` to explicitly request the latest pre-release build.
 
 ### 2. Install the operating layer
 
@@ -87,7 +104,7 @@ From a Laravel project:
 
 ```bash
 # Install the package and operating layer
-npm install --save-dev laraskills@beta
+npm install --save-dev laraskills
 npx laraskills install --profile core
 
 # Configure the full knowledge checkout
@@ -207,6 +224,11 @@ Start with:
 - [`agent/retrieval-guide.md`](agent/retrieval-guide.md)
 - [`docs/retrieval-cli-guide.md`](docs/retrieval-cli-guide.md)
 
+## Known limitations
+
+- **Full checkout required for retrieval** — The npm package stays lightweight by excluding the `knowledge/` and `intelligence/` directories. To use `retrieve`, `search`, `get`, or the MCP server, you need a separate Git checkout of the repository and must configure it with `npx laraskills setup --laraskills-root <path>` or the `LARASKILLS_ROOT` environment variable.
+- **Coverage requires PCOV or Xdebug** — `php artisan test --coverage` does not work without a code coverage driver. LaraSkills projects that need coverage reporting must have PCOV or Xdebug installed in their PHP environment.
+
 ## Local MCP server
 
 `laraskills-mcp` is a read-only stdio server over the same deterministic retrieval core:
@@ -256,6 +278,16 @@ node scripts/laraskills.mjs validate --format json --laraskills-root .
 ```
 
 CI runs the core suite across Windows, Ubuntu, and macOS on supported Node versions.
+
+## Release notes
+
+See the [CHANGELOG](CHANGELOG.md) for a full history of changes. Notable releases:
+
+- [1.0.0-beta.16](docs/releases/1.0.0-beta.16.md) — Latest beta release with real Laravel 13 project validation, bug fixes, and MCP workflow verification.
+
+## Feedback and issues
+
+Found a bug, have a feature request, or want to contribute? Open an issue on the [GitHub repository](https://github.com/elmochilyas/laraskills/issues). We track open work, planned features, and community contributions there.
 
 ## Migration from Laravel ECC
 
