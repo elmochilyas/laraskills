@@ -9,7 +9,7 @@ LaraSkills gives coding agents two complementary layers:
 
 The project targets Laravel 13, PHP 8.3+, and Pest 4. It supports OpenCode, Claude Code, Cursor, Gemini CLI, Codex CLI, GitHub Copilot, VS Code, Zed, Trae, Qwen, CodeBuddy, and Kiro.
 
-> **Beta status:** The current package version is `1.0.0-beta.15`. Install the `beta` npm tag until a stable release is announced.
+> **Beta status:** The current package version is `1.0.0-beta.16`. Install the `beta` npm tag until a stable release is announced.
 
 ## Requirements
 

@@ -1,0 +1,175 @@
+# Changelog
+
+All notable changes to LaraSkills are documented in this file.
+
+The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
+and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
+Pre-release versions are tagged with `-beta.N`.
+
+---
+
+## [1.0.0-beta.16] - 2026-06-14
+
+### Added
+
+- **Phase 17 real Laravel validation**: LaraSkills validated in a fresh Laravel 13
+  project (full CRUD API workflow with Sanctum, policies, Form Requests, API
+  Resources, cursor pagination, rate limiting, and Pest tests). All 11 tests and
+  168 assertions passed. Full report in
+  `docs/integration-tests/phase-17/fresh-laravel-project/report.md`.
+- **Phase 17 existing-project validation**: LaraSkills introduced to a non-empty
+  Breeze/Pest application without overwriting existing files. Note-archiving
+  feature added with policy authorization, no regression (32 tests, 82 assertions).
+  Report in `docs/integration-tests/phase-17/existing-laravel-project/report.md`.
+- **Phase 17 MCP workflow validation**: OpenCode launched the MCP adapter from the
+  packed package, discovered all five tools, and completed a webhook implementation
+  without CLI fallback.
+- **`get --include-content` content resolution**: The `--include-content` flag now
+  correctly appends the `04-standardized-knowledge.md` body instead of returning
+  only metadata.
+- **Phase 16 clean-clone reproducibility**: CI workflow across Windows, Ubuntu,
+  and macOS with packed-install, MCP smoke, and reproducibility jobs.
+- **Phase 16 cross-platform scripts**: `verify-clean-clone.mjs`,
+  `verify-packed-install.mjs`, `verify-mcp-smoke.mjs`.
+- **MIT License file**: Proper open-source license with attribution.
+
+### Fixed
+
+- **Irrelevant retrieval ranking**: Removed unsafe one-token partial alias matching
+  and the unconditional `aliasTarget` ranking bonus. Compact and standard retrieval
+  no longer rank unrelated replication guidance first.
+- **`.gitignore` for knowledge/**: Large generated trees excluded from version
+  control in clone-based installations.
+- **README rewrite**: Down from ~600 lines to ~270 focused lines covering
+  installation, quickstart, commands, building blocks, and validation evidence.
+- **Phase 18 package metadata cleanup**: Repository URL, keywords, and homepage
+  unified under the LaraSkills identity.
+
+### Changed
+
+- **Package identity**: Complete rebrand from Laravel ECC to LaraSkills. CLI
+  binaries, MCP server, environment variables, documentation, and GitHub metadata
+  all use the new name. Temporary `laravel-ecc` / `laravel-ecc-mcp` / `ECC_ROOT`
+  compatibility aliases retained.
+- **README structure**: Simplified with focused sections for installation,
+  quickstart, commands, building blocks, knowledge layer, and validation evidence.
+- **Postinstall message**: Updated to guide users toward `npx laraskills install`
+  and `npx laraskills doctor`.
+
+### Performance
+
+- **Inject-dependency-edges**: PowerShell optimization (precomputed lookup, regex
+  elimination, merged loops) reduced cold injection from 461s to 118.5s (3.9×)
+  and warm injection from 276s to 52.8s (5.2×).
+
+### Validation (release gates)
+
+- Tests: 201 / 201 PASS
+- Retrieval benchmarks: 72 / 72 PASS
+- MCP smoke verification: PASS
+- Packed-install verification: PASS
+- Intelligence layer: VALID — 2,321 KUs, 427 dependency edges, 3,513
+  relationship edges, 0 cycles, 0 self-loops, 0 dangling edges
+
+---
+
+## [1.0.0-beta.15] - 2026-06-12
+
+### Summary
+
+Complete Laravel ECC to LaraSkills migration with temporary compatibility bridge.
+
+### Added
+
+- Product name, npm package, CLI, and MCP server rebranded to LaraSkills
+- `--laraskills-root` CLI option and `LARASKILLS_ROOT` environment variable
+- `laraskills` and `laraskills-mcp` primary binaries
+- Temporary `laravel-ecc`, `laravel-ecc-mcp`, `--ecc-root`, `ECC_ROOT` aliases
+
+---
+
+## [1.0.0-beta.14] - 2026-06-11
+
+### Added
+
+- In-process retrieval caching layer (57–97% warm-latency improvement)
+- Fingerprint-based cache invalidation (mtime + file size)
+- `npm run benchmark:performance` for repeatable local measurements
+- Markdown search tables with copy-friendly canonical IDs
+- Working `--json` shorthand on all CLI commands
+
+### Performance
+
+- `get knowledge unit`: ~97% faster (2.6 ms warm)
+- `validate`: ~92% faster (9.6 ms warm)
+- `search`: ~74%+ faster (23–38 ms warm)
+- `retrieve (standard)`: ~57%+ faster (37–104 ms warm)
+
+---
+
+## [1.0.0-beta.13] - 2026-06-10
+
+### Added
+
+- MCP resilience improvements (resolution metadata, short-ID resolution)
+- Retrieval budgeting and convergence guidance
+- Multi-tenant isolation hardening
+- Cycle-safe `get_graph_context` at any depth
+
+### Fixed
+
+- ECC root-resolver test isolation (save/restore env vars in hooks)
+
+---
+
+## [1.0.0-beta.12] - 2026-06-09
+
+### Added
+
+- Phase 14 and Phase 14.1 hardening
+- Canonical-ID reliability improvements
+- MCP workflow instruction enhancements
+- Multi-tenant isolation guidance
+
+---
+
+## [1.0.0-beta.11] - 2026-06-08
+
+### Fixed
+
+- Package metadata corrections for npm publication
+
+---
+
+## [1.0.0-beta.10] - 2026-06-07
+
+### Added
+
+- ECC root-resolver
+- User configuration persistence
+- Runtime modules for retrieval CLI
+- MCP adapter with five read-only tools
+
+---
+
+## [1.0.0-beta.9] - 2026-06-06
+
+### Added
+
+- Initial beta release (as `laravel-ecc`)
+- 3 Laravel 13 skills (patterns, tdd, security)
+- Rules, agents, CLI harness configs for 12 AI coding tools
+- Knowledge intelligence layer (21 domains, 2,321 KUs)
+- Retrieval CLI and deterministic context bundles
+- MCP server with knowledge-unit tooling
+
+---
+
+[1.0.0-beta.16]: https://github.com/elmochilyas/laraskills/compare/v1.0.0-beta.15...v1.0.0-beta.16
+[1.0.0-beta.15]: https://github.com/elmochilyas/laraskills/compare/v1.0.0-beta.14...v1.0.0-beta.15
+[1.0.0-beta.14]: https://github.com/elmochilyas/laraskills/compare/v1.0.0-beta.13...v1.0.0-beta.14
+[1.0.0-beta.13]: https://github.com/elmochilyas/laraskills/compare/v1.0.0-beta.12...v1.0.0-beta.13
+[1.0.0-beta.12]: https://github.com/elmochilyas/laraskills/compare/v1.0.0-beta.11...v1.0.0-beta.12
+[1.0.0-beta.11]: https://github.com/elmochilyas/laraskills/compare/v1.0.0-beta.10...v1.0.0-beta.11
+[1.0.0-beta.10]: https://github.com/elmochilyas/laraskills/compare/v1.0.0-beta.9...v1.0.0-beta.10
+[1.0.0-beta.9]: https://github.com/elmochilyas/laraskills/releases/tag/v1.0.0-beta.9
