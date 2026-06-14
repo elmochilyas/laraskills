@@ -289,6 +289,8 @@ See the [CHANGELOG](CHANGELOG.md) for a full history of changes. Notable release
 
 Found a bug, have a feature request, or want to contribute? Open an issue on the [GitHub repository](https://github.com/elmochilyas/laraskills/issues). We track open work, planned features, and community contributions there.
 
+**Beta testers:** See the [beta testing guide](docs/feedback/beta-testing-guide.md) for instructions on testing LaraSkills in your Laravel project and reporting your experience. The [tester checklist](docs/feedback/tester-checklist.md) provides a structured walkthrough.
+
 ## Migration from Laravel ECC
 
 Laravel ECC was renamed to LaraSkills. Use the `laraskills` package, `laraskills` CLI, `laraskills-mcp` server, and `LARASKILLS_ROOT`.

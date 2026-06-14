@@ -1,0 +1,87 @@
+name: Beta feedback
+description: Share your experience using LaraSkills in a real Laravel project
+labels: [feedback, beta]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thanks for participating in the LaraSkills beta! Your feedback directly shapes the project.
+
+        Before filing, consider reviewing the [beta testing guide](/docs/feedback/beta-testing-guide.md) and [tester checklist](/docs/feedback/tester-checklist.md).
+
+  - type: input
+    id: version
+    attributes:
+      label: LaraSkills version
+      description: `npx laraskills --version` or check `package.json`
+      placeholder: "1.0.0-beta.16"
+    validations:
+      required: true
+
+  - type: dropdown
+    id: profile
+    attributes:
+      label: Installation profile
+      options:
+        - minimal
+        - core
+        - full
+    validations:
+      required: true
+
+  - type: dropdown
+    id: ai-tool
+    attributes:
+      label: AI coding tool used
+      options:
+        - OpenCode
+        - Claude Code
+        - Cursor
+        - Gemini CLI
+        - Codex CLI
+        - GitHub Copilot
+        - VS Code (with MCP)
+        - Other
+    validations:
+      required: true
+
+  - type: textarea
+    id: what-worked
+    attributes:
+      label: What worked well?
+      description: Which skills, rules, agents, or retrievals were most useful?
+      placeholder: "The Eloquent performance skill caught an N+1 I was about to ship."
+
+  - type: textarea
+    id: what-didnt
+    attributes:
+      label: What was confusing or missing?
+      description: Were any instructions unclear, incomplete, or hard to follow?
+      placeholder: "I couldn't figure out how to configure the MCP server for my editor."
+
+  - type: textarea
+    id: retrieval-quality
+    attributes:
+      label: Retrieval quality
+      description: Did `npx laraskills retrieve` return relevant results? Were critical KUs missing for your task?
+      placeholder: "The retrieval for 'multi-tenant API' was good but missed a key rule about tenant scoping."
+
+  - type: textarea
+    id: project-context
+    attributes:
+      label: Project context (optional)
+      description: What kind of Laravel project are you building? New app, existing app, package?
+      placeholder: "Existing Laravel 13 app with Breeze + Inertia, ~15 models, ~30 routes"
+
+  - type: textarea
+    id: logs
+    attributes:
+      label: Relevant logs or evidence (optional)
+      description: Paste output from `npx laraskills doctor`, `npx laraskills validate`, or any error messages.
+      render: shell
+
+  - type: textarea
+    id: suggestions
+    attributes:
+      label: Suggestions
+      description: What would make LaraSkills more useful for your workflow?
