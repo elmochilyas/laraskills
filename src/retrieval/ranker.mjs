@@ -128,16 +128,6 @@ export function rankCandidates(candidates, catalog, normalizedQuery, aliasResult
 
   const ranked = [];
 
-  const aliasTargets = new Map();
-  for (const alias of catalog.aliases) {
-    if (alias.canonical_ku_id) {
-      if (!aliasTargets.has(alias.canonical_ku_id)) {
-        aliasTargets.set(alias.canonical_ku_id, []);
-      }
-      aliasTargets.get(alias.canonical_ku_id).push(alias.alias);
-    }
-  }
-
   const skillKuMap = new Map();
   for (const skill of catalog.skills) {
     if (skill.id) {
@@ -170,11 +160,6 @@ export function rankCandidates(candidates, catalog, normalizedQuery, aliasResult
     if (aliasEntry) {
       totalScore += SCORE_WEIGHTS.exactAlias;
       breakdown.push({ signal: 'exactAlias', value: SCORE_WEIGHTS.exactAlias, detail: `Matched alias: "${aliasEntry.alias}"` });
-    }
-
-    if (aliasTargets.has(id)) {
-      totalScore += SCORE_WEIGHTS.exactAlias - 5;
-      breakdown.push({ signal: 'aliasTarget', value: SCORE_WEIGHTS.exactAlias - 5, detail: `Alias target: "${aliasTargets.get(id)[0]}"` });
     }
 
     const skills = skillKuMap.get(id) || [];

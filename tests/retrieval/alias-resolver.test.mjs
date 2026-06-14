@@ -38,6 +38,12 @@ const SAMPLE_ALIASES = [
     canonical_ku_id: 'data-storage-systems/transactions/deadlock-prevention-patterns',
     source_paths: ['knowledge/data-storage-systems/transactions/deadlock-prevention-patterns/04-standardized-knowledge.md'],
   },
+  {
+    alias: 'Laravel read/write config',
+    normalized_alias: 'laravel-read-write-config',
+    canonical_ku_id: 'data-storage-systems/replication/laravel-read-write-config',
+    source_paths: ['knowledge/data-storage-systems/replication/laravel-read-write-config/04-standardized-knowledge.md'],
+  },
 ];
 
 describe('Alias Resolver', () => {
@@ -60,6 +66,12 @@ describe('Alias Resolver', () => {
 
   it('should return empty for missing alias', () => {
     const result = resolveAliases(SAMPLE_ALIASES, ['completely', 'unrelated', 'query']);
+    assert.strictEqual(result.appliedAliases.length, 0);
+    assert.strictEqual(result.matchedKuIds.length, 0);
+  });
+
+  it('should not resolve a multi-token alias from one shared token', () => {
+    const result = resolveAliases(SAMPLE_ALIASES, ['laravel', 'policy', 'feature', 'tests']);
     assert.strictEqual(result.appliedAliases.length, 0);
     assert.strictEqual(result.matchedKuIds.length, 0);
   });

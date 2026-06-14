@@ -91,6 +91,9 @@ npx laraskills get data-storage-systems/indexes/composite-indexes --include-cont
 npx laraskills get ai-intelligence-systems/rag-retrieval-augmented-generation/rag-architecture-fundamentals --format json
 ```
 
+Use `--include-content` to append the exact
+`04-standardized-knowledge.md` content from the resolved LaraSkills root.
+
 ### `prerequisites`
 
 Show prerequisite chain for a knowledge unit.

@@ -1,3 +1,6 @@
+import { existsSync, readFileSync } from 'node:fs';
+import { resolve, sep } from 'node:path';
+
 function scoreTag(score) {
   if (score >= 90) return '★ HIGH';
   if (score >= 60) return '● MEDIUM';
@@ -185,7 +188,21 @@ export function formatAsJson(bundle) {
   return JSON.stringify(bundle, null, 2);
 }
 
-export function formatKuDetail(ku, catalog, includeContent) {
+function readStandardizedKnowledge(ku, eccRoot) {
+  if (!ku.directory || !eccRoot) return null;
+
+  const resolvedRoot = resolve(eccRoot);
+  const contentPath = resolve(resolvedRoot, ku.directory, '04-standardized-knowledge.md');
+  const rootPrefix = resolvedRoot.endsWith(sep) ? resolvedRoot : `${resolvedRoot}${sep}`;
+
+  if (!contentPath.startsWith(rootPrefix) || !existsSync(contentPath)) {
+    return null;
+  }
+
+  return readFileSync(contentPath, 'utf8').replace(/^\uFEFF/, '').trimEnd();
+}
+
+export function formatKuDetail(ku, catalog, includeContent, eccRoot) {
   const lines = [];
   lines.push(`# ${ku.knowledge_unit || ku.id}`);
   lines.push('');
@@ -217,6 +234,14 @@ export function formatKuDetail(ku, catalog, includeContent) {
       const other = rel.source === ku.id ? rel.target : rel.source;
       lines.push(`- \`${other}\` — ${rel.reason || ''}`);
     }
+    lines.push('');
+  }
+
+  if (includeContent) {
+    const content = readStandardizedKnowledge(ku, eccRoot);
+    lines.push('## Standardized Knowledge');
+    lines.push('');
+    lines.push(content || '_Standardized knowledge content is unavailable._');
     lines.push('');
   }
 
