@@ -1,6 +1,6 @@
 {
   "name": "laraskills",
-  "version": "1.0.0-beta.15",
+  "version": "1.0.0-beta.16",
   "description": "AI-ready Laravel 13 skills, rules, agents, deterministic retrieval CLI, and MCP server",
   "publishConfig": {
     "access": "public"
@@ -77,6 +77,7 @@
     "LICENSE",
     "AGENTS.md",
     "CLAUDE.md",
+    "CHANGELOG.md",
     "VERSION"
   ],
   "scripts": {
