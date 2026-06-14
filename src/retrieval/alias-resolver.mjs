@@ -27,8 +27,6 @@ export function resolveAliases(aliases, queryTokens) {
       const matchCount = aliasTokens.filter(t => querySet.has(t)).length;
       if (matchCount >= Math.min(2, aliasTokens.length) && matchCount === aliasTokens.length) {
         matchType = 'token';
-      } else if (matchCount >= 1 && aliasTokens.length >= 2 && aliasTokens.some(t => t.length > 4)) {
-        matchType = 'partial';
       }
     }
 

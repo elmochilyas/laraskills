@@ -240,6 +240,25 @@ async function main() {
         }
       }
     }
+    const policyKnowledgeDir = join(
+      laraskillsRootDir,
+      'knowledge',
+      'security-identity-engineering',
+      'authorization',
+      'policies-model',
+    );
+    mkdirSync(policyKnowledgeDir, { recursive: true });
+    writeFileSync(
+      join(policyKnowledgeDir, '04-standardized-knowledge.md'),
+      readFileSync(join(
+        ROOT,
+        'knowledge',
+        'security-identity-engineering',
+        'authorization',
+        'policies-model',
+        '04-standardized-knowledge.md',
+      ), 'utf-8'),
+    );
     const doctorAfter = run(`node "${laraskillsCli}" doctor --laraskills-root "${laraskillsRootDir}"`, { cwd: installDir, silent: true, env: testEnv });
     if (doctorAfter.includes('HEALTHY')) {
       pass('Doctor reports HEALTHY after setup');
@@ -290,8 +309,34 @@ async function main() {
       fail('CLI retrieve output unexpected');
     }
 
-    // 14. Verify MCP tools/list
-    console.log('\n--- Step 14: MCP tools/list ---');
+    // 14. Verify Phase 17 retrieval and content regressions
+    console.log('\n--- Step 14: Phase 17 CLI regressions ---');
+    const archiveTask = 'Add note archiving to an existing Laravel project with an Eloquent policy, nullable archived_at timestamp, Blade archive action, and Pest feature tests for owner authorization and forbidden cross-user access';
+    const archiveRetrieveJson = run(`node "${laraskillsCli}" retrieve "${archiveTask}" --mode compact --format json --laraskills-root "${laraskillsRootDir}"`, {
+      cwd: installDir,
+      silent: true,
+      env: testEnv,
+    });
+    const archiveRetrieve = JSON.parse(archiveRetrieveJson);
+    if (archiveRetrieve.knowledgeUnits?.[0]?.id === 'security-identity-engineering/authorization/policies-model') {
+      pass('Archive task ranks Eloquent policy guidance first');
+    } else {
+      fail(`Archive task top result was unexpected: ${archiveRetrieve.knowledgeUnits?.[0]?.id || 'none'}`);
+    }
+
+    const policyContent = run(`node "${laraskillsCli}" get "security-identity-engineering/authorization/policies-model" --include-content --laraskills-root "${laraskillsRootDir}"`, {
+      cwd: installDir,
+      silent: true,
+      env: testEnv,
+    });
+    if (policyContent.includes('## Standardized Knowledge') && policyContent.includes('Policies are classes that organize authorization logic')) {
+      pass('Canonical get --include-content returns standardized knowledge');
+    } else {
+      fail('Canonical get --include-content omitted standardized knowledge');
+    }
+
+    // 15. Verify MCP tools/list
+    console.log('\n--- Step 15: MCP tools/list ---');
     const mcpOutput = JSON.parse(run(`node "${laraskillsMcp}" --laraskills-root "${laraskillsRootDir}"`, {
       cwd: installDir,
       silent: true,
@@ -322,8 +367,8 @@ async function main() {
     }
     pass('Preferred and legacy MCP aliases execute');
 
-    // 15. Verify MCP validate_ecc
-    console.log('\n--- Step 15: MCP validate_ecc ---');
+    // 16. Verify MCP validate_ecc
+    console.log('\n--- Step 16: MCP validate_ecc ---');
     const mcpValidate = JSON.parse(run(`node "${laraskillsMcp}" --laraskills-root "${laraskillsRootDir}"`, {
       cwd: installDir,
       silent: true,

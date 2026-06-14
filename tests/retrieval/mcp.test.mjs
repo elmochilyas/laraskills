@@ -300,13 +300,13 @@ describe('MCP Tool — search_ecc', () => {
     }
   });
 
-  it('resolves aliases (aliasTarget signal appears in breakdown)', async () => {
+  it('resolves genuine query aliases with an exactAlias signal', async () => {
     const res = await client.callTool({
       name: 'search_ecc',
-      arguments: { query: 'Sanctum', limit: 10 },
+      arguments: { query: 'N+1 queries', limit: 10 },
     });
     const hasAlias = res.structuredContent.results.some((r) =>
-      Array.isArray(r.breakdown) && r.breakdown.some((b) => b.signal === 'aliasTarget' || b.signal === 'exactAlias'),
+      Array.isArray(r.breakdown) && r.breakdown.some((b) => b.signal === 'exactAlias'),
     );
     assert.ok(hasAlias, 'Expected at least one alias-resolved hit');
   });
@@ -388,6 +388,19 @@ describe('MCP Tool — get_knowledge_unit', () => {
     });
     const types = res.structuredContent.artifact_summaries.map((a) => a.artifact_type);
     assert.deepStrictEqual(types.slice().sort(), ['rules', 'skills']);
+  });
+
+  it('includes standardized knowledge content when requested', async () => {
+    const res = await client.callTool({
+      name: 'get_knowledge_unit',
+      arguments: {
+        id: 'security-identity-engineering/authorization/policies-model',
+        include_content: true,
+      },
+    });
+
+    assert.ok(res.structuredContent.content.includes('## Standardized Knowledge'));
+    assert.ok(res.structuredContent.content.includes('Policies are classes that organize authorization logic'));
   });
 
   it('returns actionable error for unknown ID (isError: true)', async () => {

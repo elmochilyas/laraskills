@@ -3,6 +3,7 @@ import assert from 'node:assert';
 import { join, dirname } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { existsSync } from 'node:fs';
+import { execFileSync } from 'node:child_process';
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const LARASKILLS_ROOT = join(__dirname, '..', '..');
@@ -60,6 +61,26 @@ describe('CLI Integration Smoke Tests', () => {
     }
   });
 
+  it('should prioritize policy guidance for the Phase 17 archive task', () => {
+    const task = 'Add note archiving to an existing Laravel project with an Eloquent policy, nullable archived_at timestamp, Blade archive action, and Pest feature tests for owner authorization and forbidden cross-user access';
+    for (const mode of ['compact', 'standard']) {
+      const result = retrieveContext(task, {
+        eccRoot: LARASKILLS_ROOT,
+        mode,
+      });
+
+      assert.strictEqual(
+        result.bundle.knowledgeUnits[0].id,
+        'security-identity-engineering/authorization/policies-model',
+        `${mode} mode should rank policy guidance first`,
+      );
+      assert.notStrictEqual(
+        result.bundle.knowledgeUnits[0].id,
+        'data-storage-systems/replication/laravel-read-write-config',
+      );
+    }
+  });
+
   it('get command should retrieve KU metadata', () => {
     const firstKu = [...bundle][0] || null;
     const testId = 'ai-intelligence-systems/agentic-workflows/01';
@@ -68,6 +89,21 @@ describe('CLI Integration Smoke Tests', () => {
     assert.ok(result.metadata);
     assert.strictEqual(result.metadata.id, testId);
     assert.ok(result.detail);
+  });
+
+  it('get --include-content should print standardized knowledge for a canonical ID', () => {
+    const cliPath = join(LARASKILLS_ROOT, 'scripts', 'laraskills.mjs');
+    const output = execFileSync(process.execPath, [
+      cliPath,
+      'get',
+      'security-identity-engineering/authorization/policies-model',
+      '--include-content',
+      '--laraskills-root',
+      LARASKILLS_ROOT,
+    ], { encoding: 'utf8' });
+
+    assert.ok(output.includes('## Standardized Knowledge'));
+    assert.ok(output.includes('Policies are classes that organize authorization logic'));
   });
 
   it('get command should return null for unknown KU', () => {

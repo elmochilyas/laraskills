@@ -153,7 +153,7 @@ export function getKnowledgeUnit(id, options = {}) {
 
   return {
     metadata: ku,
-    detail: formatKuDetail(ku, catalog, options.includeContent),
+    detail: formatKuDetail(ku, catalog, options.includeContent, actualRoot),
     _resolution: resolvedInfo,
   };
 }
