@@ -772,6 +772,7 @@ function showHelp() {
   lines.push('');
   lines.push('Options:');
   lines.push('  --help                                                Show this help');
+  lines.push('  laraskills <command> --help                           Show command help');
   lines.push('');
   lines.push('Retrieval Options:');
   lines.push('  --mode compact|standard|deep              Context bundle mode (default: standard)');
@@ -792,9 +793,9 @@ function showHelp() {
   lines.push('  --include-content                         Include Markdown content (get only)');
   lines.push('');
   lines.push('Profiles:');
-  lines.push('  minimal   Skills only (3 skills)');
-  lines.push('  core      6 skills + rules + agents (default)');
-  lines.push('  full      Everything + commands + harness configs');
+  lines.push('  minimal   3 starter skills + shared rules, hooks, MCP configs, and Artisan agent');
+  lines.push('  core      6 core skills + shared rules, hooks, MCP configs, and 5 agents (default)');
+  lines.push('  full      Core profile + commands and harness configs');
   lines.push('');
   lines.push('Components:');
   lines.push('  laravel-patterns        Laravel 13 architecture patterns (Actions, DTOs, Eloquent, Queues)');
@@ -818,11 +819,113 @@ function showHelp() {
   console.log(lines.join('\n'));
 }
 
+function showCommandHelp(command) {
+  const help = {
+    setup: [
+      'Usage: laraskills setup --laraskills-root <path>',
+      '',
+      'Configure the full LaraSkills checkout used by retrieval and MCP commands.',
+    ],
+    doctor: [
+      'Usage: laraskills doctor [--laraskills-root <path>]',
+      '',
+      'Diagnose package configuration, intelligence files, retrieval, and MCP readiness.',
+    ],
+    install: [
+      'Usage: laraskills install [--profile minimal|core|full]',
+      '',
+      'Install the LaraSkills operating layer into the current project.',
+      '',
+      'Profiles:',
+      '  minimal   3 starter skills + shared rules, hooks, MCP configs, and Artisan agent',
+      '  core      6 core skills + shared rules, hooks, MCP configs, and 5 agents (default)',
+      '  full      Core profile + commands and harness configs',
+    ],
+    add: [
+      'Usage: laraskills add <component>',
+      '',
+      'Add one supported skill or agent to the current project.',
+    ],
+    update: [
+      'Usage: laraskills update',
+      '',
+      'Update an existing LaraSkills installation using its saved profile.',
+    ],
+    retrieve: [
+      'Usage: laraskills retrieve "<query>" [options]',
+      '',
+      'Retrieve a ranked context bundle for a Laravel engineering task.',
+      '',
+      'Options:',
+      '  --mode compact|standard|deep',
+      '  --format markdown|json',
+      '  --laraskills-root <path>',
+      '  --max-kus <number>',
+      '  --max-rules <number>',
+      '  --max-skills <number>',
+      '  --budget <number>',
+    ],
+    search: [
+      'Usage: laraskills search "<query>" [options]',
+      '',
+      'Search ranked knowledge units and return canonical IDs.',
+      '',
+      'Options:',
+      '  --format markdown|json',
+      '  --limit <number>',
+      '  --domain <domain-id>',
+      '  --laraskills-root <path>',
+    ],
+    get: [
+      'Usage: laraskills get <knowledge-unit-id> [options]',
+      '',
+      'Inspect one canonical knowledge unit.',
+      '',
+      'Options:',
+      '  --include-content',
+      '  --format markdown|json',
+      '  --laraskills-root <path>',
+    ],
+    prerequisites: [
+      'Usage: laraskills prerequisites <knowledge-unit-id> [options]',
+      '',
+      'Show prerequisite knowledge units.',
+      '',
+      'Options: --depth <number> --limit <number> --format markdown|json',
+    ],
+    related: [
+      'Usage: laraskills related <knowledge-unit-id> [options]',
+      '',
+      'Show related knowledge units.',
+      '',
+      'Options: --depth <number> --limit <number> --format markdown|json',
+    ],
+    validate: [
+      'Usage: laraskills validate [options]',
+      '',
+      'Validate the intelligence graph and machine-readable indexes.',
+      '',
+      'Options:',
+      '  --format markdown|json',
+      '  --laraskills-root <path>',
+    ],
+  };
+
+  if (!help[command]) return false;
+  console.log(`\n${help[command].join('\n')}\n`);
+  return true;
+}
+
 const args = process.argv.slice(2);
 const target = process.cwd();
+const commandHelpRequested = args.slice(1).some(arg => arg === '--help' || arg === '-h');
 
 if (args.length === 0 || args[0] === '--help' || args[0] === '-h') {
   showHelp();
+} else if (commandHelpRequested) {
+  if (!showCommandHelp(args[0])) {
+    err(`Unknown command: ${args[0]}. Use --help to see usage.`);
+  }
 } else if (args[0] === 'setup') {
   cmdSetup(args.slice(1));
 } else if (args[0] === 'doctor') {

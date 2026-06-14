@@ -1,332 +1,268 @@
 # LaraSkills
 
-**Laravel 13 AI-ready skills, rules, agents, and CLI harness configs** for OpenCode, Claude Code, Cursor, Gemini CLI, Codex CLI, Copilot, VS Code, Zed, Trae, Qwen, CodeBuddy, and Kiro.
+Laravel 13 skills, rules, agents, retrieval tooling, and MCP integration for AI-assisted development.
 
-A Laravel-focused AI coding-agent **operating layer** and **engineering knowledge system**.
+LaraSkills gives coding agents two complementary layers:
 
-Builds on the [ECC](https://github.com/affaan-m/ECC) ecosystem with Laravel 13-specific depth.
+- An **operating layer** with reusable skills, rules, agents, hooks, commands, and harness configurations.
+- A **knowledge intelligence layer** with 2,321 Laravel engineering knowledge units, deterministic retrieval, decision support, anti-patterns, and validation checklists.
 
-> **Migration notice:** Laravel ECC has been renamed to **LaraSkills**. Use the
-> `laraskills` npm package, `laraskills` CLI, and `laraskills-mcp` server.
-> Temporary `laravel-ecc` and `laravel-ecc-mcp` binary aliases remain available
-> for migration. See
-> [`docs/migrations/laravel-ecc-to-laraskills.md`](docs/migrations/laravel-ecc-to-laraskills.md).
+The project targets Laravel 13, PHP 8.3+, and Pest 4. It supports OpenCode, Claude Code, Cursor, Gemini CLI, Codex CLI, GitHub Copilot, VS Code, Zed, Trae, Qwen, CodeBuddy, and Kiro.
 
-```bash
-# Install from GitHub
-npx skills add elmochilyas/laraskills
+> **Beta status:** The current package version is `1.0.0-beta.15`. Install the `beta` npm tag until a stable release is announced.
 
-# Install from npm
-npx laraskills@beta add laravel-patterns
-```
+## Requirements
 
-## Repository Architecture
+- Node.js 18 or newer
+- A Laravel project for operating-layer installation
+- A full LaraSkills Git checkout for retrieval and the local MCP server
 
-### Curated Operating Layer
+The npm package stays lightweight and does not bundle the large `knowledge/` or `intelligence/` trees.
 
-The curated layer teaches AI coding agents how to behave and operate inside Laravel projects:
+## Installation
 
-```
-agents/       — 12 Laravel-specific agent definitions
-skills/       — 12 deep Laravel 13 skills
-rules/        — 41 always-follow guidelines (4 categories)
-commands/     — 7 Laravel/LaraSkills console command references
-hooks/        — Git/agent hook automations
-mcp-configs/  — MCP server configurations
-```
+### 1. Install the npm package
 
-### Knowledge Intelligence Layer
-
-The knowledge layer provides deep Laravel engineering knowledge, navigation, and machine-readable indexes:
-
-```
-knowledge/     — 21 engineering domains, 2,321 knowledge units
-intelligence/  — JSON files, indexes, dependency graph
-agent/         — Routing maps, retrieval guides, domain indexes
-meta/          — Domain discovery analysis
-tools/         — Rebuild and generation scripts
-```
-
-## What's Included
-
-| Category | Count | Description |
-|----------|-------|-------------|
-| Skills | 12 | Deep Laravel 13 skills (~35-40 code examples each) |
-| Rules | 41 | common(10) + php(5) + web(7) + laravel(19) |
-| Agents | 12 | Artisan, Eloquent, Migration, Database, Container, REST, JSON:API, GraphQL, gRPC, Microservices, Authentication, Identity Architecture |
-| Commands | 7 | artisan, migrate, seed, route-list, tdd, code-review, plan |
-| Harness Configs | 12 | OpenCode, Claude Code, Cursor, Gemini, Codex, Copilot, VS Code, Zed, Trae, Qwen, CodeBuddy, Kiro |
-| MCP Config Files | 1 | mcp-servers.json (defines Laravel docs + Composer security servers) |
-
-### Intelligence Layer
-
-| Metric | Value |
-|---|---|
-| Engineering Domains | 21 |
-| Canonical Knowledge Units | 2,321 |
-| JSON Intelligence Files | 10 |
-| Markdown Indexes | 7 |
-| Dependency Edges | 427 |
-| Relationship Edges | 3,513 |
-| Circular Dependencies | 0 (verified by automated DFS on every generation) |
-| Agent Navigation Files | 5 |
-
-## How AI Agents Should Use LaraSkills
-
-```
-Task
-↓
-Identify Domain
-↓
-Consult Routing Map
-↓
-Load Relevant Knowledge
-↓
-Apply Rules
-↓
-Use Skill Workflow
-↓
-Check Decision Trees
-↓
-Avoid Anti-Patterns
-↓
-Validate With Checklist
-```
-
-Reference files:
-- [`AGENTS.md`](AGENTS.md) — Full agent operating instructions
-- [`agent/retrieval-guide.md`](agent/retrieval-guide.md) — Optimal retrieval strategy
-- [`agent/domain-routing-index.md`](agent/domain-routing-index.md) — Flat domain index
-- [`agent/task-to-skill-map.md`](agent/task-to-skill-map.md) — Task-to-skill mapping
-
-## Quick Start
-
-### Install from npm
+Install LaraSkills as a development dependency in your Laravel project:
 
 ```bash
-# Full installation to current project
-npx laraskills@beta install
-
-# Install with a different profile
-npx laraskills@beta install --profile minimal    # Skills only
-npx laraskills@beta install --profile full       # Everything
-
-# Add a single component to an existing project
-npx laraskills@beta add laravel-patterns
-
-# Check installation state
-npx laraskills@beta doctor
+npm install --save-dev laraskills@beta
 ```
 
-### Install from GitHub
+### 2. Install the operating layer
+
+Run the installer from the Laravel project root:
 
 ```bash
-# All skills via Vercel Skills CLI
-npx skills add elmochilyas/laraskills
-
-# Or via GitHub CLI
-gh skill install elmochilyas/laraskills
-
-# Install a single skill
-npx skills add elmochilyas/laraskills --skill laravel-patterns
+npx laraskills install --profile core
 ```
 
-### Install Scripts
+The installer writes LaraSkills-owned content such as `skills/`, `rules/`, `agents/`, `hooks/`, and `mcp-configs/`, then records the selected profile in `.laraskills-state.json`.
+
+### 3. Configure retrieval
+
+Clone the full repository once, then point the installed CLI at it:
 
 ```bash
-# Minimal (skills only)
-./install.ps1 --profile minimal   # Windows
-./install.sh --profile minimal    # macOS/Linux
-
-# Core (skills + rules + agents — default)
-./install.ps1                     # Windows
-./install.sh                      # macOS/Linux
-
-# Full (everything including harness configs)
-./install.ps1 --profile full      # Windows
-./install.sh --profile full       # macOS/Linux
-```
-
-### Update to Latest
-
-```bash
-# Via npm (recommended)
-npx laraskills@beta update
-
-# Via install scripts
-./update.ps1                      # Windows
-./update.sh                       # macOS/Linux
-
-# Preview changes without applying
-./update.ps1 --dry-run            # Windows
-./update.sh --dry-run             # macOS/Linux
-
-# Check version
-npx laraskills@beta doctor
-./update.ps1 --version            # Windows
-./update.sh --version             # macOS/Linux
-```
-
-The update script reads `.laraskills-state.json` and syncs all components to
-the latest package version while preserving your installation profile. The CLI
-can migrate the old state filename during the compatibility window.
-
-## Quick Setup
-
-The npm package is intentionally lightweight — it contains the CLI, MCP adapter, and operating layer. Retrieval requires access to a full LaraSkills checkout:
-
-```bash
-# Configure access to a full checkout
-npx laraskills setup --laraskills-root "/path/to/laraskills"
-
-# Verify configuration
+git clone https://github.com/elmochilyas/laraskills.git ../laraskills-source
+npx laraskills setup --laraskills-root ../laraskills-source
 npx laraskills doctor
 ```
 
-See `docs/onboarding/npm-setup.md` for detailed instructions.
-
-## Distribution
-
-The npm package (`laraskills`) includes:
-- Curated **operating layer**: skills, rules, agents, commands, hooks, MCP configs
-- CLI harness configurations for 12 AI coding tools
-- Install and update scripts
-- **Shared runtime modules**: LaraSkills root resolver and user configuration
-
-The full **knowledge intelligence layer** (knowledge/, intelligence/, agent/, meta/, tools/) is available from the [GitHub repository](https://github.com/elmochilyas/laraskills) but is not included in the npm package to keep it lightweight.
-
-## Laravel 13
-
-Targets **Laravel 13** (PHP 8.3+, Pest 4).
-
-Key features:
-- PHP 8 attribute-driven models (`#[Table]`, `#[Fillable]`, `#[Hidden]`, `#[Casts]`)
-- Pest 4 first-class test framework with PHP Attribute Output (PAO)
-- Queue job attributes (`#[Connection]`, `#[Tries]`, `#[Timeout]`)
-- Console command attributes (`#[AsCommand]`)
-- Pest 4 browser testing with Playwright
-- Horizon Redis Cluster support
-
-## Twelve Skills
-
-### laravel-patterns
-Architecture: modular domains, Actions/Services/DTOs, Eloquent optimization, attribute models, Form Requests, API Resources, Queues, Events, Caching, Policies, Pipeline, Service container, Rate limiting
-
-### laravel-tdd
-Pest 4: Feature/Unit 80/20 split, Model factories, HTTP tests, Auth tests, Laravel fakes (Http/Mail/Queue/Storage/Event/Bus), Architecture tests, Datasets, Snapshot testing, Parallel testing, CI
-
-### laravel-security
-Mass assignment, SQL injection, XSS/Blade, CSRF, Breeze/Fortify, Gates/Polices, FormRequest, Rate limiting, HSTS/CSP headers, Session security, CORS, File uploads, composer audit, APP_KEY rotation, Production hardening
-
-### laravel-core-internals
-Service Container, Dependency Injection, Auto Resolution, Contextual Binding, Tagged Services, Service Lifetimes (Singleton/Scoped/Transient), Service Providers (Register/Boot lifecycle, Deferred, Dynamic loading), Facades (Internals, Testing, Anti-patterns, Custom), Request Lifecycle (Middleware Pipeline, Route Resolution, Controller Dispatching, Response Generation), Contracts (Interface-first, Swappable implementations, LSP)
-
-### laravel-eloquent
-Advanced Eloquent: relationships (morph, polymorphic many-to-many, HasOneThrough, HasManyThrough), performance (N+1 prevention, eager constraints, selective columns, aggregate relationships), model design (DTOs, Value Objects, Rich Domain Models), advanced features (custom builders, global/local scopes, query macros, custom/encrypted/enum casts), events (observers, domain events, event sourcing)
-
-### laravel-database
-Database engineering for both MySQL and PostgreSQL: SQL mastery (CTEs, window functions, recursive CTEs, UPSERT, RETURNING, GROUP BY extensions), query plans (EXPLAIN ANALYZE, FORMAT=JSON), index design (composite, partial, covering, functional, GIN/GiST/BRIN/HNSW, FULLTEXT, SPATIAL, invisible, descending), full-text search (whereFullText, Scout, BOOLEAN MODE), database scaling (read replicas, partitioning, sharding, PgBouncer, ProxySQL), multi-tenant strategies, transactions (pessimistic locking, gap locks, isolation levels, deadlock prevention, retry), PostgreSQL (JSONB, GIN, materialized views, triggers, functions, arrays, range types), MySQL (InnoDB, utf8mb4, JSON, ProxySQL, Group Replication, Performance Schema), Laravel 13 vector search (whereVectorSimilarTo, pgvector, embeddings, HNSW, reranking, hybrid full-text + vector)
-
-### laravel-api-rest
-REST API architecture: REST principles (resources over actions, HTTP methods, status codes), HATEOAS hypermedia links, API versioning (URL-based, header negotiation, deprecation strategy), resource transformation (API Resources, conditional attributes, consistent envelopes), pagination strategies (offset, cursor, length-aware, decision matrix), enterprise API checklist
-
-### laravel-api-jsonapi
-JSON:API specification: Laravel 13 native JsonApiResource, attribute definition (simple list, closure-wrapped, sparse fieldsets), relationship mapping, compound documents with includes, whitelisting/limiting include depth, self/relationship/top-level links, meta objects, JSON:API error handling, pagination for JSON:API (page-based, cursor), test patterns
-
-### laravel-api-graphql
-GraphQL with Lighthouse: schema-first design (SDL), directives (@all, @find, @paginate, @create, @update, @delete, @hasMany, @belongsTo, @rules, @can, @canModel), thin resolver pattern with Action delegation, N+1 prevention with DataLoader, query complexity protection (max depth, max complexity), subscriptions (Pusher), GraphQL Federation (@key, @external, @shareable, @provides, @requires), validation, authorization via policies, testing
-
-### laravel-api-grpc
-gRPC and Protocol Buffers for Laravel: proto syntax and field numbering optimization, RoadRunner gRPC server configuration, service implementation (unary, server streaming, bidirectional), gRPC interceptors (logging, metrics, auth), client integration, error handling with gRPC status codes, health checks, schema evolution rules, testing
-
-### laravel-api-microservices
-Internal microservice architecture: service boundaries (one domain per service), database ownership (no direct cross-service DB access), communication strategy (events preferred, gRPC, REST), event-driven integration (event catalog, publishing, cross-service listeners), saga pattern for distributed transactions (orchestration/choreography, compensating actions), health checks, structured logging, distributed tracing, deployment
-
-### laravel-authentication
-Authentication & authorization: Sanctum, Passport, OAuth2, OIDC, JWT, Policies, Gates, Roles, Permissions, Multi-tenant, SSO, Enterprise IAM, Zero-trust, MFA
-
-## CLI Harness Support
-
-| Tool | Config |
-|------|--------|
-| OpenCode | `.opencode/opencode.json` |
-| Claude Code | `.claude/settings.json` |
-| Cursor | `.cursor/rules.mdc` |
-| Gemini CLI | `.gemini/instructions.md` |
-| Codex CLI | `.codex/instructions.md` |
-| GitHub Copilot | `.github/copilot-instructions.md` |
-| VS Code | `.vscode/settings.json` / `.vscode/extensions.json` |
-| Zed | `.zed/settings.json` |
-| Trae | `.trae/rules.md` |
-| Qwen | `.qwen/instructions.md` |
-| CodeBuddy | `.codebuddy/instructions.md` |
-| Kiro | `.kiro/instructions.md` |
-
-## Deterministic Retrieval CLI (Phase 11)
-
-The LaraSkills retrieval CLI provides deterministic, explainable access to the knowledge intelligence layer:
+You can use `LARASKILLS_ROOT` instead of persisted setup:
 
 ```bash
-# Retrieve a context bundle for a task
-npx laraskills retrieve "Build a multi-tenant REST API using Sanctum and queued notifications"
+export LARASKILLS_ROOT=/path/to/laraskills
+```
 
-# Compact mode for quick routing
-npx laraskills retrieve "Optimize an N+1 query" --mode compact
+PowerShell:
 
-# Search for knowledge units
-npx laraskills search "Policies versus Gates"
+```powershell
+$env:LARASKILLS_ROOT = 'C:\path\to\laraskills'
+```
 
-# Get knowledge unit details
-npx laraskills get security-identity-engineering/authentication/sanctum-spa-authentication
+Preferred root sources are `--laraskills-root`, `LARASKILLS_ROOT`, saved user configuration, and current-directory walk-up. Legacy ECC inputs remain temporary fallbacks.
 
-# Validate intelligence layer integrity
+### Installation profiles
+
+| Profile | Contents |
+|---|---|
+| `minimal` | Three starter skills plus shared rules, hooks, MCP configs, and the Artisan agent |
+| `core` | Six core skills plus shared rules, hooks, MCP configs, and five agents; this is the default |
+| `full` | Core profile plus LaraSkills commands and bundled AI-tool harness configurations |
+
+Use `npx laraskills install --help` to inspect the current profile summary.
+
+### Skills-only alternative
+
+To install skills through the Vercel Skills CLI instead of the LaraSkills project installer:
+
+```bash
+npx skills add elmochilyas/laraskills
+```
+
+## Quickstart
+
+From a Laravel project:
+
+```bash
+# Install the package and operating layer
+npm install --save-dev laraskills@beta
+npx laraskills install --profile core
+
+# Configure the full knowledge checkout
+git clone https://github.com/elmochilyas/laraskills.git ../laraskills-source
+npx laraskills setup --laraskills-root ../laraskills-source
+
+# Confirm the installation and intelligence graph
+npx laraskills doctor
 npx laraskills validate
+
+# Retrieve focused guidance for a real task
+npx laraskills retrieve \
+  "Build a Laravel 13 products API with Form Requests, policies, API Resources, pagination, and Pest tests" \
+  --mode compact
 ```
 
-**Modes:** `compact` (quick routing), `standard` (default), `deep` (detailed research)
+Use the returned canonical knowledge-unit IDs with `get --include-content` when deeper guidance is needed.
 
-**Output:** `markdown` (human-readable) or `json` (machine-readable, MCP-ready)
+## Core commands
 
-**Root discovery:** `--laraskills-root <path>` or `LARASKILLS_ROOT` environment variable
+All commands support the local binary through `npx laraskills`. Run `npx laraskills <command> --help` for command-specific usage.
 
-For full documentation, see `docs/retrieval-cli-guide.md`.
+### `install`
 
-## Local MCP Server (Phase 11.2)
+Install LaraSkills operating-layer files into the current project:
 
-A thin local stdio MCP server (`laraskills-mcp`) exposes the same retrieval core to MCP-capable agents (OpenCode, Claude Code, Cursor, etc.). It is a **read-only, deterministic adapter** — no duplicate ranking logic, no graph changes.
-
-```jsonc
-// .opencode/opencode.json (or examples/opencode-mcp.local.jsonc)
-{
-  "mcp": {
-    "laraskills": {
-      "type": "local",
-      "command": ["node", "C:\\path\\to\\laraskills\\scripts\\laraskills-mcp.mjs"],
-      "enabled": true,
-      "timeout": 10000,
-      "environment": { "LARASKILLS_ROOT": "C:\\path\\to\\laraskills" }
-    }
-  }
-}
+```bash
+npx laraskills install
+npx laraskills install --profile minimal
+npx laraskills install --profile full
 ```
 
-Five read-only tools:
+### `doctor`
+
+Diagnose root resolution, intelligence files, retrieval readiness, and the MCP adapter:
+
+```bash
+npx laraskills doctor
+npx laraskills doctor --laraskills-root /path/to/laraskills
+```
+
+A release-ready setup reports `Status: HEALTHY`.
+
+### `validate`
+
+Validate knowledge-unit records, graph edges, aliases, relationships, and structural integrity:
+
+```bash
+npx laraskills validate
+npx laraskills validate --format json
+```
+
+### `retrieve`
+
+Build a deterministic context bundle for a Laravel task:
+
+```bash
+npx laraskills retrieve "Optimize an Eloquent N+1 query" --mode compact
+npx laraskills retrieve "Design a multi-tenant REST API" --mode standard --format json
+```
+
+Modes are `compact`, `standard` (default), and `deep`.
+
+### `search`
+
+Find ranked knowledge units and their canonical IDs:
+
+```bash
+npx laraskills search "Sanctum tenant authentication"
+npx laraskills search "composite indexes" --domain data-storage-systems --limit 10
+```
+
+### `get --include-content`
+
+Inspect one canonical knowledge unit. Add `--include-content` to include its full standardized knowledge document:
+
+```bash
+npx laraskills get \
+  security-identity-engineering/authorization/policies-model \
+  --include-content
+```
+
+JSON output is available with `--format json`.
+
+## Building blocks
+
+| Building block | Purpose |
+|---|---|
+| **Profiles** | Select how much of the operating layer is installed in a project |
+| **Skills** | Deep, task-oriented Laravel workflows and implementation guidance |
+| **Rules** | Always-follow engineering, security, testing, PHP, web, and Laravel conventions |
+| **Agents** | Specialized role definitions for areas such as Eloquent, migrations, databases, APIs, and identity |
+| **Hooks** | Agent lifecycle and quality automations that warn, validate, or block unsafe operations |
+| **MCP configs** | Ready-to-adapt server definitions for Laravel documentation and dependency security tooling |
+
+The repository also includes seven reusable command references and harness configurations for twelve AI coding tools.
+
+## Knowledge and retrieval
+
+The knowledge layer spans 21 engineering domains and includes:
+
+| Metric | Count |
+|---|---:|
+| Knowledge units | 2,321 |
+| Knowledge artifacts per unit | 6 |
+| Dependency edges | 427 |
+| Relationship edges | 3,513 |
+| Machine-readable JSON files | 10 |
+| Cross-repository Markdown indexes | 7 |
+
+Each knowledge unit can provide standardized knowledge, rules, skills, decision trees, anti-patterns, and a validation checklist.
+
+Start with:
+
+- [`agent/domain-routing-index.md`](agent/domain-routing-index.md)
+- [`agent/task-to-skill-map.md`](agent/task-to-skill-map.md)
+- [`agent/retrieval-guide.md`](agent/retrieval-guide.md)
+- [`docs/retrieval-cli-guide.md`](docs/retrieval-cli-guide.md)
+
+## Local MCP server
+
+`laraskills-mcp` is a read-only stdio server over the same deterministic retrieval core:
+
+```bash
+npx laraskills-mcp --laraskills-root /path/to/laraskills
+```
+
+It exposes five tools:
 
 | Tool | Purpose |
-|------|---------|
-| `retrieve_context_bundle` | Smallest useful bundle for a Laravel task |
-| `search_ecc` | Ranked KU search |
-| `get_knowledge_unit` | Inspect one KU by ID |
-| `get_graph_context` | Prerequisites + related topics in one call |
-| `validate_ecc` | Validate intelligence layer integrity |
+|---|---|
+| `retrieve_context_bundle` | Retrieve the smallest useful context bundle for a task |
+| `search_ecc` | Search ranked knowledge units |
+| `get_knowledge_unit` | Inspect one knowledge unit |
+| `get_graph_context` | Load prerequisites and related topics |
+| `validate_ecc` | Validate intelligence integrity |
 
-See:
+See [`docs/mcp-server-guide.md`](docs/mcp-server-guide.md) and [`docs/mcp-tool-reference.md`](docs/mcp-tool-reference.md).
 
-- `docs/mcp-server-guide.md` — architecture, stdio rule, lightweight strategy
-- `docs/mcp-opencode-setup.md` — OpenCode configuration snippets
-- `docs/mcp-tool-reference.md` — per-tool schema and return shape
-- `docs/mcp-troubleshooting.md` — actionable error recovery
+## Validation evidence
+
+Phase 17 validated the packed beta in real Laravel 13 applications:
+
+- **Fresh Laravel project:** package install, setup, doctor, graph validation, retrieval, and a complete policy-protected CRUD API workflow passed. The generated application finished with 11 Pest tests and 168 assertions. See the [fresh-project report](docs/integration-tests/phase-17/fresh-laravel-project/report.md).
+- **Existing Laravel project:** LaraSkills was added to a non-empty Breeze/Pest application without overwriting existing application files. The baseline had 29 tests and 73 assertions; the final application had 32 tests and 82 assertions, with policy-authorized note archiving and no regressions. See the [existing-project report](docs/integration-tests/phase-17/existing-laravel-project/report.md).
+- **Release gates:** the corrected artifact passed the LaraSkills test suite, all 72 retrieval benchmarks, packed-install verification, MCP smoke verification, and intelligence validation.
+
+The existing-project coverage command could not run because that PHP environment had neither Xdebug nor PCOV; behavioral tests and the remaining release gates passed.
+
+## Package contents
+
+The npm package includes the operating layer, CLI, MCP adapter, runtime modules, install/update scripts, and AI-tool harness configurations. The full knowledge intelligence layer remains in the GitHub repository to keep npm installation fast.
+
+Use the npm package for project installation and the Git checkout as the retrieval root.
+
+## Development verification
+
+Release-readiness checks:
+
+```bash
+npm test
+npm run benchmark
+npm run verify:packed-install
+npm run verify:mcp
+node scripts/laraskills.mjs validate --format json --laraskills-root .
+```
+
+CI runs the core suite across Windows, Ubuntu, and macOS on supported Node versions.
+
+## Migration from Laravel ECC
+
+Laravel ECC was renamed to LaraSkills. Use the `laraskills` package, `laraskills` CLI, `laraskills-mcp` server, and `LARASKILLS_ROOT`.
+
+Temporary `laravel-ecc`, `laravel-ecc-mcp`, `--ecc-root`, and `ECC_ROOT` compatibility aliases remain available. See the [migration guide](docs/migrations/laravel-ecc-to-laraskills.md).
 
 ## License
 
-MIT — based on [ECC](https://github.com/affaan-m/ECC) by Affaan Mustafa.
+MIT. LaraSkills builds on [ECC](https://github.com/affaan-m/ECC) by Affaan Mustafa. See [LICENSE](LICENSE).
