@@ -5,6 +5,8 @@
 [![License](https://img.shields.io/badge/license-MIT-blue)](LICENSE)
 [![PHP](https://img.shields.io/badge/PHP-%3E%3D8.3-777bb4)](https://php.net)
 [![Laravel](https://img.shields.io/badge/Laravel-%3E%3D13-red)](https://laravel.com)
+[![PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen)](CONTRIBUTING.md)
+[![Contributions Welcome](https://img.shields.io/badge/contributions-welcome-brightgreen)](CONTRIBUTING.md)
 
 Laravel 13 skills, rules, agents, retrieval tooling, and MCP integration for AI-assisted development.
 
@@ -290,6 +292,26 @@ See the [CHANGELOG](CHANGELOG.md) for a full history of changes. Notable release
 Found a bug, have a feature request, or want to contribute? Open an issue on the [GitHub repository](https://github.com/elmochilyas/laraskills/issues). We track open work, planned features, and community contributions there.
 
 **Beta testers:** See the [beta testing guide](docs/feedback/beta-testing-guide.md) for instructions on testing LaraSkills in your Laravel project and reporting your experience. The [tester checklist](docs/feedback/tester-checklist.md) provides a structured walkthrough.
+
+## Support LaraSkills
+
+LaraSkills is an open-source project built and maintained in our spare time.
+Your sponsorship helps us dedicate more time to:
+
+- **New knowledge units** — Expanding coverage across more Laravel engineering
+  domains.
+- **Retrieval improvements** — Making the CLI and MCP server faster and more
+  accurate.
+- **MCP enhancements** — Better tooling for OpenCode, Claude Code, Cursor,
+  Copilot, and every supported AI agent.
+- **Documentation** — Clearer guides, more examples, and better onboarding.
+- **Ongoing maintenance** — Keeping up with Laravel releases, dependency
+  updates, and community issues.
+
+If LaraSkills helps you ship better Laravel code faster, consider supporting the
+project via [GitHub Sponsors](https://github.com/sponsors/elmochilyas). Every
+contribution — whether financial, a bug report, a pull request, or a feature
+suggestion — makes a difference.
 
 ## Migration from Laravel ECC
 
