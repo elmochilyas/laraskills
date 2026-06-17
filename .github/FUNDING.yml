@@ -1,15 +1,16 @@
-# Funding
+# Funding configuration for LaraSkills
+# GitHub displays a Sponsor button when this file exists on the default branch.
 
 github: [elmochilyas]
 
-# Other funding platforms (uncomment to enable):
-# patreon: # your-username
-# open_collective: # your-username
-# ko_fi: # your-username
-# tidelift: # npm/package-name
-# community_bridge: # project-name
-# liberapay: # your-username
-# issuehunt: # your-username
-# lfx_crowdfunding: # your-username
-# polar: # your-username
-# custom: # ['https://example.com', 'https://example2.com']
+custom:
+  - "https://paypal.me/elgatoVIP"
+
+# Optional funding platforms:
+# patreon: your-username
+# open_collective: your-username
+# ko_fi: your-username
+# liberapay: your-username
+# polar: your-username
+# issuehunt: your-username
+# tidelift: platform/package-name
