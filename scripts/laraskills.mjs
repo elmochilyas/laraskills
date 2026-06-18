@@ -39,6 +39,11 @@ function warn(msg) { console.warn(`[LaraSkills] WARNING: ${msg}`); }
 function err(msg) { console.error(`[LaraSkills] ERROR: ${msg}`); process.exit(1); }
 function logRet(msg) { console.log(msg); }
 
+function printVersion() {
+  console.log(`LaraSkills v${pkg.version}`);
+  process.exit(0);
+}
+
 function detectTools(target) {
   const tools = [];
   if (existsSync(join(target, '.opencode'))) tools.push('opencode');
@@ -749,72 +754,64 @@ function showHelp() {
   lines.push('');
   lines.push(`LaraSkills v${pkg.version}`);
   lines.push('');
-  lines.push('The npm package contains the CLI and MCP adapter.');
-  lines.push('Retrieval requires access to a full LaraSkills checkout.');
-  lines.push('Run `laraskills setup` to configure it.');
+  lines.push('Laravel knowledge for AI coding agents.');
   lines.push('');
-  lines.push('Onboarding:');
-  lines.push('  laraskills setup --laraskills-root "<path>"   Configure LaraSkills root');
-  lines.push('  laraskills doctor                             Diagnose configuration');
+  lines.push('Quick start:');
+  lines.push('  npm install -g laraskills');
+  lines.push('  laraskills setup --laraskills-root "<path>"   Connect to the full checkout');
+  lines.push('  cd my-laravel-project');
+  lines.push('  laraskills init                               Prepare the project');
+  lines.push('  laraskills retrieve "<task>"                  Get context for an AI agent');
   lines.push('');
-  lines.push('Project installation:');
-  lines.push('  laraskills install [--profile core|full|minimal]   Install LaraSkills');
-  lines.push('  laraskills add <component>                          Add a component');
-  lines.push('  laraskills update                                   Update to latest version');
+  lines.push('Machine setup:');
+  lines.push('  setup       Connect the CLI/MCP to the full LaraSkills checkout');
+  lines.push('  doctor      Diagnose configuration and readiness');
+  lines.push('');
+  lines.push('Project commands:');
+  lines.push('  init        Prepare the current Laravel project (recommended)');
+  lines.push('  install     Install LaraSkills project files (legacy, use init instead)');
+  lines.push('  update      Refresh installed LaraSkills project files');
+  lines.push('  add         Add one component (skill or agent)');
   lines.push('');
   lines.push('Retrieval commands:');
-  lines.push('  laraskills retrieve "<query>" [options]             Retrieve a context bundle');
-  lines.push('  laraskills search "<query>" [options]               Search knowledge units');
-  lines.push('  laraskills get <ku-id> [options]                    Get knowledge unit details');
-  lines.push('  laraskills prerequisites <ku-id> [options]          Get prerequisites');
-  lines.push('  laraskills related <ku-id> [options]                Get related topics');
-  lines.push('  laraskills validate [options]                       Validate intelligence layer');
+  lines.push('  retrieve    Retrieve a task-focused Laravel context bundle');
+  lines.push('  search      Search knowledge units');
+  lines.push('  get         Show one knowledge unit');
+  lines.push('  prerequisites  Show prerequisite knowledge');
+  lines.push('  related     Show related knowledge');
+  lines.push('  validate    Validate the intelligence layer');
+  lines.push('');
+  lines.push('Advanced:');
+  lines.push('  --help, -v, --version');
   lines.push('');
   lines.push('Options:');
-  lines.push('  --help                                                Show this help');
-  lines.push('  laraskills <command> --help                           Show command help');
+  lines.push('  --help        Show this help');
+  lines.push('  -v, --version Show version');
+  lines.push('  <command> --help  Show command-specific help');
   lines.push('');
-  lines.push('Retrieval Options:');
-  lines.push('  --mode compact|standard|deep              Context bundle mode (default: standard)');
-  lines.push('  --format markdown|json                    Output format (default: markdown)');
-  lines.push('  --laraskills-root <path>                  Path to LaraSkills repository root');
-  lines.push('  --ecc-root <path>                         Deprecated compatibility alias');
-  lines.push('  --max-kus <number>                        Max knowledge units to include');
-  lines.push('  --max-rules <number>                      Max rules to include');
-  lines.push('  --max-skills <number>                     Max skills to include');
-  lines.push('  --max-related <number>                    Max related topics (retrieve)');
-  lines.push('  --max-prerequisites <number>              Max prerequisites (retrieve)');
-  lines.push('  --prerequisite-depth <number>             Prerequisite graph depth (default: 1)');
-  lines.push('  --related-depth <number>                  Related topic graph depth (default: 1)');
-  lines.push('  --budget <number>                         Estimated token budget');
-  lines.push('  --domain <domain-id>                      Filter by domain (search only)');
-  lines.push('  --limit <number>                          Result limit (search/prerequisites/related)');
-  lines.push('  --depth <number>                          Graph depth (prerequisites/related)');
-  lines.push('  --include-content                         Include Markdown content (get only)');
+  lines.push('Retrieval options:');
+  lines.push('  --mode compact|standard|deep          Context bundle mode (default: standard)');
+  lines.push('  --format markdown|json                Output format (default: markdown)');
+  lines.push('  --laraskills-root <path>              Path to LaraSkills checkout');
+  lines.push('  --ecc-root <path>                     Deprecated alias for --laraskills-root');
+  lines.push('  --max-kus, --max-rules, --max-skills  Result limits');
+  lines.push('  --budget <number>                     Estimated token budget');
+  lines.push('  --domain <domain-id>                  Filter by domain');
+  lines.push('  --include-content                     Include Markdown content (get only)');
   lines.push('');
-  lines.push('Profiles:');
-  lines.push('  minimal   3 starter skills + shared rules, hooks, MCP configs, and Artisan agent');
-  lines.push('  core      6 core skills + shared rules, hooks, MCP configs, and 5 agents (default)');
+  lines.push('Profiles (init/install):');
+  lines.push('  minimal   3 starter skills + rules, hooks, MCP configs, Artisan agent');
+  lines.push('  core      6 core skills + rules, hooks, MCP configs, 5 agents (default)');
   lines.push('  full      Core profile + commands and harness configs');
   lines.push('');
-  lines.push('Components:');
-  lines.push('  laravel-patterns        Laravel 13 architecture patterns (Actions, DTOs, Eloquent, Queues)');
-  lines.push('  laravel-tdd             Laravel 13 testing with Pest 4 (feature tests, fakes, architecture)');
-  lines.push('  laravel-security        Laravel 13 security (mass assignment, XSS, CSRF, Gates, rate limiting)');
-  lines.push('  laravel-core-internals  Laravel 13 core internals (Container, DI, Providers, Facades, Lifecycle, Contracts)');
-  lines.push('  laravel-artisan         Artisan command generation agent');
-  lines.push('  laravel-eloquent        Eloquent ORM optimization agent');
-  lines.push('  laravel-database        Database engineering skill (SQL, indexing, PostgreSQL, vector search)');
-  lines.push('  laravel-migration       Database migration design agent');
-  lines.push('  laravel-container       Container, DI, provider, facade architecture agent');
+  lines.push('Examples:');
+  lines.push('  laraskills init');
+  lines.push('  laraskills init --profile minimal');
+  lines.push('  laraskills retrieve "Add authorization policy and Pest tests"');
+  lines.push('  laraskills get "security-identity-engineering/authorization/policies-model" --include-content');
   lines.push('');
-  lines.push('Also install via install scripts:');
-  lines.push('  ./install.ps1 --profile minimal|core|full   Windows');
-  lines.push('  ./install.sh --profile minimal|core|full    macOS/Linux');
-  lines.push('');
-  lines.push('Root environment variables:');
-  lines.push('  LARASKILLS_ROOT is preferred.');
-  lines.push('  ECC_ROOT remains a temporary compatibility fallback.');
+  lines.push('Environment:');
+  lines.push('  LARASKILLS_ROOT   Path to the LaraSkills checkout');
   lines.push('');
   console.log(lines.join('\n'));
 }
@@ -822,102 +819,229 @@ function showHelp() {
 function showCommandHelp(command) {
   const help = {
     setup: [
+      '',
       'Usage: laraskills setup --laraskills-root <path>',
       '',
-      'Configure the full LaraSkills checkout used by retrieval and MCP commands.',
+      'Configure the CLI and MCP server to use a full LaraSkills checkout.',
+      'This is a one-time machine setup step.',
+      '',
+      'Options:',
+      '  --laraskills-root <path>   Path to the cloned LaraSkills repository',
+      '  --ecc-root <path>          Deprecated alias',
+      '',
+      'Examples:',
+      '  laraskills setup --laraskills-root "C:\\path\\to\\laraskills"',
+      '',
+      'See also:',
+      '  laraskills doctor    Diagnose configuration and readiness',
+      '',
     ],
     doctor: [
+      '',
       'Usage: laraskills doctor [--laraskills-root <path>]',
       '',
-      'Diagnose package configuration, intelligence files, retrieval, and MCP readiness.',
-    ],
-    install: [
-      'Usage: laraskills install [--profile minimal|core|full]',
+      'Diagnose the package configuration, intelligence file availability,',
+      'retrieval readiness, and MCP adapter health.',
       '',
-      'Install the LaraSkills operating layer into the current project.',
+      'A release-ready setup reports Status: HEALTHY.',
+      '',
+      'Options:',
+      '  --laraskills-root <path>   Override the LaraSkills checkout path',
+      '',
+      'Examples:',
+      '  laraskills doctor',
+      '  laraskills doctor --laraskills-root "C:\\path\\to\\laraskills"',
+      '',
+    ],
+    init: [
+      '',
+      'Usage: laraskills init [--profile minimal|core|full]',
+      '',
+      'Prepare the current Laravel project for LaraSkills by installing',
+      'skills, agents, rules, hooks, MCP configs, and a .laraskills-state.json file.',
+      '',
+      'This is the recommended command for project setup.',
       '',
       'Profiles:',
       '  minimal   3 starter skills + shared rules, hooks, MCP configs, and Artisan agent',
       '  core      6 core skills + shared rules, hooks, MCP configs, and 5 agents (default)',
       '  full      Core profile + commands and harness configs',
+      '',
+      'Examples:',
+      '  laraskills init',
+      '  laraskills init --profile minimal',
+      '  laraskills init --profile full',
+      '',
+    ],
+    install: [
+      '',
+      'Usage: laraskills install [--profile minimal|core|full]',
+      '',
+      'Install LaraSkills project files into the current project.',
+      '',
+      'Note: `laraskills init` is the recommended command for new users.',
+      '  install is kept for backward compatibility and behaves identically.',
+      '',
+      'Profiles:',
+      '  minimal   3 starter skills + shared rules, hooks, MCP configs, and Artisan agent',
+      '  core      6 core skills + shared rules, hooks, MCP configs, and 5 agents (default)',
+      '  full      Core profile + commands and harness configs',
+      '',
+      'Examples:',
+      '  laraskills install',
+      '  laraskills install --profile core',
+      '',
     ],
     add: [
+      '',
       'Usage: laraskills add <component>',
       '',
       'Add one supported skill or agent to the current project.',
+      '',
+      'Valid components:',
+      '  laravel-patterns, laravel-tdd, laravel-security, laravel-core-internals,',
+      '  laravel-eloquent, laravel-database, laravel-artisan, laravel-migration,',
+      '  laravel-container',
+      '',
+      'Examples:',
+      '  laraskills add laravel-eloquent',
+      '',
     ],
     update: [
+      '',
       'Usage: laraskills update',
       '',
-      'Update an existing LaraSkills installation using its saved profile.',
+      'Refresh the LaraSkills files already installed inside the current project.',
+      'This updates skills, agents, rules, hooks, MCP configs, and state file',
+      'to match the current CLI package version.',
+      '',
+      'Note: To update the CLI package itself, use:',
+      '  npm install -g laraskills     (global install)',
+      '  npm update -g laraskills      (global update)',
+      '  npm install --save-dev laraskills  (local project update)',
+      '',
+      'Examples:',
+      '  laraskills update',
+      '',
     ],
     retrieve: [
+      '',
       'Usage: laraskills retrieve "<query>" [options]',
       '',
       'Retrieve a ranked context bundle for a Laravel engineering task.',
+      'Returns knowledge units, rules, skills, decision trees, anti-patterns,',
+      'and checklists relevant to the task.',
       '',
       'Options:',
-      '  --mode compact|standard|deep',
-      '  --format markdown|json',
-      '  --laraskills-root <path>',
-      '  --max-kus <number>',
-      '  --max-rules <number>',
-      '  --max-skills <number>',
-      '  --budget <number>',
+      '  --mode compact|standard|deep          Bundle size (default: standard)',
+      '  --format markdown|json                Output format (default: markdown)',
+      '  --laraskills-root <path>              Path to LaraSkills checkout',
+      '  --max-kus <number>                    Max knowledge units',
+      '  --max-rules <number>                  Max rules',
+      '  --max-skills <number>                 Max skills',
+      '  --budget <number>                     Estimated token budget',
+      '',
+      'Examples:',
+      '  laraskills retrieve "Build a products API with Form Requests and policies" --mode compact',
+      '  laraskills retrieve "Optimize Eloquent N+1 query" --mode standard --format json',
+      '',
     ],
     search: [
+      '',
       'Usage: laraskills search "<query>" [options]',
       '',
       'Search ranked knowledge units and return canonical IDs.',
       '',
       'Options:',
-      '  --format markdown|json',
-      '  --limit <number>',
-      '  --domain <domain-id>',
-      '  --laraskills-root <path>',
+      '  --format markdown|json                Output format (default: markdown)',
+      '  --limit <number>                      Max results (default: 20)',
+      '  --domain <domain-id>                  Filter by engineering domain',
+      '  --laraskills-root <path>              Path to LaraSkills checkout',
+      '',
+      'Examples:',
+      '  laraskills search "Sanctum tenant authentication"',
+      '  laraskills search "composite indexes" --domain data-storage-systems --limit 10',
+      '',
     ],
     get: [
+      '',
       'Usage: laraskills get <knowledge-unit-id> [options]',
       '',
-      'Inspect one canonical knowledge unit.',
+      'Inspect one canonical knowledge unit by its ID.',
       '',
       'Options:',
-      '  --include-content',
-      '  --format markdown|json',
-      '  --laraskills-root <path>',
+      '  --include-content                     Include the full knowledge document',
+      '  --format markdown|json                Output format (default: markdown)',
+      '  --laraskills-root <path>              Path to LaraSkills checkout',
+      '',
+      'Examples:',
+      '  laraskills get security-identity-engineering/authorization/policies-model',
+      '  laraskills get security-identity-engineering/authorization/policies-model --include-content',
+      '',
     ],
     prerequisites: [
+      '',
       'Usage: laraskills prerequisites <knowledge-unit-id> [options]',
       '',
-      'Show prerequisite knowledge units.',
-      '',
-      'Options: --depth <number> --limit <number> --format markdown|json',
-    ],
-    related: [
-      'Usage: laraskills related <knowledge-unit-id> [options]',
-      '',
-      'Show related knowledge units.',
-      '',
-      'Options: --depth <number> --limit <number> --format markdown|json',
-    ],
-    validate: [
-      'Usage: laraskills validate [options]',
-      '',
-      'Validate the intelligence graph and machine-readable indexes.',
+      'Show prerequisite knowledge units for the given KU.',
       '',
       'Options:',
+      '  --depth <number>                      Graph expansion depth (default: 1)',
+      '  --limit <number>                      Max results (default: 20)',
       '  --format markdown|json',
       '  --laraskills-root <path>',
+      '',
+      'Examples:',
+      '  laraskills prerequisites security-identity-engineering/authorization/policies-model',
+      '',
+    ],
+    related: [
+      '',
+      'Usage: laraskills related <knowledge-unit-id> [options]',
+      '',
+      'Show related knowledge units for the given KU.',
+      '',
+      'Options:',
+      '  --depth <number>                      Graph expansion depth (default: 1)',
+      '  --limit <number>                      Max results (default: 20)',
+      '  --format markdown|json',
+      '  --laraskills-root <path>',
+      '',
+      'Examples:',
+      '  laraskills related security-identity-engineering/authorization/policies-model',
+      '',
+    ],
+    validate: [
+      '',
+      'Usage: laraskills validate [options]',
+      '',
+      'Validate the intelligence graph: knowledge unit records, graph edges,',
+      'aliases, relationships, and structural integrity.',
+      '',
+      'Options:',
+      '  --format markdown|json                Output format (default: markdown)',
+      '  --laraskills-root <path>              Path to LaraSkills checkout',
+      '',
+      'Examples:',
+      '  laraskills validate',
+      '  laraskills validate --format json',
+      '',
     ],
   };
 
   if (!help[command]) return false;
-  console.log(`\n${help[command].join('\n')}\n`);
+  console.log(help[command].join('\n'));
   return true;
 }
 
 const args = process.argv.slice(2);
 const target = process.cwd();
+
+// Version flags — must be checked before anything else
+if (args.length === 1 && (args[0] === '-v' || args[0] === '--version')) {
+  printVersion();
+}
+
 const commandHelpRequested = args.slice(1).some(arg => arg === '--help' || arg === '-h');
 
 if (args.length === 0 || args[0] === '--help' || args[0] === '-h') {
@@ -930,8 +1054,18 @@ if (args.length === 0 || args[0] === '--help' || args[0] === '-h') {
   cmdSetup(args.slice(1));
 } else if (args[0] === 'doctor') {
   cmdDoctor(args.slice(1));
+} else if (args[0] === 'init') {
+  // init is the recommended command; delegates to install with profile support
+  const profileFlag = args.indexOf('--profile');
+  const profile = profileFlag !== -1 ? (args[profileFlag + 1] || 'core') : 'core';
+  install(target, profile);
 } else if (args[0] === 'install') {
-  const profile = args[1] === '--profile' ? args[2] || 'core' : 'core';
+  // install is kept for backward compatibility
+  const profileFlag = args.indexOf('--profile');
+  const profile = profileFlag !== -1 ? (args[profileFlag + 1] || 'core') : 'core';
+  console.log('');
+  log('Tip: `laraskills init` is now the recommended command for preparing a project.');
+  console.log('');
   install(target, profile);
 } else if (args[0] === 'add') {
   const component = args[1];

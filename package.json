@@ -81,7 +81,7 @@
     "VERSION"
   ],
   "scripts": {
-    "postinstall": "node -e \"console.log('\\n  laraskills installed.\\n  Project setup: npx laraskills install --profile core\\n  Retrieval setup: npx laraskills setup --laraskills-root <path>\\n  Diagnostics: npx laraskills doctor\\n  MCP server: npx laraskills-mcp\\n')\"",
+    "postinstall": "node -e \"console.log('\\n  laraskills installed.\\n  Project setup: npx laraskills init\\n  Retrieval setup: npx laraskills setup --laraskills-root <path>\\n  Diagnostics: npx laraskills doctor\\n  MCP server: npx laraskills-mcp\\n')\"",
     "test": "node --test",
     "benchmark": "node tests/retrieval/run-benchmarks.mjs",
     "benchmark:performance": "node tests/retrieval/run-performance-benchmarks.mjs",
