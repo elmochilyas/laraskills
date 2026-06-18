@@ -2,7 +2,7 @@ import { describe, it, before } from 'node:test';
 import assert from 'node:assert';
 import { join, dirname } from 'node:path';
 import { fileURLToPath } from 'node:url';
-import { existsSync, mkdtempSync, rmSync } from 'node:fs';
+import { existsSync, mkdtempSync, rmSync, readFileSync } from 'node:fs';
 import { tmpdir } from 'node:os';
 import { execFileSync } from 'node:child_process';
 
@@ -161,5 +161,132 @@ describe('CLI Integration Smoke Tests', () => {
     assert.ok(result.explanation);
     assert.ok(result.bundle.query === 'Fix N+1 query');
     assert.ok(result.bundle.knowledgeUnits.length > 0);
+  });
+
+  // Phase 23: CLI UX tests
+  it('laraskills -v should print version', () => {
+    const cliPath = join(LARASKILLS_ROOT, 'scripts', 'laraskills.mjs');
+    const output = execFileSync(process.execPath, [cliPath, '-v'], { encoding: 'utf8' });
+    assert.ok(output.includes('LaraSkills v'));
+  });
+
+  it('laraskills --version should print version', () => {
+    const cliPath = join(LARASKILLS_ROOT, 'scripts', 'laraskills.mjs');
+    const output = execFileSync(process.execPath, [cliPath, '--version'], { encoding: 'utf8' });
+    assert.ok(output.includes('LaraSkills v'));
+  });
+
+  it('root --help should include init in project commands', () => {
+    const cliPath = join(LARASKILLS_ROOT, 'scripts', 'laraskills.mjs');
+    const output = execFileSync(process.execPath, [cliPath, '--help'], { encoding: 'utf8' });
+    assert.ok(output.includes('init'));
+  });
+
+  it('root --help should include update in project commands', () => {
+    const cliPath = join(LARASKILLS_ROOT, 'scripts', 'laraskills.mjs');
+    const output = execFileSync(process.execPath, [cliPath, '--help'], { encoding: 'utf8' });
+    assert.ok(output.includes('update'));
+  });
+
+  it('root --help should explain quick start flow (global install, setup, init, retrieve)', () => {
+    const cliPath = join(LARASKILLS_ROOT, 'scripts', 'laraskills.mjs');
+    const output = execFileSync(process.execPath, [cliPath, '--help'], { encoding: 'utf8' });
+    assert.ok(output.includes('npm install -g laraskills'));
+    assert.ok(output.includes('setup'));
+    assert.ok(output.includes('init'));
+    assert.ok(output.includes('retrieve'));
+  });
+
+  it('root --help should not over-emphasize deprecated ECC names', () => {
+    const cliPath = join(LARASKILLS_ROOT, 'scripts', 'laraskills.mjs');
+    const output = execFileSync(process.execPath, [cliPath, '--help'], { encoding: 'utf8' });
+    // The help should not prominently feature ECC in main command names
+    const eccRootLines = output.split('\n').filter(l => l.includes('ecc-root'));
+    assert.ok(eccRootLines.length <= 1, 'ECC references should be minimal in root help');
+  });
+
+  it('init --help should show purpose, usage, profiles, and example', () => {
+    const cliPath = join(LARASKILLS_ROOT, 'scripts', 'laraskills.mjs');
+    const output = execFileSync(process.execPath, [cliPath, 'init', '--help'], { encoding: 'utf8' });
+    assert.ok(output.includes('Usage:'));
+    assert.ok(output.includes('profiles') || output.includes('Profiles'));
+    assert.ok(output.includes('minimal'));
+    assert.ok(output.includes('core'));
+    assert.ok(output.includes('full'));
+    assert.ok(output.includes('init'));
+  });
+
+  it('update --help should clarify CLI update vs project update', () => {
+    const cliPath = join(LARASKILLS_ROOT, 'scripts', 'laraskills.mjs');
+    const output = execFileSync(process.execPath, [cliPath, 'update', '--help'], { encoding: 'utf8' });
+    assert.ok(output.includes('Usage:'));
+    assert.ok(output.includes('CLI package'));
+  });
+
+  it('all subcommand --help should show Usage: without executing', () => {
+    const cliPath = join(LARASKILLS_ROOT, 'scripts', 'laraskills.mjs');
+    const target = mkdtempSync(join(tmpdir(), 'laraskills-help-all-'));
+    const commands = ['setup', 'doctor', 'init', 'install', 'update', 'add', 'retrieve', 'search', 'get', 'validate', 'prerequisites', 'related'];
+
+    try {
+      for (const command of commands) {
+        const output = execFileSync(process.execPath, [cliPath, command, '--help'], {
+          cwd: target,
+          encoding: 'utf8',
+        });
+
+        assert.ok(output.includes('Usage:'), `${command} --help should include Usage:`);
+      }
+
+      assert.strictEqual(existsSync(join(target, '.laraskills-state.json')), false,
+        'No state file should be created by --help');
+    } finally {
+      rmSync(target, { recursive: true, force: true });
+    }
+  });
+
+  it('init --profile core should create expected files', () => {
+    const cliPath = join(LARASKILLS_ROOT, 'scripts', 'laraskills.mjs');
+    const target = mkdtempSync(join(tmpdir(), 'laraskills-init-core-'));
+
+    try {
+      execFileSync(process.execPath, [cliPath, 'init', '--profile', 'core'], {
+        cwd: target,
+        encoding: 'utf8',
+      });
+
+      assert.ok(existsSync(join(target, '.laraskills-state.json')), 'State file should exist');
+      assert.ok(existsSync(join(target, 'skills')), 'Skills directory should exist');
+      assert.ok(existsSync(join(target, 'rules')), 'Rules directory should exist');
+      assert.ok(existsSync(join(target, 'agents')), 'Agents directory should exist');
+
+      const state = JSON.parse(readFileSync(join(target, '.laraskills-state.json'), 'utf-8'));
+      assert.strictEqual(state.profile, 'core');
+    } finally {
+      rmSync(target, { recursive: true, force: true });
+    }
+  });
+
+  it('install --profile core should still work for backward compatibility', () => {
+    const cliPath = join(LARASKILLS_ROOT, 'scripts', 'laraskills.mjs');
+    const target = mkdtempSync(join(tmpdir(), 'laraskills-install-core-'));
+
+    try {
+      const output = execFileSync(process.execPath, [cliPath, 'install', '--profile', 'core'], {
+        cwd: target,
+        encoding: 'utf8',
+      });
+
+      assert.ok(existsSync(join(target, '.laraskills-state.json')), 'State file should exist');
+      assert.ok(existsSync(join(target, 'skills')), 'Skills directory should exist');
+
+      const state = JSON.parse(readFileSync(join(target, '.laraskills-state.json'), 'utf-8'));
+      assert.strictEqual(state.profile, 'core');
+
+      // Should show tip about init
+      assert.ok(output.includes('init'), 'Install should mention init as recommended');
+    } finally {
+      rmSync(target, { recursive: true, force: true });
+    }
   });
 });
