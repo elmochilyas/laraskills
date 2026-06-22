@@ -8,6 +8,51 @@ Pre-release versions are tagged with `-beta.N`.
 
 ---
 
+## [1.0.0-beta.20] - 2026-06-22
+
+### Added
+
+- **Automatic MCP configuration for all supported assistants**: `laraskills init`
+  now creates the correct MCP client config for OpenCode, Claude Code, Cursor,
+  Codex, and Generic MCP. The `laraskills-mcp` server entry is written directly
+  into each tool's native config file.
+- **Safe merge behavior**: Existing MCP servers in user configs are preserved.
+  LaraSkills appends or updates only the `laraskills` MCP entry. A backup is
+  created before any config file is modified.
+- **Idempotent init**: Running `laraskills init` on an already-configured
+  project skips config files that already have the LaraSkills MCP entry.
+
+### Changed
+
+- **All assistants now `configured` at support level**: OpenCode, Claude Code,
+  Cursor, Codex, and Generic MCP all write real config files. No more
+  "template-only" or "manual step required" labels — every assistant gets
+  automatic setup.
+- **Wizard labels simplified**: The `laraskills init` wizard no longer
+  distinguishes between `configured` and `template` assistants since all are
+  now configured automatically.
+- **Doctor output reflects real MCP status**: Shows `configured` for assistants
+  whose MCP config file exists and contains the LaraSkills server entry.
+
+### Specific MCP config formats
+
+| Assistant | Config file | MCP format |
+|---|---|---|
+| OpenCode | `.opencode/opencode.json` + `opencode.json` | `"mcp": {"laraskills": {"type":"local", "command":["laraskills-mcp"]}}` |
+| Claude Code | `.mcp.json` | `"mcpServers": {"laraskills": {"command":"laraskills-mcp", "args":[]}}` |
+| Cursor | `.cursor/mcp.json` | Same `mcpServers` format as Claude Code |
+| Codex | `.codex/config.toml` | `[mcp_servers.laraskills]\ncommand = "laraskills-mcp"` |
+| Generic MCP | `mcp-configs/laraskills-mcp.json` | Same `mcpServers` format |
+
+### Backward Compatibility
+
+- `laraskills init --tools opencode --yes` still works.
+- `laraskills install --profile core` still works.
+- `laraskills update` still works.
+- Existing MCP servers in user configs are never removed.
+
+---
+
 ## [1.0.0-beta.19] - 2026-06-22
 
 ### Changed
