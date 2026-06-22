@@ -273,3 +273,38 @@ Authorization rules that depend on transaction-scoped state (e.g., after creatin
 ---
 ## Consequences Of Violation
 Locks held during authorization; wasted transactions on auth failures; slower failure paths under load.
+
+## Dispatch Events and Jobs After Transaction Commit
+---
+## Category
+Reliability | Architecture
+---
+## Rule
+Dispatch events, queue jobs, and trigger side effects AFTER the database transaction commits. Use `dispatchAfterCommit()`, `event(...)->afterCommit()`, or `DB::afterCommit()`. Do not dispatch inside the transaction body.
+---
+## Reason
+Side effects that depend on committed database state must not execute until the transaction succeeds. If dispatched inside and the transaction rolls back, the side effect has already occurred with no undo mechanism. Queued jobs dispatched inside a transaction may execute before the transaction is visible to the worker's database connection (race condition).
+---
+## Bad Example
+```php
+DB::transaction(function () use ($dto) {
+    $sub = Subscription::create([...]);
+    SendWelcomeEmail::dispatch($sub); // Dispatched INSIDE transaction
+    event(new SubscriptionCreated($sub)); // Event INSIDE transaction
+});
+```
+---
+## Good Example
+```php
+$sub = DB::transaction(function () use ($dto) {
+    return Subscription::create([...]);
+});
+SendWelcomeEmail::dispatch($sub)->afterCommit();
+event(new SubscriptionCreated($sub))->afterCommit();
+```
+---
+## Exceptions
+Side effects that MUST be atomic with the transaction AND are idempotent (e.g., write to an append-only audit log) may be inside the transaction with explicit documentation of the tradeoff.
+---
+## Consequences Of Violation
+Jobs executing before transaction visibility (race condition); emails sent for data that was never committed; events fired for rolled-back state; hard-to-diagnose production inconsistencies.

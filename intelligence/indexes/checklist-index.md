@@ -4,9 +4,9 @@ Repository-wide checklist registry.
 
 | Attribute | Value |
 |---|---|
-| Total Checklists | 2321 |
+| Total Checklists | 2352 |
 | Domains | 21 |
-| Generated | 2026-06-10 09:55:53 |
+| Generated | 2026-06-22 22:42:42 |
 
 ---
 
@@ -574,7 +574,7 @@ Repository-wide checklist registry.
 - **spatie-webhook-server-advanced** -- knowledge/api-integration-engineering/webhooks/spatie-webhook-server-advanced/09-checklists.md
 - **verification-signatures** -- knowledge/api-integration-engineering/webhooks/verification-signatures/09-checklists.md
 
-### Application Architecture Patterns (107 checklists)
+### Application Architecture Patterns (125 checklists)
 
 **Architecture Enforcement Governance** -- 10 units
 
@@ -588,6 +588,10 @@ Repository-wide checklist registry.
 - **refactoring-remediation** -- knowledge/application-architecture-patterns/architecture-enforcement-governance/refactoring-remediation/09-checklists.md
 - **static-analysis-rules** -- knowledge/application-architecture-patterns/architecture-enforcement-governance/static-analysis-rules/09-checklists.md
 - **team-convention-documentation** -- knowledge/application-architecture-patterns/architecture-enforcement-governance/team-convention-documentation/09-checklists.md
+
+**Calibrated Architecture Language** -- 1 units
+
+- **01-calibrated-language-rules** -- knowledge/application-architecture-patterns/calibrated-architecture-language/01-calibrated-language-rules/09-checklists.md
 
 **Code Organization Standards** -- 12 units
 
@@ -634,9 +638,10 @@ Repository-wide checklist registry.
 - **shared-kernel** -- knowledge/application-architecture-patterns/domain-boundaries-bounded-contexts/shared-kernel/09-checklists.md
 - **team-to-context-mapping** -- knowledge/application-architecture-patterns/domain-boundaries-bounded-contexts/team-to-context-mapping/09-checklists.md
 
-**Layered Architecture Patterns** -- 25 units
+**Layered Architecture Patterns** -- 26 units
 
 - **action-classes** -- knowledge/application-architecture-patterns/layered-architecture-patterns/action-classes/09-checklists.md
+- **aftercommit-events-jobs** -- knowledge/application-architecture-patterns/layered-architecture-patterns/aftercommit-events-jobs/09-checklists.md
 - **application-layer** -- knowledge/application-architecture-patterns/layered-architecture-patterns/application-layer/09-checklists.md
 - **architecture-tests** -- knowledge/application-architecture-patterns/layered-architecture-patterns/architecture-tests/09-checklists.md
 - **clean-architecture** -- knowledge/application-architecture-patterns/layered-architecture-patterns/clean-architecture/09-checklists.md
@@ -682,6 +687,28 @@ Repository-wide checklist registry.
 - **sync-inter-module-communication** -- knowledge/application-architecture-patterns/modular-monolith-design/sync-inter-module-communication/09-checklists.md
 - **testing-strategies** -- knowledge/application-architecture-patterns/modular-monolith-design/testing-strategies/09-checklists.md
 
+**Package Decision Calibration** -- 10 units
+
+- **01-calibrated-package-recommendation** -- knowledge/application-architecture-patterns/package-decision-calibration/01-calibrated-package-recommendation/09-checklists.md
+- **02-package-fit-non-fit-analysis** -- knowledge/application-architecture-patterns/package-decision-calibration/02-package-fit-non-fit-analysis/09-checklists.md
+- **03-package-wrapper-boundary** -- knowledge/application-architecture-patterns/package-decision-calibration/03-package-wrapper-boundary/09-checklists.md
+- **04-package-escape-hatch-strategy** -- knowledge/application-architecture-patterns/package-decision-calibration/04-package-escape-hatch-strategy/09-checklists.md
+- **05-when-not-to-build-custom** -- knowledge/application-architecture-patterns/package-decision-calibration/05-when-not-to-build-custom/09-checklists.md
+- **06-laravel-cashier-decision-matrix** -- knowledge/application-architecture-patterns/package-decision-calibration/06-laravel-cashier-decision-matrix/09-checklists.md
+- **07-spatie-permission-decision-matrix** -- knowledge/application-architecture-patterns/package-decision-calibration/07-spatie-permission-decision-matrix/09-checklists.md
+- **08-laravel-pennant-decision-matrix** -- knowledge/application-architecture-patterns/package-decision-calibration/08-laravel-pennant-decision-matrix/09-checklists.md
+- **09-horizon-decision-matrix** -- knowledge/application-architecture-patterns/package-decision-calibration/09-horizon-decision-matrix/09-checklists.md
+- **10-telescope-pulse-relevance** -- knowledge/application-architecture-patterns/package-decision-calibration/10-telescope-pulse-relevance/09-checklists.md
+
+**Saas Billing Architecture** -- 6 units
+
+- **01-plan-feature-entitlement-model** -- knowledge/application-architecture-patterns/saas-billing-architecture/01-plan-feature-entitlement-model/09-checklists.md
+- **02-cashier-billinggateway-wrapper** -- knowledge/application-architecture-patterns/saas-billing-architecture/02-cashier-billinggateway-wrapper/09-checklists.md
+- **03-stripe-webhook-idempotency** -- knowledge/application-architecture-patterns/saas-billing-architecture/03-stripe-webhook-idempotency/09-checklists.md
+- **04-webhook-audit-replay** -- knowledge/application-architecture-patterns/saas-billing-architecture/04-webhook-audit-replay/09-checklists.md
+- **05-subscription-drift-reconciliation** -- knowledge/application-architecture-patterns/saas-billing-architecture/05-subscription-drift-reconciliation/09-checklists.md
+- **06-billing-failure-states** -- knowledge/application-architecture-patterns/saas-billing-architecture/06-billing-failure-states/09-checklists.md
+
 **Service Layer Patterns** -- 19 units
 
 - **action-classes** -- knowledge/application-architecture-patterns/service-layer-patterns/action-classes/09-checklists.md
@@ -704,7 +731,7 @@ Repository-wide checklist registry.
 - **transaction-management** -- knowledge/application-architecture-patterns/service-layer-patterns/transaction-management/09-checklists.md
 - **use-case-classes** -- knowledge/application-architecture-patterns/service-layer-patterns/use-case-classes/09-checklists.md
 
-### Async & Distributed Systems (95 checklists)
+### Async & Distributed Systems (99 checklists)
 
 **Async Patterns** -- 5 units
 
@@ -773,8 +800,9 @@ Repository-wide checklist registry.
 
 - **production-queue-deployment-patterns** -- knowledge/async-distributed-systems/production-patterns/production-queue-deployment-patterns/09-checklists.md
 
-**Queue Engineering** -- 30 units
+**Queue Engineering** -- 34 units
 
+- **billing-queue-topology** -- knowledge/async-distributed-systems/queue-engineering/billing-queue-topology/09-checklists.md
 - **block-for-redis-polling** -- knowledge/async-distributed-systems/queue-engineering/block-for-redis-polling/09-checklists.md
 - **closures-as-queued-jobs** -- knowledge/async-distributed-systems/queue-engineering/closures-as-queued-jobs/09-checklists.md
 - **custom-job-middleware** -- knowledge/async-distributed-systems/queue-engineering/custom-job-middleware/09-checklists.md
@@ -788,12 +816,14 @@ Repository-wide checklist registry.
 - **process-signals** -- knowledge/async-distributed-systems/queue-engineering/process-signals/09-checklists.md
 - **queueable-mail-notifications-broadcast** -- knowledge/async-distributed-systems/queue-engineering/queueable-mail-notifications-broadcast/09-checklists.md
 - **queue-connections-vs-queues** -- knowledge/async-distributed-systems/queue-engineering/queue-connections-vs-queues/09-checklists.md
+- **queue-deployment-safety-billing** -- knowledge/async-distributed-systems/queue-engineering/queue-deployment-safety-billing/09-checklists.md
 - **queue-driver-architecture** -- knowledge/async-distributed-systems/queue-engineering/queue-driver-architecture/09-checklists.md
 - **queue-manager-connector-pattern** -- knowledge/async-distributed-systems/queue-engineering/queue-manager-connector-pattern/09-checklists.md
 - **queue-priority-multiple-queues** -- knowledge/async-distributed-systems/queue-engineering/queue-priority-multiple-queues/09-checklists.md
 - **rate-limited-job-middleware** -- knowledge/async-distributed-systems/queue-engineering/rate-limited-job-middleware/09-checklists.md
 - **rate-limiter-facade-job-rate-limiting** -- knowledge/async-distributed-systems/queue-engineering/rate-limiter-facade-job-rate-limiting/09-checklists.md
 - **retry-after-vs-timeout** -- knowledge/async-distributed-systems/queue-engineering/retry-after-vs-timeout/09-checklists.md
+- **retryuntil-deadline-based-retry** -- knowledge/async-distributed-systems/queue-engineering/retryuntil-deadline-based-retry/09-checklists.md
 - **serializes-models-trait** -- knowledge/async-distributed-systems/queue-engineering/serializes-models-trait/09-checklists.md
 - **should-be-unique-jobs** -- knowledge/async-distributed-systems/queue-engineering/should-be-unique-jobs/09-checklists.md
 - **should-queue-contract** -- knowledge/async-distributed-systems/queue-engineering/should-queue-contract/09-checklists.md
@@ -802,6 +832,7 @@ Repository-wide checklist registry.
 - **supervisor-stopfitas-graceful-shutdown** -- knowledge/async-distributed-systems/queue-engineering/supervisor-stopfitas-graceful-shutdown/09-checklists.md
 - **systemd-service-workers** -- knowledge/async-distributed-systems/queue-engineering/systemd-service-workers/09-checklists.md
 - **throttles-exceptions-middleware** -- knowledge/async-distributed-systems/queue-engineering/throttles-exceptions-middleware/09-checklists.md
+- **webhook-queue-design** -- knowledge/async-distributed-systems/queue-engineering/webhook-queue-design/09-checklists.md
 - **without-overlapping-middleware** -- knowledge/async-distributed-systems/queue-engineering/without-overlapping-middleware/09-checklists.md
 - **worker-daemon-architecture** -- knowledge/async-distributed-systems/queue-engineering/worker-daemon-architecture/09-checklists.md
 - **worker-memory-management** -- knowledge/async-distributed-systems/queue-engineering/worker-memory-management/09-checklists.md
@@ -834,7 +865,7 @@ Repository-wide checklist registry.
 - **spatie-webhook-server** -- knowledge/async-distributed-systems/webhook-distribution/spatie-webhook-server/09-checklists.md
 - **webhook-replay-attack-prevention** -- knowledge/async-distributed-systems/webhook-distribution/webhook-replay-attack-prevention/09-checklists.md
 
-### Backend Architecture Design (84 checklists)
+### Backend Architecture Design (85 checklists)
 
 **Architectural Decision Records** -- 2 units
 
@@ -878,7 +909,7 @@ Repository-wide checklist registry.
 - **context-mapping-relationships** -- knowledge/backend-architecture-design/ddd-strategic/context-mapping-relationships/09-checklists.md
 - **ubiquitous-language** -- knowledge/backend-architecture-design/ddd-strategic/ubiquitous-language/09-checklists.md
 
-**Event Sourcing** -- 7 units
+**Event Sourcing** -- 8 units
 
 - **choreography-vs-orchestration** -- knowledge/backend-architecture-design/event-sourcing/choreography-vs-orchestration/09-checklists.md
 - **dead-letter-handling** -- knowledge/backend-architecture-design/event-sourcing/dead-letter-handling/09-checklists.md
@@ -886,6 +917,7 @@ Repository-wide checklist registry.
 - **event-bus-patterns** -- knowledge/backend-architecture-design/event-sourcing/event-bus-patterns/09-checklists.md
 - **event-sourcing-components** -- knowledge/backend-architecture-design/event-sourcing/event-sourcing-components/09-checklists.md
 - **event-versioning-schema-evolution** -- knowledge/backend-architecture-design/event-sourcing/event-versioning-schema-evolution/09-checklists.md
+- **laravel-events-vs-event-sourcing** -- knowledge/backend-architecture-design/event-sourcing/laravel-events-vs-event-sourcing/09-checklists.md
 - **outbox-pattern** -- knowledge/backend-architecture-design/event-sourcing/outbox-pattern/09-checklists.md
 
 **Grasp Patterns** -- 9 units
@@ -1488,7 +1520,7 @@ Repository-wide checklist registry.
 - **transaction-scoping-laravel** -- knowledge/data-storage-systems/transactions/transaction-scoping-laravel/09-checklists.md
 - **write-skew-prevention** -- knowledge/data-storage-systems/transactions/write-skew-prevention/09-checklists.md
 
-### DevOps & Infrastructure (47 checklists)
+### DevOps & Infrastructure (50 checklists)
 
 **Ci Cd Pipelines** -- 4 units
 
@@ -1556,6 +1588,12 @@ Repository-wide checklist registry.
 
 - **infrastructure-monitoring-tools** -- knowledge/devops-infrastructure/observability-monitoring/infrastructure-monitoring-tools/09-checklists.md
 - **observability-monitoring** -- knowledge/devops-infrastructure/observability-monitoring/observability-monitoring/09-checklists.md
+
+**Queue Deployment Safety** -- 3 units
+
+- **01-backward-compatible-deployments** -- knowledge/devops-infrastructure/queue-deployment-safety/01-backward-compatible-deployments/09-checklists.md
+- **02-queue-restart-horizon-verify** -- knowledge/devops-infrastructure/queue-deployment-safety/02-queue-restart-horizon-verify/09-checklists.md
+- **queue-deployment-safety-operations** -- knowledge/devops-infrastructure/queue-deployment-safety/queue-deployment-safety-operations/09-checklists.md
 
 **Serverless Laravel** -- 3 units
 
@@ -2190,7 +2228,7 @@ Repository-wide checklist registry.
 - **provider-testing** -- knowledge/laravel-execution-lifecycle/service-providers/provider-testing/09-checklists.md
 - **register-vs-boot-methods** -- knowledge/laravel-execution-lifecycle/service-providers/register-vs-boot-methods/09-checklists.md
 
-### Observability & Production Intelligence (34 checklists)
+### Observability & Production Intelligence (37 checklists)
 
 **Advanced Topics** -- 10 units
 
@@ -2215,6 +2253,12 @@ Repository-wide checklist registry.
 - **apm-tool-integration** -- knowledge/observability-production-intelligence/apm-performance-monitoring/apm-tool-integration/09-checklists.md
 - **n-plus-one-detection** -- knowledge/observability-production-intelligence/apm-performance-monitoring/n-plus-one-detection/09-checklists.md
 - **performance-profiling** -- knowledge/observability-production-intelligence/apm-performance-monitoring/performance-profiling/09-checklists.md
+
+**Billing Observability** -- 3 units
+
+- **01-billing-webhook-metrics** -- knowledge/observability-production-intelligence/billing-observability/01-billing-webhook-metrics/09-checklists.md
+- **02-billing-alerts-repair-flows** -- knowledge/observability-production-intelligence/billing-observability/02-billing-alerts-repair-flows/09-checklists.md
+- **billing-production-metrics** -- knowledge/observability-production-intelligence/billing-observability/billing-production-metrics/09-checklists.md
 
 **Dashboards Visualization** -- 4 units
 
@@ -2843,7 +2887,7 @@ Repository-wide checklist registry.
 - **vector-search-performance** -- knowledge/search-retrieval-systems/vector-search-systems/vector-search-performance/09-checklists.md
 - **vector-search-production** -- knowledge/search-retrieval-systems/vector-search-systems/vector-search-production/09-checklists.md
 
-### Security & Identity Engineering (61 checklists)
+### Security & Identity Engineering (63 checklists)
 
 **Audit Logging** -- 4 units
 
@@ -2869,10 +2913,11 @@ Repository-wide checklist registry.
 - **webauthn-ceremonies** -- knowledge/security-identity-engineering/authentication/webauthn-ceremonies/09-checklists.md
 - **workos-enterprise-sso** -- knowledge/security-identity-engineering/authentication/workos-enterprise-sso/09-checklists.md
 
-**Authorization** -- 10 units
+**Authorization** -- 12 units
 
 - **abac-authorization** -- knowledge/security-identity-engineering/authorization/abac-authorization/09-checklists.md
 - **authorization-testing** -- knowledge/security-identity-engineering/authorization/authorization-testing/09-checklists.md
+- **authorization-test-matrix-saas** -- knowledge/security-identity-engineering/authorization/authorization-test-matrix-saas/09-checklists.md
 - **blade-can-directives** -- knowledge/security-identity-engineering/authorization/blade-can-directives/09-checklists.md
 - **gates-closure** -- knowledge/security-identity-engineering/authorization/gates-closure/09-checklists.md
 - **policies-model** -- knowledge/security-identity-engineering/authorization/policies-model/09-checklists.md
@@ -2881,6 +2926,7 @@ Repository-wide checklist registry.
 - **rebac-authorization** -- knowledge/security-identity-engineering/authorization/rebac-authorization/09-checklists.md
 - **spatie-permission** -- knowledge/security-identity-engineering/authorization/spatie-permission/09-checklists.md
 - **super-admin-bypass** -- knowledge/security-identity-engineering/authorization/super-admin-bypass/09-checklists.md
+- **team-spatie-permission-depth** -- knowledge/security-identity-engineering/authorization/team-spatie-permission-depth/09-checklists.md
 
 **Hardening** -- 8 units
 

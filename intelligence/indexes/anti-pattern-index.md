@@ -4,9 +4,9 @@ Repository-wide anti-pattern registry.
 
 | Attribute | Value |
 |---|---|
-| Total Anti-Patterns | 2321 |
+| Total Anti-Patterns | 2352 |
 | Domains | 21 |
-| Generated | 2026-06-10 09:55:53 |
+| Generated | 2026-06-22 22:42:42 |
 
 ---
 
@@ -574,7 +574,7 @@ Repository-wide anti-pattern registry.
 - **spatie-webhook-server-advanced** -- knowledge/api-integration-engineering/webhooks/spatie-webhook-server-advanced/08-anti-patterns.md
 - **verification-signatures** -- knowledge/api-integration-engineering/webhooks/verification-signatures/08-anti-patterns.md
 
-### Application Architecture Patterns (107 anti-patterns)
+### Application Architecture Patterns (125 anti-patterns)
 
 **Architecture Enforcement Governance** -- 10 units
 
@@ -588,6 +588,10 @@ Repository-wide anti-pattern registry.
 - **refactoring-remediation** -- knowledge/application-architecture-patterns/architecture-enforcement-governance/refactoring-remediation/08-anti-patterns.md
 - **static-analysis-rules** -- knowledge/application-architecture-patterns/architecture-enforcement-governance/static-analysis-rules/08-anti-patterns.md
 - **team-convention-documentation** -- knowledge/application-architecture-patterns/architecture-enforcement-governance/team-convention-documentation/08-anti-patterns.md
+
+**Calibrated Architecture Language** -- 1 units
+
+- **01-calibrated-language-rules** -- knowledge/application-architecture-patterns/calibrated-architecture-language/01-calibrated-language-rules/08-anti-patterns.md
 
 **Code Organization Standards** -- 12 units
 
@@ -634,9 +638,10 @@ Repository-wide anti-pattern registry.
 - **shared-kernel** -- knowledge/application-architecture-patterns/domain-boundaries-bounded-contexts/shared-kernel/08-anti-patterns.md
 - **team-to-context-mapping** -- knowledge/application-architecture-patterns/domain-boundaries-bounded-contexts/team-to-context-mapping/08-anti-patterns.md
 
-**Layered Architecture Patterns** -- 25 units
+**Layered Architecture Patterns** -- 26 units
 
 - **action-classes** -- knowledge/application-architecture-patterns/layered-architecture-patterns/action-classes/08-anti-patterns.md
+- **aftercommit-events-jobs** -- knowledge/application-architecture-patterns/layered-architecture-patterns/aftercommit-events-jobs/08-anti-patterns.md
 - **application-layer** -- knowledge/application-architecture-patterns/layered-architecture-patterns/application-layer/08-anti-patterns.md
 - **architecture-tests** -- knowledge/application-architecture-patterns/layered-architecture-patterns/architecture-tests/08-anti-patterns.md
 - **clean-architecture** -- knowledge/application-architecture-patterns/layered-architecture-patterns/clean-architecture/08-anti-patterns.md
@@ -682,6 +687,28 @@ Repository-wide anti-pattern registry.
 - **sync-inter-module-communication** -- knowledge/application-architecture-patterns/modular-monolith-design/sync-inter-module-communication/08-anti-patterns.md
 - **testing-strategies** -- knowledge/application-architecture-patterns/modular-monolith-design/testing-strategies/08-anti-patterns.md
 
+**Package Decision Calibration** -- 10 units
+
+- **01-calibrated-package-recommendation** -- knowledge/application-architecture-patterns/package-decision-calibration/01-calibrated-package-recommendation/08-anti-patterns.md
+- **02-package-fit-non-fit-analysis** -- knowledge/application-architecture-patterns/package-decision-calibration/02-package-fit-non-fit-analysis/08-anti-patterns.md
+- **03-package-wrapper-boundary** -- knowledge/application-architecture-patterns/package-decision-calibration/03-package-wrapper-boundary/08-anti-patterns.md
+- **04-package-escape-hatch-strategy** -- knowledge/application-architecture-patterns/package-decision-calibration/04-package-escape-hatch-strategy/08-anti-patterns.md
+- **05-when-not-to-build-custom** -- knowledge/application-architecture-patterns/package-decision-calibration/05-when-not-to-build-custom/08-anti-patterns.md
+- **06-laravel-cashier-decision-matrix** -- knowledge/application-architecture-patterns/package-decision-calibration/06-laravel-cashier-decision-matrix/08-anti-patterns.md
+- **07-spatie-permission-decision-matrix** -- knowledge/application-architecture-patterns/package-decision-calibration/07-spatie-permission-decision-matrix/08-anti-patterns.md
+- **08-laravel-pennant-decision-matrix** -- knowledge/application-architecture-patterns/package-decision-calibration/08-laravel-pennant-decision-matrix/08-anti-patterns.md
+- **09-horizon-decision-matrix** -- knowledge/application-architecture-patterns/package-decision-calibration/09-horizon-decision-matrix/08-anti-patterns.md
+- **10-telescope-pulse-relevance** -- knowledge/application-architecture-patterns/package-decision-calibration/10-telescope-pulse-relevance/08-anti-patterns.md
+
+**Saas Billing Architecture** -- 6 units
+
+- **01-plan-feature-entitlement-model** -- knowledge/application-architecture-patterns/saas-billing-architecture/01-plan-feature-entitlement-model/08-anti-patterns.md
+- **02-cashier-billinggateway-wrapper** -- knowledge/application-architecture-patterns/saas-billing-architecture/02-cashier-billinggateway-wrapper/08-anti-patterns.md
+- **03-stripe-webhook-idempotency** -- knowledge/application-architecture-patterns/saas-billing-architecture/03-stripe-webhook-idempotency/08-anti-patterns.md
+- **04-webhook-audit-replay** -- knowledge/application-architecture-patterns/saas-billing-architecture/04-webhook-audit-replay/08-anti-patterns.md
+- **05-subscription-drift-reconciliation** -- knowledge/application-architecture-patterns/saas-billing-architecture/05-subscription-drift-reconciliation/08-anti-patterns.md
+- **06-billing-failure-states** -- knowledge/application-architecture-patterns/saas-billing-architecture/06-billing-failure-states/08-anti-patterns.md
+
 **Service Layer Patterns** -- 19 units
 
 - **action-classes** -- knowledge/application-architecture-patterns/service-layer-patterns/action-classes/08-anti-patterns.md
@@ -704,7 +731,7 @@ Repository-wide anti-pattern registry.
 - **transaction-management** -- knowledge/application-architecture-patterns/service-layer-patterns/transaction-management/08-anti-patterns.md
 - **use-case-classes** -- knowledge/application-architecture-patterns/service-layer-patterns/use-case-classes/08-anti-patterns.md
 
-### Async & Distributed Systems (95 anti-patterns)
+### Async & Distributed Systems (99 anti-patterns)
 
 **Async Patterns** -- 5 units
 
@@ -773,8 +800,9 @@ Repository-wide anti-pattern registry.
 
 - **production-queue-deployment-patterns** -- knowledge/async-distributed-systems/production-patterns/production-queue-deployment-patterns/08-anti-patterns.md
 
-**Queue Engineering** -- 30 units
+**Queue Engineering** -- 34 units
 
+- **billing-queue-topology** -- knowledge/async-distributed-systems/queue-engineering/billing-queue-topology/08-anti-patterns.md
 - **block-for-redis-polling** -- knowledge/async-distributed-systems/queue-engineering/block-for-redis-polling/08-anti-patterns.md
 - **closures-as-queued-jobs** -- knowledge/async-distributed-systems/queue-engineering/closures-as-queued-jobs/08-anti-patterns.md
 - **custom-job-middleware** -- knowledge/async-distributed-systems/queue-engineering/custom-job-middleware/08-anti-patterns.md
@@ -788,12 +816,14 @@ Repository-wide anti-pattern registry.
 - **process-signals** -- knowledge/async-distributed-systems/queue-engineering/process-signals/08-anti-patterns.md
 - **queueable-mail-notifications-broadcast** -- knowledge/async-distributed-systems/queue-engineering/queueable-mail-notifications-broadcast/08-anti-patterns.md
 - **queue-connections-vs-queues** -- knowledge/async-distributed-systems/queue-engineering/queue-connections-vs-queues/08-anti-patterns.md
+- **queue-deployment-safety-billing** -- knowledge/async-distributed-systems/queue-engineering/queue-deployment-safety-billing/08-anti-patterns.md
 - **queue-driver-architecture** -- knowledge/async-distributed-systems/queue-engineering/queue-driver-architecture/08-anti-patterns.md
 - **queue-manager-connector-pattern** -- knowledge/async-distributed-systems/queue-engineering/queue-manager-connector-pattern/08-anti-patterns.md
 - **queue-priority-multiple-queues** -- knowledge/async-distributed-systems/queue-engineering/queue-priority-multiple-queues/08-anti-patterns.md
 - **rate-limited-job-middleware** -- knowledge/async-distributed-systems/queue-engineering/rate-limited-job-middleware/08-anti-patterns.md
 - **rate-limiter-facade-job-rate-limiting** -- knowledge/async-distributed-systems/queue-engineering/rate-limiter-facade-job-rate-limiting/08-anti-patterns.md
 - **retry-after-vs-timeout** -- knowledge/async-distributed-systems/queue-engineering/retry-after-vs-timeout/08-anti-patterns.md
+- **retryuntil-deadline-based-retry** -- knowledge/async-distributed-systems/queue-engineering/retryuntil-deadline-based-retry/08-anti-patterns.md
 - **serializes-models-trait** -- knowledge/async-distributed-systems/queue-engineering/serializes-models-trait/08-anti-patterns.md
 - **should-be-unique-jobs** -- knowledge/async-distributed-systems/queue-engineering/should-be-unique-jobs/08-anti-patterns.md
 - **should-queue-contract** -- knowledge/async-distributed-systems/queue-engineering/should-queue-contract/08-anti-patterns.md
@@ -802,6 +832,7 @@ Repository-wide anti-pattern registry.
 - **supervisor-stopfitas-graceful-shutdown** -- knowledge/async-distributed-systems/queue-engineering/supervisor-stopfitas-graceful-shutdown/08-anti-patterns.md
 - **systemd-service-workers** -- knowledge/async-distributed-systems/queue-engineering/systemd-service-workers/08-anti-patterns.md
 - **throttles-exceptions-middleware** -- knowledge/async-distributed-systems/queue-engineering/throttles-exceptions-middleware/08-anti-patterns.md
+- **webhook-queue-design** -- knowledge/async-distributed-systems/queue-engineering/webhook-queue-design/08-anti-patterns.md
 - **without-overlapping-middleware** -- knowledge/async-distributed-systems/queue-engineering/without-overlapping-middleware/08-anti-patterns.md
 - **worker-daemon-architecture** -- knowledge/async-distributed-systems/queue-engineering/worker-daemon-architecture/08-anti-patterns.md
 - **worker-memory-management** -- knowledge/async-distributed-systems/queue-engineering/worker-memory-management/08-anti-patterns.md
@@ -834,7 +865,7 @@ Repository-wide anti-pattern registry.
 - **spatie-webhook-server** -- knowledge/async-distributed-systems/webhook-distribution/spatie-webhook-server/08-anti-patterns.md
 - **webhook-replay-attack-prevention** -- knowledge/async-distributed-systems/webhook-distribution/webhook-replay-attack-prevention/08-anti-patterns.md
 
-### Backend Architecture Design (84 anti-patterns)
+### Backend Architecture Design (85 anti-patterns)
 
 **Architectural Decision Records** -- 2 units
 
@@ -878,7 +909,7 @@ Repository-wide anti-pattern registry.
 - **context-mapping-relationships** -- knowledge/backend-architecture-design/ddd-strategic/context-mapping-relationships/08-anti-patterns.md
 - **ubiquitous-language** -- knowledge/backend-architecture-design/ddd-strategic/ubiquitous-language/08-anti-patterns.md
 
-**Event Sourcing** -- 7 units
+**Event Sourcing** -- 8 units
 
 - **choreography-vs-orchestration** -- knowledge/backend-architecture-design/event-sourcing/choreography-vs-orchestration/08-anti-patterns.md
 - **dead-letter-handling** -- knowledge/backend-architecture-design/event-sourcing/dead-letter-handling/08-anti-patterns.md
@@ -886,6 +917,7 @@ Repository-wide anti-pattern registry.
 - **event-bus-patterns** -- knowledge/backend-architecture-design/event-sourcing/event-bus-patterns/08-anti-patterns.md
 - **event-sourcing-components** -- knowledge/backend-architecture-design/event-sourcing/event-sourcing-components/08-anti-patterns.md
 - **event-versioning-schema-evolution** -- knowledge/backend-architecture-design/event-sourcing/event-versioning-schema-evolution/08-anti-patterns.md
+- **laravel-events-vs-event-sourcing** -- knowledge/backend-architecture-design/event-sourcing/laravel-events-vs-event-sourcing/08-anti-patterns.md
 - **outbox-pattern** -- knowledge/backend-architecture-design/event-sourcing/outbox-pattern/08-anti-patterns.md
 
 **Grasp Patterns** -- 9 units
@@ -1488,7 +1520,7 @@ Repository-wide anti-pattern registry.
 - **transaction-scoping-laravel** -- knowledge/data-storage-systems/transactions/transaction-scoping-laravel/08-anti-patterns.md
 - **write-skew-prevention** -- knowledge/data-storage-systems/transactions/write-skew-prevention/08-anti-patterns.md
 
-### DevOps & Infrastructure (47 anti-patterns)
+### DevOps & Infrastructure (50 anti-patterns)
 
 **Ci Cd Pipelines** -- 4 units
 
@@ -1556,6 +1588,12 @@ Repository-wide anti-pattern registry.
 
 - **infrastructure-monitoring-tools** -- knowledge/devops-infrastructure/observability-monitoring/infrastructure-monitoring-tools/08-anti-patterns.md
 - **observability-monitoring** -- knowledge/devops-infrastructure/observability-monitoring/observability-monitoring/08-anti-patterns.md
+
+**Queue Deployment Safety** -- 3 units
+
+- **01-backward-compatible-deployments** -- knowledge/devops-infrastructure/queue-deployment-safety/01-backward-compatible-deployments/08-anti-patterns.md
+- **02-queue-restart-horizon-verify** -- knowledge/devops-infrastructure/queue-deployment-safety/02-queue-restart-horizon-verify/08-anti-patterns.md
+- **queue-deployment-safety-operations** -- knowledge/devops-infrastructure/queue-deployment-safety/queue-deployment-safety-operations/08-anti-patterns.md
 
 **Serverless Laravel** -- 3 units
 
@@ -2190,7 +2228,7 @@ Repository-wide anti-pattern registry.
 - **provider-testing** -- knowledge/laravel-execution-lifecycle/service-providers/provider-testing/08-anti-patterns.md
 - **register-vs-boot-methods** -- knowledge/laravel-execution-lifecycle/service-providers/register-vs-boot-methods/08-anti-patterns.md
 
-### Observability & Production Intelligence (34 anti-patterns)
+### Observability & Production Intelligence (37 anti-patterns)
 
 **Advanced Topics** -- 10 units
 
@@ -2215,6 +2253,12 @@ Repository-wide anti-pattern registry.
 - **apm-tool-integration** -- knowledge/observability-production-intelligence/apm-performance-monitoring/apm-tool-integration/08-anti-patterns.md
 - **n-plus-one-detection** -- knowledge/observability-production-intelligence/apm-performance-monitoring/n-plus-one-detection/08-anti-patterns.md
 - **performance-profiling** -- knowledge/observability-production-intelligence/apm-performance-monitoring/performance-profiling/08-anti-patterns.md
+
+**Billing Observability** -- 3 units
+
+- **01-billing-webhook-metrics** -- knowledge/observability-production-intelligence/billing-observability/01-billing-webhook-metrics/08-anti-patterns.md
+- **02-billing-alerts-repair-flows** -- knowledge/observability-production-intelligence/billing-observability/02-billing-alerts-repair-flows/08-anti-patterns.md
+- **billing-production-metrics** -- knowledge/observability-production-intelligence/billing-observability/billing-production-metrics/08-anti-patterns.md
 
 **Dashboards Visualization** -- 4 units
 
@@ -2843,7 +2887,7 @@ Repository-wide anti-pattern registry.
 - **vector-search-performance** -- knowledge/search-retrieval-systems/vector-search-systems/vector-search-performance/08-anti-patterns.md
 - **vector-search-production** -- knowledge/search-retrieval-systems/vector-search-systems/vector-search-production/08-anti-patterns.md
 
-### Security & Identity Engineering (61 anti-patterns)
+### Security & Identity Engineering (63 anti-patterns)
 
 **Audit Logging** -- 4 units
 
@@ -2869,10 +2913,11 @@ Repository-wide anti-pattern registry.
 - **webauthn-ceremonies** -- knowledge/security-identity-engineering/authentication/webauthn-ceremonies/08-anti-patterns.md
 - **workos-enterprise-sso** -- knowledge/security-identity-engineering/authentication/workos-enterprise-sso/08-anti-patterns.md
 
-**Authorization** -- 10 units
+**Authorization** -- 12 units
 
 - **abac-authorization** -- knowledge/security-identity-engineering/authorization/abac-authorization/08-anti-patterns.md
 - **authorization-testing** -- knowledge/security-identity-engineering/authorization/authorization-testing/08-anti-patterns.md
+- **authorization-test-matrix-saas** -- knowledge/security-identity-engineering/authorization/authorization-test-matrix-saas/08-anti-patterns.md
 - **blade-can-directives** -- knowledge/security-identity-engineering/authorization/blade-can-directives/08-anti-patterns.md
 - **gates-closure** -- knowledge/security-identity-engineering/authorization/gates-closure/08-anti-patterns.md
 - **policies-model** -- knowledge/security-identity-engineering/authorization/policies-model/08-anti-patterns.md
@@ -2881,6 +2926,7 @@ Repository-wide anti-pattern registry.
 - **rebac-authorization** -- knowledge/security-identity-engineering/authorization/rebac-authorization/08-anti-patterns.md
 - **spatie-permission** -- knowledge/security-identity-engineering/authorization/spatie-permission/08-anti-patterns.md
 - **super-admin-bypass** -- knowledge/security-identity-engineering/authorization/super-admin-bypass/08-anti-patterns.md
+- **team-spatie-permission-depth** -- knowledge/security-identity-engineering/authorization/team-spatie-permission-depth/08-anti-patterns.md
 
 **Hardening** -- 8 units
 

@@ -565,19 +565,19 @@ describe('MCP Tool — validate_ecc', () => {
     assert.deepStrictEqual(res.structuredContent.issues, []);
   });
 
-  it('reports 2321 knowledge units', async () => {
+  it('reports 2352 knowledge units', async () => {
     const res = await client.callTool({ name: 'validate_ecc', arguments: {} });
-    assert.strictEqual(res.structuredContent.knowledgeUnitCount, 2321);
+    assert.strictEqual(res.structuredContent.knowledgeUnitCount, 2352);
   });
 
-  it('reports 427 dependency edges', async () => {
+  it('reports 446 dependency edges', async () => {
     const res = await client.callTool({ name: 'validate_ecc', arguments: {} });
-    assert.strictEqual(res.structuredContent.dependencyEdgeCount, 427);
+    assert.strictEqual(res.structuredContent.dependencyEdgeCount, 446);
   });
 
-  it('reports 3513 relationship edges', async () => {
+  it('reports 3542 relationship edges', async () => {
     const res = await client.callTool({ name: 'validate_ecc', arguments: {} });
-    assert.strictEqual(res.structuredContent.relationshipEdgeCount, 3513);
+    assert.strictEqual(res.structuredContent.relationshipEdgeCount, 3542);
   });
 
   it('reports 0 cycles', async () => {

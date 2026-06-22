@@ -512,5 +512,36 @@
     "forbiddenDomains": ["real-time-systems", "ai-intelligence-systems"],
     "expectedKus": ["cross-tenant-data-leak-prevention", "tenant-aware-middleware", "eloquent-global-scopes"],
     "expectedRules": ["tenant isolation", "global scope"]
+  },
+  {
+    "id": "bench-073",
+    "query": "Design Laravel SaaS architecture with teams, Stripe subscriptions, role permissions, subscription feature gates, webhooks, queues, and long-term maintainability",
+    "expectedPrimaryDomain": "application-architecture-patterns",
+    "expectedSupportingDomains": ["security-identity-engineering", "async-distributed-systems", "observability-production-intelligence", "devops-infrastructure"],
+    "forbiddenDomains": ["ai-intelligence-systems", "real-time-systems"],
+    "expectedTopKus": [
+      "cashier", "plan-feature-entitlement",
+      "webhook-idempotency", "webhook-audit",
+      "subscription-drift", "billing-failure",
+      "cashier-billinggateway"
+    ],
+    "forbiddenTopKus": [
+      "resource-controller", "api-resource-pagination", "crud"
+    ],
+    "expectedConcepts": [
+      "package decision calibration",
+      "Cashier decision matrix",
+      "plan feature entitlement separation",
+      "Stripe webhook idempotency",
+      "transaction boundaries",
+      "afterCommit",
+      "Laravel events are not event sourcing",
+      "team-scoped authorization",
+      "authorization matrix tests",
+      "advanced queue patterns",
+      "observability",
+      "deployment safety for queued systems",
+      "calibrated architecture language"
+    ]
   }
 ]

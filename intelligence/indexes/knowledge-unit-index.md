@@ -4,9 +4,9 @@ Fast discovery of all Knowledge Units in the repository.
 
 | Attribute | Value |
 |---|---|
-| Total KUs | 2321 |
+| Total KUs | 2352 |
 | Domains | 21 |
-| Generated | 2026-06-10 09:55:53 |
+| Generated | 2026-06-22 22:42:42 |
 
 ---
 
@@ -15,23 +15,23 @@ Fast discovery of all Knowledge Units in the repository.
 - [AI Intelligence Systems](#ai-intelligence-systems) (117 KUs)
 - [API & CRUD System Engineering](#api-crud-system-engineering) (246 KUs)
 - [API Integration Engineering](#api-integration-engineering) (82 KUs)
-- [Application Architecture Patterns](#application-architecture-patterns) (107 KUs)
-- [Async & Distributed Systems](#async-distributed-systems) (95 KUs)
-- [Backend Architecture Design](#backend-architecture-design) (84 KUs)
+- [Application Architecture Patterns](#application-architecture-patterns) (125 KUs)
+- [Async & Distributed Systems](#async-distributed-systems) (99 KUs)
+- [Backend Architecture Design](#backend-architecture-design) (85 KUs)
 - [Cost & Resource Optimization](#cost-resource-optimization) (109 KUs)
 - [Data Engineering & Analytics](#data-engineering-analytics) (44 KUs)
 - [Data Storage Systems](#data-storage-systems) (289 KUs)
-- [DevOps & Infrastructure](#devops-infrastructure) (47 KUs)
+- [DevOps & Infrastructure](#devops-infrastructure) (50 KUs)
 - [Governance & Compliance Engineering](#governance-compliance-engineering) (40 KUs)
 - [Laravel Core Application Engineering](#laravel-core-application-engineering) (159 KUs)
 - [Laravel Eloquent Domain Modeling](#laravel-eloquent-domain-modeling) (171 KUs)
 - [Laravel Execution Lifecycle](#laravel-execution-lifecycle) (110 KUs)
-- [Observability & Production Intelligence](#observability-production-intelligence) (34 KUs)
+- [Observability & Production Intelligence](#observability-production-intelligence) (37 KUs)
 - [Performance & Runtime Engineering](#performance-runtime-engineering) (161 KUs)
 - [Platform Engineering & Developer Experience](#platform-engineering-developer-experience) (107 KUs)
 - [Real-Time Systems](#real-time-systems) (39 KUs)
 - [Search & Retrieval Systems](#search-retrieval-systems) (140 KUs)
-- [Security & Identity Engineering](#security-identity-engineering) (61 KUs)
+- [Security & Identity Engineering](#security-identity-engineering) (63 KUs)
 - [Testing & Reliability Engineering](#testing-reliability-engineering) (79 KUs)
 
 ---
@@ -689,6 +689,12 @@ Fast discovery of all Knowledge Units in the repository.
 | 9 | static-analysis-rules | `knowledge/application-architecture-patterns/architecture-enforcement-governance/static-analysis-rules` |
 | 10 | team-convention-documentation | `knowledge/application-architecture-patterns/architecture-enforcement-governance/team-convention-documentation` |
 
+### Calibrated Architecture Language
+
+| # | KU | Path |
+|---|---|------|
+| 1 | 01-calibrated-language-rules | `knowledge/application-architecture-patterns/calibrated-architecture-language/01-calibrated-language-rules` |
+
 ### Code Organization Standards
 
 | # | KU | Path |
@@ -745,30 +751,31 @@ Fast discovery of all Knowledge Units in the repository.
 | # | KU | Path |
 |---|---|------|
 | 1 | action-classes | `knowledge/application-architecture-patterns/layered-architecture-patterns/action-classes` |
-| 2 | application-layer | `knowledge/application-architecture-patterns/layered-architecture-patterns/application-layer` |
-| 3 | architecture-tests | `knowledge/application-architecture-patterns/layered-architecture-patterns/architecture-tests` |
-| 4 | clean-architecture | `knowledge/application-architecture-patterns/layered-architecture-patterns/clean-architecture` |
-| 5 | dependency-rule | `knowledge/application-architecture-patterns/layered-architecture-patterns/dependency-rule` |
-| 6 | domain-driven-design | `knowledge/application-architecture-patterns/layered-architecture-patterns/domain-driven-design` |
-| 7 | domain-eloquent-mapping | `knowledge/application-architecture-patterns/layered-architecture-patterns/domain-eloquent-mapping` |
-| 8 | domain-entity-mapping | `knowledge/application-architecture-patterns/layered-architecture-patterns/domain-entity-mapping` |
-| 9 | domain-events | `knowledge/application-architecture-patterns/layered-architecture-patterns/domain-events` |
-| 10 | domain-layer | `knowledge/application-architecture-patterns/layered-architecture-patterns/domain-layer` |
-| 11 | dto-transformer | `knowledge/application-architecture-patterns/layered-architecture-patterns/dto-transformer` |
-| 12 | form-request-validation | `knowledge/application-architecture-patterns/layered-architecture-patterns/form-request-validation` |
-| 13 | framework-independence | `knowledge/application-architecture-patterns/layered-architecture-patterns/framework-independence` |
-| 14 | hexagonal-architecture | `knowledge/application-architecture-patterns/layered-architecture-patterns/hexagonal-architecture` |
-| 15 | incremental-migration | `knowledge/application-architecture-patterns/layered-architecture-patterns/incremental-migration` |
-| 16 | infrastructure-layer | `knowledge/application-architecture-patterns/layered-architecture-patterns/infrastructure-layer` |
-| 17 | octane-compatibility | `knowledge/application-architecture-patterns/layered-architecture-patterns/octane-compatibility` |
-| 18 | presentation-layer | `knowledge/application-architecture-patterns/layered-architecture-patterns/presentation-layer` |
-| 19 | psr4-multi-layer | `knowledge/application-architecture-patterns/layered-architecture-patterns/psr4-multi-layer` |
-| 20 | real-world-tradeoffs | `knowledge/application-architecture-patterns/layered-architecture-patterns/real-world-tradeoffs` |
-| 21 | service-providers | `knowledge/application-architecture-patterns/layered-architecture-patterns/service-providers` |
-| 22 | three-layer-architecture | `knowledge/application-architecture-patterns/layered-architecture-patterns/three-layer-architecture` |
-| 23 | transaction-boundaries | `knowledge/application-architecture-patterns/layered-architecture-patterns/transaction-boundaries` |
-| 24 | use-case-classes | `knowledge/application-architecture-patterns/layered-architecture-patterns/use-case-classes` |
-| 25 | value-objects | `knowledge/application-architecture-patterns/layered-architecture-patterns/value-objects` |
+| 2 | aftercommit-events-jobs | `knowledge/application-architecture-patterns/layered-architecture-patterns/aftercommit-events-jobs` |
+| 3 | application-layer | `knowledge/application-architecture-patterns/layered-architecture-patterns/application-layer` |
+| 4 | architecture-tests | `knowledge/application-architecture-patterns/layered-architecture-patterns/architecture-tests` |
+| 5 | clean-architecture | `knowledge/application-architecture-patterns/layered-architecture-patterns/clean-architecture` |
+| 6 | dependency-rule | `knowledge/application-architecture-patterns/layered-architecture-patterns/dependency-rule` |
+| 7 | domain-driven-design | `knowledge/application-architecture-patterns/layered-architecture-patterns/domain-driven-design` |
+| 8 | domain-eloquent-mapping | `knowledge/application-architecture-patterns/layered-architecture-patterns/domain-eloquent-mapping` |
+| 9 | domain-entity-mapping | `knowledge/application-architecture-patterns/layered-architecture-patterns/domain-entity-mapping` |
+| 10 | domain-events | `knowledge/application-architecture-patterns/layered-architecture-patterns/domain-events` |
+| 11 | domain-layer | `knowledge/application-architecture-patterns/layered-architecture-patterns/domain-layer` |
+| 12 | dto-transformer | `knowledge/application-architecture-patterns/layered-architecture-patterns/dto-transformer` |
+| 13 | form-request-validation | `knowledge/application-architecture-patterns/layered-architecture-patterns/form-request-validation` |
+| 14 | framework-independence | `knowledge/application-architecture-patterns/layered-architecture-patterns/framework-independence` |
+| 15 | hexagonal-architecture | `knowledge/application-architecture-patterns/layered-architecture-patterns/hexagonal-architecture` |
+| 16 | incremental-migration | `knowledge/application-architecture-patterns/layered-architecture-patterns/incremental-migration` |
+| 17 | infrastructure-layer | `knowledge/application-architecture-patterns/layered-architecture-patterns/infrastructure-layer` |
+| 18 | octane-compatibility | `knowledge/application-architecture-patterns/layered-architecture-patterns/octane-compatibility` |
+| 19 | presentation-layer | `knowledge/application-architecture-patterns/layered-architecture-patterns/presentation-layer` |
+| 20 | psr4-multi-layer | `knowledge/application-architecture-patterns/layered-architecture-patterns/psr4-multi-layer` |
+| 21 | real-world-tradeoffs | `knowledge/application-architecture-patterns/layered-architecture-patterns/real-world-tradeoffs` |
+| 22 | service-providers | `knowledge/application-architecture-patterns/layered-architecture-patterns/service-providers` |
+| 23 | three-layer-architecture | `knowledge/application-architecture-patterns/layered-architecture-patterns/three-layer-architecture` |
+| 24 | transaction-boundaries | `knowledge/application-architecture-patterns/layered-architecture-patterns/transaction-boundaries` |
+| 25 | use-case-classes | `knowledge/application-architecture-patterns/layered-architecture-patterns/use-case-classes` |
+| 26 | value-objects | `knowledge/application-architecture-patterns/layered-architecture-patterns/value-objects` |
 
 ### Modular Monolith Design
 
@@ -791,6 +798,32 @@ Fast discovery of all Knowledge Units in the repository.
 | 15 | shared-kernel | `knowledge/application-architecture-patterns/modular-monolith-design/shared-kernel` |
 | 16 | sync-inter-module-communication | `knowledge/application-architecture-patterns/modular-monolith-design/sync-inter-module-communication` |
 | 17 | testing-strategies | `knowledge/application-architecture-patterns/modular-monolith-design/testing-strategies` |
+
+### Package Decision Calibration
+
+| # | KU | Path |
+|---|---|------|
+| 1 | 01-calibrated-package-recommendation | `knowledge/application-architecture-patterns/package-decision-calibration/01-calibrated-package-recommendation` |
+| 2 | 02-package-fit-non-fit-analysis | `knowledge/application-architecture-patterns/package-decision-calibration/02-package-fit-non-fit-analysis` |
+| 3 | 03-package-wrapper-boundary | `knowledge/application-architecture-patterns/package-decision-calibration/03-package-wrapper-boundary` |
+| 4 | 04-package-escape-hatch-strategy | `knowledge/application-architecture-patterns/package-decision-calibration/04-package-escape-hatch-strategy` |
+| 5 | 05-when-not-to-build-custom | `knowledge/application-architecture-patterns/package-decision-calibration/05-when-not-to-build-custom` |
+| 6 | 06-laravel-cashier-decision-matrix | `knowledge/application-architecture-patterns/package-decision-calibration/06-laravel-cashier-decision-matrix` |
+| 7 | 07-spatie-permission-decision-matrix | `knowledge/application-architecture-patterns/package-decision-calibration/07-spatie-permission-decision-matrix` |
+| 8 | 08-laravel-pennant-decision-matrix | `knowledge/application-architecture-patterns/package-decision-calibration/08-laravel-pennant-decision-matrix` |
+| 9 | 09-horizon-decision-matrix | `knowledge/application-architecture-patterns/package-decision-calibration/09-horizon-decision-matrix` |
+| 10 | 10-telescope-pulse-relevance | `knowledge/application-architecture-patterns/package-decision-calibration/10-telescope-pulse-relevance` |
+
+### Saas Billing Architecture
+
+| # | KU | Path |
+|---|---|------|
+| 1 | 01-plan-feature-entitlement-model | `knowledge/application-architecture-patterns/saas-billing-architecture/01-plan-feature-entitlement-model` |
+| 2 | 02-cashier-billinggateway-wrapper | `knowledge/application-architecture-patterns/saas-billing-architecture/02-cashier-billinggateway-wrapper` |
+| 3 | 03-stripe-webhook-idempotency | `knowledge/application-architecture-patterns/saas-billing-architecture/03-stripe-webhook-idempotency` |
+| 4 | 04-webhook-audit-replay | `knowledge/application-architecture-patterns/saas-billing-architecture/04-webhook-audit-replay` |
+| 5 | 05-subscription-drift-reconciliation | `knowledge/application-architecture-patterns/saas-billing-architecture/05-subscription-drift-reconciliation` |
+| 6 | 06-billing-failure-states | `knowledge/application-architecture-patterns/saas-billing-architecture/06-billing-failure-states` |
 
 ### Service Layer Patterns
 
@@ -903,36 +936,40 @@ Fast discovery of all Knowledge Units in the repository.
 
 | # | KU | Path |
 |---|---|------|
-| 1 | block-for-redis-polling | `knowledge/async-distributed-systems/queue-engineering/block-for-redis-polling` |
-| 2 | closures-as-queued-jobs | `knowledge/async-distributed-systems/queue-engineering/closures-as-queued-jobs` |
-| 3 | custom-job-middleware | `knowledge/async-distributed-systems/queue-engineering/custom-job-middleware` |
-| 4 | deployment-restart-strategies | `knowledge/async-distributed-systems/queue-engineering/deployment-restart-strategies` |
-| 5 | job-faking-testing | `knowledge/async-distributed-systems/queue-engineering/job-faking-testing` |
-| 6 | job-lifecycle-state-machine | `knowledge/async-distributed-systems/queue-engineering/job-lifecycle-state-machine` |
-| 7 | job-serialization-payload-envelope | `knowledge/async-distributed-systems/queue-engineering/job-serialization-payload-envelope` |
-| 8 | make-job-middleware-command | `knowledge/async-distributed-systems/queue-engineering/make-job-middleware-command` |
-| 9 | max-jobs-max-time-worker-recycling | `knowledge/async-distributed-systems/queue-engineering/max-jobs-max-time-worker-recycling` |
-| 10 | pending-dispatch-lifecycle | `knowledge/async-distributed-systems/queue-engineering/pending-dispatch-lifecycle` |
-| 11 | process-signals | `knowledge/async-distributed-systems/queue-engineering/process-signals` |
-| 12 | queueable-mail-notifications-broadcast | `knowledge/async-distributed-systems/queue-engineering/queueable-mail-notifications-broadcast` |
-| 13 | queue-connections-vs-queues | `knowledge/async-distributed-systems/queue-engineering/queue-connections-vs-queues` |
-| 14 | queue-driver-architecture | `knowledge/async-distributed-systems/queue-engineering/queue-driver-architecture` |
-| 15 | queue-manager-connector-pattern | `knowledge/async-distributed-systems/queue-engineering/queue-manager-connector-pattern` |
-| 16 | queue-priority-multiple-queues | `knowledge/async-distributed-systems/queue-engineering/queue-priority-multiple-queues` |
-| 17 | rate-limited-job-middleware | `knowledge/async-distributed-systems/queue-engineering/rate-limited-job-middleware` |
-| 18 | rate-limiter-facade-job-rate-limiting | `knowledge/async-distributed-systems/queue-engineering/rate-limiter-facade-job-rate-limiting` |
-| 19 | retry-after-vs-timeout | `knowledge/async-distributed-systems/queue-engineering/retry-after-vs-timeout` |
-| 20 | serializes-models-trait | `knowledge/async-distributed-systems/queue-engineering/serializes-models-trait` |
-| 21 | should-be-unique-jobs | `knowledge/async-distributed-systems/queue-engineering/should-be-unique-jobs` |
-| 22 | should-queue-contract | `knowledge/async-distributed-systems/queue-engineering/should-queue-contract` |
-| 23 | spatie-rate-limited-job-middleware | `knowledge/async-distributed-systems/queue-engineering/spatie-rate-limited-job-middleware` |
-| 24 | supervisor-configuration | `knowledge/async-distributed-systems/queue-engineering/supervisor-configuration` |
-| 25 | supervisor-stopfitas-graceful-shutdown | `knowledge/async-distributed-systems/queue-engineering/supervisor-stopfitas-graceful-shutdown` |
-| 26 | systemd-service-workers | `knowledge/async-distributed-systems/queue-engineering/systemd-service-workers` |
-| 27 | throttles-exceptions-middleware | `knowledge/async-distributed-systems/queue-engineering/throttles-exceptions-middleware` |
-| 28 | without-overlapping-middleware | `knowledge/async-distributed-systems/queue-engineering/without-overlapping-middleware` |
-| 29 | worker-daemon-architecture | `knowledge/async-distributed-systems/queue-engineering/worker-daemon-architecture` |
-| 30 | worker-memory-management | `knowledge/async-distributed-systems/queue-engineering/worker-memory-management` |
+| 1 | billing-queue-topology | `knowledge/async-distributed-systems/queue-engineering/billing-queue-topology` |
+| 2 | block-for-redis-polling | `knowledge/async-distributed-systems/queue-engineering/block-for-redis-polling` |
+| 3 | closures-as-queued-jobs | `knowledge/async-distributed-systems/queue-engineering/closures-as-queued-jobs` |
+| 4 | custom-job-middleware | `knowledge/async-distributed-systems/queue-engineering/custom-job-middleware` |
+| 5 | deployment-restart-strategies | `knowledge/async-distributed-systems/queue-engineering/deployment-restart-strategies` |
+| 6 | job-faking-testing | `knowledge/async-distributed-systems/queue-engineering/job-faking-testing` |
+| 7 | job-lifecycle-state-machine | `knowledge/async-distributed-systems/queue-engineering/job-lifecycle-state-machine` |
+| 8 | job-serialization-payload-envelope | `knowledge/async-distributed-systems/queue-engineering/job-serialization-payload-envelope` |
+| 9 | make-job-middleware-command | `knowledge/async-distributed-systems/queue-engineering/make-job-middleware-command` |
+| 10 | max-jobs-max-time-worker-recycling | `knowledge/async-distributed-systems/queue-engineering/max-jobs-max-time-worker-recycling` |
+| 11 | pending-dispatch-lifecycle | `knowledge/async-distributed-systems/queue-engineering/pending-dispatch-lifecycle` |
+| 12 | process-signals | `knowledge/async-distributed-systems/queue-engineering/process-signals` |
+| 13 | queueable-mail-notifications-broadcast | `knowledge/async-distributed-systems/queue-engineering/queueable-mail-notifications-broadcast` |
+| 14 | queue-connections-vs-queues | `knowledge/async-distributed-systems/queue-engineering/queue-connections-vs-queues` |
+| 15 | queue-deployment-safety-billing | `knowledge/async-distributed-systems/queue-engineering/queue-deployment-safety-billing` |
+| 16 | queue-driver-architecture | `knowledge/async-distributed-systems/queue-engineering/queue-driver-architecture` |
+| 17 | queue-manager-connector-pattern | `knowledge/async-distributed-systems/queue-engineering/queue-manager-connector-pattern` |
+| 18 | queue-priority-multiple-queues | `knowledge/async-distributed-systems/queue-engineering/queue-priority-multiple-queues` |
+| 19 | rate-limited-job-middleware | `knowledge/async-distributed-systems/queue-engineering/rate-limited-job-middleware` |
+| 20 | rate-limiter-facade-job-rate-limiting | `knowledge/async-distributed-systems/queue-engineering/rate-limiter-facade-job-rate-limiting` |
+| 21 | retry-after-vs-timeout | `knowledge/async-distributed-systems/queue-engineering/retry-after-vs-timeout` |
+| 22 | retryuntil-deadline-based-retry | `knowledge/async-distributed-systems/queue-engineering/retryuntil-deadline-based-retry` |
+| 23 | serializes-models-trait | `knowledge/async-distributed-systems/queue-engineering/serializes-models-trait` |
+| 24 | should-be-unique-jobs | `knowledge/async-distributed-systems/queue-engineering/should-be-unique-jobs` |
+| 25 | should-queue-contract | `knowledge/async-distributed-systems/queue-engineering/should-queue-contract` |
+| 26 | spatie-rate-limited-job-middleware | `knowledge/async-distributed-systems/queue-engineering/spatie-rate-limited-job-middleware` |
+| 27 | supervisor-configuration | `knowledge/async-distributed-systems/queue-engineering/supervisor-configuration` |
+| 28 | supervisor-stopfitas-graceful-shutdown | `knowledge/async-distributed-systems/queue-engineering/supervisor-stopfitas-graceful-shutdown` |
+| 29 | systemd-service-workers | `knowledge/async-distributed-systems/queue-engineering/systemd-service-workers` |
+| 30 | throttles-exceptions-middleware | `knowledge/async-distributed-systems/queue-engineering/throttles-exceptions-middleware` |
+| 31 | webhook-queue-design | `knowledge/async-distributed-systems/queue-engineering/webhook-queue-design` |
+| 32 | without-overlapping-middleware | `knowledge/async-distributed-systems/queue-engineering/without-overlapping-middleware` |
+| 33 | worker-daemon-architecture | `knowledge/async-distributed-systems/queue-engineering/worker-daemon-architecture` |
+| 34 | worker-memory-management | `knowledge/async-distributed-systems/queue-engineering/worker-memory-management` |
 
 ### Queue Observability
 
@@ -1034,7 +1071,8 @@ Fast discovery of all Knowledge Units in the repository.
 | 4 | event-bus-patterns | `knowledge/backend-architecture-design/event-sourcing/event-bus-patterns` |
 | 5 | event-sourcing-components | `knowledge/backend-architecture-design/event-sourcing/event-sourcing-components` |
 | 6 | event-versioning-schema-evolution | `knowledge/backend-architecture-design/event-sourcing/event-versioning-schema-evolution` |
-| 7 | outbox-pattern | `knowledge/backend-architecture-design/event-sourcing/outbox-pattern` |
+| 7 | laravel-events-vs-event-sourcing | `knowledge/backend-architecture-design/event-sourcing/laravel-events-vs-event-sourcing` |
+| 8 | outbox-pattern | `knowledge/backend-architecture-design/event-sourcing/outbox-pattern` |
 
 ### Grasp Patterns
 
@@ -1788,6 +1826,14 @@ Fast discovery of all Knowledge Units in the repository.
 |---|---|------|
 | 1 | infrastructure-monitoring-tools | `knowledge/devops-infrastructure/observability-monitoring/infrastructure-monitoring-tools` |
 | 2 | observability-monitoring | `knowledge/devops-infrastructure/observability-monitoring/observability-monitoring` |
+
+### Queue Deployment Safety
+
+| # | KU | Path |
+|---|---|------|
+| 1 | 01-backward-compatible-deployments | `knowledge/devops-infrastructure/queue-deployment-safety/01-backward-compatible-deployments` |
+| 2 | 02-queue-restart-horizon-verify | `knowledge/devops-infrastructure/queue-deployment-safety/02-queue-restart-horizon-verify` |
+| 3 | queue-deployment-safety-operations | `knowledge/devops-infrastructure/queue-deployment-safety/queue-deployment-safety-operations` |
 
 ### Serverless Laravel
 
@@ -2545,6 +2591,14 @@ Fast discovery of all Knowledge Units in the repository.
 | 1 | apm-tool-integration | `knowledge/observability-production-intelligence/apm-performance-monitoring/apm-tool-integration` |
 | 2 | n-plus-one-detection | `knowledge/observability-production-intelligence/apm-performance-monitoring/n-plus-one-detection` |
 | 3 | performance-profiling | `knowledge/observability-production-intelligence/apm-performance-monitoring/performance-profiling` |
+
+### Billing Observability
+
+| # | KU | Path |
+|---|---|------|
+| 1 | 01-billing-webhook-metrics | `knowledge/observability-production-intelligence/billing-observability/01-billing-webhook-metrics` |
+| 2 | 02-billing-alerts-repair-flows | `knowledge/observability-production-intelligence/billing-observability/02-billing-alerts-repair-flows` |
+| 3 | billing-production-metrics | `knowledge/observability-production-intelligence/billing-observability/billing-production-metrics` |
 
 ### Dashboards Visualization
 
@@ -3311,14 +3365,16 @@ Fast discovery of all Knowledge Units in the repository.
 |---|---|------|
 | 1 | abac-authorization | `knowledge/security-identity-engineering/authorization/abac-authorization` |
 | 2 | authorization-testing | `knowledge/security-identity-engineering/authorization/authorization-testing` |
-| 3 | blade-can-directives | `knowledge/security-identity-engineering/authorization/blade-can-directives` |
-| 4 | gates-closure | `knowledge/security-identity-engineering/authorization/gates-closure` |
-| 5 | policies-model | `knowledge/security-identity-engineering/authorization/policies-model` |
-| 6 | policy-auto-discovery | `knowledge/security-identity-engineering/authorization/policy-auto-discovery` |
-| 7 | rbac-design | `knowledge/security-identity-engineering/authorization/rbac-design` |
-| 8 | rebac-authorization | `knowledge/security-identity-engineering/authorization/rebac-authorization` |
-| 9 | spatie-permission | `knowledge/security-identity-engineering/authorization/spatie-permission` |
-| 10 | super-admin-bypass | `knowledge/security-identity-engineering/authorization/super-admin-bypass` |
+| 3 | authorization-test-matrix-saas | `knowledge/security-identity-engineering/authorization/authorization-test-matrix-saas` |
+| 4 | blade-can-directives | `knowledge/security-identity-engineering/authorization/blade-can-directives` |
+| 5 | gates-closure | `knowledge/security-identity-engineering/authorization/gates-closure` |
+| 6 | policies-model | `knowledge/security-identity-engineering/authorization/policies-model` |
+| 7 | policy-auto-discovery | `knowledge/security-identity-engineering/authorization/policy-auto-discovery` |
+| 8 | rbac-design | `knowledge/security-identity-engineering/authorization/rbac-design` |
+| 9 | rebac-authorization | `knowledge/security-identity-engineering/authorization/rebac-authorization` |
+| 10 | spatie-permission | `knowledge/security-identity-engineering/authorization/spatie-permission` |
+| 11 | super-admin-bypass | `knowledge/security-identity-engineering/authorization/super-admin-bypass` |
+| 12 | team-spatie-permission-depth | `knowledge/security-identity-engineering/authorization/team-spatie-permission-depth` |
 
 ### Hardening
 

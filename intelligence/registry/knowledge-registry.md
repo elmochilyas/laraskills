@@ -4,9 +4,9 @@ Repository-wide inventory of the ECC knowledge system.
 
 | Attribute | Value |
 |---|---|
-| Total Knowledge Units | 2321 |
+| Total Knowledge Units | 2352 |
 | Total Domains | 21 |
-| Generated | 2026-06-10 09:55:53 |
+| Generated | 2026-06-22 22:42:42 |
 
 ---
 
@@ -17,23 +17,23 @@ Repository-wide inventory of the ECC knowledge system.
 | 1 | AI Intelligence Systems | 117 | 117 | 117 | 117 | 117 | 117 |
 | 2 | API & CRUD System Engineering | 246 | 246 | 246 | 246 | 246 | 246 |
 | 3 | API Integration Engineering | 82 | 82 | 82 | 82 | 82 | 82 |
-| 4 | Application Architecture Patterns | 107 | 107 | 107 | 107 | 107 | 107 |
-| 5 | Async & Distributed Systems | 95 | 95 | 95 | 95 | 95 | 95 |
-| 6 | Backend Architecture Design | 84 | 84 | 84 | 84 | 84 | 84 |
+| 4 | Application Architecture Patterns | 125 | 125 | 125 | 125 | 125 | 125 |
+| 5 | Async & Distributed Systems | 99 | 99 | 99 | 99 | 99 | 99 |
+| 6 | Backend Architecture Design | 85 | 85 | 85 | 85 | 85 | 85 |
 | 7 | Cost & Resource Optimization | 109 | 109 | 109 | 109 | 109 | 109 |
 | 8 | Data Engineering & Analytics | 44 | 44 | 44 | 44 | 44 | 44 |
 | 9 | Data Storage Systems | 289 | 289 | 289 | 289 | 289 | 289 |
-| 10 | DevOps & Infrastructure | 47 | 47 | 47 | 47 | 47 | 47 |
+| 10 | DevOps & Infrastructure | 50 | 50 | 50 | 50 | 50 | 50 |
 | 11 | Governance & Compliance Engineering | 40 | 40 | 40 | 40 | 40 | 40 |
 | 12 | Laravel Core Application Engineering | 159 | 159 | 159 | 159 | 159 | 159 |
 | 13 | Laravel Eloquent Domain Modeling | 171 | 171 | 171 | 171 | 171 | 171 |
 | 14 | Laravel Execution Lifecycle | 110 | 110 | 110 | 110 | 110 | 110 |
-| 15 | Observability & Production Intelligence | 34 | 34 | 34 | 34 | 34 | 34 |
+| 15 | Observability & Production Intelligence | 37 | 37 | 37 | 37 | 37 | 37 |
 | 16 | Performance & Runtime Engineering | 161 | 161 | 161 | 161 | 161 | 161 |
 | 17 | Platform Engineering & Developer Experience | 107 | 107 | 107 | 107 | 107 | 107 |
 | 18 | Real-Time Systems | 39 | 39 | 39 | 39 | 39 | 39 |
 | 19 | Search & Retrieval Systems | 140 | 140 | 140 | 140 | 140 | 140 |
-| 20 | Security & Identity Engineering | 61 | 61 | 61 | 61 | 61 | 61 |
+| 20 | Security & Identity Engineering | 63 | 63 | 63 | 63 | 63 | 63 |
 | 21 | Testing & Reliability Engineering | 79 | 79 | 79 | 79 | 79 | 79 |
 
 
@@ -632,12 +632,12 @@ Repository-wide inventory of the ECC knowledge system.
 
 | Metric | Count |
 |--------|-------|
-| Knowledge Units | 107 |
-| Rules | 107 |
-| Skills | 107 |
-| Decision Trees | 107 |
-| Anti-Patterns | 107 |
-| Checklists | 107 |
+| Knowledge Units | 125 |
+| Rules | 125 |
+| Skills | 125 |
+| Decision Trees | 125 |
+| Anti-Patterns | 125 |
+| Checklists | 125 |
 
 ### Architecture Enforcement Governance
 
@@ -651,6 +651,10 @@ Repository-wide inventory of the ECC knowledge system.
 - **[refactoring-remediation](knowledge/application-architecture-patterns/architecture-enforcement-governance/refactoring-remediation/04-standardized-knowledge.md)** (intermediate)
 - **[static-analysis-rules](knowledge/application-architecture-patterns/architecture-enforcement-governance/static-analysis-rules/04-standardized-knowledge.md)** (intermediate)
 - **[team-convention-documentation](knowledge/application-architecture-patterns/architecture-enforcement-governance/team-convention-documentation/04-standardized-knowledge.md)** (intermediate)
+
+### Calibrated Architecture Language
+
+- **[01-calibrated-language-rules](knowledge/application-architecture-patterns/calibrated-architecture-language/01-calibrated-language-rules/04-standardized-knowledge.md)** (intermediate)
 
 ### Code Organization Standards
 
@@ -700,6 +704,7 @@ Repository-wide inventory of the ECC knowledge system.
 ### Layered Architecture Patterns
 
 - **[action-classes](knowledge/application-architecture-patterns/layered-architecture-patterns/action-classes/04-standardized-knowledge.md)** (intermediate)
+- **[aftercommit-events-jobs](knowledge/application-architecture-patterns/layered-architecture-patterns/aftercommit-events-jobs/04-standardized-knowledge.md)** (intermediate)
 - **[application-layer](knowledge/application-architecture-patterns/layered-architecture-patterns/application-layer/04-standardized-knowledge.md)** (intermediate)
 - **[architecture-tests](knowledge/application-architecture-patterns/layered-architecture-patterns/architecture-tests/04-standardized-knowledge.md)** (intermediate)
 - **[clean-architecture](knowledge/application-architecture-patterns/layered-architecture-patterns/clean-architecture/04-standardized-knowledge.md)** (intermediate)
@@ -745,6 +750,28 @@ Repository-wide inventory of the ECC knowledge system.
 - **[sync-inter-module-communication](knowledge/application-architecture-patterns/modular-monolith-design/sync-inter-module-communication/04-standardized-knowledge.md)** (intermediate)
 - **[testing-strategies](knowledge/application-architecture-patterns/modular-monolith-design/testing-strategies/04-standardized-knowledge.md)** (intermediate)
 
+### Package Decision Calibration
+
+- **[01-calibrated-package-recommendation](knowledge/application-architecture-patterns/package-decision-calibration/01-calibrated-package-recommendation/04-standardized-knowledge.md)** (intermediate)
+- **[02-package-fit-non-fit-analysis](knowledge/application-architecture-patterns/package-decision-calibration/02-package-fit-non-fit-analysis/04-standardized-knowledge.md)** (intermediate)
+- **[03-package-wrapper-boundary](knowledge/application-architecture-patterns/package-decision-calibration/03-package-wrapper-boundary/04-standardized-knowledge.md)** (intermediate)
+- **[04-package-escape-hatch-strategy](knowledge/application-architecture-patterns/package-decision-calibration/04-package-escape-hatch-strategy/04-standardized-knowledge.md)** (intermediate)
+- **[05-when-not-to-build-custom](knowledge/application-architecture-patterns/package-decision-calibration/05-when-not-to-build-custom/04-standardized-knowledge.md)** (intermediate)
+- **[06-laravel-cashier-decision-matrix](knowledge/application-architecture-patterns/package-decision-calibration/06-laravel-cashier-decision-matrix/04-standardized-knowledge.md)** (intermediate)
+- **[07-spatie-permission-decision-matrix](knowledge/application-architecture-patterns/package-decision-calibration/07-spatie-permission-decision-matrix/04-standardized-knowledge.md)** (intermediate)
+- **[08-laravel-pennant-decision-matrix](knowledge/application-architecture-patterns/package-decision-calibration/08-laravel-pennant-decision-matrix/04-standardized-knowledge.md)** (intermediate)
+- **[09-horizon-decision-matrix](knowledge/application-architecture-patterns/package-decision-calibration/09-horizon-decision-matrix/04-standardized-knowledge.md)** (intermediate)
+- **[10-telescope-pulse-relevance](knowledge/application-architecture-patterns/package-decision-calibration/10-telescope-pulse-relevance/04-standardized-knowledge.md)** (intermediate)
+
+### Saas Billing Architecture
+
+- **[01-plan-feature-entitlement-model](knowledge/application-architecture-patterns/saas-billing-architecture/01-plan-feature-entitlement-model/04-standardized-knowledge.md)** (intermediate)
+- **[02-cashier-billinggateway-wrapper](knowledge/application-architecture-patterns/saas-billing-architecture/02-cashier-billinggateway-wrapper/04-standardized-knowledge.md)** (intermediate)
+- **[03-stripe-webhook-idempotency](knowledge/application-architecture-patterns/saas-billing-architecture/03-stripe-webhook-idempotency/04-standardized-knowledge.md)** (intermediate)
+- **[04-webhook-audit-replay](knowledge/application-architecture-patterns/saas-billing-architecture/04-webhook-audit-replay/04-standardized-knowledge.md)** (intermediate)
+- **[05-subscription-drift-reconciliation](knowledge/application-architecture-patterns/saas-billing-architecture/05-subscription-drift-reconciliation/04-standardized-knowledge.md)** (intermediate)
+- **[06-billing-failure-states](knowledge/application-architecture-patterns/saas-billing-architecture/06-billing-failure-states/04-standardized-knowledge.md)** (intermediate)
+
 ### Service Layer Patterns
 
 - **[action-classes](knowledge/application-architecture-patterns/service-layer-patterns/action-classes/04-standardized-knowledge.md)** (intermediate)
@@ -771,12 +798,12 @@ Repository-wide inventory of the ECC knowledge system.
 
 | Metric | Count |
 |--------|-------|
-| Knowledge Units | 95 |
-| Rules | 95 |
-| Skills | 95 |
-| Decision Trees | 95 |
-| Anti-Patterns | 95 |
-| Checklists | 95 |
+| Knowledge Units | 99 |
+| Rules | 99 |
+| Skills | 99 |
+| Decision Trees | 99 |
+| Anti-Patterns | 99 |
+| Checklists | 99 |
 
 ### Async Patterns
 
@@ -847,6 +874,7 @@ Repository-wide inventory of the ECC knowledge system.
 
 ### Queue Engineering
 
+- **[billing-queue-topology](knowledge/async-distributed-systems/queue-engineering/billing-queue-topology/04-standardized-knowledge.md)** (intermediate)
 - **[block-for-redis-polling](knowledge/async-distributed-systems/queue-engineering/block-for-redis-polling/04-standardized-knowledge.md)** (intermediate)
 - **[closures-as-queued-jobs](knowledge/async-distributed-systems/queue-engineering/closures-as-queued-jobs/04-standardized-knowledge.md)** (intermediate)
 - **[custom-job-middleware](knowledge/async-distributed-systems/queue-engineering/custom-job-middleware/04-standardized-knowledge.md)** (intermediate)
@@ -860,12 +888,14 @@ Repository-wide inventory of the ECC knowledge system.
 - **[process-signals](knowledge/async-distributed-systems/queue-engineering/process-signals/04-standardized-knowledge.md)** (intermediate)
 - **[queueable-mail-notifications-broadcast](knowledge/async-distributed-systems/queue-engineering/queueable-mail-notifications-broadcast/04-standardized-knowledge.md)** (intermediate)
 - **[queue-connections-vs-queues](knowledge/async-distributed-systems/queue-engineering/queue-connections-vs-queues/04-standardized-knowledge.md)** (intermediate)
+- **[queue-deployment-safety-billing](knowledge/async-distributed-systems/queue-engineering/queue-deployment-safety-billing/04-standardized-knowledge.md)** (intermediate)
 - **[queue-driver-architecture](knowledge/async-distributed-systems/queue-engineering/queue-driver-architecture/04-standardized-knowledge.md)** (intermediate)
 - **[queue-manager-connector-pattern](knowledge/async-distributed-systems/queue-engineering/queue-manager-connector-pattern/04-standardized-knowledge.md)** (intermediate)
 - **[queue-priority-multiple-queues](knowledge/async-distributed-systems/queue-engineering/queue-priority-multiple-queues/04-standardized-knowledge.md)** (intermediate)
 - **[rate-limited-job-middleware](knowledge/async-distributed-systems/queue-engineering/rate-limited-job-middleware/04-standardized-knowledge.md)** (intermediate)
 - **[rate-limiter-facade-job-rate-limiting](knowledge/async-distributed-systems/queue-engineering/rate-limiter-facade-job-rate-limiting/04-standardized-knowledge.md)** (intermediate)
 - **[retry-after-vs-timeout](knowledge/async-distributed-systems/queue-engineering/retry-after-vs-timeout/04-standardized-knowledge.md)** (intermediate)
+- **[retryuntil-deadline-based-retry](knowledge/async-distributed-systems/queue-engineering/retryuntil-deadline-based-retry/04-standardized-knowledge.md)** (intermediate)
 - **[serializes-models-trait](knowledge/async-distributed-systems/queue-engineering/serializes-models-trait/04-standardized-knowledge.md)** (intermediate)
 - **[should-be-unique-jobs](knowledge/async-distributed-systems/queue-engineering/should-be-unique-jobs/04-standardized-knowledge.md)** (intermediate)
 - **[should-queue-contract](knowledge/async-distributed-systems/queue-engineering/should-queue-contract/04-standardized-knowledge.md)** (intermediate)
@@ -874,6 +904,7 @@ Repository-wide inventory of the ECC knowledge system.
 - **[supervisor-stopfitas-graceful-shutdown](knowledge/async-distributed-systems/queue-engineering/supervisor-stopfitas-graceful-shutdown/04-standardized-knowledge.md)** (intermediate)
 - **[systemd-service-workers](knowledge/async-distributed-systems/queue-engineering/systemd-service-workers/04-standardized-knowledge.md)** (intermediate)
 - **[throttles-exceptions-middleware](knowledge/async-distributed-systems/queue-engineering/throttles-exceptions-middleware/04-standardized-knowledge.md)** (intermediate)
+- **[webhook-queue-design](knowledge/async-distributed-systems/queue-engineering/webhook-queue-design/04-standardized-knowledge.md)** (intermediate)
 - **[without-overlapping-middleware](knowledge/async-distributed-systems/queue-engineering/without-overlapping-middleware/04-standardized-knowledge.md)** (intermediate)
 - **[worker-daemon-architecture](knowledge/async-distributed-systems/queue-engineering/worker-daemon-architecture/04-standardized-knowledge.md)** (intermediate)
 - **[worker-memory-management](knowledge/async-distributed-systems/queue-engineering/worker-memory-management/04-standardized-knowledge.md)** (intermediate)
@@ -910,12 +941,12 @@ Repository-wide inventory of the ECC knowledge system.
 
 | Metric | Count |
 |--------|-------|
-| Knowledge Units | 84 |
-| Rules | 84 |
-| Skills | 84 |
-| Decision Trees | 84 |
-| Anti-Patterns | 84 |
-| Checklists | 84 |
+| Knowledge Units | 85 |
+| Rules | 85 |
+| Skills | 85 |
+| Decision Trees | 85 |
+| Anti-Patterns | 85 |
+| Checklists | 85 |
 
 ### Architectural Decision Records
 
@@ -967,6 +998,7 @@ Repository-wide inventory of the ECC knowledge system.
 - **[event-bus-patterns](knowledge/backend-architecture-design/event-sourcing/event-bus-patterns/04-standardized-knowledge.md)** (intermediate)
 - **[event-sourcing-components](knowledge/backend-architecture-design/event-sourcing/event-sourcing-components/04-standardized-knowledge.md)** (intermediate)
 - **[event-versioning-schema-evolution](knowledge/backend-architecture-design/event-sourcing/event-versioning-schema-evolution/04-standardized-knowledge.md)** (intermediate)
+- **[laravel-events-vs-event-sourcing](knowledge/backend-architecture-design/event-sourcing/laravel-events-vs-event-sourcing/04-standardized-knowledge.md)** (intermediate)
 - **[outbox-pattern](knowledge/backend-architecture-design/event-sourcing/outbox-pattern/04-standardized-knowledge.md)** (intermediate)
 
 ### Grasp Patterns
@@ -1600,12 +1632,12 @@ Repository-wide inventory of the ECC knowledge system.
 
 | Metric | Count |
 |--------|-------|
-| Knowledge Units | 47 |
-| Rules | 47 |
-| Skills | 47 |
-| Decision Trees | 47 |
-| Anti-Patterns | 47 |
-| Checklists | 47 |
+| Knowledge Units | 50 |
+| Rules | 50 |
+| Skills | 50 |
+| Decision Trees | 50 |
+| Anti-Patterns | 50 |
+| Checklists | 50 |
 
 ### Ci Cd Pipelines
 
@@ -1673,6 +1705,12 @@ Repository-wide inventory of the ECC knowledge system.
 
 - **[infrastructure-monitoring-tools](knowledge/devops-infrastructure/observability-monitoring/infrastructure-monitoring-tools/04-standardized-knowledge.md)** (intermediate)
 - **[observability-monitoring](knowledge/devops-infrastructure/observability-monitoring/observability-monitoring/04-standardized-knowledge.md)** (intermediate)
+
+### Queue Deployment Safety
+
+- **[01-backward-compatible-deployments](knowledge/devops-infrastructure/queue-deployment-safety/01-backward-compatible-deployments/04-standardized-knowledge.md)** (intermediate)
+- **[02-queue-restart-horizon-verify](knowledge/devops-infrastructure/queue-deployment-safety/02-queue-restart-horizon-verify/04-standardized-knowledge.md)** (intermediate)
+- **[queue-deployment-safety-operations](knowledge/devops-infrastructure/queue-deployment-safety/queue-deployment-safety-operations/04-standardized-knowledge.md)** (intermediate)
 
 ### Serverless Laravel
 
@@ -2347,12 +2385,12 @@ Repository-wide inventory of the ECC knowledge system.
 
 | Metric | Count |
 |--------|-------|
-| Knowledge Units | 34 |
-| Rules | 34 |
-| Skills | 34 |
-| Decision Trees | 34 |
-| Anti-Patterns | 34 |
-| Checklists | 34 |
+| Knowledge Units | 37 |
+| Rules | 37 |
+| Skills | 37 |
+| Decision Trees | 37 |
+| Anti-Patterns | 37 |
+| Checklists | 37 |
 
 ### Advanced Topics
 
@@ -2377,6 +2415,12 @@ Repository-wide inventory of the ECC knowledge system.
 - **[apm-tool-integration](knowledge/observability-production-intelligence/apm-performance-monitoring/apm-tool-integration/04-standardized-knowledge.md)** (intermediate)
 - **[n-plus-one-detection](knowledge/observability-production-intelligence/apm-performance-monitoring/n-plus-one-detection/04-standardized-knowledge.md)** (intermediate)
 - **[performance-profiling](knowledge/observability-production-intelligence/apm-performance-monitoring/performance-profiling/04-standardized-knowledge.md)** (intermediate)
+
+### Billing Observability
+
+- **[01-billing-webhook-metrics](knowledge/observability-production-intelligence/billing-observability/01-billing-webhook-metrics/04-standardized-knowledge.md)** (intermediate)
+- **[02-billing-alerts-repair-flows](knowledge/observability-production-intelligence/billing-observability/02-billing-alerts-repair-flows/04-standardized-knowledge.md)** (intermediate)
+- **[billing-production-metrics](knowledge/observability-production-intelligence/billing-observability/billing-production-metrics/04-standardized-knowledge.md)** (intermediate)
 
 ### Dashboards Visualization
 
@@ -3045,12 +3089,12 @@ Repository-wide inventory of the ECC knowledge system.
 
 | Metric | Count |
 |--------|-------|
-| Knowledge Units | 61 |
-| Rules | 61 |
-| Skills | 61 |
-| Decision Trees | 61 |
-| Anti-Patterns | 61 |
-| Checklists | 61 |
+| Knowledge Units | 63 |
+| Rules | 63 |
+| Skills | 63 |
+| Decision Trees | 63 |
+| Anti-Patterns | 63 |
+| Checklists | 63 |
 
 ### Audit Logging
 
@@ -3080,6 +3124,7 @@ Repository-wide inventory of the ECC knowledge system.
 
 - **[abac-authorization](knowledge/security-identity-engineering/authorization/abac-authorization/04-standardized-knowledge.md)** (intermediate)
 - **[authorization-testing](knowledge/security-identity-engineering/authorization/authorization-testing/04-standardized-knowledge.md)** (intermediate)
+- **[authorization-test-matrix-saas](knowledge/security-identity-engineering/authorization/authorization-test-matrix-saas/04-standardized-knowledge.md)** (intermediate)
 - **[blade-can-directives](knowledge/security-identity-engineering/authorization/blade-can-directives/04-standardized-knowledge.md)** (intermediate)
 - **[gates-closure](knowledge/security-identity-engineering/authorization/gates-closure/04-standardized-knowledge.md)** (intermediate)
 - **[policies-model](knowledge/security-identity-engineering/authorization/policies-model/04-standardized-knowledge.md)** (intermediate)
@@ -3088,6 +3133,7 @@ Repository-wide inventory of the ECC knowledge system.
 - **[rebac-authorization](knowledge/security-identity-engineering/authorization/rebac-authorization/04-standardized-knowledge.md)** (intermediate)
 - **[spatie-permission](knowledge/security-identity-engineering/authorization/spatie-permission/04-standardized-knowledge.md)** (intermediate)
 - **[super-admin-bypass](knowledge/security-identity-engineering/authorization/super-admin-bypass/04-standardized-knowledge.md)** (intermediate)
+- **[team-spatie-permission-depth](knowledge/security-identity-engineering/authorization/team-spatie-permission-depth/04-standardized-knowledge.md)** (intermediate)
 
 ### Hardening
 
