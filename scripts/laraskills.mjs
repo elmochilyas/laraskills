@@ -30,6 +30,7 @@ import {
   getAllToolChecks,
   getToolDefinition,
   getAllToolDefinitions,
+  validateOpenCodeFileReferences,
 } from '../src/runtime/tool-integrations.mjs';
 import {
   isLaravelProject,
@@ -137,6 +138,10 @@ function copyHarnessConfigs(target) {
     }
     if (existsSync(join(src, 'opencode.json'))) {
       copyFileSync(join(src, 'opencode.json'), join(dest, 'opencode.json'));
+      count++;
+    }
+    if (existsSync(join(src, 'commands'))) {
+      cpSync(join(src, 'commands'), join(dest, 'commands'), { recursive: true });
       count++;
     }
     if (existsSync(join(src, 'rules.mdc'))) {
@@ -406,13 +411,29 @@ function cmdDoctor(doctorArgs) {
         console.log(`  ${tc.displayName}:  ${status} ${supportLabel}`);
       }
     }
+
+    const openCodeRefs = validateOpenCodeFileReferences(target);
+    if (stateAssistants.includes('opencode') || stateTools.includes('opencode')) {
+      if (!openCodeRefs.valid) {
+        console.log('');
+        console.log(`OpenCode: broken`);
+        for (const missing of openCodeRefs.missingFiles) {
+          console.log(`  Missing file reference: ${missing.resolvedPath}`);
+          console.log(`  Fix: run laraskills update --assistants opencode --yes`);
+        }
+      }
+    }
   }
 
   console.log('');
 
   const machineOk = resolvedRoot && validateIntelligenceRoot(resolvedRoot).valid;
   const projectOk = state !== null;
-  const totalOk = machineOk && (isLaravel ? projectOk : true);
+  let totalOk = machineOk && (isLaravel ? projectOk : true);
+  if (state && (state.assistants?.includes('opencode') || state.tools?.includes('opencode'))) {
+    const openCodeRefsCheck = validateOpenCodeFileReferences(target);
+    if (!openCodeRefsCheck.valid) totalOk = false;
+  }
 
   if (totalOk) {
     console.log('Status: HEALTHY');
@@ -557,6 +578,10 @@ function install(target, profile, toolIds = [], flags = {}) {
     ? [...new Set([...skillList, 'rules', 'hooks', 'mcp-configs', ...agents.map(a => a.replace('.md', ''))])]
     : [];
   const installedTools = toolIds.filter(id => getToolDefinition(id));
+  const userSelectedAssistants = flags.assistants || toolIds || [];
+  const autoAddedTools = installedTools
+    .filter(id => !userSelectedAssistants.includes(id))
+    .map(id => getToolDefinition(id)?.displayName || id);
   const state = {
     version: pkg.version,
     target,
@@ -575,7 +600,13 @@ function install(target, profile, toolIds = [], flags = {}) {
   log('Installation complete!');
   log(`Profile: ${profile}`);
   if (!dryRun) {
-    log(`Tool integrations: ${installedTools.map(id => getToolDefinition(id)?.displayName || id).join(', ') || 'none'}`);
+    const userLabels = userSelectedAssistants
+      .filter(id => getToolDefinition(id))
+      .map(id => getToolDefinition(id)?.displayName || id);
+    log(`Tool integrations: ${userLabels.join(', ') || 'none'}`);
+    if (autoAddedTools.length > 0) {
+      log(`Shared MCP config: generated`);
+    }
     console.log('');
     console.log('Next steps:');
     console.log(`  laraskills doctor               Verify everything is set up`);

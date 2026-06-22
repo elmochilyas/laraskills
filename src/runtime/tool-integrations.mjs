@@ -1,4 +1,4 @@
-import { existsSync, readFileSync, writeFileSync, mkdirSync, copyFileSync, appendFileSync } from 'node:fs';
+import { existsSync, readFileSync, writeFileSync, mkdirSync, copyFileSync, appendFileSync, cpSync } from 'node:fs';
 import { join, dirname } from 'node:path';
 import { fileURLToPath } from 'node:url';
 
@@ -109,6 +109,7 @@ const TOOL_DEFINITIONS = {
     description: 'Auto-configures MCP and project instructions.',
     doctorChecks: [
       { name: 'OpenCode instructions', file: '.opencode/opencode.json', description: 'Project-wide instructions, agents, commands' },
+      { name: 'OpenCode commands', file: '.opencode/commands/', description: 'OpenCode custom command definitions' },
       { name: 'OpenCode MCP', file: 'opencode.json', description: 'MCP server connection (project root)' },
     ],
     setup(target, flags) {
@@ -144,6 +145,17 @@ const TOOL_DEFINITIONS = {
         }
       }
 
+      const srcOpenCodeCmds = join(ROOT, '.opencode', 'commands');
+      const destOpenCodeCmds = join(target, '.opencode', 'commands');
+      if (existsSync(srcOpenCodeCmds)) {
+        if (!dryRun) {
+          cpSync(srcOpenCodeCmds, destOpenCodeCmds, { recursive: true });
+          results.push({ file: '.opencode/commands/', action: 'created' });
+        } else {
+          results.push({ file: '.opencode/commands/', action: 'would-create' });
+        }
+      }
+
       const mcpResult = handleJsonMcp(target, 'opencode.json', true, dryRun);
       results.push(mcpResult);
 
@@ -156,10 +168,10 @@ const TOOL_DEFINITIONS = {
         try {
           const cfg = JSON.parse(readFileSync(join(target, 'opencode.json'), 'utf-8'));
           const hasMCP = cfg.mcp && cfg.mcp.laraskills;
-          return { configured: !!hasMCP, support: 'configured', configFiles: ['.opencode/opencode.json', 'opencode.json'], mcpConfigured: !!hasMCP };
-        } catch { return { configured: hasInstructions, support: 'configured', configFiles: ['.opencode/opencode.json'], mcpConfigured: false }; }
+          return { configured: !!hasMCP, support: 'configured', configFiles: ['.opencode/opencode.json', '.opencode/commands/', 'opencode.json'], mcpConfigured: !!hasMCP };
+        } catch { return { configured: hasInstructions, support: 'configured', configFiles: ['.opencode/opencode.json', '.opencode/commands/'], mcpConfigured: false }; }
       }
-      return { configured: !!hasInstructions, support: 'configured', configFiles: hasInstructions ? ['.opencode/opencode.json'] : [], mcpConfigured: false };
+      return { configured: !!hasInstructions, support: 'configured', configFiles: hasInstructions ? ['.opencode/opencode.json', '.opencode/commands/'] : [], mcpConfigured: false };
     },
   },
 
@@ -410,4 +422,58 @@ export function getAllToolChecks(target) {
     });
   }
   return results;
+}
+
+export function validateOpenCodeFileReferences(target) {
+  const cfgPath = join(target, '.opencode', 'opencode.json');
+  if (!existsSync(cfgPath)) return { valid: true, missingFiles: [] };
+
+  let cfg;
+  try {
+    cfg = JSON.parse(readFileSync(cfgPath, 'utf-8'));
+  } catch {
+    return { valid: false, missingFiles: [], parseError: true };
+  }
+
+  const missingFiles = [];
+  const fileRefPattern = /\{file:([^}]+)\}/g;
+
+  function checkRefs(obj, path) {
+    if (!obj || typeof obj !== 'object') return;
+    if (Array.isArray(obj)) {
+      for (let i = 0; i < obj.length; i++) {
+        checkRefs(obj[i], `${path}[${i}]`);
+      }
+      return;
+    }
+    for (const [key, value] of Object.entries(obj)) {
+      const currentPath = `${path}.${key}`;
+      if (typeof value === 'string') {
+        let match;
+        while ((match = fileRefPattern.exec(value)) !== null) {
+          const refPath = match[1];
+          const resolved = join(dirname(cfgPath), refPath);
+          const normalizedResolved = resolved.replace(/\\/g, '/');
+          if (!existsSync(resolved)) {
+            missingFiles.push({
+              configPath: '.opencode/opencode.json',
+              reference: refPath,
+              resolvedPath: normalizedResolved,
+              key: currentPath,
+            });
+          }
+        }
+      } else if (typeof value === 'object' && value !== null) {
+        checkRefs(value, currentPath);
+      }
+    }
+  }
+
+  checkRefs(cfg, '.opencode/opencode.json');
+
+  return {
+    valid: missingFiles.length === 0,
+    missingFiles,
+    parseError: false,
+  };
 }
