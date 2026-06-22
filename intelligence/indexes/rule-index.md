@@ -4,9 +4,9 @@ Repository-wide rule registry. Centralized discovery for AI agents.
 
 | Attribute | Value |
 |---|---|
-| Total Rules | 2321 |
+| Total Rules | 2352 |
 | Domains | 21 |
-| Generated | 2026-06-10 09:55:53 |
+| Generated | 2026-06-22 22:42:42 |
 
 ---
 
@@ -574,7 +574,7 @@ Repository-wide rule registry. Centralized discovery for AI agents.
 - **spatie-webhook-server-advanced** -- knowledge/api-integration-engineering/webhooks/spatie-webhook-server-advanced/05-rules.md
 - **verification-signatures** -- knowledge/api-integration-engineering/webhooks/verification-signatures/05-rules.md
 
-### Application Architecture Patterns (107 rules)
+### Application Architecture Patterns (125 rules)
 
 **Architecture Enforcement Governance** -- 10 units
 
@@ -588,6 +588,10 @@ Repository-wide rule registry. Centralized discovery for AI agents.
 - **refactoring-remediation** -- knowledge/application-architecture-patterns/architecture-enforcement-governance/refactoring-remediation/05-rules.md
 - **static-analysis-rules** -- knowledge/application-architecture-patterns/architecture-enforcement-governance/static-analysis-rules/05-rules.md
 - **team-convention-documentation** -- knowledge/application-architecture-patterns/architecture-enforcement-governance/team-convention-documentation/05-rules.md
+
+**Calibrated Architecture Language** -- 1 units
+
+- **01-calibrated-language-rules** -- knowledge/application-architecture-patterns/calibrated-architecture-language/01-calibrated-language-rules/05-rules.md
 
 **Code Organization Standards** -- 12 units
 
@@ -634,9 +638,10 @@ Repository-wide rule registry. Centralized discovery for AI agents.
 - **shared-kernel** -- knowledge/application-architecture-patterns/domain-boundaries-bounded-contexts/shared-kernel/05-rules.md
 - **team-to-context-mapping** -- knowledge/application-architecture-patterns/domain-boundaries-bounded-contexts/team-to-context-mapping/05-rules.md
 
-**Layered Architecture Patterns** -- 25 units
+**Layered Architecture Patterns** -- 26 units
 
 - **action-classes** -- knowledge/application-architecture-patterns/layered-architecture-patterns/action-classes/05-rules.md
+- **aftercommit-events-jobs** -- knowledge/application-architecture-patterns/layered-architecture-patterns/aftercommit-events-jobs/05-rules.md
 - **application-layer** -- knowledge/application-architecture-patterns/layered-architecture-patterns/application-layer/05-rules.md
 - **architecture-tests** -- knowledge/application-architecture-patterns/layered-architecture-patterns/architecture-tests/05-rules.md
 - **clean-architecture** -- knowledge/application-architecture-patterns/layered-architecture-patterns/clean-architecture/05-rules.md
@@ -682,6 +687,28 @@ Repository-wide rule registry. Centralized discovery for AI agents.
 - **sync-inter-module-communication** -- knowledge/application-architecture-patterns/modular-monolith-design/sync-inter-module-communication/05-rules.md
 - **testing-strategies** -- knowledge/application-architecture-patterns/modular-monolith-design/testing-strategies/05-rules.md
 
+**Package Decision Calibration** -- 10 units
+
+- **01-calibrated-package-recommendation** -- knowledge/application-architecture-patterns/package-decision-calibration/01-calibrated-package-recommendation/05-rules.md
+- **02-package-fit-non-fit-analysis** -- knowledge/application-architecture-patterns/package-decision-calibration/02-package-fit-non-fit-analysis/05-rules.md
+- **03-package-wrapper-boundary** -- knowledge/application-architecture-patterns/package-decision-calibration/03-package-wrapper-boundary/05-rules.md
+- **04-package-escape-hatch-strategy** -- knowledge/application-architecture-patterns/package-decision-calibration/04-package-escape-hatch-strategy/05-rules.md
+- **05-when-not-to-build-custom** -- knowledge/application-architecture-patterns/package-decision-calibration/05-when-not-to-build-custom/05-rules.md
+- **06-laravel-cashier-decision-matrix** -- knowledge/application-architecture-patterns/package-decision-calibration/06-laravel-cashier-decision-matrix/05-rules.md
+- **07-spatie-permission-decision-matrix** -- knowledge/application-architecture-patterns/package-decision-calibration/07-spatie-permission-decision-matrix/05-rules.md
+- **08-laravel-pennant-decision-matrix** -- knowledge/application-architecture-patterns/package-decision-calibration/08-laravel-pennant-decision-matrix/05-rules.md
+- **09-horizon-decision-matrix** -- knowledge/application-architecture-patterns/package-decision-calibration/09-horizon-decision-matrix/05-rules.md
+- **10-telescope-pulse-relevance** -- knowledge/application-architecture-patterns/package-decision-calibration/10-telescope-pulse-relevance/05-rules.md
+
+**Saas Billing Architecture** -- 6 units
+
+- **01-plan-feature-entitlement-model** -- knowledge/application-architecture-patterns/saas-billing-architecture/01-plan-feature-entitlement-model/05-rules.md
+- **02-cashier-billinggateway-wrapper** -- knowledge/application-architecture-patterns/saas-billing-architecture/02-cashier-billinggateway-wrapper/05-rules.md
+- **03-stripe-webhook-idempotency** -- knowledge/application-architecture-patterns/saas-billing-architecture/03-stripe-webhook-idempotency/05-rules.md
+- **04-webhook-audit-replay** -- knowledge/application-architecture-patterns/saas-billing-architecture/04-webhook-audit-replay/05-rules.md
+- **05-subscription-drift-reconciliation** -- knowledge/application-architecture-patterns/saas-billing-architecture/05-subscription-drift-reconciliation/05-rules.md
+- **06-billing-failure-states** -- knowledge/application-architecture-patterns/saas-billing-architecture/06-billing-failure-states/05-rules.md
+
 **Service Layer Patterns** -- 19 units
 
 - **action-classes** -- knowledge/application-architecture-patterns/service-layer-patterns/action-classes/05-rules.md
@@ -704,7 +731,7 @@ Repository-wide rule registry. Centralized discovery for AI agents.
 - **transaction-management** -- knowledge/application-architecture-patterns/service-layer-patterns/transaction-management/05-rules.md
 - **use-case-classes** -- knowledge/application-architecture-patterns/service-layer-patterns/use-case-classes/05-rules.md
 
-### Async & Distributed Systems (95 rules)
+### Async & Distributed Systems (99 rules)
 
 **Async Patterns** -- 5 units
 
@@ -773,8 +800,9 @@ Repository-wide rule registry. Centralized discovery for AI agents.
 
 - **production-queue-deployment-patterns** -- knowledge/async-distributed-systems/production-patterns/production-queue-deployment-patterns/05-rules.md
 
-**Queue Engineering** -- 30 units
+**Queue Engineering** -- 34 units
 
+- **billing-queue-topology** -- knowledge/async-distributed-systems/queue-engineering/billing-queue-topology/05-rules.md
 - **block-for-redis-polling** -- knowledge/async-distributed-systems/queue-engineering/block-for-redis-polling/05-rules.md
 - **closures-as-queued-jobs** -- knowledge/async-distributed-systems/queue-engineering/closures-as-queued-jobs/05-rules.md
 - **custom-job-middleware** -- knowledge/async-distributed-systems/queue-engineering/custom-job-middleware/05-rules.md
@@ -788,12 +816,14 @@ Repository-wide rule registry. Centralized discovery for AI agents.
 - **process-signals** -- knowledge/async-distributed-systems/queue-engineering/process-signals/05-rules.md
 - **queueable-mail-notifications-broadcast** -- knowledge/async-distributed-systems/queue-engineering/queueable-mail-notifications-broadcast/05-rules.md
 - **queue-connections-vs-queues** -- knowledge/async-distributed-systems/queue-engineering/queue-connections-vs-queues/05-rules.md
+- **queue-deployment-safety-billing** -- knowledge/async-distributed-systems/queue-engineering/queue-deployment-safety-billing/05-rules.md
 - **queue-driver-architecture** -- knowledge/async-distributed-systems/queue-engineering/queue-driver-architecture/05-rules.md
 - **queue-manager-connector-pattern** -- knowledge/async-distributed-systems/queue-engineering/queue-manager-connector-pattern/05-rules.md
 - **queue-priority-multiple-queues** -- knowledge/async-distributed-systems/queue-engineering/queue-priority-multiple-queues/05-rules.md
 - **rate-limited-job-middleware** -- knowledge/async-distributed-systems/queue-engineering/rate-limited-job-middleware/05-rules.md
 - **rate-limiter-facade-job-rate-limiting** -- knowledge/async-distributed-systems/queue-engineering/rate-limiter-facade-job-rate-limiting/05-rules.md
 - **retry-after-vs-timeout** -- knowledge/async-distributed-systems/queue-engineering/retry-after-vs-timeout/05-rules.md
+- **retryuntil-deadline-based-retry** -- knowledge/async-distributed-systems/queue-engineering/retryuntil-deadline-based-retry/05-rules.md
 - **serializes-models-trait** -- knowledge/async-distributed-systems/queue-engineering/serializes-models-trait/05-rules.md
 - **should-be-unique-jobs** -- knowledge/async-distributed-systems/queue-engineering/should-be-unique-jobs/05-rules.md
 - **should-queue-contract** -- knowledge/async-distributed-systems/queue-engineering/should-queue-contract/05-rules.md
@@ -802,6 +832,7 @@ Repository-wide rule registry. Centralized discovery for AI agents.
 - **supervisor-stopfitas-graceful-shutdown** -- knowledge/async-distributed-systems/queue-engineering/supervisor-stopfitas-graceful-shutdown/05-rules.md
 - **systemd-service-workers** -- knowledge/async-distributed-systems/queue-engineering/systemd-service-workers/05-rules.md
 - **throttles-exceptions-middleware** -- knowledge/async-distributed-systems/queue-engineering/throttles-exceptions-middleware/05-rules.md
+- **webhook-queue-design** -- knowledge/async-distributed-systems/queue-engineering/webhook-queue-design/05-rules.md
 - **without-overlapping-middleware** -- knowledge/async-distributed-systems/queue-engineering/without-overlapping-middleware/05-rules.md
 - **worker-daemon-architecture** -- knowledge/async-distributed-systems/queue-engineering/worker-daemon-architecture/05-rules.md
 - **worker-memory-management** -- knowledge/async-distributed-systems/queue-engineering/worker-memory-management/05-rules.md
@@ -834,7 +865,7 @@ Repository-wide rule registry. Centralized discovery for AI agents.
 - **spatie-webhook-server** -- knowledge/async-distributed-systems/webhook-distribution/spatie-webhook-server/05-rules.md
 - **webhook-replay-attack-prevention** -- knowledge/async-distributed-systems/webhook-distribution/webhook-replay-attack-prevention/05-rules.md
 
-### Backend Architecture Design (84 rules)
+### Backend Architecture Design (85 rules)
 
 **Architectural Decision Records** -- 2 units
 
@@ -878,7 +909,7 @@ Repository-wide rule registry. Centralized discovery for AI agents.
 - **context-mapping-relationships** -- knowledge/backend-architecture-design/ddd-strategic/context-mapping-relationships/05-rules.md
 - **ubiquitous-language** -- knowledge/backend-architecture-design/ddd-strategic/ubiquitous-language/05-rules.md
 
-**Event Sourcing** -- 7 units
+**Event Sourcing** -- 8 units
 
 - **choreography-vs-orchestration** -- knowledge/backend-architecture-design/event-sourcing/choreography-vs-orchestration/05-rules.md
 - **dead-letter-handling** -- knowledge/backend-architecture-design/event-sourcing/dead-letter-handling/05-rules.md
@@ -886,6 +917,7 @@ Repository-wide rule registry. Centralized discovery for AI agents.
 - **event-bus-patterns** -- knowledge/backend-architecture-design/event-sourcing/event-bus-patterns/05-rules.md
 - **event-sourcing-components** -- knowledge/backend-architecture-design/event-sourcing/event-sourcing-components/05-rules.md
 - **event-versioning-schema-evolution** -- knowledge/backend-architecture-design/event-sourcing/event-versioning-schema-evolution/05-rules.md
+- **laravel-events-vs-event-sourcing** -- knowledge/backend-architecture-design/event-sourcing/laravel-events-vs-event-sourcing/05-rules.md
 - **outbox-pattern** -- knowledge/backend-architecture-design/event-sourcing/outbox-pattern/05-rules.md
 
 **Grasp Patterns** -- 9 units
@@ -1488,7 +1520,7 @@ Repository-wide rule registry. Centralized discovery for AI agents.
 - **transaction-scoping-laravel** -- knowledge/data-storage-systems/transactions/transaction-scoping-laravel/05-rules.md
 - **write-skew-prevention** -- knowledge/data-storage-systems/transactions/write-skew-prevention/05-rules.md
 
-### DevOps & Infrastructure (47 rules)
+### DevOps & Infrastructure (50 rules)
 
 **Ci Cd Pipelines** -- 4 units
 
@@ -1556,6 +1588,12 @@ Repository-wide rule registry. Centralized discovery for AI agents.
 
 - **infrastructure-monitoring-tools** -- knowledge/devops-infrastructure/observability-monitoring/infrastructure-monitoring-tools/05-rules.md
 - **observability-monitoring** -- knowledge/devops-infrastructure/observability-monitoring/observability-monitoring/05-rules.md
+
+**Queue Deployment Safety** -- 3 units
+
+- **01-backward-compatible-deployments** -- knowledge/devops-infrastructure/queue-deployment-safety/01-backward-compatible-deployments/05-rules.md
+- **02-queue-restart-horizon-verify** -- knowledge/devops-infrastructure/queue-deployment-safety/02-queue-restart-horizon-verify/05-rules.md
+- **queue-deployment-safety-operations** -- knowledge/devops-infrastructure/queue-deployment-safety/queue-deployment-safety-operations/05-rules.md
 
 **Serverless Laravel** -- 3 units
 
@@ -2190,7 +2228,7 @@ Repository-wide rule registry. Centralized discovery for AI agents.
 - **provider-testing** -- knowledge/laravel-execution-lifecycle/service-providers/provider-testing/05-rules.md
 - **register-vs-boot-methods** -- knowledge/laravel-execution-lifecycle/service-providers/register-vs-boot-methods/05-rules.md
 
-### Observability & Production Intelligence (34 rules)
+### Observability & Production Intelligence (37 rules)
 
 **Advanced Topics** -- 10 units
 
@@ -2215,6 +2253,12 @@ Repository-wide rule registry. Centralized discovery for AI agents.
 - **apm-tool-integration** -- knowledge/observability-production-intelligence/apm-performance-monitoring/apm-tool-integration/05-rules.md
 - **n-plus-one-detection** -- knowledge/observability-production-intelligence/apm-performance-monitoring/n-plus-one-detection/05-rules.md
 - **performance-profiling** -- knowledge/observability-production-intelligence/apm-performance-monitoring/performance-profiling/05-rules.md
+
+**Billing Observability** -- 3 units
+
+- **01-billing-webhook-metrics** -- knowledge/observability-production-intelligence/billing-observability/01-billing-webhook-metrics/05-rules.md
+- **02-billing-alerts-repair-flows** -- knowledge/observability-production-intelligence/billing-observability/02-billing-alerts-repair-flows/05-rules.md
+- **billing-production-metrics** -- knowledge/observability-production-intelligence/billing-observability/billing-production-metrics/05-rules.md
 
 **Dashboards Visualization** -- 4 units
 
@@ -2843,7 +2887,7 @@ Repository-wide rule registry. Centralized discovery for AI agents.
 - **vector-search-performance** -- knowledge/search-retrieval-systems/vector-search-systems/vector-search-performance/05-rules.md
 - **vector-search-production** -- knowledge/search-retrieval-systems/vector-search-systems/vector-search-production/05-rules.md
 
-### Security & Identity Engineering (61 rules)
+### Security & Identity Engineering (63 rules)
 
 **Audit Logging** -- 4 units
 
@@ -2869,10 +2913,11 @@ Repository-wide rule registry. Centralized discovery for AI agents.
 - **webauthn-ceremonies** -- knowledge/security-identity-engineering/authentication/webauthn-ceremonies/05-rules.md
 - **workos-enterprise-sso** -- knowledge/security-identity-engineering/authentication/workos-enterprise-sso/05-rules.md
 
-**Authorization** -- 10 units
+**Authorization** -- 12 units
 
 - **abac-authorization** -- knowledge/security-identity-engineering/authorization/abac-authorization/05-rules.md
 - **authorization-testing** -- knowledge/security-identity-engineering/authorization/authorization-testing/05-rules.md
+- **authorization-test-matrix-saas** -- knowledge/security-identity-engineering/authorization/authorization-test-matrix-saas/05-rules.md
 - **blade-can-directives** -- knowledge/security-identity-engineering/authorization/blade-can-directives/05-rules.md
 - **gates-closure** -- knowledge/security-identity-engineering/authorization/gates-closure/05-rules.md
 - **policies-model** -- knowledge/security-identity-engineering/authorization/policies-model/05-rules.md
@@ -2881,6 +2926,7 @@ Repository-wide rule registry. Centralized discovery for AI agents.
 - **rebac-authorization** -- knowledge/security-identity-engineering/authorization/rebac-authorization/05-rules.md
 - **spatie-permission** -- knowledge/security-identity-engineering/authorization/spatie-permission/05-rules.md
 - **super-admin-bypass** -- knowledge/security-identity-engineering/authorization/super-admin-bypass/05-rules.md
+- **team-spatie-permission-depth** -- knowledge/security-identity-engineering/authorization/team-spatie-permission-depth/05-rules.md
 
 **Hardening** -- 8 units
 

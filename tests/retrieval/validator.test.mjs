@@ -63,8 +63,8 @@ describe('Validator — Integration', () => {
     assert.strictEqual(result.issues.length, 0);
   });
 
-  it('contains 2321 knowledge units', () => {
-    assert.strictEqual(result.knowledgeUnitCount, 2321);
+  it('contains 2352 knowledge units', () => {
+    assert.strictEqual(result.knowledgeUnitCount, 2352);
   });
 
   it('has no circular dependencies (all KUs reachable)', () => {
@@ -131,8 +131,8 @@ describe('Validator — aliases.json integrity', () => {
     aliases = JSON.parse(raw).aliases || [];
   });
 
-  it('has 120 aliases', () => {
-    assert.strictEqual(aliases.length, 120);
+  it('has 141 aliases', () => {
+    assert.strictEqual(aliases.length, 141);
   });
 
   it('each alias resolves to a valid canonical KU', () => {

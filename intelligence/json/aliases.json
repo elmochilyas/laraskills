@@ -959,6 +959,174 @@
       "source_paths": [
         "knowledge/real-time-systems/security/serverless-websocket-limitations/04-standardized-knowledge.md"
       ]
+    },
+    {
+      "alias": "Cashier decision matrix",
+      "normalized_alias": "cashier-decision-matrix",
+      "canonical_ku_id": "application-architecture-patterns/package-decision-calibration/06-laravel-cashier-decision-matrix",
+      "source_paths": [
+        "knowledge/application-architecture-patterns/package-decision-calibration/06-laravel-cashier-decision-matrix/04-standardized-knowledge.md"
+      ]
+    },
+    {
+      "alias": "package decision calibration",
+      "normalized_alias": "package-decision-calibration",
+      "canonical_ku_id": "application-architecture-patterns/package-decision-calibration/01-calibrated-package-recommendation",
+      "source_paths": [
+        "knowledge/application-architecture-patterns/package-decision-calibration/01-calibrated-package-recommendation/04-standardized-knowledge.md"
+      ]
+    },
+    {
+      "alias": "plan feature entitlement model",
+      "normalized_alias": "plan-feature-entitlement-model",
+      "canonical_ku_id": "application-architecture-patterns/saas-billing-architecture/01-plan-feature-entitlement-model",
+      "source_paths": [
+        "knowledge/application-architecture-patterns/saas-billing-architecture/01-plan-feature-entitlement-model/04-standardized-knowledge.md"
+      ]
+    },
+    {
+      "alias": "Stripe webhook idempotency",
+      "normalized_alias": "stripe-webhook-idempotency",
+      "canonical_ku_id": "application-architecture-patterns/saas-billing-architecture/03-stripe-webhook-idempotency",
+      "source_paths": [
+        "knowledge/application-architecture-patterns/saas-billing-architecture/03-stripe-webhook-idempotency/04-standardized-knowledge.md"
+      ]
+    },
+    {
+      "alias": "webhook audit replay",
+      "normalized_alias": "webhook-audit-replay",
+      "canonical_ku_id": "application-architecture-patterns/saas-billing-architecture/04-webhook-audit-replay",
+      "source_paths": [
+        "knowledge/application-architecture-patterns/saas-billing-architecture/04-webhook-audit-replay/04-standardized-knowledge.md"
+      ]
+    },
+    {
+      "alias": "subscription drift",
+      "normalized_alias": "subscription-drift",
+      "canonical_ku_id": "application-architecture-patterns/saas-billing-architecture/05-subscription-drift-reconciliation",
+      "source_paths": [
+        "knowledge/application-architecture-patterns/saas-billing-architecture/05-subscription-drift-reconciliation/04-standardized-knowledge.md"
+      ]
+    },
+    {
+      "alias": "billing failure states",
+      "normalized_alias": "billing-failure-states",
+      "canonical_ku_id": "application-architecture-patterns/saas-billing-architecture/06-billing-failure-states",
+      "source_paths": [
+        "knowledge/application-architecture-patterns/saas-billing-architecture/06-billing-failure-states/04-standardized-knowledge.md"
+      ]
+    },
+    {
+      "alias": "Cashier BillingGateway wrapper",
+      "normalized_alias": "cashier-billinggateway-wrapper",
+      "canonical_ku_id": "application-architecture-patterns/saas-billing-architecture/02-cashier-billinggateway-wrapper",
+      "source_paths": [
+        "knowledge/application-architecture-patterns/saas-billing-architecture/02-cashier-billinggateway-wrapper/04-standardized-knowledge.md"
+      ]
+    },
+    {
+      "alias": "Laravel events are not event sourcing",
+      "normalized_alias": "laravel-events-are-not-event-sourcing",
+      "canonical_ku_id": "backend-architecture-design/event-sourcing/laravel-events-vs-event-sourcing",
+      "source_paths": [
+        "knowledge/backend-architecture-design/event-sourcing/laravel-events-vs-event-sourcing/04-standardized-knowledge.md"
+      ]
+    },
+    {
+      "alias": "events vs event sourcing",
+      "normalized_alias": "events-vs-event-sourcing",
+      "canonical_ku_id": "backend-architecture-design/event-sourcing/laravel-events-vs-event-sourcing",
+      "source_paths": [
+        "knowledge/backend-architecture-design/event-sourcing/laravel-events-vs-event-sourcing/04-standardized-knowledge.md"
+      ]
+    },
+    {
+      "alias": "team-scoped Spatie Permission",
+      "normalized_alias": "team-scoped-spatie-permission",
+      "canonical_ku_id": "security-identity-engineering/authorization/team-spatie-permission-depth",
+      "source_paths": [
+        "knowledge/security-identity-engineering/authorization/team-spatie-permission-depth/04-standardized-knowledge.md"
+      ]
+    },
+    {
+      "alias": "SaaS authorization test matrix",
+      "normalized_alias": "saas-authorization-test-matrix",
+      "canonical_ku_id": "security-identity-engineering/authorization/authorization-test-matrix-saas",
+      "source_paths": [
+        "knowledge/security-identity-engineering/authorization/authorization-test-matrix-saas/04-standardized-knowledge.md"
+      ]
+    },
+    {
+      "alias": "afterCommit transaction boundary",
+      "normalized_alias": "aftercommit-transaction-boundary",
+      "canonical_ku_id": "application-architecture-patterns/layered-architecture-patterns/aftercommit-events-jobs",
+      "source_paths": [
+        "knowledge/application-architecture-patterns/layered-architecture-patterns/aftercommit-events-jobs/04-standardized-knowledge.md"
+      ]
+    },
+    {
+      "alias": "retryUntil deadline retry",
+      "normalized_alias": "retryuntil-deadline-retry",
+      "canonical_ku_id": "async-distributed-systems/queue-engineering/retryuntil-deadline-based-retry",
+      "source_paths": [
+        "knowledge/async-distributed-systems/queue-engineering/retryuntil-deadline-based-retry/04-standardized-knowledge.md"
+      ]
+    },
+    {
+      "alias": "queue deployment safety",
+      "normalized_alias": "queue-deployment-safety",
+      "canonical_ku_id": "devops-infrastructure/queue-deployment-safety/queue-deployment-safety-operations",
+      "source_paths": [
+        "knowledge/devops-infrastructure/queue-deployment-safety/queue-deployment-safety-operations/04-standardized-knowledge.md"
+      ]
+    },
+    {
+      "alias": "billing production metrics",
+      "normalized_alias": "billing-production-metrics",
+      "canonical_ku_id": "observability-production-intelligence/billing-observability/billing-production-metrics",
+      "source_paths": [
+        "knowledge/observability-production-intelligence/billing-observability/billing-production-metrics/04-standardized-knowledge.md"
+      ]
+    },
+    {
+      "alias": "Spatie Permission decision matrix",
+      "normalized_alias": "spatie-permission-decision-matrix",
+      "canonical_ku_id": "application-architecture-patterns/package-decision-calibration/07-spatie-permission-decision-matrix",
+      "source_paths": [
+        "knowledge/application-architecture-patterns/package-decision-calibration/07-spatie-permission-decision-matrix/04-standardized-knowledge.md"
+      ]
+    },
+    {
+      "alias": "Horizon decision matrix",
+      "normalized_alias": "horizon-decision-matrix",
+      "canonical_ku_id": "application-architecture-patterns/package-decision-calibration/09-horizon-decision-matrix",
+      "source_paths": [
+        "knowledge/application-architecture-patterns/package-decision-calibration/09-horizon-decision-matrix/04-standardized-knowledge.md"
+      ]
+    },
+    {
+      "alias": "calibrated architecture language",
+      "normalized_alias": "calibrated-architecture-language",
+      "canonical_ku_id": "application-architecture-patterns/calibrated-architecture-language/01-calibrated-language-rules",
+      "source_paths": [
+        "knowledge/application-architecture-patterns/calibrated-architecture-language/01-calibrated-language-rules/04-standardized-knowledge.md"
+      ]
+    },
+    {
+      "alias": "SaaS architecture",
+      "normalized_alias": "saas-architecture",
+      "canonical_ku_id": "application-architecture-patterns/saas-billing-architecture/01-plan-feature-entitlement-model",
+      "source_paths": [
+        "knowledge/application-architecture-patterns/saas-billing-architecture/01-plan-feature-entitlement-model/04-standardized-knowledge.md"
+      ]
+    },
+    {
+      "alias": "SaaS billing architecture",
+      "normalized_alias": "saas-billing-architecture",
+      "canonical_ku_id": "application-architecture-patterns/saas-billing-architecture/01-plan-feature-entitlement-model",
+      "source_paths": [
+        "knowledge/application-architecture-patterns/saas-billing-architecture/01-plan-feature-entitlement-model/04-standardized-knowledge.md"
+      ]
     }
   ]
 }

@@ -4,9 +4,9 @@ Repository-wide decision tree registry.
 
 | Attribute | Value |
 |---|---|
-| Total Decision Trees | 2321 |
+| Total Decision Trees | 2352 |
 | Domains | 21 |
-| Generated | 2026-06-10 09:55:53 |
+| Generated | 2026-06-22 22:42:42 |
 
 ---
 
@@ -574,7 +574,7 @@ Repository-wide decision tree registry.
 - **spatie-webhook-server-advanced** -- knowledge/api-integration-engineering/webhooks/spatie-webhook-server-advanced/07-decision-trees.md
 - **verification-signatures** -- knowledge/api-integration-engineering/webhooks/verification-signatures/07-decision-trees.md
 
-### Application Architecture Patterns (107 decision trees)
+### Application Architecture Patterns (125 decision trees)
 
 **Architecture Enforcement Governance** -- 10 units
 
@@ -588,6 +588,10 @@ Repository-wide decision tree registry.
 - **refactoring-remediation** -- knowledge/application-architecture-patterns/architecture-enforcement-governance/refactoring-remediation/07-decision-trees.md
 - **static-analysis-rules** -- knowledge/application-architecture-patterns/architecture-enforcement-governance/static-analysis-rules/07-decision-trees.md
 - **team-convention-documentation** -- knowledge/application-architecture-patterns/architecture-enforcement-governance/team-convention-documentation/07-decision-trees.md
+
+**Calibrated Architecture Language** -- 1 units
+
+- **01-calibrated-language-rules** -- knowledge/application-architecture-patterns/calibrated-architecture-language/01-calibrated-language-rules/07-decision-trees.md
 
 **Code Organization Standards** -- 12 units
 
@@ -634,9 +638,10 @@ Repository-wide decision tree registry.
 - **shared-kernel** -- knowledge/application-architecture-patterns/domain-boundaries-bounded-contexts/shared-kernel/07-decision-trees.md
 - **team-to-context-mapping** -- knowledge/application-architecture-patterns/domain-boundaries-bounded-contexts/team-to-context-mapping/07-decision-trees.md
 
-**Layered Architecture Patterns** -- 25 units
+**Layered Architecture Patterns** -- 26 units
 
 - **action-classes** -- knowledge/application-architecture-patterns/layered-architecture-patterns/action-classes/07-decision-trees.md
+- **aftercommit-events-jobs** -- knowledge/application-architecture-patterns/layered-architecture-patterns/aftercommit-events-jobs/07-decision-trees.md
 - **application-layer** -- knowledge/application-architecture-patterns/layered-architecture-patterns/application-layer/07-decision-trees.md
 - **architecture-tests** -- knowledge/application-architecture-patterns/layered-architecture-patterns/architecture-tests/07-decision-trees.md
 - **clean-architecture** -- knowledge/application-architecture-patterns/layered-architecture-patterns/clean-architecture/07-decision-trees.md
@@ -682,6 +687,28 @@ Repository-wide decision tree registry.
 - **sync-inter-module-communication** -- knowledge/application-architecture-patterns/modular-monolith-design/sync-inter-module-communication/07-decision-trees.md
 - **testing-strategies** -- knowledge/application-architecture-patterns/modular-monolith-design/testing-strategies/07-decision-trees.md
 
+**Package Decision Calibration** -- 10 units
+
+- **01-calibrated-package-recommendation** -- knowledge/application-architecture-patterns/package-decision-calibration/01-calibrated-package-recommendation/07-decision-trees.md
+- **02-package-fit-non-fit-analysis** -- knowledge/application-architecture-patterns/package-decision-calibration/02-package-fit-non-fit-analysis/07-decision-trees.md
+- **03-package-wrapper-boundary** -- knowledge/application-architecture-patterns/package-decision-calibration/03-package-wrapper-boundary/07-decision-trees.md
+- **04-package-escape-hatch-strategy** -- knowledge/application-architecture-patterns/package-decision-calibration/04-package-escape-hatch-strategy/07-decision-trees.md
+- **05-when-not-to-build-custom** -- knowledge/application-architecture-patterns/package-decision-calibration/05-when-not-to-build-custom/07-decision-trees.md
+- **06-laravel-cashier-decision-matrix** -- knowledge/application-architecture-patterns/package-decision-calibration/06-laravel-cashier-decision-matrix/07-decision-trees.md
+- **07-spatie-permission-decision-matrix** -- knowledge/application-architecture-patterns/package-decision-calibration/07-spatie-permission-decision-matrix/07-decision-trees.md
+- **08-laravel-pennant-decision-matrix** -- knowledge/application-architecture-patterns/package-decision-calibration/08-laravel-pennant-decision-matrix/07-decision-trees.md
+- **09-horizon-decision-matrix** -- knowledge/application-architecture-patterns/package-decision-calibration/09-horizon-decision-matrix/07-decision-trees.md
+- **10-telescope-pulse-relevance** -- knowledge/application-architecture-patterns/package-decision-calibration/10-telescope-pulse-relevance/07-decision-trees.md
+
+**Saas Billing Architecture** -- 6 units
+
+- **01-plan-feature-entitlement-model** -- knowledge/application-architecture-patterns/saas-billing-architecture/01-plan-feature-entitlement-model/07-decision-trees.md
+- **02-cashier-billinggateway-wrapper** -- knowledge/application-architecture-patterns/saas-billing-architecture/02-cashier-billinggateway-wrapper/07-decision-trees.md
+- **03-stripe-webhook-idempotency** -- knowledge/application-architecture-patterns/saas-billing-architecture/03-stripe-webhook-idempotency/07-decision-trees.md
+- **04-webhook-audit-replay** -- knowledge/application-architecture-patterns/saas-billing-architecture/04-webhook-audit-replay/07-decision-trees.md
+- **05-subscription-drift-reconciliation** -- knowledge/application-architecture-patterns/saas-billing-architecture/05-subscription-drift-reconciliation/07-decision-trees.md
+- **06-billing-failure-states** -- knowledge/application-architecture-patterns/saas-billing-architecture/06-billing-failure-states/07-decision-trees.md
+
 **Service Layer Patterns** -- 19 units
 
 - **action-classes** -- knowledge/application-architecture-patterns/service-layer-patterns/action-classes/07-decision-trees.md
@@ -704,7 +731,7 @@ Repository-wide decision tree registry.
 - **transaction-management** -- knowledge/application-architecture-patterns/service-layer-patterns/transaction-management/07-decision-trees.md
 - **use-case-classes** -- knowledge/application-architecture-patterns/service-layer-patterns/use-case-classes/07-decision-trees.md
 
-### Async & Distributed Systems (95 decision trees)
+### Async & Distributed Systems (99 decision trees)
 
 **Async Patterns** -- 5 units
 
@@ -773,8 +800,9 @@ Repository-wide decision tree registry.
 
 - **production-queue-deployment-patterns** -- knowledge/async-distributed-systems/production-patterns/production-queue-deployment-patterns/07-decision-trees.md
 
-**Queue Engineering** -- 30 units
+**Queue Engineering** -- 34 units
 
+- **billing-queue-topology** -- knowledge/async-distributed-systems/queue-engineering/billing-queue-topology/07-decision-trees.md
 - **block-for-redis-polling** -- knowledge/async-distributed-systems/queue-engineering/block-for-redis-polling/07-decision-trees.md
 - **closures-as-queued-jobs** -- knowledge/async-distributed-systems/queue-engineering/closures-as-queued-jobs/07-decision-trees.md
 - **custom-job-middleware** -- knowledge/async-distributed-systems/queue-engineering/custom-job-middleware/07-decision-trees.md
@@ -788,12 +816,14 @@ Repository-wide decision tree registry.
 - **process-signals** -- knowledge/async-distributed-systems/queue-engineering/process-signals/07-decision-trees.md
 - **queueable-mail-notifications-broadcast** -- knowledge/async-distributed-systems/queue-engineering/queueable-mail-notifications-broadcast/07-decision-trees.md
 - **queue-connections-vs-queues** -- knowledge/async-distributed-systems/queue-engineering/queue-connections-vs-queues/07-decision-trees.md
+- **queue-deployment-safety-billing** -- knowledge/async-distributed-systems/queue-engineering/queue-deployment-safety-billing/07-decision-trees.md
 - **queue-driver-architecture** -- knowledge/async-distributed-systems/queue-engineering/queue-driver-architecture/07-decision-trees.md
 - **queue-manager-connector-pattern** -- knowledge/async-distributed-systems/queue-engineering/queue-manager-connector-pattern/07-decision-trees.md
 - **queue-priority-multiple-queues** -- knowledge/async-distributed-systems/queue-engineering/queue-priority-multiple-queues/07-decision-trees.md
 - **rate-limited-job-middleware** -- knowledge/async-distributed-systems/queue-engineering/rate-limited-job-middleware/07-decision-trees.md
 - **rate-limiter-facade-job-rate-limiting** -- knowledge/async-distributed-systems/queue-engineering/rate-limiter-facade-job-rate-limiting/07-decision-trees.md
 - **retry-after-vs-timeout** -- knowledge/async-distributed-systems/queue-engineering/retry-after-vs-timeout/07-decision-trees.md
+- **retryuntil-deadline-based-retry** -- knowledge/async-distributed-systems/queue-engineering/retryuntil-deadline-based-retry/07-decision-trees.md
 - **serializes-models-trait** -- knowledge/async-distributed-systems/queue-engineering/serializes-models-trait/07-decision-trees.md
 - **should-be-unique-jobs** -- knowledge/async-distributed-systems/queue-engineering/should-be-unique-jobs/07-decision-trees.md
 - **should-queue-contract** -- knowledge/async-distributed-systems/queue-engineering/should-queue-contract/07-decision-trees.md
@@ -802,6 +832,7 @@ Repository-wide decision tree registry.
 - **supervisor-stopfitas-graceful-shutdown** -- knowledge/async-distributed-systems/queue-engineering/supervisor-stopfitas-graceful-shutdown/07-decision-trees.md
 - **systemd-service-workers** -- knowledge/async-distributed-systems/queue-engineering/systemd-service-workers/07-decision-trees.md
 - **throttles-exceptions-middleware** -- knowledge/async-distributed-systems/queue-engineering/throttles-exceptions-middleware/07-decision-trees.md
+- **webhook-queue-design** -- knowledge/async-distributed-systems/queue-engineering/webhook-queue-design/07-decision-trees.md
 - **without-overlapping-middleware** -- knowledge/async-distributed-systems/queue-engineering/without-overlapping-middleware/07-decision-trees.md
 - **worker-daemon-architecture** -- knowledge/async-distributed-systems/queue-engineering/worker-daemon-architecture/07-decision-trees.md
 - **worker-memory-management** -- knowledge/async-distributed-systems/queue-engineering/worker-memory-management/07-decision-trees.md
@@ -834,7 +865,7 @@ Repository-wide decision tree registry.
 - **spatie-webhook-server** -- knowledge/async-distributed-systems/webhook-distribution/spatie-webhook-server/07-decision-trees.md
 - **webhook-replay-attack-prevention** -- knowledge/async-distributed-systems/webhook-distribution/webhook-replay-attack-prevention/07-decision-trees.md
 
-### Backend Architecture Design (84 decision trees)
+### Backend Architecture Design (85 decision trees)
 
 **Architectural Decision Records** -- 2 units
 
@@ -878,7 +909,7 @@ Repository-wide decision tree registry.
 - **context-mapping-relationships** -- knowledge/backend-architecture-design/ddd-strategic/context-mapping-relationships/07-decision-trees.md
 - **ubiquitous-language** -- knowledge/backend-architecture-design/ddd-strategic/ubiquitous-language/07-decision-trees.md
 
-**Event Sourcing** -- 7 units
+**Event Sourcing** -- 8 units
 
 - **choreography-vs-orchestration** -- knowledge/backend-architecture-design/event-sourcing/choreography-vs-orchestration/07-decision-trees.md
 - **dead-letter-handling** -- knowledge/backend-architecture-design/event-sourcing/dead-letter-handling/07-decision-trees.md
@@ -886,6 +917,7 @@ Repository-wide decision tree registry.
 - **event-bus-patterns** -- knowledge/backend-architecture-design/event-sourcing/event-bus-patterns/07-decision-trees.md
 - **event-sourcing-components** -- knowledge/backend-architecture-design/event-sourcing/event-sourcing-components/07-decision-trees.md
 - **event-versioning-schema-evolution** -- knowledge/backend-architecture-design/event-sourcing/event-versioning-schema-evolution/07-decision-trees.md
+- **laravel-events-vs-event-sourcing** -- knowledge/backend-architecture-design/event-sourcing/laravel-events-vs-event-sourcing/07-decision-trees.md
 - **outbox-pattern** -- knowledge/backend-architecture-design/event-sourcing/outbox-pattern/07-decision-trees.md
 
 **Grasp Patterns** -- 9 units
@@ -1488,7 +1520,7 @@ Repository-wide decision tree registry.
 - **transaction-scoping-laravel** -- knowledge/data-storage-systems/transactions/transaction-scoping-laravel/07-decision-trees.md
 - **write-skew-prevention** -- knowledge/data-storage-systems/transactions/write-skew-prevention/07-decision-trees.md
 
-### DevOps & Infrastructure (47 decision trees)
+### DevOps & Infrastructure (50 decision trees)
 
 **Ci Cd Pipelines** -- 4 units
 
@@ -1556,6 +1588,12 @@ Repository-wide decision tree registry.
 
 - **infrastructure-monitoring-tools** -- knowledge/devops-infrastructure/observability-monitoring/infrastructure-monitoring-tools/07-decision-trees.md
 - **observability-monitoring** -- knowledge/devops-infrastructure/observability-monitoring/observability-monitoring/07-decision-trees.md
+
+**Queue Deployment Safety** -- 3 units
+
+- **01-backward-compatible-deployments** -- knowledge/devops-infrastructure/queue-deployment-safety/01-backward-compatible-deployments/07-decision-trees.md
+- **02-queue-restart-horizon-verify** -- knowledge/devops-infrastructure/queue-deployment-safety/02-queue-restart-horizon-verify/07-decision-trees.md
+- **queue-deployment-safety-operations** -- knowledge/devops-infrastructure/queue-deployment-safety/queue-deployment-safety-operations/07-decision-trees.md
 
 **Serverless Laravel** -- 3 units
 
@@ -2190,7 +2228,7 @@ Repository-wide decision tree registry.
 - **provider-testing** -- knowledge/laravel-execution-lifecycle/service-providers/provider-testing/07-decision-trees.md
 - **register-vs-boot-methods** -- knowledge/laravel-execution-lifecycle/service-providers/register-vs-boot-methods/07-decision-trees.md
 
-### Observability & Production Intelligence (34 decision trees)
+### Observability & Production Intelligence (37 decision trees)
 
 **Advanced Topics** -- 10 units
 
@@ -2215,6 +2253,12 @@ Repository-wide decision tree registry.
 - **apm-tool-integration** -- knowledge/observability-production-intelligence/apm-performance-monitoring/apm-tool-integration/07-decision-trees.md
 - **n-plus-one-detection** -- knowledge/observability-production-intelligence/apm-performance-monitoring/n-plus-one-detection/07-decision-trees.md
 - **performance-profiling** -- knowledge/observability-production-intelligence/apm-performance-monitoring/performance-profiling/07-decision-trees.md
+
+**Billing Observability** -- 3 units
+
+- **01-billing-webhook-metrics** -- knowledge/observability-production-intelligence/billing-observability/01-billing-webhook-metrics/07-decision-trees.md
+- **02-billing-alerts-repair-flows** -- knowledge/observability-production-intelligence/billing-observability/02-billing-alerts-repair-flows/07-decision-trees.md
+- **billing-production-metrics** -- knowledge/observability-production-intelligence/billing-observability/billing-production-metrics/07-decision-trees.md
 
 **Dashboards Visualization** -- 4 units
 
@@ -2843,7 +2887,7 @@ Repository-wide decision tree registry.
 - **vector-search-performance** -- knowledge/search-retrieval-systems/vector-search-systems/vector-search-performance/07-decision-trees.md
 - **vector-search-production** -- knowledge/search-retrieval-systems/vector-search-systems/vector-search-production/07-decision-trees.md
 
-### Security & Identity Engineering (61 decision trees)
+### Security & Identity Engineering (63 decision trees)
 
 **Audit Logging** -- 4 units
 
@@ -2869,10 +2913,11 @@ Repository-wide decision tree registry.
 - **webauthn-ceremonies** -- knowledge/security-identity-engineering/authentication/webauthn-ceremonies/07-decision-trees.md
 - **workos-enterprise-sso** -- knowledge/security-identity-engineering/authentication/workos-enterprise-sso/07-decision-trees.md
 
-**Authorization** -- 10 units
+**Authorization** -- 12 units
 
 - **abac-authorization** -- knowledge/security-identity-engineering/authorization/abac-authorization/07-decision-trees.md
 - **authorization-testing** -- knowledge/security-identity-engineering/authorization/authorization-testing/07-decision-trees.md
+- **authorization-test-matrix-saas** -- knowledge/security-identity-engineering/authorization/authorization-test-matrix-saas/07-decision-trees.md
 - **blade-can-directives** -- knowledge/security-identity-engineering/authorization/blade-can-directives/07-decision-trees.md
 - **gates-closure** -- knowledge/security-identity-engineering/authorization/gates-closure/07-decision-trees.md
 - **policies-model** -- knowledge/security-identity-engineering/authorization/policies-model/07-decision-trees.md
@@ -2881,6 +2926,7 @@ Repository-wide decision tree registry.
 - **rebac-authorization** -- knowledge/security-identity-engineering/authorization/rebac-authorization/07-decision-trees.md
 - **spatie-permission** -- knowledge/security-identity-engineering/authorization/spatie-permission/07-decision-trees.md
 - **super-admin-bypass** -- knowledge/security-identity-engineering/authorization/super-admin-bypass/07-decision-trees.md
+- **team-spatie-permission-depth** -- knowledge/security-identity-engineering/authorization/team-spatie-permission-depth/07-decision-trees.md
 
 **Hardening** -- 8 units
 
