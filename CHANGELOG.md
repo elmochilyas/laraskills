@@ -8,6 +8,34 @@ Pre-release versions are tagged with `-beta.N`.
 
 ---
 
+## [1.0.0-beta.21] - 2026-06-22
+
+### Fixed
+
+- **OpenCode generated config hotfix**: `laraskills init --assistants opencode` now
+  copies the `.opencode/commands/` directory alongside `.opencode/opencode.json`.
+  Beta.20 generated a config with `{file:commands/plan.md}` references but did not
+  create the referenced command files, causing OpenCode to reject the configuration.
+- **OpenCode file reference validation**: `laraskills doctor` now validates every
+  `{file:...}` reference in `.opencode/opencode.json` and reports broken references
+  with repair instructions.
+- **`laraskills update` repairs missing files**: Running `laraskills update
+  --assistants opencode --yes` on a beta.20 install now creates any missing
+  `.opencode/commands/` files without overwriting unrelated user config.
+- **Install summary accuracy**: The init summary now shows only user-selected
+  assistants. Generic MCP (when auto-generated as shared config) is shown as
+  a separate "Shared MCP config: generated" line instead of appearing as
+  a user-selected tool integration.
+
+### Added
+
+- `validateOpenCodeFileReferences()` reusable helper for detecting broken
+  `{file:...}` references in OpenCode config files.
+- 15 regression tests for OpenCode config generation, update repair, doctor
+  detection, config preservation, idempotency, and summary accuracy.
+
+---
+
 ## [1.0.0-beta.20] - 2026-06-22
 
 ### Added
