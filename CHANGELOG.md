@@ -8,6 +8,77 @@ Pre-release versions are tagged with `-beta.N`.
 
 ---
 
+## [1.0.0-beta.18] - 2026-06-22
+
+### Added
+
+- **Zero-friction onboarding**: Normal users no longer need to clone the LaraSkills
+  repository. Packaged intelligence is bundled inside the npm package, and
+  `doctor`, `validate`, `retrieve`, `search`, `get --include-content`, and MCP
+  all work without `LARASKILLS_ROOT`, `laraskills setup`, or a Git clone.
+- **Packaged standardized knowledge**: All 2,321 knowledge units' standardized
+  content is now shipped as `intelligence/content/content-index.json`, making
+  `get --include-content` work fully from the npm package.
+- **Interactive `laraskills init`**: Detects whether the current directory is a
+  Laravel project, asks which profile to install (`core`/`minimal`/`full`) and
+  which coding tools to configure (OpenCode, Generic MCP, Codex, Claude Code,
+  Cursor), and prints next steps.
+- **Non-interactive init flags**: `--profile`, `--tools`, `--yes`/`-y`,
+  `--dry-run` for automation and CI/CD.
+- **Tool integration framework**: A pluggable adapter system for coding tools.
+  OpenCode and Generic MCP are fully supported; Codex, Claude Code, and Cursor
+  ship template configs for manual wiring.
+- **OpenCode integration**: `init --tools opencode` creates or safely merges
+  `.opencode/opencode.json` (agents, instructions, slash commands) and root
+  `opencode.json` (MCP connection). Existing user config is preserved and
+  backed up before changes.
+- **Postinstall message**: A clean, Windows-safe postinstall script informs
+  users of the recommended next steps.
+- **Phase 25 regression tests**: 15 new tests covering packaged intelligence,
+  interactive init, tool integrations, packaged content index, and backward
+  compatibility (total test count: 229, all passing).
+
+### Changed
+
+- **`laraskills doctor` now reports two sections**: Machine readiness
+  (intelligence source — packaged vs configured root, retrieval, MCP adapter)
+  and project readiness (Laravel detected, initialized state, profile, tool
+  integrations).
+- **`laraskills setup` is now optional/advanced**: Normal users do not need
+  to run setup. The `--help` and command output explain that setup is for
+  custom knowledge source overrides.
+- **`laraskills update` supports `--tools` and `--dry-run`**: Refresh specific
+  tool integrations safely.
+- **Root resolution priority updated**: 1) `--laraskills-root` CLI,
+  2) `LARASKILLS_ROOT` env, 3) saved config, 4) packaged intelligence,
+  5) legacy `ECC_ROOT`/config fallback.
+- **`doctor` output** now indicates when intelligence is running from the
+  packaged bundle and shows `Status: HEALTHY` without a configured root.
+- **MCP error messages** updated to point to package reinstall rather than
+  manual clone/setup for normal users.
+- **README rewritten** for the new onboarding flow with OpenCode integration
+  section.
+- **`npm pack` file count** increased from 140 to 152 due to bundled
+  intelligence JSON files and content index.
+
+### Fixed
+
+- **Test structure nesting bug**: The new Phase 25 describe block was
+  accidentally nested inside an `it` block, causing `cancelledByParent`
+  timeouts in CI. Moved to top-level with explicit 30s timeouts.
+- **CI compatibility**: Updated `verify:packed-install` script to account for
+  bundled `intelligence/` files (previously expected them to be excluded).
+
+### Backward Compatibility
+
+- `laraskills install --profile core` still works.
+- `laraskills setup --laraskills-root <path>` still works.
+- `--ecc-root`, `ECC_ROOT`, `laravel-ecc`, and `laravel-ecc-mcp`
+  compatibility paths still work.
+- Existing projects can still run `laraskills update`.
+
+---
+
 ## [1.0.0-beta.17] - 2026-06-22
 
 ### Added
