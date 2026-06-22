@@ -56,19 +56,37 @@ cd my-laravel-project
 laraskills init
 ```
 
-`laraskills init` is interactive. It will:
-1. Detect whether the current directory is a Laravel project
-2. Ask which profile to install (core / minimal / full)
-3. Ask which coding tools to configure (OpenCode, MCP, Codex, Claude Code, Cursor)
-4. Install project files and configure selected tools
-5. Print next steps
+`laraskills init` is interactive. It guides you through a 3-step wizard:
+
+1. **Choose coding assistants** — OpenCode, Codex, Cursor, Claude Code, Generic MCP (select multiple with comma, or type `all`/`none`)
+2. **Choose integration level** — Full (MCP + project files), MCP only, or Project files only
+3. **Choose LaraSkills profile** — Core (recommended), Minimal, or Full
+
+By default (pressing Enter through the whole wizard), init selects all assistants with full integration and the core profile.
+
+Multiple assistants can be configured at once. LaraSkills generates the right config or template for each:
+
+| Assistant | Support | What LaraSkills creates |
+|---|---|---|
+| OpenCode | Full auto-setup | `.opencode/opencode.json` + root `opencode.json` with MCP |
+| Generic MCP | Template | `mcp-configs/mcp-servers.json` (copy into any MCP client) |
+| Codex | Template | `.codex/instructions.md` + MCP instructions |
+| Cursor | Template | `.cursor/rules.mdc` + MCP instructions |
+| Claude Code | Template | `.claude/settings.json` + MCP instructions |
+
+### MCP — the shared protocol layer
+
+LaraSkills exposes one MCP server command: `laraskills-mcp`. Each coding assistant connects to it as an MCP client. LaraSkills generates the correct MCP client config for each assistant, or a clear template/manual instruction when automatic wiring is not yet supported.
 
 Or use non-interactive mode for automation:
 
 ```bash
+laraskills init --assistants all --integration full --profile core --yes
+laraskills init --assistants opencode,codex --integration full --profile core --yes
+laraskills init --assistants none --integration project-files --profile minimal --yes
+
+# Legacy --tools flag still works:
 laraskills init --profile core --tools opencode --yes
-laraskills init --profile core --tools opencode,generic-mcp --yes
-laraskills init --profile minimal --tools none --yes
 ```
 
 Profiles:
@@ -79,9 +97,11 @@ Profiles:
 | `core` | 6 core skills + rules, hooks, MCP configs, 5 agents (default) |
 | `full` | Core profile + commands and harness configs for 12 AI tools |
 
-## OpenCode integration
+## Tool integrations
 
-When you run `laraskills init --tools opencode`, the following files are created/merged:
+### OpenCode (fully automatic)
+
+When you run `laraskills init --assistants opencode` (the default), the following files are created/merged:
 
 - `.opencode/opencode.json` — Project-wide instructions, sub-agents (planner, code-reviewer, security-reviewer, tdd-guide), and slash commands (plan, tdd, code-review, artisan)
 - `opencode.json` — MCP connection to the `laraskills-mcp` server

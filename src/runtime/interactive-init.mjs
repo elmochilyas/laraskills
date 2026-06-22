@@ -2,6 +2,18 @@ import { existsSync } from 'node:fs';
 import { join } from 'node:path';
 import { createInterface } from 'node:readline';
 
+const VALID_INTEGRATIONS = ['full', 'mcp-only', 'project-files'];
+
+const ALL_ASSISTANTS = [
+  { id: 'opencode', label: 'OpenCode', support: 'configured', desc: 'Full automatic setup available' },
+  { id: 'codex', label: 'Codex', support: 'template', desc: 'MCP/template setup' },
+  { id: 'cursor', label: 'Cursor', support: 'template', desc: 'MCP/template setup' },
+  { id: 'claude-code', label: 'Claude Code', support: 'template', desc: 'MCP/template setup' },
+  { id: 'generic-mcp', label: 'Generic MCP', support: 'template', desc: 'Reusable MCP config for any MCP-capable client' },
+];
+
+const ALL_ASSISTANT_IDS = ALL_ASSISTANTS.map(a => a.id);
+
 export function isLaravelProject(target) {
   const markers = [
     'artisan',
@@ -53,98 +65,279 @@ export function isTerminalInteractive() {
   return process.stdin.isTTY && process.stdout.isTTY;
 }
 
-function log(msg) { console.log(`  ${msg}`); }
+function printWizardHeader(target, isLaravel) {
+  console.log('');
+  console.log('  LaraSkills Init');
+  console.log('  ===============');
+  console.log('');
+  console.log('  Project:');
+  console.log(`    Path: ${target}`);
+  console.log(`    Laravel detected: ${isLaravel ? 'yes' : 'no'}`);
+  if (!isLaravel) {
+    console.log('    Note: continuing anyway. Some Laravel-specific checks may be skipped.');
+  }
+  console.log('');
+}
+
+async function askAssistants(prompter) {
+  console.log('  Step 1 — Choose coding assistants');
+  console.log('');
+
+  for (let i = 0; i < ALL_ASSISTANTS.length; i++) {
+    const a = ALL_ASSISTANTS[i];
+    const supportLabel = a.support === 'configured' ? '(full auto-setup)' : '(template)';
+    console.log(`    ${i + 1}. ${a.label} ${supportLabel}`);
+    console.log(`       ${a.desc}`);
+    console.log('');
+  }
+
+  console.log(`    ${ALL_ASSISTANTS.length + 1}. None`);
+  console.log('       Install project files only');
+  console.log('');
+  console.log('  Tip: select multiple with comma (e.g. 1,2,3) or type "all"');
+  console.log('');
+
+  const choice = await prompter.question('  Select assistants [all]: ');
+
+  const trimmed = choice.trim().toLowerCase();
+  if (!trimmed || trimmed === 'all' || trimmed === 'auto') {
+    return ALL_ASSISTANT_IDS.slice();
+  }
+  if (trimmed === 'none' || trimmed === String(ALL_ASSISTANTS.length + 1)) {
+    return [];
+  }
+
+  const parts = trimmed.split(/[\s,]+/).filter(Boolean);
+  const result = new Set();
+
+  for (const part of parts) {
+    const num = parseInt(part, 10);
+    if (!Number.isNaN(num) && num >= 1 && num <= ALL_ASSISTANTS.length) {
+      result.add(ALL_ASSISTANTS[num - 1].id);
+    } else if (ALL_ASSISTANT_IDS.includes(part)) {
+      result.add(part);
+    } else if (part === 'claude' || part === 'claude-code') {
+      result.add('claude-code');
+    } else if (part === 'mcp' || part === 'generic') {
+      result.add('generic-mcp');
+    }
+  }
+
+  return [...result];
+}
+
+async function askIntegration(prompter) {
+  console.log('');
+  console.log('  Step 2 — Choose integration level');
+  console.log('');
+  console.log('    1. Full recommended');
+  console.log('       MCP + skills + agents + rules + hooks + configs');
+  console.log('');
+  console.log('    2. MCP only');
+  console.log('       Dynamic LaraSkills knowledge through MCP');
+  console.log('');
+  console.log('    3. Project files only');
+  console.log('       Skills, agents, rules, hooks, no MCP wiring');
+  console.log('');
+  const choice = await prompter.question('  Integration [1]: ');
+  const map = { '1': 'full', '2': 'mcp-only', '3': 'project-files', '': 'full' };
+  return map[choice] || 'full';
+}
+
+async function askProfile(prompter) {
+  console.log('');
+  console.log('  Step 3 — Choose LaraSkills profile');
+  console.log('');
+  console.log('    1. Core recommended');
+  console.log('       Best default for Laravel projects');
+  console.log('');
+  console.log('    2. Minimal');
+  console.log('       Smaller setup for testing');
+  console.log('');
+  console.log('    3. Full');
+  console.log('       Everything LaraSkills provides');
+  console.log('');
+  const choice = await prompter.question('  Profile [1]: ');
+  const map = { '1': 'core', '2': 'minimal', '3': 'full', '': 'core' };
+  return map[choice] || 'core';
+}
+
+function assistantsToLabel(ids) {
+  if (ids.length === 0) return 'no assistant';
+  return ids.map(id => {
+    const a = ALL_ASSISTANTS.find(x => x.id === id);
+    return a ? a.label : id;
+  }).join(', ');
+}
+
+async function askConfirm(prompter, assistants, integration, profile) {
+  console.log('');
+  console.log('  Review');
+  console.log('');
+  console.log(`  LaraSkills will:`);
+  if (assistants.length > 0) {
+    const sup = assistants.map(id => {
+      const a = ALL_ASSISTANTS.find(x => x.id === id);
+      return a ? a.support : 'unknown';
+    });
+    const configured = sup.filter(s => s === 'configured');
+    const template = sup.filter(s => s === 'template');
+    if (configured.length > 0) console.log(`    - configure assistants: ${assistantsToLabel(configured)} (fully automatic)`);
+    if (template.length > 0) console.log(`    - generate templates for: ${assistantsToLabel(template)}`);
+  }
+  if (assistants.length > 0 && (integration === 'full' || integration === 'mcp-only')) {
+    console.log(`    - enable LaraSkills MCP where supported`);
+  }
+  if (integration === 'full' || integration === 'project-files') {
+    console.log(`    - install the ${profile} profile`);
+  }
+  console.log(`    - create/update project config safely`);
+  console.log('');
+  const answer = await prompter.question('  Continue? [Y/n]: ');
+  return answer.toLowerCase() !== 'n' && answer.toLowerCase() !== 'no';
+}
+
+export function resolveAssistantsArg(flags) {
+  const raw = flags.assistants
+    || flags.assistant
+    || flags.tools
+    || flags.tool
+    || null;
+
+  if (!raw || raw === true) return null;
+
+  const str = String(raw).toLowerCase().trim();
+  if (str === 'all') return ALL_ASSISTANT_IDS.slice();
+  if (str === 'none' || str === 'false') return [];
+
+  const ids = str.split(/[\s,]+/).filter(Boolean).map(s => {
+    if (ALL_ASSISTANT_IDS.includes(s)) return s;
+    if (s === 'claude') return 'claude-code';
+    if (s === 'mcp' || s === 'generic') return 'generic-mcp';
+    return s;
+  }).filter(id => ALL_ASSISTANT_IDS.includes(id));
+
+  return ids.length > 0 ? ids : null;
+}
+
+export function resolveInitOptions(flags) {
+  let assistants = resolveAssistantsArg(flags);
+  let integration = flags.integration || null;
+  let profile = flags.profile || null;
+
+  if (!assistants && (flags.tools || flags.tool)) {
+    const raw = flags.tools || flags.tool || '';
+    const toolIds = parseToolsArg(raw);
+    if (toolIds.length === 0) {
+      assistants = [];
+      integration = integration || 'project-files';
+    } else {
+      assistants = toolIds.filter(id => ALL_ASSISTANT_IDS.includes(id) || id === 'none');
+      if (assistants.length === 0) assistants = ALL_ASSISTANT_IDS.slice();
+      integration = integration || 'full';
+    }
+  }
+
+  return {
+    assistants: assistants || ALL_ASSISTANT_IDS.slice(),
+    integration: VALID_INTEGRATIONS.includes(integration) ? integration : 'full',
+    profile: profile || 'core',
+  };
+}
+
+export function getAssistantToolIds(assistants, integration) {
+  if (!assistants || assistants.length === 0) return [];
+  if (integration === 'project-files') return [];
+
+  const toolIds = new Set();
+  const mcpAssistants = new Set();
+
+  for (const id of assistants) {
+    if (id === 'none') continue;
+    toolIds.add(id);
+    if (ALL_ASSISTANTS.find(a => a.id === id && a.support === 'configured')) {
+      mcpAssistants.add(id);
+    }
+  }
+
+  if (assistants.length > 0 && (integration === 'full' || integration === 'mcp-only')) {
+    toolIds.add('generic-mcp');
+  }
+
+  return [...toolIds];
+}
+
+export function shouldInstallProjectFiles(integration) {
+  return integration === 'full' || integration === 'project-files';
+}
 
 export async function runInteractiveInit({ target, flags }) {
   const isInteractive = isTerminalInteractive();
   const skipPrompts = flags.yes || flags.y || isInteractive === false;
 
-  console.log('');
-  console.log('  LaraSkills Init');
-  console.log('  ===============');
-  console.log('');
-
   const isLaravel = isLaravelProject(target);
-  log(`Project detection: ${isLaravel ? 'Laravel project detected' : 'NOT a Laravel project'}`);
-  log(`Target: ${target}`);
-  console.log('');
+  const dryRun = flags.dryrun || flags.dryRun || false;
 
-  let profile = flags.profile || (isInteractive && !skipPrompts ? null : 'core');
-  let toolIds = parseToolsArg(flags.tools || flags.tool || '');
-  let dryRun = flags.dryrun || flags.dryRun || false;
+  let { assistants, integration, profile } = resolveInitOptions(flags);
+  let confirmed = skipPrompts;
 
-  if (!skipPrompts) {
+  if (skipPrompts) {
+    printWizardHeader(target, isLaravel);
+    console.log('  Non-interactive mode: using defaults or provided flags');
+    console.log(`    Assistants: ${assistantsToLabel(assistants)}`);
+    console.log(`    Integration: ${integration}`);
+    console.log(`    Profile: ${profile}`);
+    console.log('');
+  } else {
     const prompter = createPrompter();
 
     try {
-      if (!profile) {
-        console.log('  Choose a profile:');
-        console.log('    1. core (recommended) — 6 core skills, 5 agents, rules, hooks, MCP configs');
-        console.log('    2. minimal — 3 starter skills, 1 agent, rules, hooks, MCP configs');
-        console.log('    3. full — core + commands + harness configs for 12 AI tools');
-        console.log('');
-        const profileChoice = await prompter.question('  Profile [1]: ');
-        const profileMap = { '1': 'core', '2': 'minimal', '3': 'full', '': 'core' };
-        profile = profileMap[profileChoice.trim()] || 'core';
-        console.log('');
+      printWizardHeader(target, isLaravel);
+
+      if (!flags.assistants && !flags.assistant && !flags.tools && !flags.tool) {
+        assistants = await askAssistants(prompter);
+      }
+      if (!flags.integration) {
+        integration = await askIntegration(prompter);
+      }
+      if (!flags.profile) {
+        profile = await askProfile(prompter);
       }
 
-      if (!toolIds || toolIds.length === 0) {
-        console.log('  Which coding tools do you want to configure?');
-        console.log('    1. OpenCode (fully supported — MCP + instructions)');
-        console.log('    2. Generic MCP config only');
-        console.log('    3. OpenCode + Generic MCP (recommended)');
-        console.log('    4. None — install project files only');
-        console.log('    5. Custom selection');
-        console.log('');
-        const toolChoice = await prompter.question('  Tools [3]: ');
-        const toolMap = {
-          '1': ['opencode'],
-          '2': ['generic-mcp'],
-          '3': ['opencode', 'generic-mcp'],
-          '4': [],
-          '5': null,
-          '': ['opencode', 'generic-mcp'],
-        };
-        toolIds = toolMap[toolChoice.trim()] || [];
-        if (toolChoice.trim() === '5') {
-          console.log('');
-          console.log('  Available tools:');
-          console.log('    opencode      — OpenCode (fully supported)');
-          console.log('    generic-mcp   — Generic MCP config');
-          console.log('    codex         — Codex CLI (template only)');
-          console.log('    claude-code   — Claude Code (template only)');
-          console.log('    cursor        — Cursor IDE (template only)');
-          console.log('');
-          const customTools = await prompter.question('  Enter tool IDs (comma-separated): ');
-          toolIds = customTools.split(',').map(t => t.trim()).filter(Boolean);
-        }
-        console.log('');
-      }
+      confirmed = await askConfirm(prompter, assistants, integration, profile);
     } finally {
       prompter.close();
     }
-  } else if (skipPrompts && (!toolIds || toolIds.length === 0) && !flags.tools && !flags.tool) {
-    toolIds = ['opencode', 'generic-mcp'];
-    log('Non-interactive mode: using defaults (OpenCode + Generic MCP)');
-    console.log('');
   }
 
+  if (!confirmed) {
+    console.log('');
+    console.log('  Cancelled.');
+    return { cancelled: true };
+  }
+
+  const installProject = shouldInstallProjectFiles(integration);
+  const toolIds = getAssistantToolIds(assistants, integration);
+
   if (dryRun) {
-    log('DRY RUN — no files will be written');
+    console.log('');
+    console.log('  DRY RUN — no files will be written');
     console.log('');
   }
 
   return {
-    profile: profile || 'core',
-    toolIds: toolIds || [],
+    profile,
+    toolIds,
+    integration,
+    assistants,
+    installProject,
     dryRun,
     isLaravel,
   };
 }
 
-function parseToolsArg(toolsArg) {
+export function parseToolsArg(toolsArg) {
   if (!toolsArg || toolsArg === 'none') return [];
-  if (toolsArg === true) return ['opencode', 'generic-mcp'];
+  if (toolsArg === true) return ALL_ASSISTANT_IDS.slice();
   return toolsArg.split(',').map(t => t.trim().toLowerCase()).filter(Boolean);
 }
