@@ -250,7 +250,7 @@ describe('CLI Integration Smoke Tests', () => {
     const target = mkdtempSync(join(tmpdir(), 'laraskills-init-core-'));
 
     try {
-      execFileSync(process.execPath, [cliPath, 'init', '--profile', 'core'], {
+      execFileSync(process.execPath, [cliPath, 'init', '--profile', 'core', '--tools', 'opencode,generic-mcp', '--yes'], {
         cwd: target,
         encoding: 'utf8',
       });

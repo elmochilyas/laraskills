@@ -7,6 +7,7 @@ import {
   validateIntelligence,
 } from '../../src/retrieval/index.mjs';
 import { loadCatalog } from '../../src/retrieval/catalog-loader.mjs';
+import { getPackagedIntelligenceRoot } from '../../src/runtime/packaged-root.mjs';
 import {
   retrieveContextInputSchema,
   searchInputSchema,
@@ -343,6 +344,7 @@ export function buildErrorResult(message) {
 }
 
 export function buildRootErrorResult(state) {
+  const packagedRoot = getPackagedIntelligenceRoot();
   const hint = state.explicitLaraskillsRoot
     ? `Explicit --laraskills-root path failed: ${state.explicitLaraskillsRoot}`
     : state.explicitEccRoot
@@ -351,28 +353,28 @@ export function buildRootErrorResult(state) {
         ? `LARASKILLS_ROOT path failed: ${state.envLaraskillsRoot}`
         : state.envEccRoot
           ? `Legacy ECC_ROOT path failed: ${state.envEccRoot}`
-          : 'No configured LaraSkills root was found, and the current working directory does not contain intelligence/json/.';
+          : 'No configured root was found.';
+  const packagedNote = packagedRoot
+    ? 'Packaged intelligence is available — this error may indicate a corrupted npm installation. Try: npm install -g laraskills'
+    : 'No packaged intelligence found — the npm package may be incomplete.';
   const message = [
     'LaraSkills intelligence files were not found.',
     hint,
     '',
-    'The npm package contains the CLI and MCP adapter.',
-    'Retrieval requires access to a full LaraSkills checkout.',
+    packagedNote,
     '',
     'Options:',
-    '  Run the built-in setup command:',
+    '  Ensure the package is installed correctly:',
+    '    npm install -g laraskills',
+    '',
+    '  Advanced: point to a custom checkout:',
     '    laraskills setup --laraskills-root /path/to/laraskills',
     '',
-    '  Set the preferred environment variable:',
+    '  Or set the environment variable:',
     '    LARASKILLS_ROOT=/path/to/laraskills',
-    '',
-    '  Or pass --laraskills-root to the MCP server:',
-    '    node scripts/laraskills-mcp.mjs --laraskills-root /path/to/laraskills',
     '',
     '  Run doctor for diagnostics:',
     '    laraskills doctor',
-    '',
-    'Temporary compatibility fallbacks: --ecc-root, ECC_ROOT, and the old config directory.',
   ].join('\n');
   return {
     isError: true,

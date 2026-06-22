@@ -13,6 +13,7 @@ import {
   validateIntelligence,
 } from '../src/retrieval/index.mjs';
 import { resolveEccRootWithPrecedence } from '../src/runtime/ecc-root-resolver.mjs';
+import { getPackagedIntelligenceRoot } from '../src/runtime/packaged-root.mjs';
 import {
   bundleOutputSchema,
   searchResultListSchema,

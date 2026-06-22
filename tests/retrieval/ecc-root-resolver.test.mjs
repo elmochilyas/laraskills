@@ -13,6 +13,7 @@ import {
   resolveEccRootWithPrecedence,
   validateIntelligenceRoot,
 } from '../../src/runtime/ecc-root-resolver.mjs';
+import { getPackagedIntelligenceRoot } from '../../src/runtime/packaged-root.mjs';
 
 function createFakeCheckout(base, valid = true) {
   const jsonDir = join(base, 'intelligence', 'json');
@@ -235,13 +236,34 @@ describe('LaraSkills Root Resolver - error messages', () => {
   });
 
   it('throws actionable guidance when no root can be resolved', () => {
-    assert.throws(
-      () => resolveEccRootWithPrecedence({}),
-      /LaraSkills intelligence files were not found/,
-    );
-    assert.throws(
-      () => resolveEccRootWithPrecedence({}),
-      /laraskills setup/,
-    );
+    const packaged = getPackagedIntelligenceRoot();
+    if (packaged) {
+      assert.ok(true, 'Packaged intelligence exists — resolution should succeed without throwing. This is the expected Phase 25 behavior.');
+      const result = resolveEccRootWithPrecedence({});
+      assert.ok(result);
+      assert.ok(result.source);
+    } else {
+      assert.throws(
+        () => resolveEccRootWithPrecedence({}),
+        /LaraSkills intelligence files were not found/,
+      );
+      assert.throws(
+        () => resolveEccRootWithPrecedence({}),
+        /laraskills setup/,
+      );
+    }
+  });
+
+  it('finds packaged intelligence when available and no config exists', () => {
+    const packaged = getPackagedIntelligenceRoot();
+    if (packaged) {
+      const result = resolveEccRootWithPrecedence({});
+      assert.ok(result);
+      assert.strictEqual(result.root.replace(/\\/g, '/'), packaged.replace(/\\/g, '/'));
+      assert.strictEqual(result.source, 'packaged-intelligence');
+      assert.ok(result.valid);
+    } else {
+      assert.ok(true, 'No packaged intelligence detected (test running outside npm package context) — skipping');
+    }
   });
 });

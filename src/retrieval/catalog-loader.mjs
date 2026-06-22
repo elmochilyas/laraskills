@@ -6,6 +6,7 @@ import {
   INTELLIGENCE_JSON_DIR,
 } from './config.mjs';
 import { loadConfig } from '../runtime/user-config.mjs';
+import { getPackagedIntelligenceRoot } from '../runtime/packaged-root.mjs';
 import { getCachedCatalog, setCachedCatalog } from './cache-manager.mjs';
 
 export function resolveEccRoot(root) {
@@ -56,9 +57,16 @@ export function findEccRoot(cwd, explicitRoot, envRoot) {
   if (found) return found;
   found = resolveEccRoot(process.cwd());
   if (found) return found;
+
+  const packagedRoot = getPackagedIntelligenceRoot();
+  if (packagedRoot) return packagedRoot;
+
   throw new Error(
     'LaraSkills intelligence files were not found.\n\n' +
-    'Provide the full LaraSkills repository path:\n\n' +
+    'Packaged intelligence should be available automatically.\n' +
+    'If you see this error, try reinstalling the npm package:\n\n' +
+    '  npm install -g laraskills\n\n' +
+    'Advanced: point to a custom checkout:\n\n' +
     `  npx laraskills retrieve "your task" --laraskills-root C:\\path\\to\\laraskills\n\n` +
     'or set:\n\n' +
     '  LARASKILLS_ROOT=C:\\path\\to\\laraskills\n\n' +

@@ -1,5 +1,29 @@
 import { existsSync, readFileSync } from 'node:fs';
-import { resolve, sep } from 'node:path';
+import { resolve, sep, join } from 'node:path';
+
+let _contentIndex = null;
+let _contentIndexLoaded = false;
+let _contentIndexPath = null;
+
+function loadContentIndex(eccRoot) {
+  if (_contentIndexLoaded && _contentIndexPath === eccRoot) return _contentIndex;
+  _contentIndexLoaded = true;
+  _contentIndexPath = eccRoot;
+
+  if (!eccRoot) { _contentIndex = null; return null; }
+
+  const contentIndexFile = join(eccRoot, 'intelligence', 'content', 'content-index.json');
+  if (existsSync(contentIndexFile)) {
+    try {
+      _contentIndex = JSON.parse(readFileSync(contentIndexFile, 'utf-8'));
+      return _contentIndex;
+    } catch {
+      _contentIndex = null;
+    }
+  }
+  _contentIndex = null;
+  return null;
+}
 
 function scoreTag(score) {
   if (score >= 90) return '★ HIGH';
@@ -195,11 +219,19 @@ function readStandardizedKnowledge(ku, eccRoot) {
   const contentPath = resolve(resolvedRoot, ku.directory, '04-standardized-knowledge.md');
   const rootPrefix = resolvedRoot.endsWith(sep) ? resolvedRoot : `${resolvedRoot}${sep}`;
 
-  if (!contentPath.startsWith(rootPrefix) || !existsSync(contentPath)) {
-    return null;
+  if (contentPath.startsWith(rootPrefix) && existsSync(contentPath)) {
+    return readFileSync(contentPath, 'utf8').replace(/^\uFEFF/, '').trimEnd();
   }
 
-  return readFileSync(contentPath, 'utf8').replace(/^\uFEFF/, '').trimEnd();
+  const contentIndex = loadContentIndex(eccRoot);
+  if (contentIndex) {
+    const kuId = ku.id || '';
+    if (contentIndex[kuId]) {
+      return contentIndex[kuId].replace(/^\uFEFF/, '').trimEnd();
+    }
+  }
+
+  return null;
 }
 
 export function formatKuDetail(ku, catalog, includeContent, eccRoot) {

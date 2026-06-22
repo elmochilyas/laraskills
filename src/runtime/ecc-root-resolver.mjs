@@ -5,6 +5,7 @@ import {
   getConfigPath,
   getLegacyConfigPath,
 } from './user-config.mjs';
+import { getPackagedIntelligenceRoot, isPackagedRoot } from './packaged-root.mjs';
 
 const INTELLIGENCE_JSON_DIR = 'intelligence/json';
 
@@ -154,6 +155,11 @@ export function resolveEccRootWithPrecedence({
     return buildResult(cwdRoot, 'cwd-discovery');
   }
 
+  const packagedRoot = getPackagedIntelligenceRoot();
+  if (packagedRoot) {
+    return buildResult(packagedRoot, 'packaged-intelligence');
+  }
+
   const configPath = getConfigPath();
   const legacyConfigPath = getLegacyConfigPath();
   const hint = existsSync(configPath)
@@ -162,15 +168,14 @@ export function resolveEccRootWithPrecedence({
 
   throw new Error(
     `LaraSkills intelligence files were not found.\n\n` +
-    `The npm package contains the CLI and MCP adapter.\n` +
-    `Retrieval requires access to a full LaraSkills checkout.\n\n` +
+    `The npm package contains the CLI, MCP adapter, and packaged intelligence.\n` +
+    `Packaged intelligence should be available automatically.\n\n` +
+    `If you see this error, the npm package may be corrupted.\n` +
+    `Try reinstalling: npm install -g laraskills\n\n` +
     hint + '\n' +
     `Legacy config fallback checked at:\n  ${legacyConfigPath}\n\n` +
-    `Fix: run \`laraskills setup --laraskills-root /path/to/laraskills\`.\n\n` +
-    `You can also set the LARASKILLS_ROOT environment variable:\n` +
-    `  LARASKILLS_ROOT=/path/to/laraskills\n\n` +
-    `To clone the full repository:\n` +
-    `  git clone https://github.com/elmochilyas/laraskills.git`
+    `Advanced: point to a custom checkout with:\n` +
+    `  laraskills setup --laraskills-root /path/to/laraskills\n`
   );
 }
 

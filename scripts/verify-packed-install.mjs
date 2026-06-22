@@ -145,14 +145,29 @@ async function main() {
     }
     pass('Repository-only CI workflow excluded from package');
 
-    // 4. Verify heavy layers excluded
+    // 4. Verify heavy layers excluded (intelligence/ is now intentionally bundled as packaged intelligence)
     console.log('\n--- Step 4: Verify heavy layers excluded ---');
-    const excluded = ['package/knowledge/', 'package/intelligence/', 'package/tools/', 'package/tests/', 'package/examples/'];
+    const excluded = ['package/knowledge/', 'package/tools/', 'package/tests/', 'package/examples/'];
     for (const prefix of excluded) {
       const matches = tarballList.filter(e => e.startsWith(prefix));
       if (matches.length > 0) fail(`Heavy layer ${prefix} has ${matches.length} entries in package`);
     }
-    pass('Heavy layers excluded from package');
+    pass('Heavy layers excluded from package (intelligence/json/ bundled as packaged intelligence)');
+
+    console.log('\n--- Step 4b: Verify packaged intelligence included ---');
+    const intelligenceFiles = tarballList.filter(e => e.startsWith('package/intelligence/json/') && e.endsWith('.json'));
+    if (intelligenceFiles.length >= 8) {
+      pass(`Packaged intelligence JSON included: ${intelligenceFiles.length} files`);
+    } else {
+      fail(`Packaged intelligence JSON incomplete: only ${intelligenceFiles.length} files`);
+    }
+
+    const contentIndex = tarballList.filter(e => e === 'package/intelligence/content/content-index.json');
+    if (contentIndex.length === 1) {
+      pass('Packaged content index included');
+    } else {
+      fail('Packaged content index missing from tarball');
+    }
 
     // 5. Install tarball in isolated project
     console.log('\n--- Step 5: Install in isolated project ---');
@@ -209,13 +224,34 @@ async function main() {
     }
     pass('Preferred and legacy CLI aliases execute');
 
-    // 7. Verify doctor before setup
-    console.log('\n--- Step 7: Doctor before setup ---');
+    // 7. Verify doctor works with packaged intelligence (no setup needed)
+    console.log('\n--- Step 7: Doctor with packaged intelligence ---');
     const doctorOutput = run(`node "${laraskillsCli}" doctor`, { cwd: installDir, silent: true, allowNonZero: true, env: testEnv });
-    if (doctorOutput.includes('ACTION REQUIRED') || doctorOutput.includes('NOT FOUND')) {
-      pass('Doctor reports actionable guidance before setup');
+    if (doctorOutput.includes('HEALTHY') || doctorOutput.includes('packaged')) {
+      pass('Doctor reports HEALTHY with packaged intelligence');
+    } else if (doctorOutput.includes('ACTION REQUIRED')) {
+      console.log(`  Doctor output (first 300 chars): ${doctorOutput.slice(0, 300)}`);
+      fail('Doctor should report HEALTHY with packaged intelligence (Phase 25)');
     } else {
-      fail('Doctor should report action required before setup');
+      console.log(`  Doctor output (first 300 chars): ${doctorOutput.slice(0, 300)}`);
+      fail('Doctor output unexpected');
+    }
+
+    // 7b. Verify get --include-content works from packaged intelligence
+    console.log('\n--- Step 7b: get --include-content from packaged intelligence ---');
+    const getContentOutput = run(`node "${laraskillsCli}" get "security-identity-engineering/authorization/policies-model" --include-content`, {
+      cwd: installDir,
+      silent: true,
+      allowNonZero: true,
+      env: testEnv,
+    });
+    if (getContentOutput.includes('## Standardized Knowledge') && getContentOutput.includes('Policies are classes that organize authorization logic')) {
+      pass('get --include-content returns real content from packaged intelligence');
+    } else if (getContentOutput.includes('Standardized knowledge content is unavailable') || getContentOutput.includes('unavailable')) {
+      fail('get --include-content should return real content, got "unavailable"');
+    } else {
+      console.log(`  get output (first 300 chars): ${getContentOutput.slice(0, 300)}`);
+      fail('get --include-content output unexpected');
     }
 
     // 8. Configure isolated user-config directory
