@@ -5,11 +5,11 @@ import { createInterface } from 'node:readline';
 const VALID_INTEGRATIONS = ['full', 'mcp-only', 'project-files'];
 
 const ALL_ASSISTANTS = [
-  { id: 'opencode', label: 'OpenCode', support: 'configured', desc: 'Full automatic setup available' },
-  { id: 'codex', label: 'Codex', support: 'template', desc: 'MCP/template setup' },
-  { id: 'cursor', label: 'Cursor', support: 'template', desc: 'MCP/template setup' },
-  { id: 'claude-code', label: 'Claude Code', support: 'template', desc: 'MCP/template setup' },
-  { id: 'generic-mcp', label: 'Generic MCP', support: 'template', desc: 'Reusable MCP config for any MCP-capable client' },
+  { id: 'opencode', label: 'OpenCode', support: 'configured', desc: 'Auto-configures MCP and project instructions' },
+  { id: 'codex', label: 'Codex', support: 'configured', desc: 'Configures MCP via .codex/config.toml' },
+  { id: 'cursor', label: 'Cursor', support: 'configured', desc: 'Auto-configures project MCP and IDE rules' },
+  { id: 'claude-code', label: 'Claude Code', support: 'configured', desc: 'Configures project MCP through .mcp.json' },
+  { id: 'generic-mcp', label: 'Generic MCP', support: 'configured', desc: 'Generates portable MCP config for any MCP-capable client' },
 ];
 
 const ALL_ASSISTANT_IDS = ALL_ASSISTANTS.map(a => a.id);
@@ -85,8 +85,7 @@ async function askAssistants(prompter) {
 
   for (let i = 0; i < ALL_ASSISTANTS.length; i++) {
     const a = ALL_ASSISTANTS[i];
-    const supportLabel = a.support === 'configured' ? '(full auto-setup)' : '(template)';
-    console.log(`    ${i + 1}. ${a.label} ${supportLabel}`);
+    console.log(`    ${i + 1}. ${a.label}`);
     console.log(`       ${a.desc}`);
     console.log('');
   }
@@ -176,22 +175,16 @@ async function askConfirm(prompter, assistants, integration, profile) {
   console.log('');
   console.log(`  LaraSkills will:`);
   if (assistants.length > 0) {
-    const sup = assistants.map(id => {
-      const a = ALL_ASSISTANTS.find(x => x.id === id);
-      return a ? a.support : 'unknown';
-    });
-    const configured = sup.filter(s => s === 'configured');
-    const template = sup.filter(s => s === 'template');
-    if (configured.length > 0) console.log(`    - configure assistants: ${assistantsToLabel(configured)} (fully automatic)`);
-    if (template.length > 0) console.log(`    - generate templates for: ${assistantsToLabel(template)}`);
+    console.log(`    - configure assistants: ${assistantsToLabel(assistants)}`);
   }
   if (assistants.length > 0 && (integration === 'full' || integration === 'mcp-only')) {
-    console.log(`    - enable LaraSkills MCP where supported`);
+    console.log(`    - enable LaraSkills MCP for selected assistants`);
   }
   if (integration === 'full' || integration === 'project-files') {
     console.log(`    - install the ${profile} profile`);
   }
   console.log(`    - create/update project config safely`);
+  console.log(`    - preserve existing config and MCP servers`);
   console.log('');
   const answer = await prompter.question('  Continue? [Y/n]: ');
   return answer.toLowerCase() !== 'n' && answer.toLowerCase() !== 'no';

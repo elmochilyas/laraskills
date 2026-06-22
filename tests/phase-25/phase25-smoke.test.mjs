@@ -95,7 +95,7 @@ describe('Phase 25 — Tool Integrations', () => {
 
     const check = checkToolConfigured('opencode', testDir);
     assert.ok(check.configured);
-    assert.ok(check.hasOpenCodeDir);
+    assert.ok(check.mcpConfigured);
 
     const rootCfg = JSON.parse(readFileSync(join(testDir, 'opencode.json'), 'utf-8'));
     assert.ok(rootCfg.mcp && rootCfg.mcp.laraskills, 'Should have MCP laraskills entry');
@@ -117,7 +117,7 @@ describe('Phase 25 — Tool Integrations', () => {
     assert.ok(merged.mcp && merged.mcp.laraskills, 'Should have MCP laraskills entry');
   });
 
-  it('Generic MCP setup creates mcp-configs/mcp-servers.json', async () => {
+  it('Generic MCP setup creates mcp-configs/laraskills-mcp.json', async () => {
     const { setupToolIntegration, checkToolConfigured } = await import('../../src/runtime/tool-integrations.mjs');
     const testDir = join(TMP, 'mcp-setup');
     mkdirSync(testDir, { recursive: true });
@@ -126,7 +126,7 @@ describe('Phase 25 — Tool Integrations', () => {
 
     const check = checkToolConfigured('generic-mcp', testDir);
     assert.ok(check.configured);
-    assert.ok(existsSync(join(testDir, 'mcp-configs', 'mcp-servers.json')));
+    assert.ok(existsSync(join(testDir, 'mcp-configs', 'laraskills-mcp.json')));
   });
 
   it('Dry run does not write files', async () => {
