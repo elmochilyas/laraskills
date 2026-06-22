@@ -23,6 +23,19 @@ import {
   loadConfigWithSource,
   saveConfig,
 } from '../src/runtime/user-config.mjs';
+import { getPackagedIntelligenceRoot, isPackagedRoot } from '../src/runtime/packaged-root.mjs';
+import {
+  setupToolIntegration,
+  checkToolConfigured,
+  getAllToolChecks,
+  getToolDefinition,
+  getAllToolDefinitions,
+} from '../src/runtime/tool-integrations.mjs';
+import {
+  isLaravelProject,
+  runInteractiveInit,
+  isTerminalInteractive,
+} from '../src/runtime/interactive-init.mjs';
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const ROOT = join(__dirname, '..');
@@ -198,7 +211,27 @@ function addComponent(target, component) {
 function cmdSetup(setupArgs) {
   const flags = parseFlags(setupArgs);
 
+  const packagedRoot = getPackagedIntelligenceRoot();
+  if (packagedRoot && !flags.laraskillsroot && !flags.eccroot) {
+    log('LaraSkills setup is optional for normal users.');
+    console.log('');
+    console.log('Packaged intelligence is already available — no manual clone is required.');
+    console.log('Use --laraskills-root <path> only if you need to point to a custom local checkout.');
+    console.log('');
+    console.log('To override with a custom checkout:');
+    console.log(`  laraskills setup --laraskills-root "/path/to/laraskills"`);
+    console.log('');
+    console.log('To diagnose current state:');
+    console.log('  laraskills doctor');
+    console.log('');
+    return;
+  }
+
   log('LaraSkills setup');
+  console.log('');
+  log('NOTE: normal users do not need to run setup.');
+  log('Packaged intelligence is used automatically by default.');
+  log('setup is for advanced users who want to point to a custom local checkout.');
   console.log('');
 
   let result;
@@ -252,32 +285,13 @@ function cmdDoctor(doctorArgs) {
   const legacyConfigExists = existsSync(legacyConfigPath);
   const envLaraskillsRoot = process.env.LARASKILLS_ROOT || 'not set';
   const envEccRoot = process.env.ECC_ROOT || 'not set';
+  const packagedRoot = getPackagedIntelligenceRoot();
 
   console.log('LaraSkills Doctor');
   console.log('');
   console.log(`Package version:       ${pkg.version}`);
   console.log(`Node.js:               ${process.version}`);
   console.log(`Platform:              ${process.platform}`);
-  console.log(`Config file:           ${configPath}`);
-  console.log(`Config exists:         ${configExists ? 'yes' : 'no'}`);
-  console.log(`Legacy config file:    ${legacyConfigPath}`);
-  console.log(`Legacy config exists:  ${legacyConfigExists ? 'yes' : 'no'}`);
-
-  if (configExists || legacyConfigExists) {
-    try {
-      const loaded = loadConfigWithSource();
-      console.log(`Config root:           ${loaded.config.laraskillsRoot}`);
-      console.log(`Config source:         ${loaded.source}`);
-      if (loaded.legacy) {
-        console.log(`Compatibility notice:  ${loaded.legacyReasons.join(', ')}`);
-      }
-    } catch (error) {
-      console.log(`Config root:           ERROR - ${error.message}`);
-    }
-  }
-
-  console.log(`LARASKILLS_ROOT env:   ${envLaraskillsRoot}`);
-  console.log(`ECC_ROOT env:          ${envEccRoot}`);
 
   let resolvedRoot = null;
   let resolutionSource = '';
@@ -292,19 +306,20 @@ function cmdDoctor(doctorArgs) {
     resolvedRoot = result.root;
     resolutionSource = result.source;
     compatibilityNotice = result.legacyFallback ? result.legacyReason : null;
-    console.log(`Resolved root:         ${resolvedRoot}`);
-    console.log(`Resolution source:     ${resolutionSource}`);
-    console.log(`Legacy fallback:       ${compatibilityNotice ? 'yes' : 'no'}`);
-    if (compatibilityNotice) {
-      console.log(`Compatibility notice:  ${compatibilityNotice}`);
-      console.log(`Migration action:      use --laraskills-root, LARASKILLS_ROOT, or the new LaraSkills config`);
-    }
   } catch (e) {
     resolutionError = e.message;
-    console.log(`Resolved root:         NOT FOUND`);
-    console.log(`Resolution source:     none`);
-    console.log(`Legacy fallback:       no`);
   }
+
+  const isPackaged = resolvedRoot && isPackagedRoot(resolvedRoot);
+
+  console.log('');
+  console.log('--- Machine ---');
+  console.log(`Intelligence source:   ${resolutionSource || 'none'}`);
+  if (isPackaged) console.log('Source type:           packaged (bundled with npm package)');
+  else if (resolutionSource === 'laraskills-cli' || resolutionSource === 'laraskills-environment') console.log('Source type:           configured root');
+  else if (resolutionSource) console.log(`Source type:           ${resolutionSource}`);
+  console.log(`LARASKILLS_ROOT env:   ${envLaraskillsRoot}`);
+  console.log(`ECC_ROOT env:          ${envEccRoot}`);
 
   if (resolvedRoot) {
     const jsonDir = join(resolvedRoot, 'intelligence', 'json');
@@ -314,62 +329,123 @@ function cmdDoctor(doctorArgs) {
       'decision-trees.json',
     ];
     let filesPass = true;
-    const fileResults = [];
     for (const f of requiredFiles) {
-      const ok = existsSync(join(jsonDir, f));
-      fileResults.push({ file: f, ok });
-      if (!ok) filesPass = false;
+      if (!existsSync(join(jsonDir, f))) { filesPass = false; break; }
     }
-    console.log(`Intelligence files:    ${filesPass ? 'PASS' : 'FAIL'}`);
-    if (!filesPass) {
-      for (const fr of fileResults) {
-        if (!fr.ok) console.log(`  Missing: ${fr.file}`);
-      }
-    }
-
+    console.log(`Intelligence files:    ${filesPass ? 'OK' : 'MISSING'}`);
     const intelligenceCheck = validateIntelligenceRoot(resolvedRoot);
-    console.log(`Intelligence validate: ${intelligenceCheck.valid ? 'PASS' : 'FAIL'}`);
+    console.log(`Intelligence validate: ${intelligenceCheck.valid ? 'OK' : 'ISSUES'}`);
 
     const mcpPath = join(resolvedRoot, 'scripts', 'laraskills-mcp.mjs');
-    console.log(`MCP adapter:           ${existsSync(mcpPath) ? 'PASS' : 'MISSING'}`);
+    console.log(`MCP adapter:           ${existsSync(mcpPath) ? 'OK' : 'MISSING'}`);
 
     const retrievalDir = join(resolvedRoot, 'src', 'retrieval');
-    console.log(`Retrieval readiness:   ${existsSync(retrievalDir) ? 'PASS' : 'MISSING'}`);
+    console.log(`Retrieval:             ${existsSync(retrievalDir) ? 'OK' : 'MISSING'}`);
   } else {
     console.log(`Intelligence files:    FAIL`);
     console.log(`Intelligence validate: FAIL`);
     console.log(`MCP adapter:           FAIL`);
-    console.log(`Retrieval readiness:   FAIL`);
+    console.log(`Retrieval:             FAIL`);
+  }
+
+  console.log(`Config file:           ${configPath}`);
+  console.log(`Config exists:         ${configExists ? 'yes' : 'no'}`);
+  if (legacyConfigExists) {
+    console.log(`Legacy config:         ${legacyConfigPath} (exists)`);
+  }
+  if (compatibilityNotice) {
+    console.log(`Compatibility notice:  ${compatibilityNotice}`);
+  }
+
+  const target = process.cwd();
+  const state = readState(target);
+  const isLaravel = isLaravelProject(target);
+
+  console.log('');
+  console.log('--- Project ---');
+  console.log(`Laravel detected:      ${isLaravel ? 'yes' : 'no'}`);
+  console.log(`LaraSkills initialized: ${state ? 'yes' : 'no'}`);
+
+  if (state) {
+    console.log(`Profile:               ${state.profile || 'unknown'}`);
+    console.log(`State version:          ${state.version || 'unknown'}`);
+
+    const projectChecks = {
+      skills: existsSync(join(target, 'skills')),
+      agents: existsSync(join(target, 'agents')),
+      rules: existsSync(join(target, 'rules')),
+      hooks: existsSync(join(target, 'hooks')),
+      'mcp-configs': existsSync(join(target, 'mcp-configs')),
+    };
+    for (const [name, ok] of Object.entries(projectChecks)) {
+      console.log(`  ${name}:              ${ok ? 'present' : 'MISSING'}`);
+    }
+
+    const toolChecks = getAllToolChecks(target);
+    console.log('');
+    console.log('Tool integrations:');
+    if (toolChecks.length === 0) {
+      console.log('  none configured');
+    } else {
+      for (const tc of toolChecks) {
+        const status = tc.configured ? 'configured' : 'not configured';
+        const supportLabel = tc.support === 'full' ? '' : ' (template)';
+        console.log(`  ${tc.displayName}:  ${status}${supportLabel}`);
+      }
+    }
   }
 
   console.log('');
 
-  if (resolvedRoot && validateIntelligenceRoot(resolvedRoot).valid) {
+  const machineOk = resolvedRoot && validateIntelligenceRoot(resolvedRoot).valid;
+  const projectOk = state !== null;
+  const totalOk = machineOk && (isLaravel ? projectOk : true);
+
+  if (totalOk) {
     console.log('Status: HEALTHY');
-    return;
+    if (isPackaged) {
+      console.log('');
+      console.log('Intelligence is running from the packaged bundle — no manual clone required.');
+    }
   } else {
     console.log('Status: ACTION REQUIRED');
-    if (resolutionError) {
+    if (!machineOk) {
       console.log('');
-      console.log('Fix:');
-      console.log(`  laraskills setup --laraskills-root "/path/to/laraskills"`);
-      console.log('');
-      console.log('To clone the full repository:');
-      console.log(`  git clone https://github.com/elmochilyas/laraskills.git`);
+      if (!resolvedRoot) {
+        console.log('Fix: intelligence source not found. Try reinstalling:');
+        console.log('  npm install -g laraskills');
+        console.log('');
+        console.log('Advanced: configure a custom checkout:');
+        console.log('  laraskills setup --laraskills-root "/path/to/laraskills"');
+      }
     }
-    process.exit(1);
+    if (isLaravel && !projectOk) {
+      console.log('');
+      console.log('Fix: initialize this project:');
+      console.log('  laraskills init');
+    }
   }
 }
 
-function install(target, profile) {
+function install(target, profile, toolIds = [], flags = {}) {
+  const dryRun = flags.dryRun || flags.dryrun || false;
   const detected = detectTools(target);
+  const isLaravel = isLaravelProject(target);
+
   log(`LaraSkills v${pkg.version}`);
   log(`Target: ${target}`);
   log(`Profile: ${profile}`);
-  log(`Detected tools: ${detected.join(', ')}`);
+  if (isLaravel) log(`Laravel project: detected`);
+  else log(`Laravel project: NOT detected (proceeding anyway)`);
+
+  if (dryRun) {
+    log('Mode: DRY RUN — no files will be written');
+  }
+
+  console.log('');
 
   const skillsDir = join(target, 'skills');
-  mkdirSync(skillsDir, { recursive: true });
+  if (!dryRun) mkdirSync(skillsDir, { recursive: true });
 
   const skillList = profile === 'minimal'
     ? ['laravel-patterns', 'laravel-tdd', 'laravel-security']
@@ -378,52 +454,120 @@ function install(target, profile) {
   for (const skill of skillList) {
     const src = join(ROOT, 'skills', skill);
     if (existsSync(src)) {
-      cpSync(src, join(skillsDir, skill), { recursive: true });
-      log(`  ✓ Installed skill: ${skill}`);
+      if (!dryRun) {
+        cpSync(src, join(skillsDir, skill), { recursive: true });
+        log(`  + Installed skill: ${skill}`);
+      } else {
+        log(`  ? Would install skill: ${skill}`);
+      }
     }
   }
 
-  copyRules(target);
-  copyHooks(target);
-  copyMcpConfigs(target);
+  if (!dryRun) {
+    copyRules(target);
+    copyHooks(target);
+    copyMcpConfigs(target);
+  } else {
+    log('  ? Would sync rules');
+    log('  ? Would sync hooks');
+    log('  ? Would sync MCP configs');
+  }
 
   const agentsDir = join(target, 'agents');
-  mkdirSync(agentsDir, { recursive: true });
+  if (!dryRun) mkdirSync(agentsDir, { recursive: true });
   const agents = profile === 'minimal'
     ? ['laravel-artisan.md']
     : ['laravel-artisan.md', 'laravel-eloquent.md', 'laravel-migration.md', 'laravel-database.md', 'laravel-container.md'];
   for (const agent of agents) {
     const src = join(ROOT, 'agents', agent);
     if (existsSync(src)) {
-      copyFileSync(src, join(agentsDir, agent));
+      if (!dryRun) {
+        copyFileSync(src, join(agentsDir, agent));
+        log(`  + Installed agent: ${agent}`);
+      } else {
+        log(`  ? Would install agent: ${agent}`);
+      }
     }
   }
-  log(`  ✓ Installed ${agents.length} agent(s)`);
 
   if (profile === 'full') {
-    copyCommands(target);
-    copyHarnessConfigs(target);
-    log('  ✓ Installed commands & harness configs');
+    if (!dryRun) {
+      copyCommands(target);
+      copyHarnessConfigs(target);
+    } else {
+      log('  ? Would sync commands');
+      log('  ? Would sync harness configs');
+    }
   }
 
-  const installedComponents = [...new Set([...skillList, 'rules', ...agents.map(a => a.replace('.md', ''))])];
+  let toolResults = [];
+  if (toolIds.length > 0) {
+    console.log('');
+    log('Configuring tool integrations...');
+    for (const toolId of toolIds) {
+      const def = getToolDefinition(toolId);
+      if (!def) {
+        warn(`Unknown tool: ${toolId} — skipping`);
+        continue;
+      }
+      try {
+        const results = setupToolIntegration(toolId, target, { dryRun });
+        for (const r of results) {
+          const actionLabel = r.action === 'created' ? '+' : r.action === 'merged' ? '~' : r.action === 'replaced' ? '~' : '?';
+          const backupNote = r.backup ? ` (backed up to ${r.backup})` : '';
+          if (dryRun) {
+            log(`  ? Would configure ${def.displayName}: ${r.file}`);
+          } else {
+            log(`  ${actionLabel} ${def.displayName}: ${r.file}${backupNote}`);
+          }
+        }
+        if (results.length === 0) {
+          log(`  - ${def.displayName}: nothing to configure`);
+        }
+        toolResults.push(...results);
+      } catch (e) {
+        warn(`${def.displayName}: ${e.message}`);
+      }
+    }
+  }
+
+  const installedComponents = [...new Set([...skillList, 'rules', 'hooks', 'mcp-configs', ...agents.map(a => a.replace('.md', ''))])];
+  const installedTools = toolIds.filter(id => getToolDefinition(id));
   const state = {
     version: pkg.version,
     target,
     installed_at: new Date().toISOString(),
     profile,
-    tools: detected,
+    tools: [...new Set([...detected, ...installedTools])],
     components: installedComponents,
   };
-  writeState(target, state);
+  if (!dryRun) {
+    writeState(target, state);
+  }
+
+  console.log('');
   log('Installation complete!');
   log(`Profile: ${profile}`);
+  if (!dryRun) {
+    log(`Tool integrations: ${installedTools.map(id => getToolDefinition(id)?.displayName || id).join(', ') || 'none'}`);
+    console.log('');
+    console.log('Next steps:');
+    console.log(`  laraskills doctor               Verify everything is set up`);
+    console.log(`  laraskills retrieve "<task>"    Get AI-ready Laravel context`);
+  }
+  if (dryRun) {
+    console.log('');
+    console.log('To apply these changes, run without --dry-run.');
+  }
 }
 
-function doUpdate(target) {
+function doUpdate(target, updateFlags = {}) {
+  const dryRun = updateFlags.dryRun || updateFlags.dryrun || false;
+  const toolIds = parseToolList(updateFlags.tools || updateFlags.tool || '');
+
   const state = readState(target);
   if (!state) {
-    err('Not installed. Run `npx laraskills install` first.');
+    err('Not installed. Run `npx laraskills init` first.');
   }
 
   if (state.legacyStateFile) {
@@ -434,40 +578,89 @@ function doUpdate(target) {
   log(`Target: ${target}`);
   log(`Profile: ${state.profile}`);
 
+  if (dryRun) {
+    log('Mode: DRY RUN — no files will be written');
+  }
+  console.log('');
+
   const skillsDir = join(target, 'skills');
-  mkdirSync(skillsDir, { recursive: true });
+  if (!dryRun) mkdirSync(skillsDir, { recursive: true });
   const srcSkillsDir = join(ROOT, 'skills');
   if (existsSync(srcSkillsDir)) {
     const installed = readdirSync(srcSkillsDir);
     for (const skill of installed) {
       const src = join(srcSkillsDir, skill);
       if (statSync(src).isDirectory()) {
-        cpSync(src, join(skillsDir, skill), { recursive: true });
-        log(`  ✓ Updated skill: ${skill}`);
+        if (!dryRun) {
+          cpSync(src, join(skillsDir, skill), { recursive: true });
+          log(`  ~ Updated skill: ${skill}`);
+        } else {
+          log(`  ? Would update skill: ${skill}`);
+        }
       }
     }
   }
 
-  copyRules(target);
-  copyHooks(target);
-  copyMcpConfigs(target);
+  if (!dryRun) {
+    copyRules(target);
+    copyHooks(target);
+    copyMcpConfigs(target);
+  } else {
+    log('  ? Would refresh rules');
+    log('  ? Would refresh hooks');
+    log('  ? Would refresh MCP configs');
+  }
 
   const agentsDir = join(target, 'agents');
-  mkdirSync(agentsDir, { recursive: true });
+  if (!dryRun) mkdirSync(agentsDir, { recursive: true });
   const srcAgentsDir = join(ROOT, 'agents');
   if (existsSync(srcAgentsDir)) {
     const installed = readdirSync(srcAgentsDir);
     for (const agent of installed) {
       if (agent.endsWith('.md')) {
-        copyFileSync(join(srcAgentsDir, agent), join(agentsDir, agent));
-        log(`  ✓ Updated agent: ${agent}`);
+        if (!dryRun) {
+          copyFileSync(join(srcAgentsDir, agent), join(agentsDir, agent));
+          log(`  ~ Updated agent: ${agent}`);
+        } else {
+          log(`  ? Would update agent: ${agent}`);
+        }
       }
     }
   }
 
   if (state.profile === 'full') {
-    copyCommands(target);
-    copyHarnessConfigs(target);
+    if (!dryRun) {
+      copyCommands(target);
+      copyHarnessConfigs(target);
+    } else {
+      log('  ? Would refresh commands');
+      log('  ? Would refresh harness configs');
+    }
+  }
+
+  if (toolIds.length > 0) {
+    console.log('');
+    log('Refreshing tool integrations...');
+    for (const toolId of toolIds) {
+      const def = getToolDefinition(toolId);
+      if (!def) {
+        warn(`Unknown tool: ${toolId} — skipping`);
+        continue;
+      }
+      try {
+        const results = setupToolIntegration(toolId, target, { dryRun });
+        for (const r of results) {
+          const actionLabel = r.action === 'created' ? '+' : r.action === 'merged' ? '~' : r.action === 'replaced' ? '~' : '?';
+          if (dryRun) {
+            log(`  ? Would refresh ${def.displayName}: ${r.file}`);
+          } else {
+            log(`  ${actionLabel} Refreshed ${def.displayName}: ${r.file}`);
+          }
+        }
+      } catch (e) {
+        warn(`${def.displayName}: ${e.message}`);
+      }
+    }
   }
 
   const updatedComponents = [];
@@ -475,7 +668,7 @@ function doUpdate(target) {
     const skillDirs = readdirSync(join(target, 'skills'));
     updatedComponents.push(...skillDirs);
   }
-  updatedComponents.push('rules');
+  updatedComponents.push('rules', 'hooks', 'mcp-configs');
   if (existsSync(join(target, 'agents'))) {
     const agentFiles = readdirSync(join(target, 'agents')).filter(f => f.endsWith('.md')).map(f => f.replace('.md', ''));
     updatedComponents.push(...agentFiles);
@@ -486,22 +679,40 @@ function doUpdate(target) {
     version: pkg.version,
     updated_at: new Date().toISOString(),
     components: updatedComponents,
+    tools: state.tools || [],
   };
-  writeState(target, newState);
+  if (!dryRun) {
+    writeState(target, newState);
+  }
 
+  console.log('');
   log('Update complete!');
   if (state.version !== pkg.version) {
     log(`Updated from v${state.version} to v${pkg.version}`);
   } else {
     log(`Already at latest version v${pkg.version}`);
   }
+  if (dryRun) {
+    console.log('');
+    console.log('To apply these changes, run without --dry-run.');
+  }
 }
 
 function parseFlags(args) {
   const flags = {};
   for (let i = 0; i < args.length; i++) {
+    if (args[i] === '--yes' || args[i] === '-y') {
+      flags.yes = true;
+      flags.y = true;
+      continue;
+    }
+    if (args[i] === '--dry-run') {
+      flags.dryRun = true;
+      flags.dryrun = true;
+      continue;
+    }
     if (args[i].startsWith('--')) {
-      const key = args[i].replace(/^--/, '').replace(/-/g, '');
+      const key = args[i].replace(/^--/, '').replace(/-/g, '').toLowerCase();
       const next = args[i + 1];
       if (next && !next.startsWith('--')) {
         flags[key] = next;
@@ -514,6 +725,11 @@ function parseFlags(args) {
   if (flags.json && !flags.format) flags.format = 'json';
   if (flags.markdown && !flags.format) flags.format = 'markdown';
   return flags;
+}
+
+function parseToolList(toolsArg) {
+  if (!toolsArg || toolsArg === true) return [];
+  return toolsArg.split(',').map(t => t.trim().toLowerCase()).filter(Boolean);
 }
 
 function getLaraskillsRoot(flags) {
@@ -758,19 +974,22 @@ function showHelp() {
   lines.push('');
   lines.push('Quick start:');
   lines.push('  npm install -g laraskills');
-  lines.push('  laraskills setup --laraskills-root "<path>"   Connect to the full checkout');
   lines.push('  cd my-laravel-project');
-  lines.push('  laraskills init                               Prepare the project');
-  lines.push('  laraskills retrieve "<task>"                  Get context for an AI agent');
+  lines.push('  laraskills init                  Prepare the project (interactive)');
+  lines.push('  laraskills doctor                Verify everything');
+  lines.push('  laraskills retrieve "<task>"     Get context for an AI agent');
   lines.push('');
-  lines.push('Machine setup:');
-  lines.push('  setup       Connect the CLI/MCP to the full LaraSkills checkout');
-  lines.push('  doctor      Diagnose configuration and readiness');
+  lines.push('No manual clone required. Packaged intelligence works out of the box.');
+  lines.push('Run `laraskills setup --help` only if you need an advanced custom knowledge source.');
+  lines.push('');
+  lines.push('Machine commands:');
+  lines.push('  setup       Advanced: point to a custom LaraSkills checkout');
+  lines.push('  doctor      Diagnose machine and project readiness');
   lines.push('');
   lines.push('Project commands:');
-  lines.push('  init        Prepare the current Laravel project (recommended)');
-  lines.push('  install     Install LaraSkills project files (legacy, use init instead)');
-  lines.push('  update      Refresh installed LaraSkills project files');
+  lines.push('  init        Prepare the current Laravel project (interactive, recommended)');
+  lines.push('  install     Install project files (legacy, use init instead)');
+  lines.push('  update      Refresh installed project files and tool integration');
   lines.push('  add         Add one component (skill or agent)');
   lines.push('');
   lines.push('Retrieval commands:');
@@ -785,16 +1004,20 @@ function showHelp() {
   lines.push('  --help, -v, --version');
   lines.push('');
   lines.push('Options:');
-  lines.push('  --help        Show this help');
-  lines.push('  -v, --version Show version');
-  lines.push('  <command> --help  Show command-specific help');
+  lines.push('  --help              Show this help');
+  lines.push('  -v, --version       Show version');
+  lines.push('  <command> --help    Show command-specific help');
+  lines.push('');
+  lines.push('Init options:');
+  lines.push('  --profile minimal|core|full   Select profile (default: core)');
+  lines.push('  --tools opencode,codex,...    Select tool integrations');
+  lines.push('  --yes, -y                     Skip prompts, use defaults');
+  lines.push('  --dry-run                     Preview without writing files');
   lines.push('');
   lines.push('Retrieval options:');
   lines.push('  --mode compact|standard|deep          Context bundle mode (default: standard)');
   lines.push('  --format markdown|json                Output format (default: markdown)');
   lines.push('  --laraskills-root <path>              Path to LaraSkills checkout');
-  lines.push('  --ecc-root <path>                     Deprecated alias for --laraskills-root');
-  lines.push('  --max-kus, --max-rules, --max-skills  Result limits');
   lines.push('  --budget <number>                     Estimated token budget');
   lines.push('  --domain <domain-id>                  Filter by domain');
   lines.push('  --include-content                     Include Markdown content (get only)');
@@ -804,14 +1027,22 @@ function showHelp() {
   lines.push('  core      6 core skills + rules, hooks, MCP configs, 5 agents (default)');
   lines.push('  full      Core profile + commands and harness configs');
   lines.push('');
+  lines.push('Tool integrations (init --tools):');
+  lines.push('  opencode       Fully supported (MCP + instructions, agents, commands)');
+  lines.push('  generic-mcp    Standard MCP config for any MCP-compatible tool');
+  lines.push('  codex          Codex CLI (template only)');
+  lines.push('  claude-code    Claude Code (template only)');
+  lines.push('  cursor         Cursor IDE (template only)');
+  lines.push('');
   lines.push('Examples:');
   lines.push('  laraskills init');
-  lines.push('  laraskills init --profile minimal');
+  lines.push('  laraskills init --profile core --tools opencode --yes');
+  lines.push('  laraskills init --profile minimal --tools none --yes');
   lines.push('  laraskills retrieve "Add authorization policy and Pest tests"');
   lines.push('  laraskills get "security-identity-engineering/authorization/policies-model" --include-content');
   lines.push('');
   lines.push('Environment:');
-  lines.push('  LARASKILLS_ROOT   Path to the LaraSkills checkout');
+  lines.push('  LARASKILLS_ROOT   Path to a custom LaraSkills checkout (advanced)');
   lines.push('');
   console.log(lines.join('\n'));
 }
@@ -822,8 +1053,14 @@ function showCommandHelp(command) {
       '',
       'Usage: laraskills setup --laraskills-root <path>',
       '',
-      'Configure the CLI and MCP server to use a full LaraSkills checkout.',
-      'This is a one-time machine setup step.',
+      'ADVANCED: Configure the CLI and MCP server to use a custom LaraSkills checkout.',
+      '',
+      'Normal users do NOT need to run setup. The npm package includes bundled',
+      'intelligence files that work out of the box without a manual clone.',
+      '',
+      'Only use setup when you need to:',
+      '  - Point to a local development checkout of the full repository',
+      '  - Override the packaged intelligence with a custom knowledge source',
       '',
       'Options:',
       '  --laraskills-root <path>   Path to the cloned LaraSkills repository',
@@ -838,58 +1075,90 @@ function showCommandHelp(command) {
     ],
     doctor: [
       '',
-      'Usage: laraskills doctor [--laraskills-root <path>]',
+      'Usage: laraskills doctor',
       '',
-      'Diagnose the package configuration, intelligence file availability,',
-      'retrieval readiness, and MCP adapter health.',
+      'Diagnose both machine readiness (intelligence source, retrieval, MCP)',
+      'and project readiness (initialized, profile, tool integrations).',
       '',
-      'A release-ready setup reports Status: HEALTHY.',
+      'A healthy setup reports "Status: HEALTHY" for both machine and project.',
       '',
-      'Options:',
-      '  --laraskills-root <path>   Override the LaraSkills checkout path',
+      'Reports:',
+      '  - Package version, Node.js version, platform',
+      '  - Intelligence source (packaged or configured root)',
+      '  - Intelligence file validation',
+      '  - MCP adapter and retrieval readiness',
+      '  - Laravel project detection',
+      '  - LaraSkills project initialization status',
+      '  - Tool integration status (OpenCode, etc.)',
       '',
       'Examples:',
       '  laraskills doctor',
-      '  laraskills doctor --laraskills-root "C:\\path\\to\\laraskills"',
       '',
     ],
     init: [
       '',
-      'Usage: laraskills init [--profile minimal|core|full]',
+      'Usage: laraskills init [options]',
       '',
-      'Prepare the current Laravel project for LaraSkills by installing',
-      'skills, agents, rules, hooks, MCP configs, and a .laraskills-state.json file.',
+      'Prepare the current Laravel project for LaraSkills.',
       '',
-      'This is the recommended command for project setup.',
+      'When run interactively (default), guides you through:',
+      '  1. Project detection (is this a Laravel project?)',
+      '  2. Profile selection (core, minimal, or full)',
+      '  3. Tool integration selection (OpenCode, Generic MCP, etc.)',
+      '  4. Installation of project files + tool configs',
+      '  5. Next steps',
+      '',
+      'Non-interactive mode (--yes):',
+      '  laraskills init --profile core --tools opencode --yes',
       '',
       'Profiles:',
-      '  minimal   3 starter skills + shared rules, hooks, MCP configs, and Artisan agent',
-      '  core      6 core skills + shared rules, hooks, MCP configs, and 5 agents (default)',
+      '  minimal   3 starter skills + rules, hooks, MCP configs, Artisan agent',
+      '  core      6 core skills + rules, hooks, MCP configs, 5 agents (default)',
       '  full      Core profile + commands and harness configs',
+      '',
+      'Tool integrations (--tools):',
+      '  opencode       Fully supported (MCP + instructions, agents, commands)',
+      '  generic-mcp    Standard MCP config for any MCP-compatible tool',
+      '  codex          Codex CLI (template only)',
+      '  claude-code    Claude Code (template only)',
+      '  cursor         Cursor IDE (template only)',
+      '  none           Skip tool integration',
+      '',
+      'Options:',
+      '  --profile minimal|core|full   Profile (default: core)',
+      '  --tools <ids>                 Comma-separated tool IDs',
+      '  --tool <id>                   Single tool ID (alias for --tools)',
+      '  --yes, -y                     Skip prompts, use provided or default values',
+      '  --dry-run                     Preview without writing files',
       '',
       'Examples:',
       '  laraskills init',
-      '  laraskills init --profile minimal',
-      '  laraskills init --profile full',
+      '  laraskills init --profile core --tools opencode --yes',
+      '  laraskills init --profile minimal --tools none --yes',
+      '  laraskills init --profile core --tools opencode,generic-mcp --yes',
+      '  laraskills init --profile full --tools opencode --dry-run',
       '',
     ],
     install: [
       '',
-      'Usage: laraskills install [--profile minimal|core|full]',
+      'Usage: laraskills install [--profile minimal|core|full] [--tools <ids>]',
       '',
       'Install LaraSkills project files into the current project.',
       '',
       'Note: `laraskills init` is the recommended command for new users.',
-      '  install is kept for backward compatibility and behaves identically.',
+      '  install is kept for backward compatibility.',
       '',
       'Profiles:',
-      '  minimal   3 starter skills + shared rules, hooks, MCP configs, and Artisan agent',
-      '  core      6 core skills + shared rules, hooks, MCP configs, and 5 agents (default)',
+      '  minimal   3 starter skills + rules, hooks, MCP configs, Artisan agent',
+      '  core      6 core skills + rules, hooks, MCP configs, 5 agents (default)',
       '  full      Core profile + commands and harness configs',
+      '',
+      'Tool integrations (--tools):',
+      '  opencode, generic-mcp, codex, claude-code, cursor',
       '',
       'Examples:',
       '  laraskills install',
-      '  laraskills install --profile core',
+      '  laraskills install --profile core --tools opencode',
       '',
     ],
     add: [
@@ -909,11 +1178,17 @@ function showCommandHelp(command) {
     ],
     update: [
       '',
-      'Usage: laraskills update',
+      'Usage: laraskills update [options]',
       '',
-      'Refresh the LaraSkills files already installed inside the current project.',
-      'This updates skills, agents, rules, hooks, MCP configs, and state file',
-      'to match the current CLI package version.',
+      'Refresh the LaraSkills files installed inside the current project.',
+      'Updates skills, agents, rules, hooks, MCP configs, tool integration',
+      'files, and the state file to match the current CLI package version.',
+      '',
+      'Options:',
+      '  --tools <ids>      Refresh specific tool integrations',
+      '  --tool <id>        Single tool ID (alias for --tools)',
+      '  --dry-run          Preview without writing files',
+      '  --yes, -y          Skip prompts',
       '',
       'Note: To update the CLI package itself, use:',
       '  npm install -g laraskills     (global install)',
@@ -922,6 +1197,8 @@ function showCommandHelp(command) {
       '',
       'Examples:',
       '  laraskills update',
+      '  laraskills update --tools opencode --yes',
+      '  laraskills update --dry-run',
       '',
     ],
     retrieve: [
@@ -1055,18 +1332,39 @@ if (args.length === 0 || args[0] === '--help' || args[0] === '-h') {
 } else if (args[0] === 'doctor') {
   cmdDoctor(args.slice(1));
 } else if (args[0] === 'init') {
-  // init is the recommended command; delegates to install with profile support
-  const profileFlag = args.indexOf('--profile');
-  const profile = profileFlag !== -1 ? (args[profileFlag + 1] || 'core') : 'core';
-  install(target, profile);
+  const allArgs = args.slice(1);
+  const flags = parseFlags(allArgs);
+  const profile = flags.profile || 'core';
+  const toolIds = parseToolList(flags.tools || flags.tool || '');
+
+  if (flags.yes || flags.y) {
+    install(target, profile, toolIds.length > 0 ? toolIds : ['opencode', 'generic-mcp'], flags);
+  } else if (!isTerminalInteractive()) {
+    err('Terminal is not interactive. Use --yes for non-interactive mode:\n  laraskills init --profile core --tools opencode --yes');
+  } else {
+    runInteractiveInit({ target, flags: { ...flags, profile, tools: flags.tools || flags.tool || '' } })
+      .then(({ profile: chosenProfile, toolIds: chosenTools, dryRun, isLaravel }) => {
+        if (!isLaravel && !flags.yes && !flags.y) {
+          console.log('');
+          warn('Current directory does not appear to be a Laravel project.');
+          console.log('  Proceeding anyway. Use --yes to skip this warning in the future.');
+          console.log('');
+        }
+        install(target, chosenProfile, chosenTools, { dryRun });
+      })
+      .catch(e => {
+        err(e.message);
+      });
+  }
 } else if (args[0] === 'install') {
-  // install is kept for backward compatibility
-  const profileFlag = args.indexOf('--profile');
-  const profile = profileFlag !== -1 ? (args[profileFlag + 1] || 'core') : 'core';
+  const allArgs = args.slice(1);
+  const flags = parseFlags(allArgs);
+  const profile = flags.profile || 'core';
+  const toolIds = parseToolList(flags.tools || flags.tool || '');
   console.log('');
   log('Tip: `laraskills init` is now the recommended command for preparing a project.');
   console.log('');
-  install(target, profile);
+  install(target, profile, toolIds, flags);
 } else if (args[0] === 'add') {
   const component = args[1];
   if (!component) {
@@ -1074,7 +1372,13 @@ if (args.length === 0 || args[0] === '--help' || args[0] === '-h') {
   }
   addComponent(target, component);
 } else if (args[0] === 'update') {
-  doUpdate(target);
+  const allArgs = args.slice(1);
+  const flags = parseFlags(allArgs);
+  const toolIds = parseToolList(flags.tools || flags.tool || '');
+  doUpdate(target, {
+    ...flags,
+    tools: flags.tools || flags.tool || '',
+  });
 } else if (args[0] === 'retrieve') {
   cmdRetrieve(args.slice(1));
 } else if (args[0] === 'search') {

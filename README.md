@@ -8,19 +8,32 @@
 
 Laravel 13 skills, rules, agents, retrieval tooling, and MCP integration for AI-assisted development.
 
-LaraSkills has three parts:
+## How it works
 
-1. **The npm CLI package** — provides the `laraskills` CLI and `laraskills-mcp` MCP adapter.
-2. **The full LaraSkills checkout** — the knowledge source used by retrieve, search, get, validate, and MCP.
-3. **Project files** — installed into each Laravel app with `laraskills init` to teach AI agents Laravel 13 conventions.
+LaraSkills uses a hybrid model:
+
+1. **The npm package** provides the CLI, MCP adapter, and packaged intelligence — ready out of the box.
+2. **`laraskills init`** installs project-facing skills, agents, rules, hooks, and MCP configs into your Laravel project.
+3. **Tool integrations** connect coding agents like OpenCode to LaraSkills via MCP.
+
+No manual clone required for normal users. Run `laraskills setup --help` only if you need an advanced custom knowledge source.
+
+## Quick start
+
+```bash
+npm install -g laraskills
+cd my-laravel-project
+laraskills init
+laraskills doctor
+laraskills retrieve "Add a Laravel policy and Pest tests"
+```
+
+That's it. Packaged intelligence works out of the box.
 
 ## Requirements
 
 - Node.js 18 or newer
 - A Laravel project for operating-layer installation
-- A full LaraSkills Git checkout for retrieval and the local MCP server
-
-The npm package stays lightweight and does not bundle the large `knowledge/` or `intelligence/` trees.
 
 ## Install
 
@@ -34,24 +47,6 @@ Or install as a local project dependency:
 npm install --save-dev laraskills
 ```
 
-## One-time setup
-
-Clone the full LaraSkills repository once, then point the CLI at it:
-
-```bash
-git clone https://github.com/elmochilyas/laraskills.git ../laraskills-source
-laraskills setup --laraskills-root "C:\path\to\laraskills-source"
-laraskills doctor
-```
-
-Use `laraskills doctor` to confirm the configuration is healthy.
-
-You can also set the `LARASKILLS_ROOT` environment variable instead of running `setup`:
-
-```powershell
-$env:LARASKILLS_ROOT = 'C:\path\to\laraskills'
-```
-
 ## Initialize a Laravel project
 
 Inside your Laravel project root:
@@ -61,15 +56,22 @@ cd my-laravel-project
 laraskills init
 ```
 
-Or with `npx` for a local install:
+`laraskills init` is interactive. It will:
+1. Detect whether the current directory is a Laravel project
+2. Ask which profile to install (core / minimal / full)
+3. Ask which coding tools to configure (OpenCode, MCP, Codex, Claude Code, Cursor)
+4. Install project files and configure selected tools
+5. Print next steps
+
+Or use non-interactive mode for automation:
 
 ```bash
-npx laraskills init
+laraskills init --profile core --tools opencode --yes
+laraskills init --profile core --tools opencode,generic-mcp --yes
+laraskills init --profile minimal --tools none --yes
 ```
 
-This installs skills, agents, rules, hooks, MCP configs, and a `.laraskills-state.json` file into your project.
-
-Profiles control how much is installed:
+Profiles:
 
 | Profile | Contents |
 |---|---|
@@ -77,15 +79,24 @@ Profiles control how much is installed:
 | `core` | 6 core skills + rules, hooks, MCP configs, 5 agents (default) |
 | `full` | Core profile + commands and harness configs for 12 AI tools |
 
+## OpenCode integration
+
+When you run `laraskills init --tools opencode`, the following files are created/merged:
+
+- `.opencode/opencode.json` — Project-wide instructions, sub-agents (planner, code-reviewer, security-reviewer, tdd-guide), and slash commands (plan, tdd, code-review, artisan)
+- `opencode.json` — MCP connection to the `laraskills-mcp` server
+
+If an existing `opencode.json` exists in your project, LaraSkills merges safely (preserving your settings). A backup is always created before any changes.
+
+After init, verify with:
+
 ```bash
-laraskills init --profile minimal
-laraskills init --profile core
-laraskills init --profile full
+laraskills doctor
 ```
 
-## Retrieve context for an AI agent
+Look for: `OpenCode: configured`.
 
-With the setup complete, retrieve focused Laravel guidance:
+## Retrieve context for an AI agent
 
 ```bash
 laraskills retrieve "Add authorization policy and Pest tests" --mode compact
@@ -108,9 +119,11 @@ npm update -g laraskills
 
 ```bash
 laraskills update
+laraskills update --tools opencode --yes
+laraskills update --dry-run
 ```
 
-This updates the skills, agents, rules, hooks, MCP configs, and state file to match the new CLI version.
+`npm update` updates the CLI package. `laraskills update` refreshes installed project files and tool integration configs.
 
 ## Global install vs local project install
 
@@ -134,9 +147,8 @@ Both are valid. The global install keeps `laraskills` on your PATH. The local in
 
 | Command | Purpose |
 |---|---|
-| `laraskills init` | Prepare the current Laravel project (recommended) |
-| `laraskills setup` | Connect the CLI to the full LaraSkills checkout |
-| `laraskills doctor` | Diagnose configuration and readiness |
+| `laraskills init` | Prepare the current Laravel project (interactive, recommended) |
+| `laraskills doctor` | Diagnose machine and project readiness |
 | `laraskills update` | Refresh installed project files |
 | `laraskills retrieve` | Get a task-focused Laravel context bundle |
 | `laraskills search` | Search knowledge units |
@@ -149,6 +161,7 @@ Use `<command> --help` for detailed usage, options, and examples.
 
 | Command | Purpose |
 |---|---|
+| `laraskills setup` | Point to a custom LaraSkills checkout (advanced override) |
 | `laraskills install` | Install files (legacy, use `init` instead) |
 | `laraskills add` | Add one component (skill or agent) |
 | `laraskills prerequisites` | Show prerequisite knowledge |
@@ -159,8 +172,10 @@ Use `<command> --help` for detailed usage, options, and examples.
 `laraskills-mcp` is a read-only stdio server over the same deterministic retrieval core:
 
 ```bash
-npx laraskills-mcp --laraskills-root /path/to/laraskills
+npx laraskills-mcp
 ```
+
+No `--laraskills-root` flag needed — packaged intelligence works automatically.
 
 It exposes five tools:
 
@@ -183,10 +198,6 @@ It exposes five tools:
 | **Hooks** | Agent lifecycle and quality automations |
 | **MCP configs** | Ready-to-adapt server definitions |
 
-## Validation evidence
-
-Phase 17 validated the packed beta in real Laravel 13 applications. See the [validation evidence](#validation-evidence) section in the repository for detailed reports.
-
 ## Development verification
 
 Release-readiness checks:
@@ -198,11 +209,6 @@ npm run verify:packed-install
 npm run verify:mcp
 node scripts/laraskills.mjs validate --format json --laraskills-root .
 ```
-
-## Known limitations
-
-- **Full checkout required for retrieval** — The npm package stays lightweight by excluding the `knowledge/` and `intelligence/` directories. To use `retrieve`, `search`, `get`, or the MCP server, you need a separate Git checkout of the repository configured via `laraskills setup --laraskills-root <path>` or the `LARASKILLS_ROOT` environment variable.
-- **Coverage requires PCOV or Xdebug** — `php artisan test --coverage` does not work without a code coverage driver.
 
 ## License
 
