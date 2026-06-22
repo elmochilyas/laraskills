@@ -8,6 +8,45 @@ Pre-release versions are tagged with `-beta.N`.
 
 ---
 
+## [1.0.0-beta.17] - 2026-06-22
+
+### Added
+
+- **`laraskills init` command**: New recommended project setup command that installs
+  skills, agents, rules, hooks, MCP configs, and a `.laraskills-state.json` file
+  into your Laravel project with profile support (`minimal`, `core`, `full`).
+  `laraskills install` kept working for backward compatibility.
+- **`laraskills -v` / `laraskills --version`**: Quick version check without
+  verbose output.
+- **Command-specific help pages**: Each CLI command now has its own usage,
+  options, and examples via `<command> --help`.
+- **CLI help rework**: Root `--help` now organized into clear sections with
+  command groups.
+- **Phase 23 CLI regression tests**: 213 tests passing covering init, install,
+  version flags, help pages, and the hybrid model workflow.
+
+### Changed
+
+- **README rewrite**: Clean hybrid-model explanation:
+  - npm package = CLI/MCP adapter
+  - full LaraSkills checkout = knowledge source
+  - `laraskills init` = project-facing files inside Laravel apps
+- **README command flow**: Restructured install, setup, init, update workflow
+  with clear global vs local install guidance.
+- **Hybrid model clarified**: Clear distinction between updating the npm package
+  (`npm update -g laraskills`) and refreshing project files (`laraskills update`).
+
+### Validation (release gates)
+
+- Tests: 213 / 213 PASS
+- Retrieval benchmarks: 72 / 72 PASS
+- MCP smoke verification: PASS
+- Packed-install verification: PASS
+- Intelligence layer: VALID — 2,321 KUs, 427 dependency edges, 3,513
+  relationship edges, 0 cycles, 0 self-loops, 0 dangling edges
+
+---
+
 ## [1.0.0-beta.16] - 2026-06-14
 
 ### Added
@@ -165,6 +204,7 @@ Complete Laravel ECC to LaraSkills migration with temporary compatibility bridge
 
 ---
 
+[1.0.0-beta.17]: https://github.com/elmochilyas/laraskills/compare/v1.0.0-beta.16...v1.0.0-beta.17
 [1.0.0-beta.16]: https://github.com/elmochilyas/laraskills/compare/v1.0.0-beta.15...v1.0.0-beta.16
 [1.0.0-beta.15]: https://github.com/elmochilyas/laraskills/compare/v1.0.0-beta.14...v1.0.0-beta.15
 [1.0.0-beta.14]: https://github.com/elmochilyas/laraskills/compare/v1.0.0-beta.13...v1.0.0-beta.14
