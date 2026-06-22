@@ -35,6 +35,9 @@ import {
   isLaravelProject,
   runInteractiveInit,
   isTerminalInteractive,
+  resolveInitOptions,
+  getAssistantToolIds,
+  shouldInstallProjectFiles,
 } from '../src/runtime/interactive-init.mjs';
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
@@ -382,15 +385,25 @@ function cmdDoctor(doctorArgs) {
     }
 
     const toolChecks = getAllToolChecks(target);
+    const stateAssistants = state.assistants || [];
+    const stateTools = state.tools || [];
     console.log('');
     console.log('Tool integrations:');
     if (toolChecks.length === 0) {
       console.log('  none configured');
     } else {
       for (const tc of toolChecks) {
-        const status = tc.configured ? 'configured' : 'not configured';
-        const supportLabel = tc.support === 'full' ? '' : ' (template)';
-        console.log(`  ${tc.displayName}:  ${status}${supportLabel}`);
+        const wasSelected = stateAssistants.includes(tc.id) || stateTools.includes(tc.id);
+        let status;
+        if (!wasSelected) {
+          status = 'not selected';
+        } else if (tc.configured) {
+          status = tc.support === 'full' ? 'configured' : 'template generated';
+        } else {
+          status = 'missing';
+        }
+        const supportLabel = tc.support === 'full' ? '(auto-setup)' : '(template)';
+        console.log(`  ${tc.displayName}:  ${status} ${supportLabel}`);
       }
     }
   }
@@ -429,6 +442,7 @@ function cmdDoctor(doctorArgs) {
 
 function install(target, profile, toolIds = [], flags = {}) {
   const dryRun = flags.dryRun || flags.dryrun || false;
+  const installProjectFiles = flags.installProjectFiles !== undefined ? flags.installProjectFiles : true;
   const detected = detectTools(target);
   const isLaravel = isLaravelProject(target);
 
@@ -444,59 +458,67 @@ function install(target, profile, toolIds = [], flags = {}) {
 
   console.log('');
 
-  const skillsDir = join(target, 'skills');
-  if (!dryRun) mkdirSync(skillsDir, { recursive: true });
+  const agents = profile === 'minimal'
+    ? ['laravel-artisan.md']
+    : ['laravel-artisan.md', 'laravel-eloquent.md', 'laravel-migration.md', 'laravel-database.md', 'laravel-container.md'];
 
   const skillList = profile === 'minimal'
     ? ['laravel-patterns', 'laravel-tdd', 'laravel-security']
     : ['laravel-patterns', 'laravel-tdd', 'laravel-security', 'laravel-core-internals', 'laravel-eloquent', 'laravel-database'];
 
-  for (const skill of skillList) {
-    const src = join(ROOT, 'skills', skill);
-    if (existsSync(src)) {
-      if (!dryRun) {
-        cpSync(src, join(skillsDir, skill), { recursive: true });
-        log(`  + Installed skill: ${skill}`);
-      } else {
-        log(`  ? Would install skill: ${skill}`);
+  if (installProjectFiles) {
+    const skillsDir = join(target, 'skills');
+    if (!dryRun) mkdirSync(skillsDir, { recursive: true });
+
+    for (const skill of skillList) {
+      const src = join(ROOT, 'skills', skill);
+      if (existsSync(src)) {
+        if (!dryRun) {
+          cpSync(src, join(skillsDir, skill), { recursive: true });
+          log(`  + Installed skill: ${skill}`);
+        } else {
+          log(`  ? Would install skill: ${skill}`);
+        }
       }
     }
-  }
 
-  if (!dryRun) {
-    copyRules(target);
-    copyHooks(target);
-    copyMcpConfigs(target);
-  } else {
-    log('  ? Would sync rules');
-    log('  ? Would sync hooks');
-    log('  ? Would sync MCP configs');
-  }
-
-  const agentsDir = join(target, 'agents');
-  if (!dryRun) mkdirSync(agentsDir, { recursive: true });
-  const agents = profile === 'minimal'
-    ? ['laravel-artisan.md']
-    : ['laravel-artisan.md', 'laravel-eloquent.md', 'laravel-migration.md', 'laravel-database.md', 'laravel-container.md'];
-  for (const agent of agents) {
-    const src = join(ROOT, 'agents', agent);
-    if (existsSync(src)) {
-      if (!dryRun) {
-        copyFileSync(src, join(agentsDir, agent));
-        log(`  + Installed agent: ${agent}`);
-      } else {
-        log(`  ? Would install agent: ${agent}`);
-      }
-    }
-  }
-
-  if (profile === 'full') {
     if (!dryRun) {
-      copyCommands(target);
-      copyHarnessConfigs(target);
+      copyRules(target);
+      copyHooks(target);
+      copyMcpConfigs(target);
     } else {
-      log('  ? Would sync commands');
-      log('  ? Would sync harness configs');
+      log('  ? Would sync rules');
+      log('  ? Would sync hooks');
+      log('  ? Would sync MCP configs');
+    }
+
+    const agentsDir = join(target, 'agents');
+    if (!dryRun) mkdirSync(agentsDir, { recursive: true });
+    for (const agent of agents) {
+      const src = join(ROOT, 'agents', agent);
+      if (existsSync(src)) {
+        if (!dryRun) {
+          copyFileSync(src, join(agentsDir, agent));
+          log(`  + Installed agent: ${agent}`);
+        } else {
+          log(`  ? Would install agent: ${agent}`);
+        }
+      }
+    }
+
+    if (profile === 'full') {
+      if (!dryRun) {
+        copyCommands(target);
+        copyHarnessConfigs(target);
+      } else {
+        log('  ? Would sync commands');
+        log('  ? Would sync harness configs');
+      }
+    }
+  } else {
+    log('  - Skipping project files (MCP-only integration)');
+    if (dryRun) {
+      log('  ? Would skip skills, rules, hooks, agents');
     }
   }
 
@@ -531,13 +553,17 @@ function install(target, profile, toolIds = [], flags = {}) {
     }
   }
 
-  const installedComponents = [...new Set([...skillList, 'rules', 'hooks', 'mcp-configs', ...agents.map(a => a.replace('.md', ''))])];
+  const installedComponents = installProjectFiles
+    ? [...new Set([...skillList, 'rules', 'hooks', 'mcp-configs', ...agents.map(a => a.replace('.md', ''))])]
+    : [];
   const installedTools = toolIds.filter(id => getToolDefinition(id));
   const state = {
     version: pkg.version,
     target,
     installed_at: new Date().toISOString(),
     profile,
+    integration: flags.integration || 'full',
+    assistants: flags.assistants || toolIds || [],
     tools: [...new Set([...detected, ...installedTools])],
     components: installedComponents,
   };
@@ -1009,10 +1035,18 @@ function showHelp() {
   lines.push('  <command> --help    Show command-specific help');
   lines.push('');
   lines.push('Init options:');
-  lines.push('  --profile minimal|core|full   Select profile (default: core)');
-  lines.push('  --tools opencode,codex,...    Select tool integrations');
-  lines.push('  --yes, -y                     Skip prompts, use defaults');
-  lines.push('  --dry-run                     Preview without writing files');
+  lines.push('  --assistants <ids>   Coding assistants (opencode,codex,cursor,claude-code,generic-mcp,all,none)');
+  lines.push('  --assistant <id>     Single assistant (backward-compatible alias)');
+  lines.push('  --tools <ids>        Legacy alias for --assistants');
+  lines.push('  --integration <level> Full|mcp-only|project-files (default: full)');
+  lines.push('  --profile <name>     Minimal|core|full (default: core)');
+  lines.push('  --yes, -y            Skip prompts, use defaults');
+  lines.push('  --dry-run            Preview without writing files');
+  lines.push('');
+  lines.push('Integration levels:');
+  lines.push('  full           MCP + skills + agents + rules + hooks + configs (default)');
+  lines.push('  mcp-only       Dynamic LaraSkills knowledge through MCP, no project files');
+  lines.push('  project-files  Skills, agents, rules, hooks, no MCP wiring');
   lines.push('');
   lines.push('Retrieval options:');
   lines.push('  --mode compact|standard|deep          Context bundle mode (default: standard)');
@@ -1036,8 +1070,10 @@ function showHelp() {
   lines.push('');
   lines.push('Examples:');
   lines.push('  laraskills init');
-  lines.push('  laraskills init --profile core --tools opencode --yes');
-  lines.push('  laraskills init --profile minimal --tools none --yes');
+  lines.push('  laraskills init --assistants all --integration full --profile core --yes');
+  lines.push('  laraskills init --assistants opencode,codex --integration full --profile core --yes');
+  lines.push('  laraskills init --assistants none --integration project-files --profile minimal --yes');
+  lines.push('  laraskills init --profile core --tools opencode --yes   (legacy, still works)');
   lines.push('  laraskills retrieve "Add authorization policy and Pest tests"');
   lines.push('  laraskills get "security-identity-engineering/authorization/policies-model" --include-content');
   lines.push('');
@@ -1101,42 +1137,55 @@ function showCommandHelp(command) {
       '',
       'Prepare the current Laravel project for LaraSkills.',
       '',
-      'When run interactively (default), guides you through:',
-      '  1. Project detection (is this a Laravel project?)',
-      '  2. Profile selection (core, minimal, or full)',
-      '  3. Tool integration selection (OpenCode, Generic MCP, etc.)',
-      '  4. Installation of project files + tool configs',
-      '  5. Next steps',
+      'When run interactively (default), guides you through a clean 3-step wizard:',
+      '  Step 1 — Choose coding assistants (OpenCode, Codex, Cursor, Claude Code, Generic MCP)',
+      '  Step 2 — Choose integration level (Full, MCP only, Project files only)',
+      '  Step 3 — Choose LaraSkills profile (Core, Minimal, Full)',
+      '',
+      'Multiple assistants can be selected at once (e.g. 1,2,3 or opencode,codex).',
+      'Type "all" to select all assistants, "none" for project files only.',
+      '',
+      'Followed by a review screen before any files are written.',
       '',
       'Non-interactive mode (--yes):',
-      '  laraskills init --profile core --tools opencode --yes',
+      '  laraskills init --assistants all --integration full --profile core --yes',
       '',
-      'Profiles:',
+      'Assistants (--assistants, --assistant, --tools):',
+      '  opencode       Fully supported — automatic MCP + instructions + agents + commands',
+      '  codex          Template setup — generates Codex-compatible instructions',
+      '  cursor         Template setup — generates Cursor-compatible rules',
+      '  claude-code    Template setup — generates Claude Code-compatible config',
+      '  generic-mcp    Reusable MCP config for any MCP-capable client',
+      '  all            Select all assistants',
+      '  none           Skip tool integration entirely',
+      '',
+      'Integration levels (--integration):',
+      '  full           MCP + skills + agents + rules + hooks + configs',
+      '  mcp-only       Dynamic LaraSkills knowledge through MCP only',
+      '  project-files  Skills, agents, rules, hooks — no MCP wiring',
+      '',
+      'Profiles (--profile):',
       '  minimal   3 starter skills + rules, hooks, MCP configs, Artisan agent',
       '  core      6 core skills + rules, hooks, MCP configs, 5 agents (default)',
       '  full      Core profile + commands and harness configs',
       '',
-      'Tool integrations (--tools):',
-      '  opencode       Fully supported (MCP + instructions, agents, commands)',
-      '  generic-mcp    Standard MCP config for any MCP-compatible tool',
-      '  codex          Codex CLI (template only)',
-      '  claude-code    Claude Code (template only)',
-      '  cursor         Cursor IDE (template only)',
-      '  none           Skip tool integration',
-      '',
       'Options:',
-      '  --profile minimal|core|full   Profile (default: core)',
-      '  --tools <ids>                 Comma-separated tool IDs',
-      '  --tool <id>                   Single tool ID (alias for --tools)',
-      '  --yes, -y                     Skip prompts, use provided or default values',
-      '  --dry-run                     Preview without writing files',
+      '  --assistants <ids>     Comma-separated assistant IDs (opencode,codex,cursor,claude-code,generic-mcp,all,none)',
+      '  --assistant <id>       Single assistant (backward-compatible alias)',
+      '  --tools <ids>          Legacy alias for --assistants',
+      '  --tool <id>            Legacy alias for --assistant',
+      '  --integration <level>  Integration level (full, mcp-only, project-files)',
+      '  --profile <name>       Profile (minimal, core, full)',
+      '  --yes, -y              Skip prompts, use provided or default values',
+      '  --dry-run              Preview without writing files',
       '',
       'Examples:',
       '  laraskills init',
-      '  laraskills init --profile core --tools opencode --yes',
-      '  laraskills init --profile minimal --tools none --yes',
-      '  laraskills init --profile core --tools opencode,generic-mcp --yes',
-      '  laraskills init --profile full --tools opencode --dry-run',
+      '  laraskills init --assistants all --integration full --profile core --yes',
+      '  laraskills init --assistants opencode,codex --integration full --profile core --yes',
+      '  laraskills init --assistants opencode,generic-mcp --integration mcp-only --profile minimal --yes',
+      '  laraskills init --assistants none --integration project-files --profile minimal --yes',
+      '  laraskills init --profile core --tools opencode --yes   (legacy, still works)',
       '',
     ],
     install: [
@@ -1334,23 +1383,32 @@ if (args.length === 0 || args[0] === '--help' || args[0] === '-h') {
 } else if (args[0] === 'init') {
   const allArgs = args.slice(1);
   const flags = parseFlags(allArgs);
-  const profile = flags.profile || 'core';
-  const toolIds = parseToolList(flags.tools || flags.tool || '');
+
+  const { assistants, integration, profile } = resolveInitOptions(flags);
+  const installProject = shouldInstallProjectFiles(integration);
+  const toolIds = getAssistantToolIds(assistants, integration);
 
   if (flags.yes || flags.y) {
-    install(target, profile, toolIds.length > 0 ? toolIds : ['opencode', 'generic-mcp'], flags);
+    install(target, profile, toolIds, { ...flags, installProjectFiles: installProject, integration, assistants });
   } else if (!isTerminalInteractive()) {
-    err('Terminal is not interactive. Use --yes for non-interactive mode:\n  laraskills init --profile core --tools opencode --yes');
+    err('Terminal is not interactive. Use --yes for non-interactive mode:\n  laraskills init --assistants opencode,codex --integration full --profile core --yes');
   } else {
-    runInteractiveInit({ target, flags: { ...flags, profile, tools: flags.tools || flags.tool || '' } })
-      .then(({ profile: chosenProfile, toolIds: chosenTools, dryRun, isLaravel }) => {
-        if (!isLaravel && !flags.yes && !flags.y) {
+    runInteractiveInit({ target, flags: { ...flags, assistants: flags.assistants || null, integration, profile } })
+      .then((result) => {
+        if (result.cancelled) return;
+
+        if (!result.isLaravel && !flags.yes && !flags.y) {
           console.log('');
           warn('Current directory does not appear to be a Laravel project.');
-          console.log('  Proceeding anyway. Use --yes to skip this warning in the future.');
+          console.log('  Proceeding anyway. Some Laravel-specific checks may be skipped.');
           console.log('');
         }
-        install(target, chosenProfile, chosenTools, { dryRun });
+        install(target, result.profile, result.toolIds, {
+          ...result,
+          installProjectFiles: result.installProject,
+          integration: result.integration,
+          assistants: result.assistants,
+        });
       })
       .catch(e => {
         err(e.message);
