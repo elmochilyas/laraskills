@@ -8,6 +8,40 @@ Pre-release versions are tagged with `-beta.N`.
 
 ---
 
+## [1.0.0-beta.19] - 2026-06-22
+
+### Changed
+
+- **Refined `laraskills init` wizard**: The wizard now cleanly separates three
+  steps — coding assistants, integration level, and profile — with a review
+  screen before writing files. Replaced the confusing single-choice tool menu
+  with clear multi-select.
+- **Multi-assistant selection**: Users can select multiple assistants at once
+  using comma-separated numbers (`1,2,3`), comma-separated IDs (`opencode,codex`),
+  `all`, or `none`.
+- **New `--assistants` flag**: Preferred CLI flag for selecting coding assistants.
+  `--assistant`, `--tools`, and `--tool` kept as backward-compatible aliases.
+- **Support levels clarified**: Each assistant is labeled `configured` (full
+  auto-setup) or `template` (generated config/instructions, manual MCP wiring).
+  OpenCode and Generic MCP are `configured`; Codex, Cursor, and Claude Code
+  are `template`. The wizard and doctor show support levels honestly.
+- **MCP model documented**: README explains MCP as the shared server/protocol
+  layer. LaraSkills exposes one MCP server (`laraskills-mcp`) and generates
+  the correct client config or template for each selected assistant.
+- **Doctor reports per-assistant status**: Shows `configured` / `template
+  generated` / `missing` / `not selected` for each assistant, not just OpenCode.
+- **State file records assistants and integration**: `.laraskills-state.json`
+  now tracks which assistants were selected and what integration level was used.
+
+### Backward Compatibility
+
+- `laraskills init --tools opencode --yes` still works.
+- `laraskills init --assistant opencode --yes` still works.
+- `laraskills install --profile core` still works.
+- `laraskills update` still works.
+
+---
+
 ## [1.0.0-beta.18] - 2026-06-22
 
 ### Added

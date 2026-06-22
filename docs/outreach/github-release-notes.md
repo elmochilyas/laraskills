@@ -1,20 +1,18 @@
-## 1.0.0-beta.18 — 2026-06-22
+## 1.0.0-beta.19 — 2026-06-22
 
 LaraSkills is a Laravel 13 skills, rules, agents, and knowledge-retrieval system for AI-assisted development.
 
-### What's new in beta.18
+### What's new in beta.19
 
-**Zero-friction onboarding.** Normal users no longer need to clone the LaraSkills repository. Packaged intelligence is now bundled inside the npm package, and all retrieval commands work out of the box.
+**Refined init wizard with multi-assistant support.** The onboarding wizard now cleanly separates three steps — assistant selection, integration level, and profile — and supports configuring multiple coding assistants at once.
 
-- **No manual clone required** — `doctor`, `validate`, `retrieve`, `search`, `get --include-content`, and MCP work from packaged intelligence without `LARASKILLS_ROOT`, `laraskills setup`, or a Git clone.
-- **`get --include-content` returns real content** — All 2,321 knowledge units' standardized Markdown content is shipped as `intelligence/content/content-index.json`.
-- **Interactive `laraskills init`** — Detects Laravel projects, guides through profile and tool selection, installs project files, and configures coding tools.
-- **Non-interactive init for CI/CD** — `--profile`, `--tools`, `--yes`, `--dry-run`.
-- **OpenCode integration** — `init --tools opencode` creates/merges `.opencode/opencode.json` and root `opencode.json` with MCP connection, sub-agents, and slash commands.
-- **Tool integration framework** — Pluggable adapters for OpenCode, Generic MCP, Codex, Claude Code, and Cursor.
-- **Improved `doctor`** — Reports machine readiness (packaged/configured source) and project readiness (initialized, profile, tool integrations).
-- **`laraskills setup` is now optional** — Normal users don't need it.
-- **229 Node.js tests passing** (up from 213).
+- **Multi-assistant selection** — Configure OpenCode, Codex, Cursor, Claude Code, and Generic MCP in one `laraskills init` run. Select with comma (`1,2,3`), by name (`opencode,codex`), `all`, or `none`.
+- **New `--assistants` flag** — Preferred CLI flag. `--assistant`, `--tools`, `--tool` kept as backward-compatible aliases.
+- **Honest support levels** — OpenCode and Generic MCP are `configured` (full auto-setup). Codex, Cursor, Claude Code get `template` configs with manual MCP instructions. No pretend-full-setup.
+- **MCP model clarified** — LaraSkills exposes one MCP server (`laraskills-mcp`). Each assistant connects as an MCP client. Right config or template is generated per assistant.
+- **Improved doctor** — Shows per-assistant status with support levels: `configured`, `template generated`, `missing`, `not selected`.
+- **State file enhanced** — Records `assistants` and `integration`.
+- **229 Node.js tests passing.**
 
 ### New onboarding
 
@@ -22,8 +20,14 @@ LaraSkills is a Laravel 13 skills, rules, agents, and knowledge-retrieval system
 npm install -g laraskills
 cd my-laravel-project
 laraskills init
-laraskills doctor
-laraskills retrieve "Add a Laravel policy and Pest tests"
+```
+
+### Advanced examples
+
+```powershell
+laraskills init --assistants all --integration full --profile core --yes
+laraskills init --assistants opencode,codex --integration full --profile core --yes
+laraskills init --assistants none --integration project-files --profile minimal --yes
 ```
 
 ### Upgrading
@@ -38,7 +42,7 @@ laraskills update
 
 - [GitHub repository](https://github.com/elmochilyas/laraskills)
 - [npm package](https://www.npmjs.com/package/laraskills)
-- [Release notes](https://github.com/elmochilyas/laraskills/blob/main/docs/releases/1.0.0-beta.18.md)
+- [Release notes](https://github.com/elmochilyas/laraskills/blob/main/docs/releases/1.0.0-beta.19.md)
 - [CHANGELOG](https://github.com/elmochilyas/laraskills/blob/main/CHANGELOG.md)
 
 ### Feedback
