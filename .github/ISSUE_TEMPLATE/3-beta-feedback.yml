@@ -14,7 +14,7 @@ body:
     attributes:
       label: LaraSkills version
       description: `npx laraskills --version` or check `package.json`
-      placeholder: "1.0.0-beta.17"
+      placeholder: "1.0.0-beta.22"
     validations:
       required: true
 
