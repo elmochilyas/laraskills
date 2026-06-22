@@ -418,7 +418,9 @@ export function getAllToolChecks(target) {
       id: tool.id,
       displayName: tool.displayName,
       support: tool.support,
-      ...check,
+      configured: check.configured,
+      mcpConfigured: check.mcpConfigured || false,
+      configFiles: check.configFiles || [],
     });
   }
   return results;
