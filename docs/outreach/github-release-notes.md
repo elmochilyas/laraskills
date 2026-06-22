@@ -1,48 +1,47 @@
-## 1.0.0-beta.20 — 2026-06-22
+## 1.0.0-beta.21 — 2026-06-22 (Hotfix)
 
 LaraSkills is a Laravel 13 skills, rules, agents, and knowledge-retrieval system for AI-assisted development.
 
-### What's new in beta.20
+### What's new in beta.21
 
-**Automatic MCP configuration for all assistants.** `laraskills init` now writes the correct MCP client config for OpenCode, Claude Code, Cursor, Codex, and Generic MCP. One `laraskills-mcp` server, auto-configured for every tool.
+**Hotfix for OpenCode config generation.** Beta.20 had a bug where `laraskills init --assistants opencode` generated `.opencode/opencode.json` with `{file:commands/plan.md}` references but did not copy the `.opencode/commands/` directory. OpenCode rejected the configuration. Beta.21 fixes this.
 
-- **All assistants auto-configured** — OpenCode, Claude Code, Cursor, Codex, and Generic MCP each get their native MCP config format written automatically.
-- **Safe merge** — Existing MCP servers are preserved. Only the `laraskills` entry is added/updated. Backups are created before modifying configs.
-- **Idempotent init** — Running `laraskills init` on an already-configured project skips unchanged files.
-- **`--dry-run` safe** — Preview everything without writing files.
-- **229 Node.js tests passing.**
-
-### Supported config formats
-
-| Assistant | Config file |
-|---|---|
-| OpenCode | `.opencode/opencode.json` + `opencode.json` |
-| Claude Code | `.mcp.json` |
-| Cursor | `.cursor/mcp.json` |
-| Codex | `.codex/config.toml` |
-| Generic MCP | `mcp-configs/laraskills-mcp.json` |
-
-### New onboarding
-
-```powershell
-npm install -g laraskills
-cd my-laravel-project
-laraskills init --assistants all --integration full --profile core --yes
-```
+- **OpenCode commands now generated** — `.opencode/commands/plan.md`, `tdd.md`, `artisan.md`, and `code-review.md` are now copied alongside the config file.
+- **Doctor detects broken refs** — `laraskills doctor` validates every `{file:...}` reference in OpenCode config and reports missing files with repair instructions.
+- **One-command repair** — Existing beta.20 installs can be fixed with `laraskills update --assistants opencode --yes`.
+- **Summary accuracy** — The init summary no longer lists Generic MCP as a selected assistant when it was only generated as shared config.
+- **244 tests passing** — 15 new regression tests for config generation, repair, validation, and idempotency.
 
 ### Upgrading
+
+If you installed beta.20 globally:
 
 ```powershell
 npm update -g laraskills
 cd my-laravel-project
-laraskills update --assistants all --yes
+laraskills update --assistants opencode --yes
+```
+
+If you installed beta.20 locally in a project:
+
+```powershell
+npm install --save-dev laraskills@latest
+npx laraskills update --assistants opencode --yes
+```
+
+### New install
+
+```powershell
+npm install -g laraskills
+cd my-laravel-project
+laraskills init --assistants opencode --integration full --profile core --yes
 ```
 
 ### Resources
 
 - [GitHub repository](https://github.com/elmochilyas/laraskills)
 - [npm package](https://www.npmjs.com/package/laraskills)
-- [Release notes](https://github.com/elmochilyas/laraskills/blob/main/docs/releases/1.0.0-beta.20.md)
+- [Release notes](https://github.com/elmochilyas/laraskills/blob/main/docs/releases/1.0.0-beta.21.md)
 - [CHANGELOG](https://github.com/elmochilyas/laraskills/blob/main/CHANGELOG.md)
 
 ### Feedback
