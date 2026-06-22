@@ -1,32 +1,49 @@
-## 1.0.0-beta.21 — 2026-06-22 (Hotfix)
+## 1.0.0-beta.22 — 2026-06-22
 
 LaraSkills is a Laravel 13 skills, rules, agents, and knowledge-retrieval system for AI-assisted development.
 
-### What's new in beta.21
+### What's new in beta.22
 
-**Hotfix for OpenCode config generation.** Beta.20 had a bug where `laraskills init --assistants opencode` generated `.opencode/opencode.json` with `{file:commands/plan.md}` references but did not copy the `.opencode/commands/` directory. OpenCode rejected the configuration. Beta.21 fixes this.
+**Senior Laravel architecture judgment upgrade.** Based on real with/without LaraSkills benchmark findings on a Laravel SaaS architecture decision task, this release adds 31 new knowledge units improving the depth, calibration, and production-awareness of architecture proposals.
 
-- **OpenCode commands now generated** — `.opencode/commands/plan.md`, `tdd.md`, `artisan.md`, and `code-review.md` are now copied alongside the config file.
-- **Doctor detects broken refs** — `laraskills doctor` validates every `{file:...}` reference in OpenCode config and reports missing files with repair instructions.
-- **One-command repair** — Existing beta.20 installs can be fixed with `laraskills update --assistants opencode --yes`.
-- **Summary accuracy** — The init summary no longer lists Generic MCP as a selected assistant when it was only generated as shared config.
-- **244 tests passing** — 15 new regression tests for config generation, repair, validation, and idempotency.
+LaraSkills now goes beyond "use the right Laravel thing" and improves toward "use the right Laravel thing, explain when it fits, when it fails, what the escape hatch is, and how to operate it safely in production."
+
+- **Calibrated package recommendations** — Every major package recommendation now includes 8 dimensions: default, fit, non-fit, alternative, escape hatch, tradeoffs, testing impact, operational impact. No more shallow "use package X" answers.
+- **Cashier, Spatie Permission, Pennant, Horizon, Telescope/Pulse decision matrices** — Concrete fit conditions, non-fit conditions, and escape hatches for each package.
+- **SaaS billing architecture** — Plan / Subscription / Feature / Entitlement / UsageLimit / UsageRecord modeling. Stripe webhook idempotency, audit, replay, and subscription drift reconciliation.
+- **Transaction boundaries and afterCommit** — `dispatchAfterCommit()`, `event(...)->afterCommit()`, `DB::afterCommit()`, compensating actions for external API failures.
+- **Laravel events vs event sourcing** — Explicit clarification that Laravel events are not event sourcing. Precise terminology rules.
+- **Advanced queue architecture** — Dedicated webhook queue, billing queue topology, queue deployment safety, Horizon supervisor configuration.
+- **Billing observability** — Production metrics, alert runbooks, support repair flows with `--dry-run` and audit logging.
+- **Team-scoped authorization** — Spatie Permission team depth, role vs entitlement separation, SaaS authorization test matrix.
+- **Calibrated architecture language** — "default to" / "prefer" / "usually" instead of "always" / "never" / "every" (except for security and data-integrity rules).
+- **Benchmark regression** — New `bench-073` fixture verifying retrieval surfaces senior concepts, not just generic CRUD.
+- **2,352 knowledge units** (up from 2,321), 446 dependency edges, 3,542 relationship edges, 141 aliases.
+- **256 tests passing, 73 benchmarks at 100% pass rate.**
+
+### Recommended upgrade for architecture/design tasks
+
+If you are testing LaraSkills with architecture or design prompts (SaaS billing, team permissions, Stripe webhooks, queue design, production operations), this release significantly improves the quality and depth of retrieved context.
 
 ### Upgrading
 
-If you installed beta.20 globally:
+Global users:
 
 ```powershell
 npm update -g laraskills
+laraskills -v
 cd my-laravel-project
-laraskills update --assistants opencode --yes
+laraskills update --assistants all --yes
+laraskills doctor
 ```
 
-If you installed beta.20 locally in a project:
+Local/project users:
 
 ```powershell
 npm install --save-dev laraskills@latest
-npx laraskills update --assistants opencode --yes
+npx laraskills -v
+npx laraskills update --assistants all --yes
+npx laraskills doctor
 ```
 
 ### New install
@@ -34,14 +51,14 @@ npx laraskills update --assistants opencode --yes
 ```powershell
 npm install -g laraskills
 cd my-laravel-project
-laraskills init --assistants opencode --integration full --profile core --yes
+laraskills init --assistants all --integration full --profile core --yes
 ```
 
 ### Resources
 
 - [GitHub repository](https://github.com/elmochilyas/laraskills)
 - [npm package](https://www.npmjs.com/package/laraskills)
-- [Release notes](https://github.com/elmochilyas/laraskills/blob/main/docs/releases/1.0.0-beta.21.md)
+- [Release notes](https://github.com/elmochilyas/laraskills/blob/main/docs/releases/1.0.0-beta.22.md)
 - [CHANGELOG](https://github.com/elmochilyas/laraskills/blob/main/CHANGELOG.md)
 
 ### Feedback
