@@ -391,21 +391,20 @@ function cmdDoctor(doctorArgs) {
 
     const toolChecks = getAllToolChecks(target);
     const stateAssistants = state.assistants || [];
-    const stateTools = state.tools || [];
     console.log('');
     console.log('Tool integrations:');
     if (toolChecks.length === 0) {
       console.log('  none configured');
     } else {
       for (const tc of toolChecks) {
-        const wasSelected = stateAssistants.includes(tc.id) || stateTools.includes(tc.id);
+        const wasSelected = stateAssistants.includes(tc.id);
         let status;
         if (!wasSelected) {
           status = 'not selected';
         } else if (tc.configured) {
-          status = tc.support === 'full' ? 'configured' : 'template generated';
+          status = tc.support === 'full' ? 'configured' : 'configured (template)';
         } else {
-          status = 'missing';
+          status = 'not configured';
         }
         const supportLabel = tc.support === 'full' ? '(auto-setup)' : '(template)';
         console.log(`  ${tc.displayName}:  ${status} ${supportLabel}`);
@@ -413,7 +412,7 @@ function cmdDoctor(doctorArgs) {
     }
 
     const openCodeRefs = validateOpenCodeFileReferences(target);
-    if (stateAssistants.includes('opencode') || stateTools.includes('opencode')) {
+    if (stateAssistants.includes('opencode')) {
       if (!openCodeRefs.valid) {
         console.log('');
         console.log(`OpenCode: broken`);
@@ -430,7 +429,7 @@ function cmdDoctor(doctorArgs) {
   const machineOk = resolvedRoot && validateIntelligenceRoot(resolvedRoot).valid;
   const projectOk = state !== null;
   let totalOk = machineOk && (isLaravel ? projectOk : true);
-  if (state && (state.assistants?.includes('opencode') || state.tools?.includes('opencode'))) {
+  if (state && state.assistants?.includes('opencode')) {
     const openCodeRefsCheck = validateOpenCodeFileReferences(target);
     if (!openCodeRefsCheck.valid) totalOk = false;
   }
@@ -578,7 +577,9 @@ function install(target, profile, toolIds = [], flags = {}) {
     ? [...new Set([...skillList, 'rules', 'hooks', 'mcp-configs', ...agents.map(a => a.replace('.md', ''))])]
     : [];
   const installedTools = toolIds.filter(id => getToolDefinition(id));
-  const userSelectedAssistants = flags.assistants || toolIds || [];
+  const userSelectedAssistants = flags.assistants && flags.assistants.length > 0
+    ? flags.assistants
+    : toolIds.filter(id => id !== 'generic-mcp');
   const autoAddedTools = installedTools
     .filter(id => !userSelectedAssistants.includes(id))
     .map(id => getToolDefinition(id)?.displayName || id);
@@ -588,7 +589,7 @@ function install(target, profile, toolIds = [], flags = {}) {
     installed_at: new Date().toISOString(),
     profile,
     integration: flags.integration || 'full',
-    assistants: flags.assistants || toolIds || [],
+    assistants: userSelectedAssistants,
     tools: [...new Set([...detected, ...installedTools])],
     components: installedComponents,
   };
@@ -620,11 +621,15 @@ function install(target, profile, toolIds = [], flags = {}) {
 
 function doUpdate(target, updateFlags = {}) {
   const dryRun = updateFlags.dryRun || updateFlags.dryrun || false;
-  const toolIds = parseToolList(updateFlags.tools || updateFlags.tool || '');
+  let toolIds = parseToolList(updateFlags.tools || updateFlags.tool || '');
 
   const state = readState(target);
   if (!state) {
     err('Not installed. Run `npx laraskills init` first.');
+  }
+
+  if (toolIds.length === 0 && state.assistants && state.assistants.length > 0) {
+    toolIds = state.assistants.filter(id => getToolDefinition(id));
   }
 
   if (state.legacyStateFile) {
@@ -634,6 +639,10 @@ function doUpdate(target, updateFlags = {}) {
   log(`Updating from v${state.version} to v${pkg.version}`);
   log(`Target: ${target}`);
   log(`Profile: ${state.profile}`);
+  if (toolIds.length > 0) {
+    const toolLabels = toolIds.map(id => getToolDefinition(id)?.displayName || id).join(', ');
+    log(`Repairing assistants: ${toolLabels}`);
+  }
 
   if (dryRun) {
     log('Mode: DRY RUN — no files will be written');
@@ -736,6 +745,7 @@ function doUpdate(target, updateFlags = {}) {
     version: pkg.version,
     updated_at: new Date().toISOString(),
     components: updatedComponents,
+    assistants: state.assistants || [],
     tools: state.tools || [],
   };
   if (!dryRun) {
