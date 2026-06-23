@@ -45,6 +45,30 @@ Spatie's `laravel-webhook-client` package provides the receiving counterpart to 
 - The incoming webhook route is synchronous — the HTTP response waits for validation and database storage. Keep validation logic minimal and fast.
 - Storage growth: each webhook stores the full payload as JSON. Large payloads consume significant database storage quickly. Implement retention pruning.
 
+### Sync/Async Pipeline Decision
+
+The canonical webhook pipeline has two valid patterns:
+
+**Standard (recommended for most cases):**
+1. Verify the provider signature
+2. Extract the provider event ID
+3. Persist a raw event or idempotency record in the database
+4. Return 2xx quickly
+5. Dispatch an idempotent job for business effects
+
+This pattern is audit-safe: the event is stored before acknowledging receipt. If the job fails, the raw event is available for replay.
+
+**High-throughput variant:**
+1. Verify the provider signature
+2. Extract the provider event ID
+3. Return 2xx quickly
+4. Queue the storage operation
+5. Business effects happen after storage completes
+
+This pattern is faster at the HTTP boundary but weaker on auditability — a crash between the 2xx and storage loses the event. Use only when throughput demands it AND the provider retries failed deliveries.
+
+Choose the standard pattern unless throughput measurements prove it is insufficient.
+
 # Security Considerations
 - HMAC signature verification prevents unauthorized calls but requires secure distribution of the shared secret.
 - Timestamp-based replay prevention requires accurate clocks on both sender and receiver. Use NTP synchronization on all systems.

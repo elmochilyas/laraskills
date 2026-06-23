@@ -150,7 +150,7 @@ class ApiRootResource extends JsonResource
 - For collections, batch authorization checks to avoid N+1 queries.
 - Use consistent `rel` values and link object structure across all resources.
 - Generate only first/prev/next/last pagination links — not every page.
-- Never hardcode URL strings — always use named routes.
+- Prefer named routes over hardcoded URL strings for internal routes. External API URLs or cross-domain links may need explicit URLs.
 
 ## Verification
 - Every resource response includes a `self` link with correct `href` and `method`.

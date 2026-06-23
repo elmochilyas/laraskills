@@ -80,7 +80,7 @@ SaaS authorization testing requires a combinatorial matrix: for every protected 
 | Not testing right-plan-wrong-role | Assuming enterprise plan grants all access | Viewer on enterprise plan can administer the team | Test each role against the enterprise plan; role trumps plan for destructive actions |
 | Assuming admin = super-admin | Using admin role in tests as a catch-all | Platform admin bypass not tested; team-scoped admin can access other teams | Separate "admin" (team-scoped) from "super-admin"/"platform-admin" (global) in tests |
 | Not testing expired subscription | Only testing active and inactive | Cancelled subscription user retains full access until manual deprovisioning | Test subscription statuses: active, past_due, cancelled, expired, incomplete |
-| Architecture tests not covering policies | Focus only on feature tests | New Policy method added without tests; no CI failure | `->arch()->expect('App\\Policies')->toHaveMethods(['viewAny', 'view', 'create', 'update', 'delete'])->toHaveTests()` (or manual coverage check) |
+| Architecture tests not covering policies | Focus only on feature tests | New Policy method added without tests; no CI failure | `->arch()->expect('App\\Policies')->toHaveMethods(['viewAny', 'view', 'create', 'update', 'delete'])->toHaveTests()` (conceptual; `toHaveTests()` is not a standard Pest arch method — this is pseudo-code representing the intent) |
 
 # Anti-Patterns
 
@@ -367,7 +367,7 @@ arch('no policy allows everything')
 
 arch('authorization tests exist for all resource types')
     ->expect('App\Policies')
-    ->toHaveTests(); // Requires pest-plugin-arch enhancement or manual verification
+    ->toHaveTests(); // Conceptual: adapt to your Pest version. Standard Pest arch does not include toHaveTests(). Use architecture presets or custom rules.
 ```
 
 # Related Topics

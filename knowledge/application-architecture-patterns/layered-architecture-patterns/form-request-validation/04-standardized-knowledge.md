@@ -67,7 +67,7 @@ Engineers should care because Form Requests provide the single most effective me
 
 **Layer Placement:** Form Requests belong in the HTTP/Presentation layer, alongside controllers. Place them in `app/Http/Requests/` following Laravel convention.
 
-**Dependency Direction:** Form Requests depend on the authenticated user, route parameters, and sometimes repositories for uniqueness checks. They must not depend on application services or domain objects.
+**Dependency Direction:** Form Requests depend on the authenticated user, route parameters, and sometimes repositories for uniqueness checks. Prefer them without application service dependencies; injecting services for complex uniqueness or cross-field validation is acceptable.
 
 **Relationship to Controllers:** Type-hint the Form Request in the controller method parameter. Laravel resolves and validates it before the controller method executes. The controller receives validated data via `$request->validated()`.
 

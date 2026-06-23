@@ -163,6 +163,36 @@ for simple contexts (1-2 fields) or non-HTTP entry points (CLI commands, queued 
 - In code review, distinguish between "this violates an invariant" (blocking) and "this goes against the preferred pattern" (discussable). The language used in the original rule should make this distinction clear.
 - When writing knowledge units, use the calibrated language vocabulary table above. Consistency in language across all knowledge units builds reader intuition about which rules are hard and which are soft.
 
+## Output Mode: Public vs Internal
+
+Internal benchmark/debug reports may mention LaraSkills skill names when the audience is the coding agent or tool chain.
+
+Public architecture reports should not expose internal mechanism language such as:
+- "the skill says"
+- "according to laravel-patterns"
+- "LaraSkills says"
+- "the knowledge unit recommends"
+
+Public reports should speak as a professional Laravel architecture review:
+- "Laravel convention"
+- "recommended project policy"
+- "architecture rule"
+- "operational recommendation"
+- "framework best practice"
+
+## Scoring Consistency
+
+Use one canonical scoring system in a report.
+
+If an adjusted score is used, explain why and keep the final score clearly labeled.
+
+Avoid mixing different scoring bases without explanation:
+- "Overall Score: 2/10"
+- "Total: 14/100"
+- "Adjusted Total: 12/100"
+
+Unless the relationship between them is clearly stated. Prefer a single final score that incorporates all adjustments.
+
 # Verification
 
 - [ ] Security-critical rules use absolute language ("never," "always")

@@ -189,7 +189,7 @@ class OrderService
 - Individual actions should NOT manage their own transactions when composed
 
 ### Important Constraints
-- Services must not be called by actions (inverts the dependency)
+- Prefer actions to call services rather than services calling actions. This keeps the dependency direction consistent with the entry-point-to-domain flow.
 - Orchestration methods should return aggregated results
 - Transaction management is a service responsibility
 

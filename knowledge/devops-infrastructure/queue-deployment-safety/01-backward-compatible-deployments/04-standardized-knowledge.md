@@ -256,7 +256,7 @@ Never rename a config key in a deployment where queued jobs reference the config
 | Renaming job class without alias | Refactoring class name for cleanliness | All queued jobs with old class name fail permanently | Keep old class as `class OldName extends NewName {}` during transition |
 | Removing model column same deploy as code change | Code doesn't reference column anymore, so migration drops it | Queued jobs with serialized old models fail on deserialization | Migrate columns in a separate deployment after old jobs drain |
 | Not monitoring queue depth before cleanup deploy | Assuming all old jobs are processed | Cleanup deploy breaks remaining old-format jobs | Explicitly check queue depth; wait for zero before Phase 3 |
-| Serializing full Eloquent models in jobs | Convenience | Every schema change becomes a deployment risk | Prefer IDs or DTOs; fetch fresh data in `handle()` |
+| Serializing full Eloquent models in jobs (without SerializesModels) | Convenience | Every schema change becomes a deployment risk because the full model snapshot is stale | Use `SerializesModels` trait (stores only ID, re-fetches on deserialization) or pass explicit DTOs |
 | Using `queue:restart` after config change without config cache rebuild | Workers restart but still have stale config | Workers use old config keys that no longer exist | Always `config:cache` before `queue:restart` |
 
 # Anti-Patterns
@@ -275,7 +275,7 @@ Never rename a config key in a deployment where queued jobs reference the config
 # AI Agent Notes
 
 - When asked to "rename this job class," first check if there are existing instances of this job in any queue. If queues aren't empty, create a transition plan — don't just rename.
-- When creating a new queued job, default to serializing identifiers (IDs) rather than full Eloquent models. This is free safety against future schema changes. Only use `SerializesModels` when you specifically need the model's serialized attributes without re-fetching.
+- When creating a queued job that references Eloquent models, prefer the `SerializesModels` trait. This stores only the model identifier (class + primary key) and re-fetches the model on deserialization — not the full serialized model. For high-risk billing, webhook, reconciliation, and tenant-mutation jobs, passing explicit IDs or immutable external provider IDs can make freshness, idempotency, and replay behavior more explicit. For lower-risk notification jobs, `SerializesModels` with graceful handling of missing/deleted models is acceptable.
 - Before running a migration that drops columns or renames columns, check if any queued jobs reference those columns. If uncertain, defer the destructive migration to a separate deployment.
 - Feature flags (Pennant) are the safest way to introduce new behavior in queued jobs. Deploy the code off, enable selectively, and only remove the old code path once the new path is proven at 100%.
 
@@ -286,7 +286,7 @@ Never rename a config key in a deployment where queued jobs reference the config
 - [ ] Changing constructor parameters: new parameters are optional with defaults; old parameters aren't removed
 - [ ] Removing model attributes: kept during transition period; only dropped after old jobs drain
 - [ ] Feature flags (Pennant) used for new billing behavior — deployed off, tested, enabled gradually
-- [ ] Jobs serialize IDs or DTOs rather than full Eloquent models
+- [ ] Jobs use `SerializesModels` trait (stores IDs, re-fetches on deserialization) or pass explicit DTOs; high-risk billing/webhook jobs pass explicit provider IDs for replay safety
 - [ ] Config keys that jobs reference are not renamed within a single deployment
 - [ ] Blue-green deployments drain old workers before decommission
 - [ ] Queue depth verified at zero before Phase 3 cleanup deploy

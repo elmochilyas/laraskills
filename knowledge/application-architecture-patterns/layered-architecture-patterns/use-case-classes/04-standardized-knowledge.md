@@ -27,7 +27,7 @@ Engineers should care because Use Case classes provide the highest form of contr
 
 **Transaction Boundaries:** The Use Case controls the transaction scope. It opens a transaction, performs the orchestration steps, and commits or rolls back. Transaction management is explicit in the Use Case, not buried in a repository or domain object.
 
-**DTO Input/Output:** Use Cases accept Data Transfer Objects (DTOs) or primitives as input and return DTOs or void. HTTP Request objects are never passed to Use Cases. Domain objects are never returned from Use Cases. This keeps the application layer decoupled from both HTTP and domain concerns.
+**DTO Input/Output:** Use Cases accept Data Transfer Objects (DTOs) or primitives as input and return DTOs or void. Use Cases should accept domain objects as method arguments and return domain result objects. HTTP Request objects and raw input arrays are not passed directly to Use Cases. Prefer DTOs or domain primitives as input/output; returning domain objects is acceptable when the use case is thin. This keeps the application layer decoupled from both HTTP and domain concerns.
 
 **Framework Independence:** A properly designed Use Case contains zero Laravel-specific imports. No `Request`, `Response`, `Redirect`, `Facade` imports. The Use Case is pure PHP that can be tested without Laravel's HTTP kernel.
 
@@ -68,7 +68,7 @@ Engineers should care because Use Case classes provide the highest form of contr
 
 **Layer Placement:** Use Case classes belong in the Application layer, not the Domain layer and not the Presentation layer. In a layered Laravel architecture, place them in `app/UseCases/` or `app/Application/UseCases/`.
 
-**Dependency Direction:** Use Cases depend on Domain interfaces (ports) and DTOs. They must not depend on infrastructure implementations (databases, HTTP clients, file systems). Infrastructure dependencies are injected via their interfaces.
+**Dependency Direction:** Use Cases depend on Domain interfaces (ports) and DTOs. Prefer them not to depend on infrastructure implementations (databases, HTTP clients, file systems). Infrastructure dependencies are injected via their interfaces.
 
 **Relationship to Controllers:** Controllers extract HTTP input, pass it to a Use Case via a DTO, and return the Use Case result as an HTTP response. Controllers should be thin wrappers around Use Case calls.
 

@@ -123,7 +123,7 @@ class UserService
 
 - Controller-DTO-Service is the most common multi-layer pattern in production Laravel applications >50k LOC
 - Default to Controller-DTO-Action for discrete operations; graduate to service when shared dependencies emerge
-- Service bloat is the critical risk — monitor method count and dependency count
+- Service bloat is a common pain point — monitor method count and dependency count
 - Services are the public API for a domain entity; actions may exist as internal implementation details
 - When generating services, start with the interface (if multiple implementations are anticipated) or skip the interface for single-implementation services
 

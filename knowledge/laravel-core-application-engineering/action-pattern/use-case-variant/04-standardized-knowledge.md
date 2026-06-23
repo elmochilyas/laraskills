@@ -39,7 +39,7 @@ The DTO is the defining feature of the Use Case pattern. It is a plain PHP objec
 
 ### Zero Framework Import Rule
 
-A Use Case class must not `use` any class from the `Illuminate` namespace, any facade, or any Laravel-specific helper function. The only exceptions are PHP built-in classes, project-specific interfaces and DTOs, and third-party domain libraries. If a Use Case imports `Request`, `Model`, or `DB`, it has ceased to be a Use Case and become a standard action.
+Prefer use cases without `Illuminate` namespace imports, facades, or Laravel-specific helpers. This enables framework-independent testing and domain portability. The only dependencies should be PHP built-in classes, project interfaces, DTOs, and third-party domain libraries. Some pragmatic exceptions exist for thin CRUD workflows where full framework isolation adds more indirection than value. If a Use Case imports `Request`, `Model`, or `DB` pervasively, consider whether a standard Action better fits the use case.
 
 ---
 

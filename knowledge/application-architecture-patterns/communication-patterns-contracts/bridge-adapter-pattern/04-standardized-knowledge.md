@@ -71,7 +71,7 @@ The Bridge pattern separates abstraction (the contract) from implementation (the
 
 # Common Mistakes
 
-1. **Skipping the bridge:** Importing and directly using another context's classes. Cause: convenience. Consequence: dependency is now explicit and tight — any change in the producer breaks the consumer. Better: always use a bridge.
+1. **Skipping the bridge:** Importing and directly using another context's classes. Cause: convenience. Consequence: dependency is now explicit and tight — any change in the producer breaks the consumer. Prefer a bridge for cross-context communication. For simple same-module calls, direct communication may be acceptable.
 
 2. **Adapter in the consumer context:** The consumer creates the adapter. Cause: misunderstanding the pattern. Consequence: the consumer now knows both the bridge and the producer's API. The point of the adapter is defeated. Better: adapter lives in the producer context.
 
