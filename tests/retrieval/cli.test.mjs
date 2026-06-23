@@ -256,7 +256,7 @@ describe('CLI Integration Smoke Tests', () => {
       });
 
       assert.ok(existsSync(join(target, '.laraskills-state.json')), 'State file should exist');
-      assert.ok(existsSync(join(target, 'skills')), 'Skills directory should exist');
+      assert.ok(existsSync(join(target, '.laraskills', 'skills')), 'Skills directory should exist');
       assert.ok(existsSync(join(target, 'rules')), 'Rules directory should exist');
       assert.ok(existsSync(join(target, 'agents')), 'Agents directory should exist');
 
@@ -278,7 +278,7 @@ describe('CLI Integration Smoke Tests', () => {
       });
 
       assert.ok(existsSync(join(target, '.laraskills-state.json')), 'State file should exist');
-      assert.ok(existsSync(join(target, 'skills')), 'Skills directory should exist');
+      assert.ok(existsSync(join(target, '.laraskills', 'skills')), 'Skills directory should exist');
 
       const state = JSON.parse(readFileSync(join(target, '.laraskills-state.json'), 'utf-8'));
       assert.strictEqual(state.profile, 'core');
