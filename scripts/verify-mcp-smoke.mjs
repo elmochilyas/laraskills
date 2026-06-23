@@ -99,10 +99,13 @@ async function main() {
     const toolCount = results[2]?.toolCount || 0;
     const toolNames = results[2]?.toolNames || [];
     const expectedTools = ['retrieve_context_bundle', 'search_ecc', 'get_knowledge_unit', 'get_graph_context', 'validate_ecc'];
-    const foundTools = expectedTools.filter(t => toolNames.includes(t));
-    console.log(`1. tools/list: ${toolCount} tools (${foundTools.length}/${expectedTools.length} expected)`);
-    if (toolCount === 5 && foundTools.length === 5) pass('tools/list returns 5 expected tools');
-    else fail(`Expected 5 tools, got ${toolCount}, found ${foundTools.length}/${expectedTools.length}`);
+    const phase35Tools = ['laraskills_list_skills', 'laraskills_search_skills', 'laraskills_read_skill', 'laraskills_search_knowledge', 'laraskills_retrieve_context', 'laraskills_explain_decision'];
+    const allExpected = [...expectedTools, ...phase35Tools];
+    const foundExpected = expectedTools.filter(t => toolNames.includes(t));
+    const foundPhase35 = phase35Tools.filter(t => toolNames.includes(t));
+    console.log(`1. tools/list: ${toolCount} tools (${foundExpected.length}/${expectedTools.length} core, ${foundPhase35.length}/${phase35Tools.length} phase-35 expected)`);
+    if (foundExpected.length === expectedTools.length && foundPhase35.length === phase35Tools.length) pass('tools/list returns all expected tools');
+    else fail(`Expected all ${expectedTools.length}+${phase35Tools.length} tools, found ${foundExpected.length}/${expectedTools.length} core + ${foundPhase35.length}/${phase35Tools.length} phase-35`);
 
     // 2. validate_ecc returns valid: true
     const valid = results[3]?.hasResult && !results[3]?.isError;
@@ -161,7 +164,7 @@ async function main() {
     if (coldRetrieve && warmRetrieve) pass('Both cold and warm retrieve work');
     else fail('Retrieve calls failed');
 
-    const overall = foundTools.length === 5 && valid && firstId && canonResult?.kuId && shortResult?.strategy && graphResult?.resolvedId && coldRetrieve && warmRetrieve;
+    const overall = foundExpected.length === expectedTools.length && foundPhase35.length === phase35Tools.length && valid && firstId && canonResult?.kuId && shortResult?.strategy && graphResult?.resolvedId && coldRetrieve && warmRetrieve;
     console.log(`\n${overall ? '=== ALL MCP SMOKE CHECKS PASSED ===' : '=== SOME MCP SMOKE CHECKS FAILED ==='}`);
     if (!overall) process.exit(1);
   } catch (e) {

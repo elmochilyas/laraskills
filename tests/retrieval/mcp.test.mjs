@@ -134,9 +134,15 @@ describe('MCP Server — Tool discovery', () => {
     'get_knowledge_unit',
     'get_graph_context',
     'validate_ecc',
+    'laraskills_list_skills',
+    'laraskills_search_skills',
+    'laraskills_read_skill',
+    'laraskills_search_knowledge',
+    'laraskills_retrieve_context',
+    'laraskills_explain_decision',
   ];
 
-  it('exposes exactly the 5 expected tools (no more, no less)', async () => {
+  it('exposes exactly the 11 expected tools (no more, no less)', async () => {
     const result = await client.listTools();
     const names = result.tools.map((t) => t.name).sort();
     assert.deepStrictEqual(names, EXPECTED_TOOLS.slice().sort());

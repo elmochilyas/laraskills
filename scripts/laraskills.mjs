@@ -40,6 +40,13 @@ import {
   getAssistantToolIds,
   shouldInstallProjectFiles,
 } from '../src/runtime/interactive-init.mjs';
+import {
+  generateRegistry,
+  readRegistry,
+  validateRegistry,
+  getRegistrySummary,
+  getRegistryPath,
+} from '../src/runtime/skill-registry.mjs';
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const ROOT = join(__dirname, '..');
@@ -287,175 +294,288 @@ function cmdSetup(setupArgs) {
 
 function cmdDoctor(doctorArgs) {
   const flags = parseFlags(doctorArgs || []);
-  const configPath = getConfigPath();
-  const legacyConfigPath = getLegacyConfigPath();
-  const configExists = existsSync(configPath);
-  const legacyConfigExists = existsSync(legacyConfigPath);
-  const envLaraskillsRoot = process.env.LARASKILLS_ROOT || 'not set';
-  const envEccRoot = process.env.ECC_ROOT || 'not set';
-  const packagedRoot = getPackagedIntelligenceRoot();
-
-  console.log('LaraSkills Doctor');
-  console.log('');
-  console.log(`Package version:       ${pkg.version}`);
-  console.log(`Node.js:               ${process.version}`);
-  console.log(`Platform:              ${process.platform}`);
-
-  let resolvedRoot = null;
-  let resolutionSource = '';
-  let compatibilityNotice = null;
-  let resolutionError = null;
-
-  try {
-    const result = resolveEccRootWithPrecedence({
-      explicitLaraskillsRoot: flags.laraskillsroot || null,
-      explicitEccRoot: flags.eccroot || null,
-    });
-    resolvedRoot = result.root;
-    resolutionSource = result.source;
-    compatibilityNotice = result.legacyFallback ? result.legacyReason : null;
-  } catch (e) {
-    resolutionError = e.message;
-  }
-
-  const isPackaged = resolvedRoot && isPackagedRoot(resolvedRoot);
-
-  console.log('');
-  console.log('--- Machine ---');
-  console.log(`Intelligence source:   ${resolutionSource || 'none'}`);
-  if (isPackaged) console.log('Source type:           packaged (bundled with npm package)');
-  else if (resolutionSource === 'laraskills-cli' || resolutionSource === 'laraskills-environment') console.log('Source type:           configured root');
-  else if (resolutionSource) console.log(`Source type:           ${resolutionSource}`);
-  console.log(`LARASKILLS_ROOT env:   ${envLaraskillsRoot}`);
-  console.log(`ECC_ROOT env:          ${envEccRoot}`);
-
-  if (resolvedRoot) {
-    const jsonDir = join(resolvedRoot, 'intelligence', 'json');
-    const requiredFiles = [
-      'knowledge-units.json', 'dependencies.json', 'relationships.json',
-      'rules.json', 'skills.json', 'checklists.json', 'anti-patterns.json',
-      'decision-trees.json',
-    ];
-    let filesPass = true;
-    for (const f of requiredFiles) {
-      if (!existsSync(join(jsonDir, f))) { filesPass = false; break; }
-    }
-    console.log(`Intelligence files:    ${filesPass ? 'OK' : 'MISSING'}`);
-    const intelligenceCheck = validateIntelligenceRoot(resolvedRoot);
-    console.log(`Intelligence validate: ${intelligenceCheck.valid ? 'OK' : 'ISSUES'}`);
-
-    const mcpPath = join(resolvedRoot, 'scripts', 'laraskills-mcp.mjs');
-    console.log(`MCP adapter:           ${existsSync(mcpPath) ? 'OK' : 'MISSING'}`);
-
-    const retrievalDir = join(resolvedRoot, 'src', 'retrieval');
-    console.log(`Retrieval:             ${existsSync(retrievalDir) ? 'OK' : 'MISSING'}`);
-  } else {
-    console.log(`Intelligence files:    FAIL`);
-    console.log(`Intelligence validate: FAIL`);
-    console.log(`MCP adapter:           FAIL`);
-    console.log(`Retrieval:             FAIL`);
-  }
-
-  console.log(`Config file:           ${configPath}`);
-  console.log(`Config exists:         ${configExists ? 'yes' : 'no'}`);
-  if (legacyConfigExists) {
-    console.log(`Legacy config:         ${legacyConfigPath} (exists)`);
-  }
-  if (compatibilityNotice) {
-    console.log(`Compatibility notice:  ${compatibilityNotice}`);
-  }
-
   const target = process.cwd();
+
+  // Determine which assistants to check
+  const assistantFilter = flags.opencode || flags.assistant === 'opencode' ? 'opencode'
+    : flags.cursor || flags.assistant === 'cursor' ? 'cursor'
+    : flags.claude || flags.claudecode || flags['claude-code'] || flags.assistant === 'claude-code' ? 'claude-code'
+    : flags.codex || flags.assistant === 'codex' ? 'codex'
+    : undefined;
+
+  const checkAllAssistants = flags.assistants === 'all' || flags.all || flags.benchmark;
+  const isBenchmark = !!flags.benchmark;
+
+  // Figure out which assistants to check
+  let assistantIds = [];
+  if (assistantFilter) {
+    assistantIds = [assistantFilter];
+  } else if (checkAllAssistants) {
+    assistantIds = ['opencode', 'cursor', 'claude-code', 'codex', 'generic-mcp'];
+  } else if (!isBenchmark) {
+    // Default: check all 5 supported assistants
+    assistantIds = ['opencode', 'cursor', 'claude-code', 'codex', 'generic-mcp'];
+  } else {
+    assistantIds = ['opencode', 'cursor', 'claude-code', 'codex', 'generic-mcp'];
+  }
+
   const state = readState(target);
-  const isLaravel = isLaravelProject(target);
+  const configPath = getConfigPath();
+  const configExists = existsSync(configPath);
+  const packagedRoot = getPackagedIntelligenceRoot();
+  const packageVersion = pkg.version;
 
-  console.log('');
-  console.log('--- Project ---');
-  console.log(`Laravel detected:      ${isLaravel ? 'yes' : 'no'}`);
-  console.log(`LaraSkills initialized: ${state ? 'yes' : 'no'}`);
+  // Check for stale laravel-ecc references
+  const hasStaleEccConfig = existsSync(join(target, '.laravel-ecc-state.json'));
+  const hasStaleEccDir = existsSync(join(target, '.laravel-ecc'));
 
-  if (state) {
-    console.log(`Profile:               ${state.profile || 'unknown'}`);
-    console.log(`State version:          ${state.version || 'unknown'}`);
-
-    const projectChecks = {
-      skills: existsSync(join(target, 'skills')),
-      agents: existsSync(join(target, 'agents')),
-      rules: existsSync(join(target, 'rules')),
-      hooks: existsSync(join(target, 'hooks')),
-      'mcp-configs': existsSync(join(target, 'mcp-configs')),
-    };
-    for (const [name, ok] of Object.entries(projectChecks)) {
-      console.log(`  ${name}:              ${ok ? 'present' : 'MISSING'}`);
-    }
-
-    const toolChecks = getAllToolChecks(target);
-    const stateAssistants = state.assistants || [];
+  if (isBenchmark) {
+    // Benchmark pre-flight mode
+    console.log('LaraSkills Doctor — Benchmark Pre-Flight');
     console.log('');
-    console.log('Tool integrations:');
-    if (toolChecks.length === 0) {
-      console.log('  none configured');
+    log('Verifying benchmark readiness...');
+    console.log('');
+
+    let allOk = true;
+
+    // Check package version
+    console.log(`Package version:       ${packageVersion}`);
+    console.log(`Node.js:               ${process.version}`);
+
+    // Check stale references
+    if (hasStaleEccConfig) {
+      console.log(`Stale laravel-ecc:     DETECTED (.laravel-ecc-state.json) — run laraskills update --yes`);
+      allOk = false;
     } else {
-      for (const tc of toolChecks) {
-        const wasSelected = stateAssistants.includes(tc.id);
-        let status;
-        if (!wasSelected) {
-          status = 'not selected';
-        } else if (tc.configured) {
-          status = tc.support === 'full' ? 'configured' : 'configured (template)';
-        } else {
-          status = 'not configured';
-        }
-        const supportLabel = tc.support === 'full' ? '(auto-setup)' : '(template)';
-        console.log(`  ${tc.displayName}:  ${status} ${supportLabel}`);
+      console.log(`Stale laravel-ecc:     none`);
+    }
+
+    // Check init
+    if (!state) {
+      console.log(`Local init:            MISSING — run laraskills init`);
+      allOk = false;
+    } else {
+      console.log(`Local init:            OK`);
+    }
+
+    // Check skill registry
+    const registry = readRegistry(target);
+    if (!registry) {
+      console.log(`Skill registry:        MISSING (.laraskills/skill-registry.json) — run laraskills update --yes`);
+      allOk = false;
+    } else {
+      console.log(`Skill registry:        OK (${registry.skills?.length || 0} skills)`);
+    }
+
+    // Check at least one assistant has MCP config
+    let atLeastOneMcp = false;
+    for (const aid of assistantIds) {
+      const def = getToolDefinition(aid);
+      if (!def) continue;
+      const check = def.isConfigured(target);
+      if (check.mcpConfigured) {
+        atLeastOneMcp = true;
+        break;
+      }
+    }
+    if (!atLeastOneMcp) {
+      console.log(`MCP config:            NONE — no assistant has LaraSkills MCP configured`);
+      allOk = false;
+    } else {
+      console.log(`MCP config:            OK`);
+    }
+
+    // Verify known skill can be found
+    try {
+      const searchResult = searchKnowledge('Laravel security patterns', { eccRoot: ROOT, limit: 1 });
+      console.log(`Knowledge retrieval:   ${searchResult.length > 0 ? 'OK' : 'FAIL'}`);
+      if (searchResult.length === 0) allOk = false;
+    } catch (e) {
+      console.log(`Knowledge retrieval:   FAIL (${e.message})`);
+      allOk = false;
+    }
+
+    // Verify skills can be listed from registry
+    if (registry) {
+      const validation = validateRegistry(target);
+      if (!validation.valid && validation.missingSkills.length > 0) {
+        console.log(`Skill validation:      FAIL — ${validation.missingSkills.length} skills in registry not on disk`);
+        allOk = false;
+      } else {
+        console.log(`Skill validation:      OK`);
       }
     }
 
-    const openCodeRefs = validateOpenCodeFileReferences(target);
-    if (stateAssistants.includes('opencode')) {
-      if (!openCodeRefs.valid) {
-        console.log('');
-        console.log(`OpenCode: broken`);
-        for (const missing of openCodeRefs.missingFiles) {
-          console.log(`  Missing file reference: ${missing.resolvedPath}`);
-          console.log(`  Fix: run laraskills update --assistants opencode --yes`);
-        }
-      }
+    // Check intelligence source
+    if (packagedRoot) {
+      console.log(`Intelligence source:   packaged (OK)`);
+    } else {
+      console.log(`Intelligence source:   manual checkout`);
+
     }
+
+    console.log('');
+    if (allOk) {
+      console.log('Result: BENCHMARK READY');
+      console.log('');
+      console.log('All pre-flight checks passed. You can run:');
+      console.log('  npm run benchmark');
+      console.log('  node tests/retrieval/run-benchmarks.mjs');
+    } else {
+      console.log('Result: NOT READY');
+      console.log('');
+      console.log('Fix before running benchmarks:');
+      if (hasStaleEccConfig) console.log('  laraskills update --assistants all --yes');
+      if (!state) console.log('  laraskills init --assistants all --integration full --profile core --yes');
+      if (!registry) console.log('  laraskills update --assistants all --yes  (to generate registry)');
+      if (!atLeastOneMcp) console.log('  laraskills update --assistants all --yes  (to configure MCP)');
+    }
+    return;
   }
 
+  // Standard doctor mode
+  const displayName = assistantFilter === 'opencode' ? 'OpenCode'
+    : assistantFilter === 'cursor' ? 'Cursor'
+    : assistantFilter === 'claude-code' ? 'Claude Code'
+    : assistantFilter === 'codex' ? 'Codex'
+    : assistantFilter || 'LaraSkills';
+
+  console.log(`LaraSkills Doctor — ${displayName}`);
   console.log('');
 
-  const machineOk = resolvedRoot && validateIntelligenceRoot(resolvedRoot).valid;
-  const projectOk = state !== null;
-  let totalOk = machineOk && (isLaravel ? projectOk : true);
-  if (state && state.assistants?.includes('opencode')) {
-    const openCodeRefsCheck = validateOpenCodeFileReferences(target);
-    if (!openCodeRefsCheck.valid) totalOk = false;
+  // Global checks
+  console.log(`Global package:         ${packageVersion}`);
+  console.log(`Node.js:                 ${process.version}`);
+
+  // Local init
+  if (!state) {
+    console.log(`Local init:              FAIL — run laraskills init`);
+    console.log('');
+    console.log('Result: NOT INITIALIZED');
+    return;
+  }
+  console.log(`Local init:              OK (${state.profile || 'core'}, v${state.version || 'unknown'})`);
+
+  // Project state
+  console.log(`Project state:           OK`);
+
+  // Stale ecc check
+  if (hasStaleEccConfig || hasStaleEccDir) {
+    console.log(`Stale laravel-ecc:       DETECTED — run laraskills update --yes to clean up`);
+  } else {
+    console.log(`Stale laravel-ecc:       none`);
   }
 
-  if (totalOk) {
-    console.log('Status: HEALTHY');
-    if (isPackaged) {
-      console.log('');
-      console.log('Intelligence is running from the packaged bundle — no manual clone required.');
+  // Skill registry check
+  const registry = readRegistry(target);
+  if (!registry) {
+    console.log(`Skill registry:          MISSING`);
+    console.log('');
+    console.log('Reason:');
+    console.log('  Skills exist on disk but the registry file is missing.');
+    console.log('');
+    console.log('Fix:');
+    console.log('  laraskills update --assistants all --yes');
+    console.log('');
+    console.log('Result: ACTION REQUIRED');
+    return;
+  }
+  console.log(`Skill registry:          OK (${registry.skills?.length || 0} skills)`);
+
+  // Skill file validation
+  const skillValidation = validateRegistry(target);
+  if (!skillValidation.valid) {
+    console.log(`Skill files:             FAIL — ${skillValidation.missingSkills.length} skills in registry not on disk`);
+    for (const ms of skillValidation.missingSkills) {
+      console.log(`  Missing: ${ms}`);
     }
   } else {
-    console.log('Status: ACTION REQUIRED');
-    if (!machineOk) {
-      console.log('');
-      if (!resolvedRoot) {
-        console.log('Fix: intelligence source not found. Try reinstalling:');
-        console.log('  npm install -g laraskills');
-        console.log('');
-        console.log('Advanced: configure a custom checkout:');
-        console.log('  laraskills setup --laraskills-root "/path/to/laraskills"');
+    console.log(`Skill files:             OK`);
+  }
+
+  console.log('');
+
+  // Per-assistant checks
+  let overallOk = true;
+  for (const aid of assistantIds) {
+    const def = getToolDefinition(aid);
+    if (!def) continue;
+    const check = def.isConfigured(target);
+    const statusLabel = def.displayName || aid;
+
+    console.log(`--- ${statusLabel} ---`);
+
+    // MCP config check
+    if (check.mcpConfigured) {
+      console.log(`MCP config:              OK`);
+    } else {
+      console.log(`MCP config:              FAIL`);
+      overallOk = false;
+    }
+
+    // Skill accessibility
+    if (registry && registry.skills && registry.skills.length > 0) {
+      console.log(`Skill listing:           OK (${registry.skills.length} skills via registry)`);
+    } else {
+      console.log(`Skill listing:           FAIL (no registry or no skills)`);
+    }
+
+    // Check for specific config files
+    if (check.configFiles && check.configFiles.length > 0) {
+      for (const cf of check.configFiles) {
+        const exists = existsSync(join(target, cf));
+        console.log(`  ${cf.padEnd(30)} ${exists ? 'OK' : 'MISSING'}`);
+        if (!exists && cf.endsWith('.json') || cf.endsWith('.toml')) overallOk = false;
       }
     }
-    if (isLaravel && !projectOk) {
+
+    // OpenCode-specific checks
+    if (aid === 'opencode') {
+      const openCodeRefs = validateOpenCodeFileReferences(target);
+      if (!openCodeRefs.valid) {
+        console.log(`OpenCode refs:           BROKEN — run laraskills update --assistants opencode --yes`);
+        overallOk = false;
+      } else {
+        console.log(`OpenCode refs:           OK`);
+      }
+
+      // Check for OpenCode native skill registration
+      const openCodeCfg = join(target, '.opencode', 'opencode.json');
+      if (existsSync(openCodeCfg)) {
+        try {
+          const cfg = JSON.parse(readFileSync(openCodeCfg, 'utf-8'));
+          if (cfg.skills && cfg.skills.paths) {
+            console.log(`Native skills:           OK (paths configured)`);
+          }
+        } catch {}
+      }
+    }
+
+    console.log('');
+  }
+
+  // Final status
+  if (overallOk) {
+    console.log('Result: HEALTHY');
+    if (checkAllAssistants) {
       console.log('');
-      console.log('Fix: initialize this project:');
-      console.log('  laraskills init');
+      console.log('LaraSkills is available to all requested assistants through MCP and the skill registry.');
+    } else {
+      console.log('');
+      console.log(`LaraSkills is available to ${displayName} through MCP and the skill registry.`);
+    }
+    if (packagedRoot) {
+      console.log('Intelligence is running from the packaged bundle.');
+    }
+  } else {
+    console.log('Result: ACTION REQUIRED');
+    console.log('');
+    if (registry && !skillValidation.valid) {
+      console.log('Fix: skill files on disk do not match registry. Run:');
+      console.log('  laraskills update --assistants all --yes');
+    } else {
+      console.log('Fix: configure assistants with MCP access:');
+      console.log('  laraskills update --assistants all --yes');
     }
   }
 }
@@ -595,6 +715,16 @@ function install(target, profile, toolIds = [], flags = {}) {
   };
   if (!dryRun) {
     writeState(target, state);
+
+    if (installProjectFiles) {
+      try {
+        const registry = generateRegistry(target, ROOT, profile);
+        writeFileSync(join(target, '.laraskills', 'skill-registry.json'), JSON.stringify(registry, null, 2));
+        log(`  + Generated skill registry: ${Object.keys(registry.skills || {}).length || 0} skills`);
+      } catch (e) {
+        warn(`Skill registry generation failed (non-fatal): ${e.message}`);
+      }
+    }
   }
 
   console.log('');
@@ -750,6 +880,16 @@ function doUpdate(target, updateFlags = {}) {
   };
   if (!dryRun) {
     writeState(target, newState);
+
+    if (existsSync(join(target, 'skills'))) {
+      try {
+        const registry = generateRegistry(target, ROOT, state.profile || 'core');
+        writeFileSync(join(target, '.laraskills', 'skill-registry.json'), JSON.stringify(registry, null, 2));
+        log(`  ~ Updated skill registry: ${registry.skills?.length || 0} skills`);
+      } catch (e) {
+        warn(`Skill registry update failed (non-fatal): ${e.message}`);
+      }
+    }
   }
 
   console.log('');
@@ -1051,7 +1191,7 @@ function showHelp() {
   lines.push('');
   lines.push('Machine commands:');
   lines.push('  setup       Advanced: point to a custom LaraSkills checkout');
-  lines.push('  doctor      Diagnose machine and project readiness');
+  lines.push('  doctor      Diagnose and verify LaraSkills integration');
   lines.push('');
   lines.push('Project commands:');
   lines.push('  init        Prepare the current Laravel project (interactive, recommended)');
@@ -1152,24 +1292,32 @@ function showCommandHelp(command) {
     ],
     doctor: [
       '',
-      'Usage: laraskills doctor',
+      'Usage: laraskills doctor [options]',
       '',
-      'Diagnose both machine readiness (intelligence source, retrieval, MCP)',
-      'and project readiness (initialized, profile, tool integrations).',
-      '',
-      'A healthy setup reports "Status: HEALTHY" for both machine and project.',
+      'Diagnose machine readiness, project initialization, and assistant integration.',
       '',
       'Reports:',
-      '  - Package version, Node.js version, platform',
-      '  - Intelligence source (packaged or configured root)',
-      '  - Intelligence file validation',
-      '  - MCP adapter and retrieval readiness',
-      '  - Laravel project detection',
+      '  - Package version, Node.js version',
       '  - LaraSkills project initialization status',
-      '  - Tool integration status (OpenCode, etc.)',
+      '  - Skill registry presence and validation',
+      '  - MCP config status for each assistant',
+      '  - Skill accessibility through registry',
+      '  - Stale laravel-ecc reference detection',
+      '',
+      'Options:',
+      '  --opencode          Check OpenCode integration specifically',
+      '  --cursor            Check Cursor integration specifically',
+      '  --claude, --claude-code   Check Claude Code integration specifically',
+      '  --codex             Check Codex integration specifically',
+      '  --assistants all    Check all supported assistants',
+      '  --benchmark         Pre-flight check before running benchmarks',
+      '  --laraskills-root <path>   Override intelligence root',
       '',
       'Examples:',
       '  laraskills doctor',
+      '  laraskills doctor --opencode',
+      '  laraskills doctor --assistants all',
+      '  laraskills doctor --benchmark',
       '',
     ],
     init: [

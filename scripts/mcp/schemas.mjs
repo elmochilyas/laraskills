@@ -246,3 +246,100 @@ export const errorOutputSchema = z.object({
   code: z.string(),
   hint: z.string().optional(),
 });
+
+// Skill tool schemas
+export const listSkillsInputSchema = z.object({}).strict().describe(
+  'No input required. Returns all installed LaraSkills skills from the skill registry.',
+);
+
+export const searchSkillsInputSchema = z.object({
+  query: z.string().min(1).max(500).describe(
+    'Search query for skill names, descriptions, and tags.',
+  ),
+  limit: z.number().int().min(1).max(50).default(20).describe(
+    'Maximum number of results.',
+  ),
+});
+
+export const readSkillInputSchema = z.object({
+  name: z.string().min(1).max(200).describe(
+    'Skill name (e.g., "laravel-patterns", "laravel-tdd"). Use list_skills to discover available names.',
+  ),
+});
+
+export const searchKnowledgeInputSchema = z.object({
+  query: z.string().min(1).max(500).describe(
+    'Search query for knowledge units.',
+  ),
+  limit: z.number().int().min(1).max(100).default(10).describe(
+    'Maximum number of results.',
+  ),
+  domain: z.string().min(1).max(200).optional().describe(
+    'Optional domain filter.',
+  ),
+});
+
+export const retrieveContextInputSchemaV2 = z.object({
+  task: z.string().min(1).max(2000).describe(
+    'Natural-language Laravel engineering task description.',
+  ),
+  mode: z.enum(['compact', 'standard', 'deep']).default('standard').describe(
+    'Bundle size: compact, standard, or deep.',
+  ),
+  max_kus: z.number().int().min(1).max(50).default(10),
+  max_rules: z.number().int().min(0).max(50).default(10),
+  max_skills: z.number().int().min(0).max(50).default(6),
+  budget: z.number().int().min(256).max(200000).default(6000),
+  domain: z.string().min(1).max(200).optional(),
+});
+
+export const explainDecisionInputSchema = z.object({
+  decision: z.string().min(1).max(500).describe(
+    'The architectural decision to evaluate (e.g., "Should I use a repository pattern with Eloquent?", "When should I use queued jobs vs synchronous processing?")',
+  ),
+  mode: z.enum(['compact', 'standard']).default('standard').describe(
+    'Response detail: compact (brief guidance) or standard (full explanation with rules/anti-patterns).',
+  ),
+});
+
+export const skillSummarySchema = z.object({
+  name: z.string(),
+  path: z.string(),
+  description: z.string(),
+  tags: z.array(z.string()),
+});
+
+export const skillListOutputSchema = z.object({
+  version: z.string(),
+  skillCount: z.number(),
+  skills: z.array(skillSummarySchema),
+});
+
+export const skillSearchOutputSchema = z.object({
+  query: z.string(),
+  count: z.number(),
+  results: z.array(z.object({
+    name: z.string(),
+    description: z.string(),
+    tags: z.array(z.string()),
+    matchScore: z.number(),
+  })),
+});
+
+export const skillReadOutputSchema = z.object({
+  name: z.string(),
+  path: z.string(),
+  description: z.string(),
+  tags: z.array(z.string()),
+  content: z.string(),
+  contentLength: z.number(),
+});
+
+export const decisionOutputSchema = z.object({
+  decision: z.string(),
+  guidance: z.string(),
+  mode: z.string(),
+  relevantRules: z.array(z.string()),
+  relevantAntiPatterns: z.array(z.string()),
+  recommendation: z.string(),
+});

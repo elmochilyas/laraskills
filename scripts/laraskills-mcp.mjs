@@ -37,6 +37,24 @@ import {
   buildRootErrorResult,
   describeForAgents,
 } from './mcp/handlers.mjs';
+import {
+  buildListSkillsResult,
+  buildSearchSkillsResult,
+  buildReadSkillResult,
+  buildExplainDecisionResult,
+} from './mcp/handlers.mjs';
+import {
+  listSkillsInputSchema,
+  searchSkillsInputSchema,
+  readSkillInputSchema,
+  searchKnowledgeInputSchema as searchKnowledgeSchema,
+  retrieveContextInputSchemaV2 as retrieveContextInputSchemaV2Schema,
+  explainDecisionInputSchema,
+  skillListOutputSchema,
+  skillSearchOutputSchema,
+  skillReadOutputSchema,
+  decisionOutputSchema,
+} from './mcp/schemas.mjs';
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const ROOT = join(__dirname, '..');
@@ -281,6 +299,158 @@ async function main() {
         structuredContent: safeStructured(validationOutputSchema, result.structured),
       };
     }),
+  );
+
+  server.registerTool(
+    'laraskills_list_skills',
+    {
+      title: 'List installed LaraSkills skills',
+      description:
+        'Returns all LaraSkills skills registered in the skill registry. ' +
+        'Use this to discover available skills and their descriptions.',
+      inputSchema: listSkillsInputSchema,
+      outputSchema: skillListOutputSchema,
+      annotations: READ_ONLY_ANNOTATIONS,
+    },
+    async () => {
+      try {
+        const result = buildListSkillsResult(process.cwd());
+        return {
+          content: [{ type: 'text', text: result.text }],
+          structuredContent: safeStructured(skillListOutputSchema, result.structured),
+        };
+      } catch (err) {
+        errToStderr('list-skills-error', err);
+        return makeToolErrorResult(err.message || 'Unknown error listing skills');
+      }
+    },
+  );
+
+  server.registerTool(
+    'laraskills_search_skills',
+    {
+      title: 'Search LaraSkills skills',
+      description:
+        'Search installed LaraSkills skills by name, description, and tags. ' +
+        'Returns ranked results with match scores.',
+      inputSchema: searchSkillsInputSchema,
+      outputSchema: skillSearchOutputSchema,
+      annotations: READ_ONLY_ANNOTATIONS,
+    },
+    async (args) => {
+      try {
+        const { query, limit } = searchSkillsInputSchema.parse(args);
+        const result = buildSearchSkillsResult(query, process.cwd());
+        return {
+          content: [{ type: 'text', text: result.text }],
+          structuredContent: safeStructured(skillSearchOutputSchema, result.structured),
+        };
+      } catch (err) {
+        errToStderr('search-skills-error', err);
+        return makeToolErrorResult(err.message || 'Unknown error searching skills');
+      }
+    },
+  );
+
+  server.registerTool(
+    'laraskills_read_skill',
+    {
+      title: 'Read a LaraSkills skill',
+      description:
+        'Read the full Markdown content of a LaraSkills skill. ' +
+        'Use list_skills to discover available skill names.',
+      inputSchema: readSkillInputSchema,
+      outputSchema: skillReadOutputSchema,
+      annotations: READ_ONLY_ANNOTATIONS,
+    },
+    async (args) => {
+      try {
+        const { name } = readSkillInputSchema.parse(args);
+        const result = buildReadSkillResult(name, process.cwd());
+        if (result.notFound) {
+          return makeToolErrorResult(result.message);
+        }
+        return {
+          content: [{ type: 'text', text: result.text }],
+          structuredContent: safeStructured(skillReadOutputSchema, {
+            name: result.name,
+            path: result.path,
+            description: result.description,
+            tags: result.tags,
+            content: result.content,
+            contentLength: result.contentLength,
+          }),
+        };
+      } catch (err) {
+        errToStderr('read-skill-error', err);
+        return makeToolErrorResult(err.message || 'Unknown error reading skill');
+      }
+    },
+  );
+
+  server.registerTool(
+    'laraskills_search_knowledge',
+    {
+      title: 'Search LaraSkills knowledge units',
+      description:
+        'Alias for search_ecc. Search the LaraSkills knowledge unit catalog. ' +
+        'Returns ranked KUs with scores, ranking signals, and source paths.',
+      inputSchema: searchKnowledgeSchema,
+      outputSchema: searchResultListSchema,
+      annotations: READ_ONLY_ANNOTATIONS,
+    },
+    withRoot(async (args, root) => {
+      const result = buildSearchResult(args, { eccRoot: root });
+      return {
+        content: [{ type: 'text', text: result.text }],
+        structuredContent: safeStructured(searchResultListSchema, result.structured),
+      };
+    }),
+  );
+
+  server.registerTool(
+    'laraskills_retrieve_context',
+    {
+      title: 'Retrieve LaraSkills context bundle',
+      description:
+        'Alias for retrieve_context_bundle. Return the smallest useful LaraSkills context bundle for a Laravel engineering task.',
+      inputSchema: retrieveContextInputSchemaV2Schema,
+      outputSchema: bundleOutputSchema,
+      annotations: READ_ONLY_ANNOTATIONS,
+    },
+    withRoot(async (args, root) => {
+      const result = buildRetrieveBundleResult(args, { eccRoot: root });
+      return {
+        content: [{ type: 'text', text: result.text }],
+        structuredContent: safeStructured(bundleOutputSchema, result.structured),
+      };
+    }),
+  );
+
+  server.registerTool(
+    'laraskills_explain_decision',
+    {
+      title: 'Explain a Laravel architectural decision',
+      description:
+        'Evaluate a Laravel architectural decision and return guidance, relevant rules, anti-patterns, and a recommendation. ' +
+        'Supports topics such as repository patterns, queued jobs, billing, webhooks, and more.',
+      inputSchema: explainDecisionInputSchema,
+      outputSchema: decisionOutputSchema,
+      annotations: READ_ONLY_ANNOTATIONS,
+    },
+    async (args) => {
+      try {
+        const { decision, mode } = explainDecisionInputSchema.parse(args);
+        const result = buildExplainDecisionResult(decision, mode);
+        return {
+          content: [{ type: 'text', text: result.text }],
+          structuredContent: safeStructured(decisionOutputSchema, result),
+        };
+      } catch (err) {
+        errToStderr('explain-decision-error', err);
+        return makeToolErrorResult(err.message || 'Unknown error evaluating decision');
+      }
+    },
   );
 
   const transport = new StdioServerTransport();
