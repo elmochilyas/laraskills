@@ -8,6 +8,62 @@ Pre-release versions are tagged with `-beta.N`.
 
 ---
 
+## [1.0.0-beta.23] - 2026-06-23
+
+### Added
+
+- **Skill registry**: New `.laraskills/skill-registry.json` generated during `init`
+  and `update`, providing a verifiable skill/knowledge interface for assistant
+  tooling. Registry validates skill file accessibility and relative paths.
+- **6 new MCP tools**: `laraskills_list_skills`, `laraskills_search_skills`,
+  `laraskills_read_skill`, `laraskills_search_knowledge`,
+  `laraskills_retrieve_context`, and `laraskills_explain_decision`.
+- **Benchmark pre-flight doctor check**: `laraskills doctor --benchmark` verifies
+  that all Benchmark 2 content improvements are accessible through retrieval.
+- **Assistant-specific doctor verification**: `laraskills doctor` now validates
+  registry integrity, MCP accessibility, and skill file access paths for
+  OpenCode, Cursor, Claude Code, Codex, and Generic MCP — not just file existence.
+
+### Changed
+
+- **Assistant tool registration overhaul**: Doctor no longer only checks file
+  existence — it validates that skill files are registered in the registry and
+  accessible through the intended interface.
+- **MCP tool count**: Increased from 5 to 11 tools total.
+- **Calibrated architecture language**: Reduced overabsolute language in 21
+  knowledge files — replaced "always", "never", "every" with "prefer", "default
+  to", "usually" except where security or data-integrity requires absolutes.
+- **Cashier proration guidance**: Corrected imprecise proration wording in
+  Cashier decision matrix knowledge unit.
+- **Cashier capability claims**: Removed/avoided unsupported `Cashier::fake()`
+  claim — replaced with Stripe test mode + application wrapper pattern.
+- **Queued model serialization guidance**: Corrected `SerializesModels`
+  description — clarified it stores model identifiers, not full model state.
+  Added nuanced guidance for billing vs notification jobs.
+- **Webhook sync/async pipeline**: Added canonical guidance on when webhook
+  processing should be synchronous (idempotent, low-latency) vs async (queued,
+  fan-out).
+- **Spatie team-scoped authorization**: Added `viewAny` team scope guidance and
+  distinction between API token vs team role authorization in Spatie Permission.
+- **Pest architecture examples**: Labeled unverified `toHaveTests()` syntax as
+  conceptual pseudo-code.
+- **Output mode guidance**: Added public vs internal output mode guidance for
+  architecture proposals (public: calibrated, internal: explicit).
+- **Scoring consistency guidance**: Added scoring consistency rule to benchmark
+  evaluation criteria.
+- Updated issue template version placeholders to `1.0.0-beta.23`.
+
+### Verified
+
+- 297 tests passing, 0 failures.
+- 73 benchmarks passing, 100% pass rate.
+- Intelligence validation: clean (2,352 KUs, 0 issues).
+- MCP smoke checks: all passed (11 tools).
+- Packed-install verification: all passed.
+- Targeted searches for all 5 Phase 36 content areas return matching KUs.
+
+---
+
 ## [1.0.0-beta.22] - 2026-06-22
 
 ### Added

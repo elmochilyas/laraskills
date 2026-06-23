@@ -1,29 +1,39 @@
-## 1.0.0-beta.22 — 2026-06-22
+## 1.0.0-beta.23 — 2026-06-23
 
 LaraSkills is a Laravel 13 skills, rules, agents, and knowledge-retrieval system for AI-assisted development.
 
-### What's new in beta.22
+### What's new in beta.23
 
-**Senior Laravel architecture judgment upgrade.** Based on real with/without LaraSkills benchmark findings on a Laravel SaaS architecture decision task, this release adds 31 new knowledge units improving the depth, calibration, and production-awareness of architecture proposals.
+**Assistant registry + MCP tool reliability and Benchmark 2 content precision fixes.**
 
-LaraSkills now goes beyond "use the right Laravel thing" and improves toward "use the right Laravel thing, explain when it fits, when it fails, what the escape hatch is, and how to operate it safely in production."
+LaraSkills now has a verifiable skill/knowledge interface for assistants. Skills no longer depend on manual file browsing — the registry and MCP tools provide the canonical interface.
 
-- **Calibrated package recommendations** — Every major package recommendation now includes 8 dimensions: default, fit, non-fit, alternative, escape hatch, tradeoffs, testing impact, operational impact. No more shallow "use package X" answers.
-- **Cashier, Spatie Permission, Pennant, Horizon, Telescope/Pulse decision matrices** — Concrete fit conditions, non-fit conditions, and escape hatches for each package.
-- **SaaS billing architecture** — Plan / Subscription / Feature / Entitlement / UsageLimit / UsageRecord modeling. Stripe webhook idempotency, audit, replay, and subscription drift reconciliation.
-- **Transaction boundaries and afterCommit** — `dispatchAfterCommit()`, `event(...)->afterCommit()`, `DB::afterCommit()`, compensating actions for external API failures.
-- **Laravel events vs event sourcing** — Explicit clarification that Laravel events are not event sourcing. Precise terminology rules.
-- **Advanced queue architecture** — Dedicated webhook queue, billing queue topology, queue deployment safety, Horizon supervisor configuration.
-- **Billing observability** — Production metrics, alert runbooks, support repair flows with `--dry-run` and audit logging.
-- **Team-scoped authorization** — Spatie Permission team depth, role vs entitlement separation, SaaS authorization test matrix.
-- **Calibrated architecture language** — "default to" / "prefer" / "usually" instead of "always" / "never" / "every" (except for security and data-integrity rules).
-- **Benchmark regression** — New `bench-073` fixture verifying retrieval surfaces senior concepts, not just generic CRUD.
-- **2,352 knowledge units** (up from 2,321), 446 dependency edges, 3,542 relationship edges, 141 aliases.
-- **256 tests passing, 73 benchmarks at 100% pass rate.**
+#### Assistant integration reliability
 
-### Recommended upgrade for architecture/design tasks
+- **Skill registry**: New `.laraskills/skill-registry.json` generated during `init` and `update`.
+- **6 new MCP tools**: `laraskills_list_skills`, `laraskills_search_skills`, `laraskills_read_skill`, `laraskills_search_knowledge`, `laraskills_retrieve_context`, `laraskills_explain_decision`.
+- **MCP tool count**: Increased from 5 to 11.
+- **Assistant-specific doctor checks**: Validates registry, MCP, and skill accessibility for OpenCode, Cursor, Claude Code, Codex, and Generic MCP.
+- **Benchmark pre-flight**: `laraskills doctor --benchmark` verifies retrieval surfaces correct content.
+- **Doctor overhaul**: Verification now covers registry/MCP/retrieval, not just file existence.
 
-If you are testing LaraSkills with architecture or design prompts (SaaS billing, team permissions, Stripe webhooks, queue design, production operations), this release significantly improves the quality and depth of retrieved context.
+#### Benchmark 2 content precision
+
+- **Calibrated architecture language**: "prefer" / "default to" instead of "always" / "never" across 21 knowledge files.
+- **Cashier corrections**: Fixed proration wording; removed unsupported `Cashier::fake()` claim.
+- **Queued model serialization**: Clarified `SerializesModels` stores IDs, not full state.
+- **Webhook pipeline**: Added sync vs async processing guidance.
+- **Spatie team authorization**: Added `viewAny` team scope and token vs role distinction.
+- **Pest examples**: Labeled unverified syntax as conceptual pseudo-code.
+- **Output mode guidance**: Public vs internal mode for architecture proposals.
+- **Scoring consistency**: Added scoring consistency rule to benchmark criteria.
+
+- **297 tests passing, 73 benchmarks at 100% pass rate.**
+- **2,352 knowledge units**, intelligence validation clean.
+
+### Recommended upgrade for all users
+
+If you run LaraSkills with OpenCode, Cursor, Claude Code, Codex, or benchmarks, this release improves assistant integration reliability and architecture guidance precision.
 
 ### Upgrading
 
@@ -34,7 +44,7 @@ npm update -g laraskills
 laraskills -v
 cd my-laravel-project
 laraskills update --assistants all --yes
-laraskills doctor
+laraskills doctor --benchmark
 ```
 
 Local/project users:
@@ -43,7 +53,7 @@ Local/project users:
 npm install --save-dev laraskills@latest
 npx laraskills -v
 npx laraskills update --assistants all --yes
-npx laraskills doctor
+npx laraskills doctor --benchmark
 ```
 
 ### New install
@@ -52,13 +62,14 @@ npx laraskills doctor
 npm install -g laraskills
 cd my-laravel-project
 laraskills init --assistants all --integration full --profile core --yes
+laraskills doctor --benchmark
 ```
 
 ### Resources
 
 - [GitHub repository](https://github.com/elmochilyas/laraskills)
 - [npm package](https://www.npmjs.com/package/laraskills)
-- [Release notes](https://github.com/elmochilyas/laraskills/blob/main/docs/releases/1.0.0-beta.22.md)
+- [Release notes](https://github.com/elmochilyas/laraskills/blob/main/docs/releases/1.0.0-beta.23.md)
 - [CHANGELOG](https://github.com/elmochilyas/laraskills/blob/main/CHANGELOG.md)
 
 ### Feedback

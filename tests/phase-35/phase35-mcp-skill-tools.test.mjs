@@ -153,7 +153,7 @@ describe('MCP Skill Tools — Registry-dependent tools', () => {
 
     // Create a registry
     const registry = {
-      version: '1.0.0-beta.22',
+      version: '1.0.0-beta.23',
       generated_at: new Date().toISOString(),
       profile: 'core',
       skills: [
