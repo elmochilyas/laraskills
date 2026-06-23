@@ -28,7 +28,7 @@ Laravel Cashier is the standard Stripe subscription billing package for Laravel.
 - **Stripe-first**: Cashier wraps the Stripe API. All subscription data is mirrored in the `subscriptions` and `subscription_items` tables but Stripe is the source of truth.
 - **Subscription lifecycle**: `create()` → trial → active → `cancel()` (grace period) → `cancelNow()` → expired. Cashier handles webhook synchronization.
 - **Customer portal**: `$user->redirectToBillingPortal()` provides a Stripe-hosted portal for customers to manage payment methods, invoices, and plan changes.
-- **Proration**: Cashier automatically calculates proration when users change plans mid-cycle.
+- **Proration**: Cashier passes proration preferences to Stripe (via `proration_behavior`). Stripe calculates proration, not Cashier. Cashier provides the configuration surface.
 - **Cashier's sync model**: Cashier keeps local database copies of Stripe subscription state. Webhooks update these copies. This means database and Stripe can diverge.
 
 ---

@@ -188,7 +188,7 @@ final readonly class InvoiceService
 - All results must be return values
 
 ### Important Constraints
-- Services must not set mutable properties during execution
+- Services should not expose mutable state across method calls. Internal caching or short-lived state within a single method is acceptable.
 - Getters for execution results are an anti-pattern
 - Constructor injection is for stable dependencies only
 - Per-request state must be passed as method parameters

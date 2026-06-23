@@ -212,9 +212,9 @@ Repositories / Eloquent Models / External Services
 
 ### Boundary Rules
 
-- **Actions must not know about HTTP.** No `Request`, `Response`, or session dependencies in action constructor or method parameters.
-- **Actions must not know about the queue.** If an action needs to be queued, use a trait or a wrapper job. The action itself should not contain queue configuration.
-- **Actions must not know about the view.** No rendering, no view data preparation. Return data; let the caller decide how to present it.
+- **Prefer actions without HTTP dependencies.** Avoid `Request`, `Response`, or session dependencies in action constructor or method parameters for most actions. Thin CRUD workflows may accept these as pragmatic exceptions.
+- **Prefer actions without queue configuration.** If an action needs to be queued, use a trait or a wrapper job. The action itself usually should not contain queue configuration.
+- **Prefer actions without view dependencies.** Avoid rendering and view data preparation in actions. Return data; let the caller decide how to present it.
 - **Actions may call other actions.** Composition is the primary way to build complex operations from simple ones.
 - **Actions may call repositories directly.** There is no requirement for a service layer between actions and repositories.
 - **Actions should not call controllers.** The dependency direction is entry-point-to-action, not action-to-entry-point.

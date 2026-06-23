@@ -67,7 +67,7 @@ Engineers should care because DTOs and Transformers prevent the most common arch
 
 **Layer Placement:** DTOs belong in the Application layer, not the Domain layer and not the Presentation layer. Place them in `app/DTOs/` organized by use case or domain area.
 
-**Dependency Direction:** DTOs depend on nothing except PHP primitives and other DTOs. They must not depend on Eloquent, HTTP, or domain objects.
+**Dependency Direction:** Prefer DTOs without framework-specific dependencies (Eloquent, HTTP). DTO-from-Eloquent mapping or accepting validated arrays in simple data flows is acceptable.
 
 **Relationship to Eloquent Models:** DTOs are constructed from Eloquent models (in controllers or repository methods), but DTOs themselves never reference Eloquent. The conversion happens at the boundary.
 

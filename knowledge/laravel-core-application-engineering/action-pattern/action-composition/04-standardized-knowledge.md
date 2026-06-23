@@ -86,7 +86,7 @@ Actions can compose synchronously (same request, same process) or asynchronously
 ## Architecture Guidelines
 
 - **Composition depth limit:** Maximum 3-4 action dependencies per action class. At 4+, extract to a service.
-- **Transaction ownership:** The outermost orchestrator owns the transaction. Sub-actions must not manage their own transactions.
+- **Transaction ownership:** The outermost orchestrator owns the transaction. Prefer the orchestrator to own the transaction boundary. Sub-actions managing their own transactions can cause nested savepoint surprises and make rollback reasoning difficult.
 - **Circular dependency detection:** Detect through code review — the container detects circular composition only at runtime.
 - **Queueable composition:** An action that dispatches a sub-action asynchronously via `onQueue()` cannot depend on the sub-action's result. Design for immediate return.
 - **Singleton safety:** Ensure all composed actions are stateless — no mutable properties set during execution. In Octane, singleton-bound actions with mutable properties leak across requests.
@@ -204,7 +204,7 @@ class CreateContractAction
 - **Source:** This KU is atomic and well-bounded. No further decomposition needed.
 - **Dependencies:** Action Class Design, Service Container Basics (prerequisites). Serves as prerequisite for Transactional Actions, Queued Actions.
 - **Key threshold:** 3-4 action dependencies is the composition vs orchestration boundary. At 4+, extract to a service.
-- **Composition rule:** Sub-actions must not manage their own transactions. The outermost orchestrator owns the transaction boundary.
+- **Composition rule:** Prefer the orchestrator to own the transaction boundary. Sub-actions managing their own transactions can cause nested savepoint surprises and make rollback reasoning difficult. The outermost orchestrator owns the transaction boundary.
 - **Queueable composition:** Sub-actions dispatched via `onQueue()` cannot return results to the parent. Actions must be designed to work either synchronously or asynchronously.
 
 ---

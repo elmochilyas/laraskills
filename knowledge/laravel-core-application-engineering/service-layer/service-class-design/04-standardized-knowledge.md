@@ -193,7 +193,7 @@ class UserService
 - Constructor injection is the primary DI mechanism
 
 ### Important Constraints
-- Services must not depend on HTTP (Request, Session, Response)
+- Prefer services without HTTP dependencies (Request, Session, Response). Thin HTTP-aware services can be acceptable for simple workflows.
 - Services must be stateless in execution (no mutable properties)
 - Methods should return typed results
 - Max 8 constructor dependencies as guideline

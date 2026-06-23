@@ -312,6 +312,28 @@ class ExportReportAction
 - Use `Gate::before()` only for truly global roles (super-admin, platform support). Never put team-scoped authorization logic in `Gate::before()`.
 - When generating roles and permissions, ensure guard name consistency: all use the same guard string. Mismatched guards are a silent failure that is hard to debug.
 
+## viewAny Behavior with Team Scoping
+
+`viewAny` should respect team scoping explicitly. Two approaches:
+
+1. **Filter in the policy:** The policy method queries only resources in the current team context. This is explicit and testable.
+2. **Combine with global scopes:** Apply a team global scope to the model and let `viewAny` simply check role permissions. The scope handles the team filter.
+
+Prefer the explicit policy approach for clarity. When using global scopes, test `viewAny` behavior in CLI, queue, admin bypass, and cross-team scenarios.
+
+## API Token Permissions vs Team Roles
+
+Guard name determines which permission store is used:
+
+- `'web'` guard for session-based roles and permissions (team-scoped Spatie)
+- `'api'` guard for Sanctum token abilities
+
+These are separate. An API token with ability `documents:read` does not confer team-scoped permissions unless explicitly mapped.
+
+**Recommendation:** Use Sanctum token abilities for broad API access scoping (e.g., "this third-party client can read documents"). Use team-scoped Spatie roles for fine-grained user authorization within the application. Do not attempt to merge them into a single permission model without clear documentation and testing.
+
+**Test gaps to verify:** cross-team token access, token-scoped `viewAny`, and mixed platform/team permission resolution.
+
 # Verification
 
 - [ ] `setPermissionsTeamId()` is called before every permission check in team context

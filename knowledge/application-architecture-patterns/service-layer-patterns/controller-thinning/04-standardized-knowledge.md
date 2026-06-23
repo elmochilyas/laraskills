@@ -68,7 +68,7 @@ Controller thinning extracts business logic from controllers into dedicated clas
 
 1. **Over-extraction:** Extracting every conditional to a separate class. Cause: zeal for clean code. Consequence: indirection without benefit. Better: 3-4 lines doesn't need extraction.
 
-2. **Validation in controller body:** Using `$request->validate()` instead of Form Request. Cause: quick coding. Consequence: untestable, unreusable validation. Better: always use Form Requests.
+2. **Validation in controller body:** Using `$request->validate()` instead of Form Request. Cause: quick coding. Consequence: untestable, unreusable validation. Prefer Form Requests. They provide centralized validation, authorization, and clean controller methods.
 
 3. **Inconsistent thinning:** Some controllers thin, others fat. Cause: no team standard. Consequence: confusion about which pattern to follow. Better: establish and enforce a standard.
 

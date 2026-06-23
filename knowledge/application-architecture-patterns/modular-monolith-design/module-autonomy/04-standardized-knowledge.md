@@ -72,7 +72,7 @@ Module autonomy means each module owns its routes, migrations, config, and tests
 
 # Common Mistakes
 
-1. **Routes in central file:** Adding module routes to `routes/api.php`. Cause: laziness. Consequence: breaks extraction readiness. Better: always use module route file.
+1. **Routes in central file:** Adding module routes to `routes/api.php`. Cause: laziness. Consequence: breaks extraction readiness. Prefer using module route files for organizing routes by domain.
 
 2. **Shared migrations directory:** All migrations in `database/migrations/`. Cause: habit. Consequence: extraction requires splitting migrations.
 

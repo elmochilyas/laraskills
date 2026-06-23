@@ -41,7 +41,7 @@ An action class is a single-purpose class that executes one business operation. 
 ## Best Practices
 
 - Name actions as `[Verb][Entity]Action`: `CreateUserAction`, `UpdateProfileAction`, `CancelOrderAction`
-- Always accept a DTO as the primary parameter — never pass `$request` or loose parameters
+- Prefer accepting a DTO as the primary parameter rather than passing `$request` or loose parameters directly. For simple actions, passing validated arrays or FormRequest data is acceptable when the data flow is thin.
 - Wrap write operations in `DB::transaction()` by default
 - Keep actions stateless — all request-specific data arrives through method parameters
 - Limit action composition to 2-3 levels to avoid deep call chains
