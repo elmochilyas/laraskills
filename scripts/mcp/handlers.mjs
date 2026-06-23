@@ -15,6 +15,15 @@ import {
   graphContextInputSchema,
   validateInputSchema,
 } from './schemas.mjs';
+import { existsSync, readFileSync } from 'node:fs';
+import { dirname as pathDirname, join as pathJoin } from 'node:path';
+import { fileURLToPath as urlToFilePath } from 'node:url';
+import {
+  readRegistry,
+  getRegistryPath,
+  validateRegistry,
+  getRegistrySummary,
+} from '../../src/runtime/skill-registry.mjs';
 
 function readEdgesForSelfLoopsAndDangling(catalog) {
   const sourceIds = new Set(catalog.knowledgeUnits.keys());
@@ -56,13 +65,177 @@ function countCycles(catalog) {
   return total - visited;
 }
 
+const __handlerDirname = pathDirname(urlToFilePath(import.meta.url));
+const HANDLER_ROOT = pathJoin(__handlerDirname, '..', '..');
+
+export function buildListSkillsResult(target) {
+  const summary = getRegistrySummary(target || process.cwd());
+  if (!summary.exists) {
+    return {
+      text: 'No LaraSkills skill registry found. Run "laraskills init" or "laraskills update" to generate the registry.',
+      structured: { version: '0.0.0', skillCount: 0, skills: [] },
+    };
+  }
+  return {
+    text: `LaraSkills v${summary.version || 'unknown'} — ${summary.skillCount} skills installed.\n\n${summary.skills.map((s, i) => `${i + 1}. ${s.name}: ${s.description}`).join('\n')}`,
+    structured: { version: summary.version || 'unknown', skillCount: summary.skillCount, skills: summary.skills },
+  };
+}
+
+export function buildSearchSkillsResult(query, target) {
+  const summary = getRegistrySummary(target || process.cwd());
+  if (!summary.exists || summary.skillCount === 0) {
+    return { text: `No skills found matching "${query}".`, structured: { query, count: 0, results: [] } };
+  }
+  const q = query.toLowerCase();
+  const results = summary.skills
+    .map(s => {
+      let score = 0;
+      if (s.name.toLowerCase().includes(q)) score += 100;
+      if (s.description.toLowerCase().includes(q)) score += 50;
+      const tagMatch = s.tags.filter(t => t.toLowerCase().includes(q));
+      if (tagMatch.length > 0) score += tagMatch.length * 25;
+      return { name: s.name, description: s.description, tags: s.tags, matchScore: score };
+    })
+    .filter(r => r.matchScore > 0)
+    .sort((a, b) => b.matchScore - a.matchScore)
+    .slice(0, 20);
+  return {
+    text: results.length === 0 ? `No skills found matching "${query}".` : `Found ${results.length} skills for "${query}":\n${results.map((r, i) => `${i + 1}. ${r.name} (score: ${r.matchScore}): ${r.description}`).join('\n')}`,
+    structured: { query, count: results.length, results },
+  };
+}
+
+export function buildReadSkillResult(name, target) {
+  const registry = readRegistry(target || process.cwd());
+  if (!registry) {
+    return { notFound: true, message: 'No skill registry found. Run "laraskills init" or "laraskills update" to generate it.' };
+  }
+  const skill = registry.skills.find(s => s.name === name);
+  if (!skill) {
+    return { notFound: true, message: `Skill "${name}" not found in registry. Use list_skills to see available skills.` };
+  }
+  const tgt = target || process.cwd();
+  const skillPath = pathJoin(tgt, skill.path);
+  let content = '';
+  try {
+    if (existsSync(skillPath)) {
+      content = readFileSync(skillPath, 'utf-8');
+    }
+  } catch { content = ''; }
+  if (!content) {
+    const altPath = pathJoin(HANDLER_ROOT, 'skills', name, 'SKILL.md');
+    try {
+      if (existsSync(altPath)) content = readFileSync(altPath, 'utf-8');
+    } catch { content = ''; }
+  }
+  const text = content
+    ? `Skill: ${name}\nPath: ${skill.path}\nDescription: ${skill.description}\nTags: ${skill.tags.join(', ')}\n\n${content.substring(0, 5000)}${content.length > 5000 ? '\n\n[Content truncated at 5000 characters. Content length: ' + content.length + ']' : ''}`
+    : `Skill: ${name}\nPath: ${skill.path}\nDescription: ${skill.description}\nTags: ${skill.tags.join(', ')}\n\n[Content not available on disk. Run "laraskills update" to refresh.]`;
+  return {
+    name: skill.name,
+    path: skill.path,
+    description: skill.description,
+    tags: skill.tags,
+    content,
+    contentLength: content.length,
+    notFound: false,
+    text,
+  };
+}
+
+export function buildExplainDecisionResult(decision, mode) {
+  const lc = decision.toLowerCase();
+  const guidance = [];
+  const rules = [];
+  const antiPatterns = [];
+
+  if (lc.includes('repository') || lc.includes('eloquent') || lc.includes('active record')) {
+    guidance.push('Eloquent is an Active Record ORM with rich querying and persistence behavior.');
+    guidance.push('You usually do not need a repository around every Eloquent model unless there is a genuine persistence boundary, multiple data sources, or complex query contracts.');
+    guidance.push('For most Laravel applications, prefer direct Eloquent in Actions or domain services. Introduce repositories only when they create a meaningful abstraction boundary.');
+    rules.push('Prefer direct Eloquent over unnecessary repository wrappers');
+    rules.push('Use repositories only at genuine persistence boundaries or multi-source scenarios');
+    antiPatterns.push('Wrapping every Eloquent model in a Repository that adds no value');
+  }
+
+  if (lc.includes('queue') || lc.includes('job') || lc.includes('serialize')) {
+    guidance.push('Laravel can serialize queued Eloquent models by identifier.');
+    guidance.push('For high-risk billing, webhook, reconciliation, tenant, and permission jobs, prefer IDs or immutable external provider IDs for freshness, replay, and idempotency.');
+    guidance.push('For low-risk notification jobs, passing models can be acceptable if missing/deleted models are handled gracefully.');
+    rules.push('Avoid passing models to jobs for billing, webhook, and tenant-critical operations');
+    rules.push('Prefer explicit IDs or immutable provider IDs for high-risk queued jobs');
+    antiPatterns.push('Blindly passing models to every queued job without considering freshness, missing/deleted model edges, and replay safety');
+  }
+
+  if (lc.includes('global scope') || lc.includes('tenantscope')) {
+    guidance.push('Avoid hiding business-critical tenant isolation in ad-hoc global scopes.');
+    guidance.push('Prefer explicit tenant scoping or a well-tested tenancy package.');
+    guidance.push('If using global scopes, test CLI, queue, admin bypass, and cross-tenant behavior.');
+    rules.push('Prefer explicit scoping over hidden global scopes for tenant isolation');
+    rules.push('Test global scope escape hatches (withoutGlobalScope) if used');
+    antiPatterns.push('Relying on global scopes as the only tenant isolation mechanism without testing CLI/queue/cross-tenant behavior');
+  }
+
+  if (lc.includes('cashier') || lc.includes('stripe') || lc.includes('billing') || lc.includes('subscription')) {
+    guidance.push('Cashier is a strong default for standard Stripe subscription SaaS.');
+    guidance.push('Cashier does not replace production billing architecture. Still design: webhook idempotency, audit logs, reconciliation, entitlement checks, failure alerts, manual replay, and business-specific tests.');
+    rules.push('Design billing architecture independently of Cashier\'s convenient abstractions');
+    rules.push('Always implement webhook idempotency, reconciliation, and audit logging for billing');
+    antiPatterns.push('Assuming Cashier handles all billing edge cases without custom reconciliation and idempotency');
+  }
+
+  if (lc.includes('webhook') || lc.includes('web hook')) {
+    guidance.push('Webhook controllers should do minimal synchronous work: 1) verify signature, 2) persist raw event/idempotency record if required, 3) dispatch job after commit where relevant, 4) return 2xx quickly.');
+    guidance.push('All business effects should happen asynchronously in idempotent jobs.');
+    rules.push('Webhook controller: verify, persist, dispatch, respond (minimal sync work)');
+    rules.push('Process webhook business effects in idempotent queued jobs');
+    antiPatterns.push('Processing all webhook business logic synchronously in the controller before responding');
+  }
+
+  if (lc.includes('spatie') || lc.includes('permission') || lc.includes('role') && lc.includes('team')) {
+    guidance.push('For Spatie Permission with teams: ensure guard name consistency across roles and permissions.');
+    guidance.push('Configure teams support explicitly and manage current team context via middleware.');
+    guidance.push('Separate platform roles from team roles; test policy vs entitlement separation.');
+    guidance.push('Test cross-team access, viewAny behavior, and API token permissions vs team roles.');
+    rules.push('Maintain guard name consistency with Spatie Permission teams');
+    rules.push('Test cross-team authorization, API token scopes vs team roles');
+    antiPatterns.push('Mixing platform and team roles without clear separation and test coverage');
+  }
+
+  if (guidance.length === 0) {
+    guidance.push('For Laravel architectural decisions: follow the Controller → Action → Domain Service → Contract → Infrastructure flow.');
+    guidance.push('Prefer constructor injection over facades. Depend on contracts, not concrete implementations.');
+    guidance.push('Use PHP 8 attributes for model configuration (#[Fillable], #[Table], #[Casts]).');
+    guidance.push('Organize by feature/domain (app/Modules/User/), not by type (app/Models/).');
+    rules.push('Follow Controller → Action → Service → Contract → Infrastructure architecture');
+    rules.push('Use constructor injection; depend on contracts');
+  }
+
+  const recommendation = guidance[0] || 'Evaluate trade-offs based on project context. Prefer simpler patterns over over-engineering.';
+
+  const result = {
+    decision,
+    guidance: guidance.join('\n\n'),
+    mode,
+    relevantRules: rules,
+    relevantAntiPatterns: antiPatterns,
+    recommendation,
+  };
+
+  const text = `# ${decision}\n\n## Guidance\n\n${guidance.join('\n\n')}\n\n## Relevant Rules\n\n${rules.map(r => `- ${r}`).join('\n')}\n\n## Anti-Patterns to Avoid\n\n${antiPatterns.map(a => `- ${a}`).join('\n')}\n\n## Recommendation\n\n${recommendation}`;
+  return { ...result, text };
+}
+
 export function describeForAgents() {
   return [
-    'LaraSkills MCP server. Always use `retrieve_context_bundle` first for any non-trivial Laravel task.',
-    'Search with `search_ecc` to discover KUs by topic. Results include canonical IDs you can copy-paste directly into `get_knowledge_unit` and `get_graph_context`.',
+    'LaraSkills MCP server. Always use `retrieve_context_bundle` (or alias `laraskills_retrieve_context`) first for any non-trivial Laravel task.',
+    'Search with `search_ecc` (or alias `laraskills_search_knowledge`) to discover KUs by topic. Results include canonical IDs you can copy-paste directly into `get_knowledge_unit` and `get_graph_context`.',
     'Deep-inspect with `get_knowledge_unit` -- also accepts short IDs (last path segment) and aliases for convenience.',
     'Explore dependencies with `get_graph_context` -- prerequisites and related topics in one call.',
     'Check integrity with `validate_ecc`.',
+    'Discover skills with `laraskills_list_skills`, search with `laraskills_search_skills`, read skill content with `laraskills_read_skill`.',
+    'Evaluate architectural decisions with `laraskills_explain_decision` (e.g., repository pattern, queued jobs, billing, webhooks).',
     'Budget: prefer `compact` or `standard` mode before `deep`. Avoid loading the entire repository.',
     'Convergence: if a bundle does not answer the question, iterate by narrowing the task or switching to a different domain.',
   ].join(' ');

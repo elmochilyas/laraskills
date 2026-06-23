@@ -237,6 +237,32 @@ When a coding agent is connected to the local `laraskills-mcp` MCP server, prefe
 
 Prefer `compact` or `standard` mode before `deep`. Avoid loading the entire repository. See `docs/mcp-tool-reference.md` for per-tool schemas.
 
+## Registered Skill Interface (Phase 35)
+
+LaraSkills exposes a verifiable skill/knowledge interface through MCP tools. AI agents must use these tools instead of manually browsing skill files on disk.
+
+**Skill tools (MCP):**
+
+1. `laraskills_list_skills` — List all installed LaraSkills skills with descriptions and tags.
+2. `laraskills_search_skills` — Search skills by name, description, or tag.
+3. `laraskills_read_skill` — Read the full content of a specific skill.
+4. `laraskills_search_knowledge` — Alias for `search_ecc`. Search the knowledge layer.
+5. `laraskills_retrieve_context` — Alias for `retrieve_context_bundle`. Get task-focused context.
+6. `laraskills_explain_decision` — Get architectural decision guidance with rules and anti-patterns.
+
+**Registry:**
+
+The `.laraskills/skill-registry.json` file lists all installed skills with metadata. It is generated during `laraskills init` and updated during `laraskills update`. Use `laraskills doctor` to verify the registry and MCP configuration.
+
+**Preferred workflow:**
+
+1. Use `laraskills_list_skills` to discover available skills.
+2. Use `laraskills_read_skill` to load a specific skill's content.
+3. Use `laraskills_retrieve_context` for task-focused knowledge bundles.
+4. Use `laraskills_explain_decision` for architectural trade-off guidance.
+
+Do not manually browse skill files on disk. Use the registered interface.
+
 ## Machine-Readable Intelligence
 
 Future tools, MCP servers, and retrieval systems should consume these files:

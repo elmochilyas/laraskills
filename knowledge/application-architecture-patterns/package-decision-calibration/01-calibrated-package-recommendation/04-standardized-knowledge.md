@@ -156,7 +156,7 @@ we override protected methods. Stripe tax/compliance is US-centric.
 
 ### 7. Testing Impact
 Cashier tests require Stripe test keys + test clocks for time-sensitive
-scenarios. Use Cashier's fake methods for invoice previews. E2E billing
+scenarios. Use Stripe's test mode for invoice previews. For complex testing, implement an application-level FakeBillingGateway wrapping a BillingGateway contract. E2E billing
 tests are slow (~2s per test).
 
 ### 8. Operational Impact
@@ -172,7 +172,7 @@ Webhook signature verification must be tested in staging.
 - When generating package recommendations, always produce all eight dimensions. Never output only a package name.
 - Fit/non-fit criteria must reference concrete technical requirements (e.g., "Stripe is sole provider"), not subjective opinions (e.g., "good DX").
 - The escape hatch must describe an actual code migration path, not a hand-wavy "we'll figure it out."
-- Testing impact must name specific fakes or strategies. "Cashier provides test helpers" is vague; "Cashier::fake() for invoices, Stripe test clocks for subscription time travel" is concrete.
+- Testing impact must name specific fakes or strategies. "Cashier provides test helpers" is vague; "Stripe test mode for invoices, an application-level FakeBillingGateway for billing integration testing, Stripe test clocks for subscription time travel" is concrete.
 - Before recommending a package, scan its GitHub for maintenance health: last release date, open issues, PR merge rate.
 
 ---
