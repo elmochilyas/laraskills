@@ -1,6 +1,6 @@
 #!/usr/bin/env node
-import { existsSync, readFileSync, copyFileSync, mkdirSync, cpSync, writeFileSync, readdirSync, statSync } from 'node:fs';
-import { join, dirname } from 'node:path';
+import { existsSync, readFileSync, copyFileSync, mkdirSync, cpSync, writeFileSync, readdirSync, statSync, rmSync } from 'node:fs';
+import { join, dirname, basename, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { createRequire } from 'node:module';
 import {
@@ -47,6 +47,21 @@ import {
   getRegistrySummary,
   getRegistryPath,
 } from '../src/runtime/skill-registry.mjs';
+import {
+  LARASKILLS_ROOT_DIR,
+  SKILLS_DIR,
+  REGISTRY_PATH,
+  STALE_REFERENCES,
+  STALE_PATH_PATTERNS,
+  ASSISTANT_IDS,
+  ALL_KNOWN_SKILL_NAMES,
+  LEGACY_STATE_FILE,
+  LEGACY_ROOT_DIR,
+  canonicalSkillPath,
+  sanitizeSkillName,
+  publicAssistantLabel,
+  sanitizeDoctorResult,
+} from '../src/runtime/paths.mjs';
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const ROOT = join(__dirname, '..');
@@ -62,6 +77,15 @@ function log(msg) { console.log(`[LaraSkills] ${msg}`); }
 function warn(msg) { console.warn(`[LaraSkills] WARNING: ${msg}`); }
 function err(msg) { console.error(`[LaraSkills] ERROR: ${msg}`); process.exit(1); }
 function logRet(msg) { console.log(msg); }
+
+function safeBackupLocal(filePath) {
+  if (!existsSync(filePath)) return null;
+  const dir = dirname(filePath);
+  const base = basename(filePath);
+  const timestamp = new Date().toISOString().replace(/[:.]/g, '-');
+  const backup = join(dir, `${base}.backup-${timestamp}`);
+  try { copyFileSync(filePath, backup); return backup; } catch { return null; }
+}
 
 function printVersion() {
   console.log(`LaraSkills v${pkg.version}`);
@@ -204,8 +228,8 @@ function addComponent(target, component) {
 
   const skillDir = join(ROOT, 'skills', component);
   if (existsSync(skillDir)) {
-    const dest = join(target, 'skills', component);
-    mkdirSync(join(target, 'skills'), { recursive: true });
+    const dest = join(target, LARASKILLS_ROOT_DIR, 'skills', component);
+    mkdirSync(join(target, LARASKILLS_ROOT_DIR, 'skills'), { recursive: true });
     cpSync(skillDir, dest, { recursive: true });
     log(`Added skill: ${component}`);
     return;
@@ -292,9 +316,203 @@ function cmdSetup(setupArgs) {
   console.log('');
 }
 
+function detectDeepStaleReferences(target) {
+  const findings = [];
+  // Check state files
+  if (existsSync(join(target, LEGACY_STATE_FILE))) {
+    findings.push({ location: LEGACY_STATE_FILE, type: 'state_file', severity: 'high' });
+  }
+  if (existsSync(join(target, LEGACY_ROOT_DIR))) {
+    findings.push({ location: LEGACY_ROOT_DIR, type: 'directory', severity: 'high' });
+  }
+  // Check package.json
+  const pkgPath = join(target, 'package.json');
+  if (existsSync(pkgPath)) {
+    try {
+      const targetPkg = JSON.parse(readFileSync(pkgPath, 'utf-8'));
+      const deps = { ...(targetPkg.dependencies || {}), ...(targetPkg.devDependencies || {}) };
+      for (const ref of STALE_REFERENCES) {
+        if (deps[ref]) {
+          findings.push({ location: `package.json (dependency: ${ref})`, type: 'dependency', severity: 'medium' });
+        }
+      }
+      if (targetPkg.scripts) {
+        for (const [name, script] of Object.entries(targetPkg.scripts)) {
+          for (const ref of STALE_REFERENCES) {
+            if (script.includes(ref)) {
+              findings.push({ location: `package.json (script: ${name})`, type: 'script', severity: 'medium' });
+            }
+          }
+        }
+      }
+    } catch {}
+  }
+  // Check package-lock.json
+  const lockPath = join(target, 'package-lock.json');
+  if (existsSync(lockPath)) {
+    try {
+      const lockContent = readFileSync(lockPath, 'utf-8');
+      for (const ref of STALE_REFERENCES) {
+        if (lockContent.includes(ref)) {
+          findings.push({ location: 'package-lock.json', type: 'lockfile', severity: 'medium' });
+          break;
+        }
+      }
+    } catch {}
+  }
+  // Check node_modules
+  for (const ref of STALE_REFERENCES) {
+    const nmPath = join(target, 'node_modules', ref);
+    if (existsSync(nmPath)) {
+      findings.push({ location: `node_modules/${ref}`, type: 'installed_package', severity: 'high' });
+    }
+  }
+  return findings;
+}
+
+function checkAssistantConfigForStale(target, configFiles) {
+  const findings = [];
+  for (const cf of configFiles) {
+    const fullPath = join(target, cf);
+    if (!existsSync(fullPath)) continue;
+    try {
+      const content = readFileSync(fullPath, 'utf-8');
+      for (const ref of STALE_REFERENCES) {
+        if (content.toLowerCase().includes(ref.toLowerCase())) {
+          findings.push({ file: cf, stale: ref });
+        }
+      }
+      for (const pat of STALE_PATH_PATTERNS) {
+        if (pat.test(content)) {
+          findings.push({ file: cf, stale: 'stale_skill_path', pattern: pat.toString() });
+        }
+      }
+    } catch {}
+  }
+  return findings;
+}
+
+function checkAssistantConfigPaths(target, assistantId, def) {
+  const check = def.isConfigured(target);
+  const issues = [];
+  const warnings = [];
+
+  // Check config file existence
+  if (check.configFiles) {
+    for (const cf of check.configFiles) {
+      const fullPath = join(target, cf);
+      if (!existsSync(fullPath)) {
+        if (cf.endsWith('.json') || cf.endsWith('.toml') || cf.endsWith('.mdc') || cf.endsWith('.md')) {
+          issues.push({ type: 'config_missing', file: cf, critical: true });
+        }
+      }
+    }
+  }
+
+  // Check MCP config
+  if (!check.mcpConfigured) {
+    issues.push({ type: 'mcp_not_configured', critical: false });
+  }
+
+  // Check for stale references in assistant configs
+  const staleFindings = checkAssistantConfigForStale(target, check.configFiles || []);
+  for (const sf of staleFindings) {
+    if (sf.stale === 'stale_skill_path') {
+      issues.push({ type: 'stale_skill_path', file: sf.file, critical: false });
+    } else {
+      warnings.push({ type: 'stale_reference', file: sf.file, stale: sf.stale });
+    }
+  }
+
+  return { issues, warnings, mcpConfigured: check.mcpConfigured, configFiles: check.configFiles || [] };
+}
+
+function checkMcpRuntime() {
+  const checks = {
+    configExists: false,
+    commandExists: false,
+    runtimeAvailable: false,
+    toolsAvailable: false,
+    details: [],
+  };
+
+  // Check MCP config exists
+  const mcpConfigs = [
+    join(process.cwd(), 'opencode.json'),
+    join(process.cwd(), '.mcp.json'),
+    join(process.cwd(), '.cursor', 'mcp.json'),
+    join(process.cwd(), 'mcp-configs', 'laraskills-mcp.json'),
+  ];
+  for (const cfg of mcpConfigs) {
+    if (existsSync(cfg)) {
+      checks.configExists = true;
+      checks.details.push(`MCP config found: ${cfg}`);
+      break;
+    }
+  }
+
+  if (!checks.configExists) {
+    checks.details.push('No MCP config file found');
+    return checks;
+  }
+
+  // Check if laraskills-mcp command is available
+  const mcpScript = join(ROOT, 'scripts', 'laraskills-mcp.mjs');
+  if (existsSync(mcpScript)) {
+    checks.commandExists = true;
+    checks.details.push('laraskills-mcp script found');
+  } else {
+    // Try global npm bin
+    try {
+      const { execSync } = require('node:child_process');
+      execSync('npx which laraskills-mcp 2>/dev/null || echo ""', { encoding: 'utf-8', timeout: 5000 });
+      checks.commandExists = true;
+      checks.details.push('laraskills-mcp available via npx');
+    } catch {
+      checks.details.push('laraskills-mcp command not found');
+    }
+  }
+
+  // Try to invoke MCP briefly (just check it starts)
+  if (checks.commandExists) {
+    try {
+      const { execSync } = require('node:child_process');
+      const result = execSync(`node "${mcpScript}" --help 2>&1 || echo "NO_HELP"`, {
+        encoding: 'utf-8',
+        timeout: 5000,
+        cwd: ROOT,
+        env: { ...process.env, LARASKILLS_MCP_BRIEF: '1' },
+      });
+      if (result.includes('MCP') || result.includes('laraskills')) {
+        checks.runtimeAvailable = true;
+        checks.details.push('MCP process can start');
+      } else {
+        checks.details.push(`MCP start response: ${result.substring(0, 100)}`);
+      }
+    } catch (e) {
+      checks.details.push(`MCP runtime check failed: ${e.message}`);
+    }
+
+    // Check tool listing via registry (doesn't need MCP process)
+    try {
+      const registry = readRegistry(process.cwd());
+      if (registry && registry.skills && registry.skills.length > 0) {
+        checks.toolsAvailable = true;
+        checks.details.push(`Registry has ${registry.skills.length} skills available for MCP tools`);
+      }
+    } catch {}
+  }
+
+  return checks;
+}
+
 function cmdDoctor(doctorArgs) {
   const flags = parseFlags(doctorArgs || []);
   const target = process.cwd();
+  const isJson = !!flags.json;
+  const isPublic = !!flags.public;
+  const isMd = flags.output === 'doctor-output.md' || !!flags.markdown;
+  const benchmarkPackagePath = flags.package && typeof flags.package === 'string' ? flags.package : null;
 
   // Determine which assistants to check
   const assistantFilter = flags.opencode || flags.assistant === 'opencode' ? 'opencode'
@@ -311,272 +529,615 @@ function cmdDoctor(doctorArgs) {
   if (assistantFilter) {
     assistantIds = [assistantFilter];
   } else if (checkAllAssistants) {
-    assistantIds = ['opencode', 'cursor', 'claude-code', 'codex', 'generic-mcp'];
-  } else if (!isBenchmark) {
-    // Default: check all 5 supported assistants
-    assistantIds = ['opencode', 'cursor', 'claude-code', 'codex', 'generic-mcp'];
+    assistantIds = [...ASSISTANT_IDS];
   } else {
-    assistantIds = ['opencode', 'cursor', 'claude-code', 'codex', 'generic-mcp'];
+    assistantIds = [...ASSISTANT_IDS];
   }
 
   const state = readState(target);
-  const configPath = getConfigPath();
-  const configExists = existsSync(configPath);
-  const packagedRoot = getPackagedIntelligenceRoot();
   const packageVersion = pkg.version;
+  const packagedRoot = getPackagedIntelligenceRoot();
 
-  // Check for stale laravel-ecc references
-  const hasStaleEccConfig = existsSync(join(target, '.laravel-ecc-state.json'));
-  const hasStaleEccDir = existsSync(join(target, '.laravel-ecc'));
+  // Deep stale detection
+  const deepStaleFindings = detectDeepStaleReferences(target);
+  const hasStaleEccConfig = deepStaleFindings.some(f => f.type === 'state_file' || f.type === 'directory');
+  const hasDeepStale = deepStaleFindings.length > 0;
 
-  if (isBenchmark) {
-    // Benchmark pre-flight mode
-    console.log('LaraSkills Doctor — Benchmark Pre-Flight');
-    console.log('');
-    log('Verifying benchmark readiness...');
-    console.log('');
-
-    let allOk = true;
-
-    // Check package version
-    console.log(`Package version:       ${packageVersion}`);
-    console.log(`Node.js:               ${process.version}`);
-
-    // Check stale references
-    if (hasStaleEccConfig) {
-      console.log(`Stale laravel-ecc:     DETECTED (.laravel-ecc-state.json) — run laraskills update --yes`);
-      allOk = false;
-    } else {
-      console.log(`Stale laravel-ecc:     none`);
-    }
-
-    // Check init
-    if (!state) {
-      console.log(`Local init:            MISSING — run laraskills init`);
-      allOk = false;
-    } else {
-      console.log(`Local init:            OK`);
-    }
-
-    // Check skill registry
+  // Build structured results
+  function buildResult() {
     const registry = readRegistry(target);
-    if (!registry) {
-      console.log(`Skill registry:        MISSING (.laraskills/skill-registry.json) — run laraskills update --yes`);
-      allOk = false;
-    } else {
-      console.log(`Skill registry:        OK (${registry.skills?.length || 0} skills)`);
-    }
+    const skillValidation = registry ? validateRegistry(target) : null;
+    const registryOk = !!registry;
+    const skillsOk = skillValidation ? skillValidation.valid : false;
 
-    // Check at least one assistant has MCP config
-    let atLeastOneMcp = false;
+    // Critical checks
+    const criticalChecks = {
+      local_init_exists: { status: !!state ? 'pass' : 'fail', critical: true },
+      registry_exists: { status: registryOk ? 'pass' : 'fail', critical: true },
+      registry_parses: { status: registryOk ? 'pass' : 'fail', critical: true },
+      skills_exist: {
+        status: skillsOk ? 'pass' : 'fail',
+        critical: true,
+        missing: skillValidation ? skillValidation.missingSkills : [],
+      },
+    };
+
+    // Non-critical checks
+    const checks = {
+      ...criticalChecks,
+      package_version: { status: 'pass', value: packageVersion, critical: false },
+      node_version: { status: 'pass', value: process.version, critical: false },
+      stale_references: {
+        status: deepStaleFindings.length > 0 ? 'warn' : 'pass',
+        critical: isBenchmark,
+        findings: deepStaleFindings,
+      },
+      intelligence_source: {
+        status: packagedRoot ? 'pass' : 'info',
+        value: packagedRoot ? 'packaged' : 'manual',
+        critical: false,
+      },
+    };
+
+    // Determine critical failures
+    const criticalFailed = Object.entries(criticalChecks).some(([, v]) => v.status === 'fail');
+
+    // Per-assistant checks
+    const assistants = {};
     for (const aid of assistantIds) {
       const def = getToolDefinition(aid);
       if (!def) continue;
-      const check = def.isConfigured(target);
-      if (check.mcpConfigured) {
-        atLeastOneMcp = true;
-        break;
+      const pathCheck = checkAssistantConfigPaths(target, aid, def);
+      const assistantCritical = pathCheck.issues.some(i => i.critical && i.type === 'config_missing');
+
+      assistants[aid] = {
+        configured: pathCheck.issues.length === 0,
+        mcpConfigured: pathCheck.mcpConfigured,
+        configFiles: pathCheck.configFiles,
+        issues: pathCheck.issues,
+        warnings: pathCheck.warnings,
+        status: assistantCritical ? 'fail' : (pathCheck.issues.length > 0 ? 'degraded' : 'pass'),
+      };
+    }
+
+    // MCP runtime check
+    let mcpRuntime = null;
+    const checkMcp = flags.mcp || flags['mcp-runtime'] || isBenchmark;
+    if (checkMcp) {
+      mcpRuntime = checkMcpRuntime();
+    }
+
+    const overallResult = criticalFailed ? 'not_healthy'
+      : Object.values(assistants).some(a => a.status === 'fail') ? 'not_healthy'
+      : Object.values(assistants).some(a => a.status === 'degraded') ? 'degraded'
+      : 'healthy';
+
+    return {
+      result: overallResult,
+      version: packageVersion,
+      mode: isBenchmark ? 'benchmark' : (assistantFilter ? `assistant_${assistantFilter}` : 'assistants_all'),
+      state: state ? { profile: state.profile || 'core', version: state.version } : null,
+      checks,
+      critical_failed: criticalFailed,
+      assistants,
+      mcp_runtime: mcpRuntime,
+      failures: [],
+      warnings: [],
+    };
+  }
+
+  // ---- BENCHMARK MODE ----
+  if (isBenchmark) {
+    const result = buildResult();
+    let allOk = true;
+
+    // In benchmark mode, stale is hard failure
+    if (deepStaleFindings.length > 0) {
+      result.failures.push({ check: 'stale_references', detail: `${deepStaleFindings.length} stale references found`, findings: deepStaleFindings });
+      allOk = false;
+    }
+    if (!state) {
+      result.failures.push({ check: 'local_init', detail: 'Not initialized' });
+      allOk = false;
+    }
+    const registry = readRegistry(target);
+    if (!registry) {
+      result.failures.push({ check: 'registry', detail: 'Registry missing' });
+      allOk = false;
+    }
+    if (registry) {
+      const sv = validateRegistry(target);
+      if (!sv.valid) {
+        result.failures.push({ check: 'skill_files', detail: `${sv.missingSkills.length} skills missing from disk` });
+        allOk = false;
       }
+    }
+    let atLeastOneMcp = false;
+    for (const [aid, a] of Object.entries(result.assistants)) {
+      if (a.mcpConfigured) { atLeastOneMcp = true; break; }
     }
     if (!atLeastOneMcp) {
-      console.log(`MCP config:            NONE — no assistant has LaraSkills MCP configured`);
+      result.failures.push({ check: 'mcp_config', detail: 'No assistant has MCP configured' });
       allOk = false;
-    } else {
-      console.log(`MCP config:            OK`);
     }
-
-    // Verify known skill can be found
+    // Knowledge retrieval test
     try {
       const searchResult = searchKnowledge('Laravel security patterns', { eccRoot: ROOT, limit: 1 });
-      console.log(`Knowledge retrieval:   ${searchResult.length > 0 ? 'OK' : 'FAIL'}`);
-      if (searchResult.length === 0) allOk = false;
+      if (searchResult.length === 0) {
+        result.failures.push({ check: 'knowledge_retrieval', detail: 'Could not retrieve knowledge' });
+        allOk = false;
+      }
     } catch (e) {
-      console.log(`Knowledge retrieval:   FAIL (${e.message})`);
+      result.failures.push({ check: 'knowledge_retrieval', detail: e.message });
       allOk = false;
     }
 
-    // Verify skills can be listed from registry
-    if (registry) {
-      const validation = validateRegistry(target);
-      if (!validation.valid && validation.missingSkills.length > 0) {
-        console.log(`Skill validation:      FAIL — ${validation.missingSkills.length} skills in registry not on disk`);
-        allOk = false;
-      } else {
-        console.log(`Skill validation:      OK`);
+    result.result = allOk ? 'benchmark_ready' : 'not_ready';
+
+    if (isJson) {
+      result.exit_code = allOk ? 0 : 1;
+      console.log(JSON.stringify(result, null, 2));
+    } else {
+      console.log('LaraSkills Doctor — Benchmark Pre-Flight');
+      console.log('');
+      console.log(`Package version:       ${packageVersion}`);
+      console.log(`Node.js:               ${process.version}`);
+      console.log(`Stale references:      ${deepStaleFindings.length > 0 ? `DETECTED (${deepStaleFindings.length}) - run laraskills init --repair` : 'none'}`);
+      console.log(`Local init:            ${state ? 'OK' : 'MISSING - run laraskills init'}`);
+      const reg = readRegistry(target);
+      console.log(`Skill registry:        ${reg ? `OK (${reg.skills?.length || 0} skills)` : 'MISSING'}`);
+      console.log(`MCP config:            ${atLeastOneMcp ? 'OK' : 'NONE'}`);
+      const sv = reg ? validateRegistry(target) : null;
+      console.log(`Skill validation:      ${sv && sv.valid ? 'OK' : sv ? `FAIL - ${sv.missingSkills.length} missing` : 'N/A'}`);
+      console.log('');
+      console.log(`Result: ${allOk ? 'BENCHMARK READY' : 'NOT READY'}`);
+      if (!allOk) {
+        console.log('');
+        for (const f of result.failures) {
+          console.log(`  - ${f.check}: ${f.detail}`);
+        }
       }
     }
 
-    // Check intelligence source
-    if (packagedRoot) {
-      console.log(`Intelligence source:   packaged (OK)`);
-    } else {
-      console.log(`Intelligence source:   manual checkout`);
+    if (!allOk) process.exitCode = 1;
 
+    // Benchmark packaging
+    if (benchmarkPackagePath) {
+      try {
+        const snapshot = {
+          timestamp: new Date().toISOString(),
+          version: packageVersion,
+          node: process.version,
+          platform: process.platform,
+          result: result.result,
+          failures: result.failures,
+          stale_findings: deepStaleFindings,
+          assistant_count: Object.keys(result.assistants || {}).length,
+          public: isPublic || false,
+        };
+        const resolvedPath = resolve(benchmarkPackagePath);
+        const snapshotJson = JSON.stringify(snapshot, null, 2);
+        writeFileSync(resolvedPath, snapshotJson, 'utf-8');
+        if (!isJson) {
+          console.log(`\nBenchmark snapshot saved to: ${resolvedPath}`);
+        }
+      } catch (e) {
+        warn(`Could not write benchmark package: ${e.message}`);
+      }
     }
 
-    console.log('');
-    if (allOk) {
-      console.log('Result: BENCHMARK READY');
-      console.log('');
-      console.log('All pre-flight checks passed. You can run:');
-      console.log('  npm run benchmark');
-      console.log('  node tests/retrieval/run-benchmarks.mjs');
-    } else {
-      console.log('Result: NOT READY');
-      console.log('');
-      console.log('Fix before running benchmarks:');
-      if (hasStaleEccConfig) console.log('  laraskills update --assistants all --yes');
-      if (!state) console.log('  laraskills init --assistants all --integration full --profile core --yes');
-      if (!registry) console.log('  laraskills update --assistants all --yes  (to generate registry)');
-      if (!atLeastOneMcp) console.log('  laraskills update --assistants all --yes  (to configure MCP)');
-    }
     return;
   }
 
-  // Standard doctor mode
+  // ---- JSON OUTPUT MODE ----
+  if (isJson) {
+    const result = buildResult();
+    result.exit_code = result.result === 'healthy' ? 0 : 1;
+    if (isPublic) {
+      const sanitized = sanitizeDoctorResult(result);
+      // Replace internal critical_failed with public-safe truthful field
+      sanitized.requires_action = sanitized.critical_failed || sanitized.result !== 'healthy';
+      delete sanitized.critical_failed;
+      // Clean up empty missing arrays
+      for (const ck of Object.keys(sanitized.checks)) {
+        if (sanitized.checks[ck].missing && sanitized.checks[ck].missing.length === 0) {
+          delete sanitized.checks[ck].missing;
+        }
+      }
+      console.log(JSON.stringify(sanitized, null, 2));
+    } else {
+      console.log(JSON.stringify(result, null, 2));
+    }
+    if (result.result !== 'healthy') process.exitCode = 1;
+    return;
+  }
+
+  // ---- STANDARD TEXT MODE ----
   const displayName = assistantFilter === 'opencode' ? 'OpenCode'
     : assistantFilter === 'cursor' ? 'Cursor'
     : assistantFilter === 'claude-code' ? 'Claude Code'
     : assistantFilter === 'codex' ? 'Codex'
     : assistantFilter || 'LaraSkills';
 
-  console.log(`LaraSkills Doctor — ${displayName}`);
+  // In public mode, use generic title
+  if (isPublic) {
+    console.log('LaraSkills Diagnostic Report');
+  } else {
+    console.log(`LaraSkills Doctor — ${displayName}`);
+  }
   console.log('');
 
   // Global checks
   console.log(`Global package:         ${packageVersion}`);
   console.log(`Node.js:                 ${process.version}`);
 
-  // Local init
+  // Local init (CRITICAL)
   if (!state) {
     console.log(`Local init:              FAIL — run laraskills init`);
     console.log('');
-    console.log('Result: NOT INITIALIZED');
+    console.log('Result: NOT HEALTHY');
+    process.exitCode = 1;
     return;
   }
-  console.log(`Local init:              OK (${state.profile || 'core'}, v${state.version || 'unknown'})`);
+  console.log(`Local init:              OK (${isPublic ? 'initialized' : `${state.profile || 'core'}, v${state.version || 'unknown'}`})`);
 
   // Project state
   console.log(`Project state:           OK`);
 
-  // Stale ecc check
-  if (hasStaleEccConfig || hasStaleEccDir) {
-    console.log(`Stale laravel-ecc:       DETECTED — run laraskills update --yes to clean up`);
+  // Stale ecc check (public: simplified)
+  if (hasDeepStale) {
+    if (isPublic) {
+      console.log(`Stale references:        DETECTED — run laraskills init --repair`);
+    } else {
+      console.log(`Stale references:        DETECTED — run laraskills init --repair`);
+      for (const f of deepStaleFindings) {
+        console.log(`  - ${f.location} (${f.type}, severity: ${f.severity})`);
+      }
+    }
   } else {
-    console.log(`Stale laravel-ecc:       none`);
+    console.log(`Stale references:        none`);
   }
 
-  // Skill registry check
+  // Skill registry check (CRITICAL)
   const registry = readRegistry(target);
   if (!registry) {
     console.log(`Skill registry:          MISSING`);
     console.log('');
-    console.log('Reason:');
-    console.log('  Skills exist on disk but the registry file is missing.');
+    console.log('Fix: laraskills init --repair');
     console.log('');
-    console.log('Fix:');
-    console.log('  laraskills update --assistants all --yes');
-    console.log('');
-    console.log('Result: ACTION REQUIRED');
+    console.log('Result: NOT HEALTHY');
+    process.exitCode = 1;
     return;
   }
   console.log(`Skill registry:          OK (${registry.skills?.length || 0} skills)`);
 
-  // Skill file validation
+  // Skill file validation (CRITICAL) — public: sanitize names
   const skillValidation = validateRegistry(target);
   if (!skillValidation.valid) {
-    console.log(`Skill files:             FAIL — ${skillValidation.missingSkills.length} skills in registry not on disk`);
-    for (const ms of skillValidation.missingSkills) {
-      console.log(`  Missing: ${ms}`);
+    if (isPublic) {
+      console.log(`Skill files:             ${skillValidation.missingSkills.length} skills need attention`);
+    } else {
+      console.log(`Skill files:             FAIL — ${skillValidation.missingSkills.length} skills in registry not on disk`);
+      for (const ms of skillValidation.missingSkills) {
+        console.log(`  Missing: ${ms}`);
+      }
     }
   } else {
     console.log(`Skill files:             OK`);
   }
 
+  // Track critical failures for final result
+  let criticalFailed = !state || !registry || !skillValidation.valid;
+
   console.log('');
 
-  // Per-assistant checks
-  let overallOk = true;
+  // Per-assistant checks (public: simplified)
+  let assistantIssues = 0;
   for (const aid of assistantIds) {
     const def = getToolDefinition(aid);
     if (!def) continue;
-    const check = def.isConfigured(target);
-    const statusLabel = def.displayName || aid;
+    const pathCheck = checkAssistantConfigPaths(target, aid, def);
+    const statusLabel = isPublic ? publicAssistantLabel(aid) : (def.displayName || aid);
 
     console.log(`--- ${statusLabel} ---`);
 
     // MCP config check
-    if (check.mcpConfigured) {
+    if (pathCheck.mcpConfigured) {
       console.log(`MCP config:              OK`);
     } else {
-      console.log(`MCP config:              FAIL`);
-      overallOk = false;
+      console.log(`MCP config:              NOT CONFIGURED`);
+      assistantIssues++;
     }
 
-    // Skill accessibility
-    if (registry && registry.skills && registry.skills.length > 0) {
-      console.log(`Skill listing:           OK (${registry.skills.length} skills via registry)`);
-    } else {
-      console.log(`Skill listing:           FAIL (no registry or no skills)`);
-    }
-
-    // Check for specific config files
-    if (check.configFiles && check.configFiles.length > 0) {
-      for (const cf of check.configFiles) {
-        const exists = existsSync(join(target, cf));
-        console.log(`  ${cf.padEnd(30)} ${exists ? 'OK' : 'MISSING'}`);
-        if (!exists && cf.endsWith('.json') || cf.endsWith('.toml')) overallOk = false;
-      }
-    }
-
-    // OpenCode-specific checks
-    if (aid === 'opencode') {
-      const openCodeRefs = validateOpenCodeFileReferences(target);
-      if (!openCodeRefs.valid) {
-        console.log(`OpenCode refs:           BROKEN — run laraskills update --assistants opencode --yes`);
-        overallOk = false;
-      } else {
-        console.log(`OpenCode refs:           OK`);
+    if (!isPublic) {
+      // Config file checks
+      for (const cf of pathCheck.configFiles) {
+        const ex = existsSync(join(target, cf));
+        console.log(`  Config: ${cf.padEnd(28)} ${ex ? 'OK' : 'MISSING'}`);
+        if (!ex && (cf.endsWith('.json') || cf.endsWith('.toml'))) assistantIssues++;
       }
 
-      // Check for OpenCode native skill registration
-      const openCodeCfg = join(target, '.opencode', 'opencode.json');
-      if (existsSync(openCodeCfg)) {
-        try {
-          const cfg = JSON.parse(readFileSync(openCodeCfg, 'utf-8'));
-          if (cfg.skills && cfg.skills.paths) {
-            console.log(`Native skills:           OK (paths configured)`);
-          }
-        } catch {}
+      // Report issues
+      for (const issue of pathCheck.issues) {
+        if (issue.type === 'stale_skill_path') {
+          console.log(`  Skill paths:            STALE (references old paths) — run laraskills init --repair`);
+          assistantIssues++;
+        }
+      }
+
+      // Stale reference warnings
+      for (const w of pathCheck.warnings) {
+        console.log(`  Warning:                Stale reference "${w.stale}" in ${w.file}`);
       }
     }
 
     console.log('');
   }
 
+  // MCP runtime check if requested
+  if (flags.mcp || flags['mcp-runtime']) {
+    console.log('--- MCP Runtime ---');
+    const mcpChecks = checkMcpRuntime();
+    console.log(`  Config exists:         ${mcpChecks.configExists ? 'YES' : 'NO'}`);
+    console.log(`  Command exists:        ${mcpChecks.commandExists ? 'YES' : 'NO'}`);
+    console.log(`  Runtime check:         ${mcpChecks.runtimeAvailable ? 'OK' : 'NOT VERIFIED'}`);
+    console.log(`  Tools available:       ${mcpChecks.toolsAvailable ? 'YES' : 'NO'}`);
+    console.log('');
+  }
+
   // Final status
-  if (overallOk) {
+  if (criticalFailed) {
+    console.log('Result: NOT HEALTHY');
+    console.log('');
+    console.log('Critical checks failed. Fix with:');
+    console.log('  laraskills init --repair');
+    process.exit(1);
+  } else if (assistantIssues > 0) {
+    console.log('Result: NOT HEALTHY');
+    console.log('');
+    console.log('Some assistant configurations need attention. Fix with:');
+    console.log('  laraskills init --repair');
+    process.exit(1);
+  } else {
     console.log('Result: HEALTHY');
-    if (checkAllAssistants) {
+    if (checkAllAssistants && !isPublic) {
       console.log('');
-      console.log('LaraSkills is available to all requested assistants through MCP and the skill registry.');
-    } else {
-      console.log('');
-      console.log(`LaraSkills is available to ${displayName} through MCP and the skill registry.`);
+      console.log('All assistant integrations are properly configured.');
     }
     if (packagedRoot) {
       console.log('Intelligence is running from the packaged bundle.');
     }
-  } else {
-    console.log('Result: ACTION REQUIRED');
-    console.log('');
-    if (registry && !skillValidation.valid) {
-      console.log('Fix: skill files on disk do not match registry. Run:');
-      console.log('  laraskills update --assistants all --yes');
-    } else {
-      console.log('Fix: configure assistants with MCP access:');
-      console.log('  laraskills update --assistants all --yes');
+  }
+}
+
+function cmdRepair(target, flags = {}) {
+  const dryRun = flags.dryRun || false;
+  const profile = flags.profile || 'core';
+  const state = readState(target);
+  const autoTools = [];
+  if (state && state.assistants) autoTools.push(...state.assistants);
+
+  log('LaraSkills Repair Mode');
+  log(`Target: ${target}`);
+  log(`Profile: ${state?.profile || profile}`);
+  console.log('');
+
+  const changes = [];
+  let needsReinit = false;
+
+  // Step 1: Ensure .laraskills directory and state file
+  if (!state) {
+    log('No init state found. Running full init first...');
+    needsReinit = true;
+  }
+
+  // Step 2: Recreate .laraskills/skills from package source
+  const laraSkillsDir = join(target, LARASKILLS_ROOT_DIR);
+  const laraSkillsSkillsDir = join(laraSkillsDir, 'skills');
+  if (!dryRun) {
+    mkdirSync(laraSkillsSkillsDir, { recursive: true });
+  }
+
+  const srcSkillsDir = join(ROOT, 'skills');
+  if (existsSync(srcSkillsDir)) {
+    const allSkills = readdirSync(srcSkillsDir);
+    for (const skill of allSkills) {
+      const srcSkill = join(srcSkillsDir, skill);
+      if (statSync(srcSkill).isDirectory()) {
+        const destSkill = join(laraSkillsSkillsDir, skill);
+        if (!dryRun) {
+          cpSync(srcSkill, destSkill, { recursive: true });
+          changes.push(`Recreated .laraskills/skills/${skill}/`);
+        } else {
+          changes.push(`Would recreate .laraskills/skills/${skill}/`);
+        }
+      }
     }
+  }
+
+  // Step 3: Regenerate skill registry
+  if (!dryRun) {
+    try {
+      const registry = generateRegistry(target, ROOT, state?.profile || profile, pkg.version);
+      writeFileSync(join(target, REGISTRY_PATH), JSON.stringify(registry, null, 2));
+      changes.push(`Regenerated ${REGISTRY_PATH} (${registry.skills?.length || 0} skills)`);
+    } catch (e) {
+      warn(`Registry regeneration: ${e.message}`);
+    }
+  } else {
+    changes.push(`Would regenerate ${REGISTRY_PATH}`);
+  }
+
+  // Step 4: Recreate state file if needed
+  if (!state && !dryRun) {
+    const newState = {
+      version: pkg.version,
+      target,
+      repaired_at: new Date().toISOString(),
+      profile,
+      integration: 'full',
+      assistants: [],
+      tools: [],
+      components: [],
+    };
+    writeState(target, newState);
+    changes.push('Created .laraskills-state.json');
+  }
+
+  // Step 5: Refresh all assistant configs to use canonical paths
+  const allAssistants = ASSISTANT_IDS;
+  const toolIds = autoTools.length > 0 ? autoTools.filter(id => getToolDefinition(id)) : allAssistants;
+
+  console.log('');
+  log('Repairing assistant integrations...');
+
+  for (const toolId of toolIds) {
+    const def = getToolDefinition(toolId);
+    if (!def) {
+      warn(`Unknown tool: ${toolId} — skipping`);
+      continue;
+    }
+    try {
+      const results = setupToolIntegration(toolId, target, { dryRun, force: true });
+      for (const r of results) {
+        const label = r.action === 'created' ? 'Created' : r.action === 'merged' ? 'Updated' : r.action === 'replaced' ? 'Replaced' : r.action === 'would-create' ? 'Would create' : r.action;
+        changes.push(`${label} ${def.displayName}: ${r.file}`);
+      }
+      if (results.length === 0) {
+        changes.push(`No changes for ${def.displayName}`);
+      }
+    } catch (e) {
+      warn(`${def.displayName}: ${e.message}`);
+    }
+  }
+
+  // Step 6: Also set up generic MCP if not explicitly selected
+  if (!toolIds.includes('generic-mcp') && !dryRun) {
+    try {
+      setupToolIntegration('generic-mcp', target, { dryRun });
+      changes.push('Refreshed generic MCP config');
+    } catch {}
+  }
+
+  // Step 7: Clean up stale references
+  if (!dryRun) {
+    // Remove old state file if it exists
+    if (existsSync(join(target, LEGACY_STATE_FILE))) {
+      try { rmSync(join(target, LEGACY_STATE_FILE)); changes.push(`Removed stale ${LEGACY_STATE_FILE}`); } catch {}
+    }
+  }
+
+  // Step 8: Clean old skills/ directory if .laraskills/skills is canonical
+  const oldSkillsDir = join(target, 'skills');
+  if (existsSync(oldSkillsDir) && existsSync(laraSkillsSkillsDir)) {
+    if (!dryRun) {
+      try {
+        // Only remove if it looks like it only has LaraSkills skills
+        const oldEntries = readdirSync(oldSkillsDir);
+        const known = oldEntries.filter(e => ALL_KNOWN_SKILL_NAMES.includes(e));
+        if (known.length === oldEntries.length) {
+          rmSync(oldSkillsDir, { recursive: true, force: true });
+          changes.push('Removed old skills/ directory (migrated to .laraskills/skills/)');
+        } else {
+          changes.push('Old skills/ directory has non-LaraSkills content — left in place');
+        }
+      } catch (e) {
+        warn(`Could not remove old skills/: ${e.message}`);
+      }
+    } else {
+      changes.push('Would check old skills/ for migration');
+    }
+  }
+
+  // Step 9: Fix OpenCode config skill paths
+  if (!dryRun) {
+    const openCodeCfgPath = join(target, '.opencode', 'opencode.json');
+    if (existsSync(openCodeCfgPath)) {
+      try {
+        let cfg = JSON.parse(readFileSync(openCodeCfgPath, 'utf-8'));
+        let changed = false;
+
+        // Fix skills.paths to use .laraskills/skills
+        if (cfg.skills && cfg.skills.paths && Array.isArray(cfg.skills.paths)) {
+          const needsFix = cfg.skills.paths.some(p =>
+            p === '../skills' || p === 'skills' || p === '../.laraskills/skills'
+          );
+          if (needsFix) {
+            cfg.skills.paths = ['.laraskills/skills'];
+            changed = true;
+          }
+        }
+
+        // Fix instructions paths from skills/ to .laraskills/skills/
+        if (cfg.instructions && Array.isArray(cfg.instructions)) {
+          cfg.instructions = cfg.instructions.map(p => {
+            if (p.startsWith('skills/')) return `.laraskills/${p}`;
+            if (p.startsWith('../skills/')) return `.laraskills/skills/${p.replace('../skills/', '')}`;
+            return p;
+          });
+          changed = true;
+        }
+
+        if (changed) {
+          const backup = safelyBackup(openCodeCfgPath);
+          writeFileSync(openCodeCfgPath, JSON.stringify(cfg, null, 2) + '\n', 'utf-8');
+          changes.push(`Updated OpenCode config paths (backup: ${backup || 'none'})`);
+        }
+      } catch (e) {
+        warn(`Could not update OpenCode config: ${e.message}`);
+      }
+    }
+
+    // Fix Claude Code config skill paths
+    const claudeCfgPath = join(target, '.claude', 'settings.json');
+    if (existsSync(claudeCfgPath)) {
+      try {
+        let cfg = JSON.parse(readFileSync(claudeCfgPath, 'utf-8'));
+        if (cfg.instructions && Array.isArray(cfg.instructions)) {
+          const original = [...cfg.instructions];
+          cfg.instructions = cfg.instructions.map(p => {
+            if (p.startsWith('skills/')) return `.laraskills/${p}`;
+            return p;
+          });
+          if (JSON.stringify(cfg.instructions) !== JSON.stringify(original)) {
+            const backup = safelyBackup(claudeCfgPath);
+            writeFileSync(claudeCfgPath, JSON.stringify(cfg, null, 2) + '\n', 'utf-8');
+            changes.push(`Updated Claude Code config paths (backup: ${backup || 'none'})`);
+          }
+        }
+      } catch (e) {
+        warn(`Could not update Claude Code config: ${e.message}`);
+      }
+    }
+  }
+
+  // Step 10: Update state
+  if (!dryRun) {
+    const repairState = {
+      ...(state || {}),
+      version: pkg.version,
+      repaired_at: new Date().toISOString(),
+      profile: state?.profile || profile,
+      integration: state?.integration || 'full',
+      assistants: state?.assistants || [],
+      tools: [...new Set([...(state?.tools || []), ...toolIds])],
+      components: state?.components || [],
+    };
+    writeState(target, repairState);
+    changes.push('Updated .laraskills-state.json');
+  }
+
+  console.log('');
+  log('Repair complete!');
+  console.log('');
+  console.log('Changes made:');
+  for (const c of changes) {
+    console.log(`  + ${c}`);
+  }
+
+  if (dryRun) {
+    console.log('');
+    console.log('This was a dry run. Run without --dry-run to apply changes.');
   }
 }
 
@@ -607,7 +1168,7 @@ function install(target, profile, toolIds = [], flags = {}) {
     : ['laravel-patterns', 'laravel-tdd', 'laravel-security', 'laravel-core-internals', 'laravel-eloquent', 'laravel-database'];
 
   if (installProjectFiles) {
-    const skillsDir = join(target, 'skills');
+    const skillsDir = join(target, LARASKILLS_ROOT_DIR, 'skills');
     if (!dryRun) mkdirSync(skillsDir, { recursive: true });
 
     for (const skill of skillList) {
@@ -718,7 +1279,7 @@ function install(target, profile, toolIds = [], flags = {}) {
 
     if (installProjectFiles) {
       try {
-        const registry = generateRegistry(target, ROOT, profile);
+        const registry = generateRegistry(target, ROOT, profile, pkg.version);
         writeFileSync(join(target, '.laraskills', 'skill-registry.json'), JSON.stringify(registry, null, 2));
         log(`  + Generated skill registry: ${Object.keys(registry.skills || {}).length || 0} skills`);
       } catch (e) {
@@ -779,7 +1340,7 @@ function doUpdate(target, updateFlags = {}) {
   }
   console.log('');
 
-  const skillsDir = join(target, 'skills');
+  const skillsDir = join(target, LARASKILLS_ROOT_DIR, 'skills');
   if (!dryRun) mkdirSync(skillsDir, { recursive: true });
   const srcSkillsDir = join(ROOT, 'skills');
   if (existsSync(srcSkillsDir)) {
@@ -860,8 +1421,13 @@ function doUpdate(target, updateFlags = {}) {
   }
 
   const updatedComponents = [];
-  if (existsSync(join(target, 'skills'))) {
-    const skillDirs = readdirSync(join(target, 'skills'));
+  const skillsCheckPath = join(target, LARASKILLS_ROOT_DIR, 'skills');
+  const oldSkillsCheckPath = join(target, 'skills');
+  if (existsSync(skillsCheckPath)) {
+    const skillDirs = readdirSync(skillsCheckPath);
+    updatedComponents.push(...skillDirs);
+  } else if (existsSync(oldSkillsCheckPath)) {
+    const skillDirs = readdirSync(oldSkillsCheckPath);
     updatedComponents.push(...skillDirs);
   }
   updatedComponents.push('rules', 'hooks', 'mcp-configs');
@@ -881,9 +1447,9 @@ function doUpdate(target, updateFlags = {}) {
   if (!dryRun) {
     writeState(target, newState);
 
-    if (existsSync(join(target, 'skills'))) {
+    if (existsSync(skillsCheckPath) || existsSync(oldSkillsCheckPath)) {
       try {
-        const registry = generateRegistry(target, ROOT, state.profile || 'core');
+        const registry = generateRegistry(target, ROOT, state.profile || 'core', pkg.version);
         writeFileSync(join(target, '.laraskills', 'skill-registry.json'), JSON.stringify(registry, null, 2));
         log(`  ~ Updated skill registry: ${registry.skills?.length || 0} skills`);
       } catch (e) {
@@ -1311,6 +1877,8 @@ function showCommandHelp(command) {
       '  --codex             Check Codex integration specifically',
       '  --assistants all    Check all supported assistants',
       '  --benchmark         Pre-flight check before running benchmarks',
+      '  --benchmark --package <path>   Save benchmark snapshot to file',
+      '  --public            Sanitize output (hide internal skill/assistant names)',
       '  --laraskills-root <path>   Override intelligence root',
       '',
       'Examples:',
@@ -1573,15 +2141,20 @@ if (args.length === 0 || args[0] === '--help' || args[0] === '-h') {
   const allArgs = args.slice(1);
   const flags = parseFlags(allArgs);
 
-  const { assistants, integration, profile } = resolveInitOptions(flags);
-  const installProject = shouldInstallProjectFiles(integration);
-  const toolIds = getAssistantToolIds(assistants, integration);
-
-  if (flags.yes || flags.y) {
+  // Repair mode: init --repair
+  if (flags.repair) {
+    cmdRepair(target, flags);
+  } else if (flags.yes || flags.y) {
+    const { assistants, integration, profile } = resolveInitOptions(flags);
+    const installProject = shouldInstallProjectFiles(integration);
+    const toolIds = getAssistantToolIds(assistants, integration);
     install(target, profile, toolIds, { ...flags, installProjectFiles: installProject, integration, assistants });
   } else if (!isTerminalInteractive()) {
     err('Terminal is not interactive. Use --yes for non-interactive mode:\n  laraskills init --assistants opencode,codex --integration full --profile core --yes');
   } else {
+    const { assistants, integration, profile } = resolveInitOptions(flags);
+    const installProject = shouldInstallProjectFiles(integration);
+    const toolIds = getAssistantToolIds(assistants, integration);
     runInteractiveInit({ target, flags: { ...flags, assistants: flags.assistants || null, integration, profile } })
       .then((result) => {
         if (result.cancelled) return;

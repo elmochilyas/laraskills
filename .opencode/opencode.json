@@ -3,30 +3,30 @@
   "instructions": [
     "AGENTS.md",
     "CLAUDE.md",
-    "skills/laravel-patterns/SKILL.md",
-    "skills/laravel-tdd/SKILL.md",
-    "skills/laravel-security/SKILL.md",
-    "skills/laravel-core-internals/SKILL.md",
-    "skills/laravel-eloquent/SKILL.md",
-    "skills/laravel-database/SKILL.md",
-    "skills/laravel-authentication/01-authentication-foundations.md",
-    "skills/laravel-authentication/02-laravel-sanctum.md",
-    "skills/laravel-authentication/03-laravel-passport-oauth2.md",
-    "skills/laravel-authentication/04-openid-connect.md",
-    "skills/laravel-authentication/05-jwt-architecture.md",
-    "skills/laravel-authentication/06-authorization-core.md",
-    "skills/laravel-authentication/07-laravel-policies-gates.md",
-    "skills/laravel-authentication/08-roles-and-permissions.md",
-    "skills/laravel-authentication/09-multi-tenant-authentication.md",
-    "skills/laravel-authentication/10-single-sign-on.md",
-    "skills/laravel-authentication/11-enterprise-identity-management.md",
-    "skills/laravel-authentication/12-authentication-security.md",
-    "skills/laravel-authentication/13-zero-trust-identity.md",
-    "skills/laravel-authentication/14-authentication-testing.md"
+    ".laraskills/skills/laravel-patterns/SKILL.md",
+    ".laraskills/skills/laravel-tdd/SKILL.md",
+    ".laraskills/skills/laravel-security/SKILL.md",
+    ".laraskills/skills/laravel-core-internals/SKILL.md",
+    ".laraskills/skills/laravel-eloquent/SKILL.md",
+    ".laraskills/skills/laravel-database/SKILL.md",
+    ".laraskills/skills/laravel-authentication/01-authentication-foundations.md",
+    ".laraskills/skills/laravel-authentication/02-laravel-sanctum.md",
+    ".laraskills/skills/laravel-authentication/03-laravel-passport-oauth2.md",
+    ".laraskills/skills/laravel-authentication/04-openid-connect.md",
+    ".laraskills/skills/laravel-authentication/05-jwt-architecture.md",
+    ".laraskills/skills/laravel-authentication/06-authorization-core.md",
+    ".laraskills/skills/laravel-authentication/07-laravel-policies-gates.md",
+    ".laraskills/skills/laravel-authentication/08-roles-and-permissions.md",
+    ".laraskills/skills/laravel-authentication/09-multi-tenant-authentication.md",
+    ".laraskills/skills/laravel-authentication/10-single-sign-on.md",
+    ".laraskills/skills/laravel-authentication/11-enterprise-identity-management.md",
+    ".laraskills/skills/laravel-authentication/12-authentication-security.md",
+    ".laraskills/skills/laravel-authentication/13-zero-trust-identity.md",
+    ".laraskills/skills/laravel-authentication/14-authentication-testing.md"
   ],
   "skills": {
     "paths": [
-      "../skills"
+      ".laraskills/skills"
     ]
   },
   "agent": {

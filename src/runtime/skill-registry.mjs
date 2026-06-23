@@ -1,5 +1,6 @@
 import { existsSync, readdirSync, readFileSync, mkdirSync, writeFileSync, statSync } from 'node:fs';
 import { join } from 'node:path';
+import { LARASKILLS_ROOT_DIR } from './paths.mjs';
 
 const SKILL_METADATA = {
   'laravel-patterns': { description: 'Laravel architecture patterns, actions, DTOs, services, queues, caching, API resources', tags: ['architecture', 'patterns', 'services', 'actions', 'dto', 'queues', 'caching'] },
@@ -16,7 +17,7 @@ const SKILL_METADATA = {
   'laravel-authentication': { description: 'Authentication & authorization: Sanctum, Passport, OAuth2, OIDC, JWT, Policies, Gates, Roles, Permissions, Multi-tenant, SSO, Enterprise IAM, Zero-trust', tags: ['authentication', 'authorization', 'sanctum', 'passport', 'oauth2', 'oidc', 'jwt', 'mfa', 'sso', 'zero-trust'] },
 };
 
-const REGISTRY_DIR = '.laraskills';
+const REGISTRY_DIR = LARASKILLS_ROOT_DIR;
 
 function readSkillDescription(packageRoot, skillName) {
   const skillMdPath = join(packageRoot, 'skills', skillName, 'SKILL.md');
@@ -102,7 +103,7 @@ export function getRegistryPath(target) {
   return join(target, REGISTRY_DIR, 'skill-registry.json');
 }
 
-export function generateRegistry(target, packageRoot, profile) {
+export function generateRegistry(target, packageRoot, profile, pkgVersion = '1.0.0-beta.23') {
   const installedSkills = discoverInstalledSkills(target);
 
   const skills = installedSkills
@@ -110,7 +111,7 @@ export function generateRegistry(target, packageRoot, profile) {
     .filter(Boolean);
 
   const registry = {
-    version: '1.0.0-beta.23',
+    version: pkgVersion,
     generated_at: new Date().toISOString(),
     profile: profile || 'core',
     skills,
