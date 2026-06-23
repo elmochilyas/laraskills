@@ -110,7 +110,7 @@ export function generateRegistry(target, packageRoot, profile) {
     .filter(Boolean);
 
   const registry = {
-    version: '1.0.0-beta.22',
+    version: '1.0.0-beta.23',
     generated_at: new Date().toISOString(),
     profile: profile || 'core',
     skills,
